@@ -37,8 +37,8 @@ $tdp_inc_files = [
     'assets.php',       // CSS / JS 资源加载（可先空）
     'post-types.php',   // CPT：Capability / Material
     'taxonomies.php',   // 自定义分类法
-    'acf-fields.php',   // ACF 字段组
-    'acf-blocks.php',   // ACF Blocks 注册
+    'acf/fields.php',   // ACF 字段组
+    'acf/blocks.php',   // ACF Blocks 注册
     'helpers.php',      // 通用工具函数
     'seo.php',          // SEO 增强（开发阶段可为空）
 ];

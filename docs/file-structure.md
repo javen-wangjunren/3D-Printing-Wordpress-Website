@@ -12,19 +12,24 @@
 │   ├── content-model.md          # 内容模型（Capability / Material / Blog）
 │   └── seo-structure.md          # SEO & 内链规则（后期补）
 │
-├── 📂 inc/                       # 🧠 后端逻辑层（稳定后很少改）
+├── 📂 inc/ 
+│   ├── 📂 acf
+│   │   ├── specific-field
+│   │   │    ├──hero-banner.php   # 注册特定的ACF模块,避免在一个文件下，导致代码过长
+│   │   ├── load-all-fields.php       # 中转站，集中加载所有定义的ACF模块
+│   │   ├── register-all-blocks.php   # 注册 Block，管理所有的积木名单
+│   │
 │   ├── setup.php                 # enqueue / theme support
 │   ├── assets.php                # CSS / JS 加载（建议拆出来）
 │   ├── post-types.php            # Capability / Material
 │   ├── taxonomies.php            # Industry / Material Category
-│   ├── acf-fields.php            # 所有 ACF 字段（集中管理）
-│   ├── acf-blocks.php            # 注册 Block
 │   ├── helpers.php               # 通用函数（excerpt / reading time 等）
 │   └── seo.php                   # （后期）结构化数据 / TOC / schema
 │
-├── 📂 blocks/                    # 🧱 可复用 Block（原子 → 分子）
+├── 📂 blocks/                    # 🧱 可复用 Block（原子 → 分子），存放所有积木模块的
 │   ├── global/
-│   │   ├── hero/
+│   │   ├── hero-banner/
+│   │   │   ├── render.php
 │   │   ├── cta/
 │   │   ├── feature-grid/
 │   │   ├── logo-cloud/
@@ -68,3 +73,26 @@
     │   ├── filter.js
     │   └── tabs.js
     └── icons/
+
+
+一个Block的开发顺序：
+
+假设开发的block的名称是：hero
+1. 在 `acf-blocks.php` 文件中注册这个积木模块，例如 `register_block_type( 'hero' );`
+2. 在 `acf-fields.php` 文件中定义这个积木模块的字段，例如 `acf_add_local_field_group( array(
+    'key' => 'group_hero',
+    'title' => 'Hero',
+    'fields' => array(
+        array(
+            'key' => 'field_hero_title',
+            'label' => 'Title',
+            'name' => 'title',
+            'type' => 'text',
+        ),
+    ),
+) );`
+3. 在blocks/global/hero 目录下创建 render.php 文件，这就是积木模块的 HTML 代码+Tailwind 代码.
+
+
+关于什么时候创建和注册block, 什么时候不创建
+
