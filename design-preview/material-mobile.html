@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>材料详情快照预览</title>
+    <style>
+        /* --- 基础设置 (模拟移动端环境) --- */
+        :root {
+            --brand-color: #ff6600; /* 品牌主色 (例如橙色) */
+            --text-dark: #333333;
+            --text-gray: #666666;
+            --bg-light: #f8f9fa;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* 模拟手风琴展开后的容器 wrapper */
+        .mobile-preview-container {
+            width: 100%;
+            max-width: 375px; /* 限制为常见手机宽度 */
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd; /* 模拟手风琴展开的边框 */
+        }
+
+        /* 模拟手风琴标题 (未展开状态) */
+        .accordion-header-mock {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        /* 模拟手风琴标题 (当前激活状态) */
+        .accordion-header-active {
+            padding: 15px;
+            background: #fff;
+            color: var(--text-dark);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: none; /* 展开后与内容融合 */
+        }
+
+        /* =========================================
+           核心组件：材料快照 (Material Snapshot) 样式
+           ========================================= */
+        .material-snapshot {
+            padding: 16px;
+            background-color: #fff;
+        }
+
+        /* --- A. 顶部：视觉与数据快照 (Flex Row) --- */
+        .snapshot-top-section {
+            display: flex;
+            gap: 12px; /* 图片和网格之间的间距 */
+            margin-bottom: 16px;
+        }
+
+        .material-image-container {
+            flex-shrink: 0; /* 防止图片被挤压 */
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--bg-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .material-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保纹理图填充 */
+        }
+
+        /* 2x2 数据网格 */
+        .material-data-grid {
+            flex-grow: 1; /* 占据剩余空间 */
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 两列等宽 */
+            grid-template-rows: 1fr 1fr; /* 两行等高 */
+            gap: 8px; /* 网格间距 */
+        }
+
+        .data-item {
+            background-color: var(--bg-light);
+            border-radius: 6px;
+            padding: 8px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .data-icon {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .data-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            line-height: 1.2;
+        }
+
+        .data-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 2px;
+        }
+
+        /* --- B. 中部：关键特性摘要 (List) --- */
+        .snapshot-middle-section {
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #f9f9f9; /* 稍微区分背景 */
+            border-radius: 8px;
+        }
+
+        .feature-list {
+            margin: 0;
+            padding-left: 20px; /* 留出项目符号空间 */
+            font-size: 13px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        .feature-list li {
+            margin-bottom: 6px;
+        }
+        
+        .feature-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* --- C. 底部：双路径行动按钮 (Flex Row) --- */
+        .snapshot-bottom-section {
+            display: flex;
+            gap: 12px; /* 两个按钮之间的间距 */
+        }
+
+        .btn {
+            flex: 1; /* 两个按钮等宽 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* 主按钮 (Quote) */
+        .btn-primary {
+            background-color: var(--brand-color);
+            color: white;
+            border: 1px solid var(--brand-color);
+            box-shadow: 0 2px 6px rgba(255, 102, 0, 0.2);
+        }
+        .btn-primary:active {
+            background-color: #e65c00; /* 点击态 */
+        }
+
+        /* 次按钮 (View Specs) */
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--brand-color);
+            border: 1px solid var(--brand-color);
+        }
+        .btn-secondary:active {
+            background-color: #fff5eb; /* 点击态 */
+        }
+        
+        .btn-icon {
+            margin-right: 6px;
+        }
+        
+        .btn-arrow {
+            margin-left: 4px;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="mobile-preview-container">
+    <div class="accordion-header-mock">▶ 📂 Stainless Steel 316L</div>
+
+    <div class="accordion-header-active">
+        <span>▼ 📂 Aluminum 6061 <span style="font-size: 12px; color: #ff6600; background: #fff5eb; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">High Strength</span></span>
+    </div>
+
+    <div class="material-snapshot">
+        
+        <div class="snapshot-top-section">
+            <div class="material-image-container">
+                <img src="https://placehold.co/200x200/e0e0e0/999999?text=Alu+Texture" alt="Aluminum 6061 Texture">
+            </div>
+
+            <div class="material-data-grid">
+                <div class="data-item">
+                    <div class="data-icon">💲</div>
+                    <div class="data-label">Cost Level</div>
+                    <div class="data-value">$$ (Medium)</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-icon">⏱️</div>
+                    <div class="data-label">Lead Time</div>
+                    <div class="data-value">3-5 Days</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-icon">📏</div>
+                    <div class="data-label">Tolerance</div>
+                    <div class="data-value">±0.05 mm</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-icon">💪</div>
+                    <div class="data-label">Key Feature</div>
+                    <div class="data-value">Lightweight</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="snapshot-middle-section">
+            <ul class="feature-list">
+                <li>Excellent strength-to-weight ratio, ideal for structural parts.</li>
+                <li>Good corrosion resistance; suitable for anodizing.</li>
+                <li>Typical uses: Aerospace brackets, automotive prototypes.</li>
+            </ul>
+        </div>
+
+        <div class="snapshot-bottom-section">
+            <a href="/quote" class="btn btn-primary">
+                <span class="btn-icon">🚀</span> Get Instant Quote
+            </a>
+            <a href="/materials/aluminum-6061" class="btn btn-secondary">
+                <span class="btn-icon">📄</span> View Full Specs <span class="btn-arrow">›</span>
+            </a>
+        </div>
+
+    </div>
+    <div class="accordion-header-mock" style="border-top: 1px solid #ddd;">▶ 📂 Titanium Ti6Al4V</div>
+</div>
+
+</body>
+</html>

@@ -28,7 +28,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Process List (工艺大类)',
                     'name' => 'material_list_processes',
                     'type' => 'repeater',
-                    'instructions' => '添加 3D 打印工艺分类（如 DMLS, SLA）。',
+                    'instructions' => '添加 3D 打印工艺分类（如 DMLS, SLA）。若使用单工艺模式，系统将仅显示第一个工艺的内容。',
                     'collapsed' => 'field_ml_process_name',
                     'layout' => 'block', // 释放横向空间
                     'button_label' => '＋ 添加新工艺',
@@ -149,6 +149,16 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         'tabs_scroll' => '顶部滑动 Tab + 内容区',
                     ),
                     'default_value' => 'accordion',
+                    'wrapper' => array('width' => '50'),
+                ),
+                array(
+                    'key' => 'field_ml_display_mode',
+                    'label' => 'Single-Process Mode (单工艺模式)',
+                    'name' => 'material_list_display_mode',
+                    'type' => 'true_false',
+                    'instructions' => '勾选后进入单工艺模式：隐藏侧边栏Tab，仅展示第一个工艺的材料列表。适用于特定工艺详情页（如SLS页面）。',
+                    'ui' => true,
+                    'default_value' => false,
                     'wrapper' => array('width' => '50'),
                 ),
                 array(

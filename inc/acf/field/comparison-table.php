@@ -1,246 +1,107 @@
 <?php
 /**
- * Comparison Table Block 的ACF字段定义
- * 
- * 包含3D打印技术对比表格的标题、比较行和设计选项
+ * 角色：Universal Comparison Table 字段定义
  */
 
-// 确保函数在ACF可用时才执行
 if ( function_exists( 'acf_add_local_field_group' ) ) {
-    // 注册Comparison Table Block的字段组
-    function _3dp_comparison_table_fields() {
+
+    function _3dp_add_comparison_table_fields() {
         acf_add_local_field_group( array(
-            'key' => 'group_66e2a0c0f0c8b0c',
-            'title' => 'Comparison Table Block',
+            'key' => 'group_3dp_comparison_table',
+            'title' => 'Comparison Table (通用对比表配置)',
             'fields' => array(
-                // Content Tab
+                
+                // ==========================================
+                // TAB 1: CONTENT (数据建模)
+                // ==========================================
                 array(
-                    'key' => 'field_66e2a0c0f0c8b17',
+                    'key' => 'field_ct_tab_content',
                     'label' => 'Content',
-                    'name' => '',
                     'type' => 'tab',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
                     'placement' => 'top',
-                    'endpoint' => 0,
                 ),
                 array(
-                    'key' => 'field_66e2a0c0f0c8b20',
+                    'key' => 'field_ct_title',
                     'label' => 'Table Title',
                     'name' => 'table_title',
                     'type' => 'text',
-                    'instructions' => '输入对比表格的标题（如 "MJF 3D printing service compared..."）',
-                    'required' => 1,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '100',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'default_value' => 'MJF 3D printing service compared to other 3D printing technologies',
-                    'placeholder' => '例如：MJF 3D printing service compared to other 3D printing technologies',
-                    'prepend' => '',
-                    'append' => '',
-                    'maxlength' => '',
+                    'instructions' => '如：SLS Materials Mechanical Properties Comparison',
                 ),
+                // --- 第一层：定义表头标签 (动态表头核心) ---
                 array(
-                    'key' => 'field_66e2a0c0f0c8b2a',
-                    'label' => 'Comparison Rows',
+                    'key' => 'field_ct_header_group',
+                    'label' => 'Table Headers (定义列标题)',
+                    'name' => 'headers',
+                    'type' => 'group',
+                    'layout' => 'table', // 表头定义采用紧凑表格布局
+                    'instructions' => '在此定义表格的列名。例如：Material, Color, Tensile Strength 等。',
+                    'sub_fields' => array(
+                        array( 'key' => 'field_ct_h1', 'label' => 'Col 1 (Fixed)', 'name' => 'h1', 'type' => 'text', 'default_value' => 'Material' ),
+                        array( 'key' => 'field_ct_h2', 'label' => 'Col 2', 'name' => 'h2', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_h3', 'label' => 'Col 3', 'name' => 'h3', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_h4', 'label' => 'Col 4', 'name' => 'h4', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_h5', 'label' => 'Col 5', 'name' => 'h5', 'type' => 'text' ),
+                    ),
+                ),
+                // --- 第二层：填入行数据 ---
+                array(
+                    'key' => 'field_ct_rows',
+                    'label' => 'Table Data Rows (数据行内容)',
                     'name' => 'comparison_rows',
                     'type' => 'repeater',
-                    'instructions' => '添加需要比较的技术行，每行包含技术名称和各项参数',
-                    'required' => 1,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '100',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'collapsed' => 'field_66e2a0c0f0c8b34',
-                    'min' => 1,
-                    'max' => 10,
-                    'layout' => 'table',
-                    'button_label' => '添加技术行',
+                    'instructions' => '对应上方定义的表头填入数值。例如在 Val 3 填入 "7.54 ksi"。',
+                    'collapsed' => 'field_ct_col1',
+                    'layout' => 'table', // 每一行在后台也横向显示，模拟真实表格
+                    'button_label' => '＋ 添加数据行',
                     'sub_fields' => array(
-                        array(
-                            'key' => 'field_66e2a0c0f0c8b34',
-                            'label' => 'Tech Name',
-                            'name' => 'tech_name',
-                            'type' => 'text',
-                            'instructions' => '输入技术名称（如 MJF, SLS, SLA...）',
-                            'required' => 1,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '15',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'placeholder' => '例如：MJF',
-                            'prepend' => '',
-                            'append' => '',
-                            'maxlength' => '',
-                        ),
-                        array(
-                            'key' => 'field_66e2a0c0f0c8b3e',
-                            'label' => 'Dimensional Accuracy',
-                            'name' => 'accuracy',
-                            'type' => 'text',
-                            'instructions' => '输入尺寸精度（如 "± 0.3% with a lower limit of ± 0.3 mm"）',
-                            'required' => 1,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '20',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'placeholder' => '例如：± 0.3% with a lower limit of ± 0.3 mm',
-                            'prepend' => '',
-                            'append' => '',
-                            'maxlength' => '',
-                        ),
-                        array(
-                            'key' => 'field_66e2a0c0f0c8b48',
-                            'label' => 'Strengths',
-                            'name' => 'strengths',
-                            'type' => 'textarea',
-                            'instructions' => '输入技术优势',
-                            'required' => 1,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '25',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'placeholder' => '例如：Design flexibility, support not required',
-                            'maxlength' => '',
-                            'rows' => 3,
-                            'new_lines' => '',
-                        ),
-                        array(
-                            'key' => 'field_66e2a0c0f0c8b52',
-                            'label' => 'Build Volume',
-                            'name' => 'build_volume',
-                            'type' => 'text',
-                            'instructions' => '输入成型体积（如 "380 x 285 x 380 mm"）',
-                            'required' => 1,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '15',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'placeholder' => '例如：380 x 285 x 380 mm',
-                            'prepend' => '',
-                            'append' => '',
-                            'maxlength' => '',
-                        ),
-                        array(
-                            'key' => 'field_66e2a0c0f0c8b5c',
-                            'label' => 'Layer Thickness',
-                            'name' => 'layer_thickness',
-                            'type' => 'text',
-                            'instructions' => '输入层厚（如 "80µm"）',
-                            'required' => 1,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '10',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'placeholder' => '例如：80µm',
-                            'prepend' => '',
-                            'append' => '',
-                            'maxlength' => '',
-                        ),
-                        array(
-                            'key' => 'field_66e2a0c0f0c8b66',
-                            'label' => 'Min. Feature Size',
-                            'name' => 'min_feature',
-                            'type' => 'text',
-                            'instructions' => '输入最小细节（如 "0.5 mm"）',
-                            'required' => 1,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '15',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'default_value' => '',
-                            'placeholder' => '例如：0.5 mm',
-                            'prepend' => '',
-                            'append' => '',
-                            'maxlength' => '',
-                        ),
+                        array( 'key' => 'field_ct_col1', 'label' => 'Val 1', 'name' => 'v1', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_col2', 'label' => 'Val 2', 'name' => 'v2', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_col3', 'label' => 'Val 3', 'name' => 'v3', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_col4', 'label' => 'Val 4', 'name' => 'v4', 'type' => 'text' ),
+                        array( 'key' => 'field_ct_col5', 'label' => 'Val 5', 'name' => 'v5', 'type' => 'text' ),
                     ),
                 ),
-                // Design Tab
+
+                // ==========================================
+                // TAB 2: DESIGN (视觉逻辑)
+                // ==========================================
                 array(
-                    'key' => 'field_66e2a0c0f0c8b6f',
+                    'key' => 'field_ct_tab_design',
                     'label' => 'Design',
-                    'name' => '',
                     'type' => 'tab',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'placement' => 'top',
-                    'endpoint' => 0,
                 ),
                 array(
-                    'key' => 'field_66e2a0c0f0c8b79',
-                    'label' => 'Highlight Row',
-                    'name' => 'highlight_row',
-                    'type' => 'select',
-                    'instructions' => '选择需要高亮显示的技术行',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '100',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'choices' => array(
-                        '' => 'None',
-                    ),
-                    'default_value' => '',
-                    'allow_null' => 0,
-                    'multiple' => 0,
+                    'key' => 'field_ct_highlight',
+                    'label' => 'Highlight Row (行高亮)',
+                    'name' => 'highlight_index',
+                    'type' => 'number',
+                    'instructions' => '输入需要重点突出的行号（如输入 1 则第一行变黄，模拟图 image_c9c545 效果）。',
+                    'wrapper' => array('width' => '50'),
+                ),
+                array(
+                    'key' => 'field_ct_use_mono',
+                    'label' => 'Monospace Precision Font',
+                    'name' => 'use_mono',
+                    'type' => 'true_false',
                     'ui' => 1,
-                    'return_format' => 'value',
-                    'ajax' => 0,
-                    'placeholder' => '',
+                    'instructions' => '开启后数据列将使用 JetBrains Mono 字体，增强工业严谨感。',
+                    'wrapper' => array('width' => '50'),
                 ),
-                // Settings Tab
+
+                // ==========================================
+                // TAB 3: SETTINGS (系统辅助)
+                // ==========================================
                 array(
-                    'key' => 'field_66e2a0c0f0c8b83',
+                    'key' => 'field_ct_tab_settings',
                     'label' => 'Settings',
-                    'name' => '',
                     'type' => 'tab',
-                    'instructions' => '',
-                    'required' => 0,
-                    'conditional_logic' => 0,
-                    'wrapper' => array(
-                        'width' => '',
-                        'class' => '',
-                        'id' => '',
-                    ),
-                    'placement' => 'top',
-                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_ct_anchor',
+                    'label' => 'Block Anchor ID',
+                    'name' => 'anchor_id',
+                    'type' => 'text',
+                    'instructions' => '用于锚点定位，如 #mechanical-properties。',
                 ),
             ),
             'location' => array(
@@ -252,15 +113,9 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                 ),
             ),
-            'menu_order' => 0,
-            'position' => 'normal',
-            'style' => 'default',
-            'label_placement' => 'top',
-            'instruction_placement' => 'label',
-            'hide_on_screen' => '',
-            'active' => true,
-            'description' => '',
+            'style' => 'seamless',
         ) );
     }
-    add_action( 'acf/init', '_3dp_comparison_table_fields' );
+
+    add_action( 'acf/init', '_3dp_add_comparison_table_fields' );
 }

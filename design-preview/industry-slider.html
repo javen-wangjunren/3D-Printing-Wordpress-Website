@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Industry Applications Slider - High Fidelity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 基于 Tailwind Config 的变量映射 --- */
+        :root {
+            --primary: #0047AB;
+            --primary-hover: #003A8C;
+            --heading: #1D2938;
+            --body: #667085;
+            --bg-section: #F2F4F7;
+            --border: #E4E7EC;
+            --radius-card: 12px;
+            --radius-btn: 8px;
+            --container-max: 1280px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--body);
+            line-height: 1.5;
+            margin: 0;
+            background-color: #fff;
+        }
+
+        .section-py { padding: 96px 0; }
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+        /* --- 头部布局：标题 + 描述 + 导航按钮 --- */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 48px;
+        }
+        .header-content { max-width: 720px; }
+        .h2 { font-size: 36px; color: var(--heading); font-weight: 600; margin: 0 0 16px 0; }
+        .section-desc { font-size: 18px; margin: 0; }
+
+        /* 滑动控制按钮 */
+        .slider-nav { display: flex; gap: 12px; }
+        .nav-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--heading);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { border-color: var(--primary); color: var(--primary); background: #F9FAFB; }
+
+        /* --- Slider 核心容器 --- */
+        .slider-wrapper { margin: 0 -12px; overflow: hidden; }
+        .slider-track {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding: 10px 12px 40px 12px;
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* 隐藏滚动条 */
+            scroll-snap-type: x mandatory;
+        }
+        .slider-track::-webkit-scrollbar { display: none; }
+
+        /* --- 行业卡片 (Application Card) --- */
+        .app-card {
+            flex: 0 0 calc(25% - 18px); /* 默认一屏显示4个 */
+            min-width: 300px;
+            scroll-snap-align: start;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .app-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(16, 24, 40, 0.08);
+            border-color: var(--primary);
+        }
+
+        /* 图片视觉区 */
+        .app-visual { height: 220px; background-color: var(--bg-section); overflow: hidden; }
+        .app-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .app-card:hover .app-visual img { transform: scale(1.05); }
+
+        /* 内容区 */
+        .app-body { padding: 32px; flex-grow: 1; display: flex; flex-direction: column; }
+
+        /* 技术标签 (Tags) - 增强专业感 */
+        .tag-row { display: flex; gap: 8px; margin-bottom: 16px; }
+        .tag {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .tag-usage { background: #E0EAFF; color: #0047AB; } /* 用途标签 */
+        .tag-feature { background: #ECFDF3; color: #027A48; } /* 性能标签 */
+
+        .h4 { font-size: 20px; color: var(--heading); margin: 0 0 12px 0; font-weight: 600; }
+        .app-desc { font-size: 15px; line-height: 1.6; color: var(--body); margin-bottom: 24px; flex-grow: 1; }
+
+        /* 转化链接 */
+        .app-link {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+        }
+        .app-link::after { content: ' →'; margin-left: 4px; transition: margin 0.2s; }
+        .app-card:hover .app-link::after { margin-left: 8px; }
+    </style>
+</head>
+<body>
+
+<section class="section-py">
+    <div class="container">
+        <div class="header-row">
+            <div class="header-content">
+                <h2 class="h2">SLS Applications Across Industries</h2>
+                <p class="section-desc">Discover how top-tier manufacturers utilize Selective Laser Sintering for high-performance, functional applications.</p>
+            </div>
+            <div class="slider-nav">
+                <button class="nav-btn" onclick="document.querySelector('.slider-track').scrollBy({left: -320, behavior: 'smooth'})">❮</button>
+                <button class="nav-btn" onclick="document.querySelector('.slider-track').scrollBy({left: 320, behavior: 'smooth'})">❯</button>
+            </div>
+        </div>
+
+        <div class="slider-wrapper">
+            <div class="slider-track">
+                
+                <a href="/solutions/aerospace" class="app-card">
+                    <div class="app-visual">
+                        <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Aerospace+Ducting" alt="Aerospace">
+                    </div>
+                    <div class="app-body">
+                        <div class="tag-row">
+                            <span class="tag tag-usage">End-use Parts</span>
+                            <span class="tag tag-feature">Lightweight</span>
+                        </div>
+                        <h4 class="h4">Aerospace Components</h4>
+                        <p class="app-desc">Production of complex internal ducting and UAV structural parts that require optimized strength-to-weight ratios.</p>
+                        <span class="app-link">View Solution</span>
+                    </div>
+                </a>
+
+                <a href="/solutions/medical" class="app-card">
+                    <div class="app-visual">
+                        <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Medical+Orthotics" alt="Medical">
+                    </div>
+                    <div class="app-body">
+                        <div class="tag-row">
+                            <span class="tag tag-usage">Custom Devices</span>
+                            <span class="tag tag-feature">Biocompatible</span>
+                        </div>
+                        <h4 class="h4">Medical & Healthcare</h4>
+                        <p class="app-desc">Biocompatible Nylon (PA12) solutions for customized prosthetics, surgical guides, and wearable orthotics.</p>
+                        <span class="app-link">View Solution</span>
+                    </div>
+                </a>
+
+                <a href="/solutions/automotive" class="app-card">
+                    <div class="app-visual">
+                        <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Automotive+Testing" alt="Automotive">
+                    </div>
+                    <div class="app-body">
+                        <div class="tag-row">
+                            <span class="tag tag-usage">Functional Protos</span>
+                            <span class="tag tag-feature">Heat Resist</span>
+                        </div>
+                        <h4 class="h4">Automotive Engineering</h4>
+                        <p class="app-desc">High-impact functional testing prototypes and customized interior components with high thermal stability.</p>
+                        <span class="app-link">View Solution</span>
+                    </div>
+                </a>
+
+                <a href="/solutions/tooling" class="app-card">
+                    <div class="app-visual">
+                        <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Industrial+Jigs" alt="Industrial">
+                    </div>
+                    <div class="app-body">
+                        <div class="tag-row">
+                            <span class="tag tag-usage">Production Tooling</span>
+                            <span class="tag tag-feature">Durable</span>
+                        </div>
+                        <h4 class="h4">Industrial Tooling</h4>
+                        <p class="app-desc">On-demand production of jigs, fixtures, and end-of-arm tooling with integrated internal cooling channels.</p>
+                        <span class="app-link">View Solution</span>
+                    </div>
+                </a>
+
+                <a href="/solutions/consumer" class="app-card">
+                    <div class="app-visual">
+                        <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Consumer+Goods" alt="Consumer">
+                    </div>
+                    <div class="app-body">
+                        <div class="tag-row">
+                            <span class="tag tag-usage">Batch Production</span>
+                            <span class="tag tag-feature">Complex Geometry</span>
+                        </div>
+                        <h4 class="h4">Consumer Goods</h4>
+                        <p class="app-desc">Mass customization for eyewear, sports equipment, and high-end lifestyle products with unique textures.</p>
+                        <span class="app-link">View Solution</span>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

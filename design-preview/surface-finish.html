@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Surface Finishing - Design System Integrated</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 基于 Tailwind Config 的变量映射 --- */
+        :root {
+            --primary: #0047AB;
+            --primary-hover: #003A8C;
+            --heading: #1D2938;
+            --body: #667085;
+            --muted: #98A2B3;
+            --bg-section: #F2F4F7;
+            --border: #E4E7EC;
+            --container-max: 1280px;
+            --radius-card: 12px;
+            --radius-btn: 8px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--body);
+            line-height: 1.5;
+            margin: 0;
+            background-color: #fff;
+        }
+
+        /* --- 容器与间距 --- */
+        .section-py { padding: 96px 0; }
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+
+        /* --- 标题逻辑 --- */
+        .h2 {
+            font-size: 36px;
+            line-height: 1.2;
+            font-weight: 600;
+            color: var(--heading);
+            margin-bottom: 16px;
+        }
+        .section-desc {
+            font-size: 18px;
+            max-width: 720px;
+            margin-bottom: 48px;
+        }
+
+        /* --- 漏斗第一步：多重筛选区 (Multi-filter) --- */
+        .filter-bar {
+            display: flex;
+            gap: 16px;
+            padding: 32px;
+            background-color: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            margin-bottom: 48px;
+            align-items: flex-end;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .filter-label { font-size: 14px; font-weight: 500; color: var(--heading); }
+        .filter-control {
+            height: 48px;
+            padding: 0 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-btn);
+            font-size: 14px;
+            color: var(--heading);
+            outline: none;
+        }
+        .filter-control:focus { border-color: var(--primary); }
+
+        /* --- 漏斗第二、三步：网格与卡片 (Grid & Card) --- */
+        .finishing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .finish-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .finish-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(16, 24, 40, 0.08);
+            border-color: var(--primary);
+        }
+
+        .card-visual { height: 240px; background-color: var(--bg-section); position: relative; }
+        .card-visual img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 状态标签 */
+        .badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .card-body { padding: 32px; flex-grow: 1; display: flex; flex-direction: column; }
+        .category { color: var(--primary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+        .h4 { font-size: 20px; color: var(--heading); margin: 0 0 12px 0; font-weight: 600; }
+        
+        /* PC端采用段落描述，通透无背景 */
+        .description { font-size: 15px; color: var(--body); line-height: 1.6; margin-bottom: 24px; }
+
+        /* 参数指标 - 采用 1x2 或 1x3 紧凑横排 */
+        .specs-row {
+            display: flex;
+            gap: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+        .spec-item { display: flex; flex-direction: column; }
+        .spec-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+        .spec-value { font-size: 14px; font-weight: 600; color: var(--heading); }
+
+        /* --- 漏斗第四步：行动决策 (CTA) --- */
+        .card-actions { display: flex; gap: 12px; margin-top: auto; }
+        .btn {
+            flex: 1;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-btn);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline { border: 1px solid var(--border); color: var(--heading); }
+        .btn-outline:hover { background: var(--bg-section); border-color: var(--border-strong); }
+
+    </style>
+</head>
+<body>
+
+<section class="section-py">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="h2">Custom Finishing & Post-Processing</h2>
+            <p class="section-desc">Achieve the perfect look and performance for your 3D printed parts with our industrial-grade surface treatments.</p>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label class="filter-label">Technology</label>
+                <select class="filter-control">
+                    <option>All Technologies</option>
+                    <option>SLA (Resin)</option>
+                    <option>DMLS (Metal)</option>
+                    <option>FDM (Plastic)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Finish Category</label>
+                <select class="filter-control">
+                    <option>All Categories</option>
+                    <option>Enhanced (Appearance)</option>
+                    <option>Protective (Functional)</option>
+                    <option>Standard (As-printed)</option>
+                </select>
+            </div>
+            <div class="filter-group" style="flex: 1.5;">
+                <label class="filter-label">Search Finishes</label>
+                <input type="text" class="filter-control" placeholder="e.g. Anodizing, Polishing...">
+            </div>
+        </div>
+
+        <div class="finishing-grid">
+            
+            <div class="finish-card">
+                <div class="card-visual">
+                    <span class="badge">SLA / Resin</span>
+                    <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Transparent+Polish" alt="Clear Polish">
+                </div>
+                <div class="card-body">
+                    <span class="category">Enhanced Appearance</span>
+                    <h4 class="h4">Optical Clear Polishing</h4>
+                    <p class="description">A multi-stage manual polishing process followed by a UV-resistant clear coat to achieve near-perfect transparency on clear resins.</p>
+                    <div class="specs-row">
+                        <div class="spec-item">
+                            <span class="spec-label">Clarity</span>
+                            <span class="spec-value">Transparent</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Surface Ra</span>
+                            <span class="spec-value">$ < 0.1 \mu m $</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">Get Quote</a>
+                        <a href="#" class="btn btn-outline">Specs Sheet ›</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="finish-card">
+                <div class="card-visual">
+                    <span class="badge">DMLS / Metal</span>
+                    <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Metal+Anodizing" alt="Anodizing">
+                </div>
+                <div class="card-body">
+                    <span class="category">Protective & Aesthetic</span>
+                    <h4 class="h4">Type II Anodizing</h4>
+                    <p class="description">Increases corrosion resistance and surface hardness for aluminum parts while allowing for vibrant color customization.</p>
+                    <div class="specs-row">
+                        <div class="spec-item">
+                            <span class="spec-label">Hardness</span>
+                            <span class="spec-value">Increased</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Thickness</span>
+                            <span class="spec-value">$ 5-25 \mu m $</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">Get Quote</a>
+                        <a href="#" class="btn btn-outline">Specs Sheet ›</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="finish-card">
+                <div class="card-visual">
+                    <span class="badge">SLS / MJF</span>
+                    <img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Dyeing+Finish" alt="Dyeing">
+                </div>
+                <div class="card-body">
+                    <span class="category">Standard Finish</span>
+                    <h4 class="h4">Vibratory Tumbling</h4>
+                    <p class="description">Batched mechanical smoothing that removes powder residue and rounds sharp edges for a smooth, uniform matte texture.</p>
+                    <div class="specs-row">
+                        <div class="spec-item">
+                            <span class="spec-label">Lead Time</span>
+                            <span class="spec-value">+1-2 Days</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Uniformity</span>
+                            <span class="spec-value">High</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn btn-primary">Get Quote</a>
+                        <a href="#" class="btn btn-outline">Specs Sheet ›</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

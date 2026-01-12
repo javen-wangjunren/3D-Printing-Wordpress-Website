@@ -316,3 +316,29 @@ if ( function_exists( 'acf_register_block_type' ) ) {
     // 挂载到 acf/init 钩子，确保安全性
     add_action( 'acf/init', '_3dp_register_how_it_works_block' );
 }
+
+/**
+ * 注册 Capability Design Guide 积木身份
+ * 挂载于 acf/init 钩子中
+ */
+if ( function_exists( 'acf_register_block_type' ) ) {
+    function _3dp_register_capability_design_guide_block() {
+        acf_register_block_type( array(
+            'name'              => 'capability-design-guide',
+            'title'             => __( 'Capability Design Guide', '3d-printing' ),
+            'description'       => __( '展示工艺参数核心指标网格、规格列表及专家设计指南建议。', '3d-printing' ),
+            'render_template'   => 'blocks/global/capability-design-guide/render.php',
+            'category'          => 'layout',
+            'icon'              => 'media-spreadsheet',
+            'keywords'          => array( 'capability', 'design', 'specs', 'guide' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_capability_design_guide_block' );
+}

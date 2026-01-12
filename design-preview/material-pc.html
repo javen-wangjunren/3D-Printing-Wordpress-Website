@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>PC端能力汇总模块预览</title>
+    <style>
+        :root {
+            --brand-color: #ff6600;
+            --text-dark: #2d3436;
+            --text-gray: #636e72;
+            --bg-light: #f8f9fa;
+            --border-color: #dfe6e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+            color: var(--text-dark);
+        }
+
+        /* --- 整体容器 --- */
+        .capabilities-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex; /* 左右分栏布局 */
+            gap: 30px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* --- 左侧工艺导航 (Sidebar) --- */
+        .process-sidebar {
+            flex: 0 0 260px;
+            border-right: 1px solid var(--border-color);
+            padding-right: 20px;
+        }
+
+        .process-sidebar h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-left: 10px;
+        }
+
+        .nav-item {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 8px;
+            text-align: left;
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background-color: var(--bg-light);
+            color: var(--brand-color);
+        }
+
+        .nav-item.active {
+            background-color: #fff5eb;
+            color: var(--brand-color);
+            border-color: var(--brand-color);
+            box-shadow: 0 2px 8px rgba(255,102,0,0.1);
+        }
+
+        /* --- 右侧材料主区域 (Main) --- */
+        .materials-main {
+            flex: 1;
+        }
+
+        .materials-main h2 {
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        /* 手风琴条目 */
+        .material-accordion-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        /* 手风琴标题 */
+        .accordion-header {
+            padding: 18px 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .accordion-header:hover {
+            background-color: #fafafa;
+        }
+
+        .accordion-header h4 {
+            margin: 0;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+        }
+
+        .material-tag {
+            font-size: 11px;
+            background: #fff5eb;
+            color: var(--brand-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: 12px;
+            text-transform: uppercase;
+        }
+
+        /* --- 核心：材料名片内容 (PC横向布局) --- */
+        .material-snapshot-pc {
+            padding: 25px;
+            border-top: 1px solid var(--border-color);
+            display: flex; /* 横向排列：图 | 数据与文案 */
+            gap: 30px;
+            background-color: #fff;
+        }
+
+        /* 左侧：高清大图 */
+        .snapshot-left-img {
+            flex: 0 0 240px; /* PC端图片更大 */
+            height: 240px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .snapshot-left-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 右侧：信息与操作区 */
+        .snapshot-right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部：4列横向数据网格 */
+        .pc-data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4列等宽，PC更舒展 */
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .pc-data-item {
+            background: var(--bg-light);
+            padding: 15px 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .data-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: 5px;
+        }
+
+        .data-value {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* 中部：描述文案 */
+        .pc-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #444;
+            margin-bottom: 30px;
+        }
+
+        /* 底部：对齐的按钮 */
+        .pc-action-row {
+            margin-top: auto; /* 推到底部 */
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background-color: var(--brand-color);
+            color: white;
+            border: 1px solid var(--brand-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #e65c00;
+            box-shadow: 0 4px 12px rgba(255,102,0,0.2);
+        }
+
+        .btn-secondary {
+            background-color: #fff;
+            color: var(--brand-color);
+            border: 1px solid var(--brand-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #fff5eb;
+        }
+
+        .chevron {
+            color: var(--text-gray);
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="capabilities-container">
+    <aside class="process-sidebar">
+        <h3>Processes</h3>
+        <button class="nav-item active">DMLS (Metal 3D)</button>
+        <button class="nav-item">SLA (Resin)</button>
+        <button class="nav-item">FDM (Plastic)</button>
+        <button class="nav-item">SLS (Nylon)</button>
+        <button class="nav-item">CNC Machining</button>
+    </aside>
+
+    <main class="materials-main">
+        <h2>Metal 3D Printing Materials</h2>
+
+        <div class="material-accordion-item">
+            <div class="accordion-header">
+                <h4>Aluminum 6061 <span class="material-tag">Aerospace Grade</span></h4>
+                <span class="chevron">▼</span>
+            </div>
+
+            <div class="material-snapshot-pc">
+                <div class="snapshot-left-img">
+                    <img src="https://placehold.co/400x400/eeeeee/666666?text=Alu+Part+HD" alt="Aluminum 6061 HD">
+                </div>
+
+                <div class="snapshot-right-content">
+                    <div class="pc-data-grid">
+                        <div class="pc-data-item">
+                            <span>💲</span>
+                            <div class="data-label">Cost</div>
+                            <div class="data-value">Moderate ($$)</div>
+                        </div>
+                        <div class="pc-data-item">
+                            <span>⏱️</span>
+                            <div class="data-label">Lead Time</div>
+                            <div class="data-value">3-5 Days</div>
+                        </div>
+                        <div class="pc-data-item">
+                            <span>📏</span>
+                            <div class="data-label">Tolerance</div>
+                            <div class="data-value">±0.05 mm</div>
+                        </div>
+                        <div class="pc-data-item">
+                            <span>🔥</span>
+                            <div class="data-label">Heat Resist</div>
+                            <div class="data-value">Up to 150°C</div>
+                        </div>
+                    </div>
+
+                    <div class="pc-description">
+                        Aluminum 6061 is one of the most versatile 3D printing alloys. It offers an excellent strength-to-weight ratio and is highly resistant to corrosion. This material is ideal for structural components in the aerospace and automotive industries that require high precision and durability.
+                    </div>
+
+                    <div class="pc-action-row">
+                        <a href="/quote" class="btn btn-primary">🚀 Start Instant Quote</a>
+                        <a href="/materials/aluminum" class="btn btn-secondary">📄 Detailed Technical Data Sheet ›</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="material-accordion-item">
+            <div class="accordion-header">
+                <h4>Stainless Steel 316L <span class="material-tag">Medical Grade</span></h4>
+                <span class="chevron">▶</span>
+            </div>
+        </div>
+
+        <div class="material-accordion-item">
+            <div class="accordion-header">
+                <h4>Titanium Ti6Al4V <span class="material-tag">High Performance</span></h4>
+                <span class="chevron">▶</span>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
