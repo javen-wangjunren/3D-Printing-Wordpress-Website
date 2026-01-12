@@ -194,6 +194,7 @@ We take care of everything, including your satisfaction.', '3d-printing' ),
                 ),
                 
                 // Design 标签页
+
                 array(
                     'key'               => 'field_hero_tab_design',
                     'label'             => __( 'Design', '3d-printing' ),
@@ -209,6 +210,31 @@ We take care of everything, including your satisfaction.', '3d-printing' ),
                     ),
                     'placement'         => 'top',
                     'endpoint'          => 0,
+                ),
+                array(
+                    'key'               => 'field_hero_layout',
+                    'label'             => __( '布局样式', '3d-printing' ),
+                    'name'              => 'hero_layout',
+                    'type'              => 'select',
+                    'instructions'      => __( '选择Hero Banner的布局样式', '3d-printing' ),
+                    'required'          => 1,
+                    'conditional_logic' => 0,
+                    'wrapper'           => array(
+                        'width'         => '',
+                        'class'         => '',
+                        'id'            => '',
+                    ),
+                    'choices'           => array(
+                        'split'         => __( '左文右图', '3d-printing' ),
+                        'centered'      => __( '文字居中 + 背景大图', '3d-printing' ),
+                    ),
+                    'default_value'     => 'split',
+                    'allow_null'        => 0,
+                    'multiple'          => 0,
+                    'ui'                => 1,
+                    'return_format'     => 'value',
+                    'ajax'              => 0,
+                    'placeholder'       => '',
                 ),
                 array(
                     'key'               => 'field_hero_background_color',
