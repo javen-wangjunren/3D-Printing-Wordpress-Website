@@ -35,6 +35,7 @@ define( 'TDP_INC_DIR', TDP_THEME_DIR . '/inc' );
 $tdp_inc_files = [
     'setup.php',        // 主题支持 / 基础设置
     'assets.php',       // CSS / JS 资源加载（可先空）
+    'options-page.php', // ACF 选项页注册
     'post-types.php',   // CPT：Capability / Material
     'taxonomies.php',   // 自定义分类法
     'acf/fields.php',   // ACF 字段组

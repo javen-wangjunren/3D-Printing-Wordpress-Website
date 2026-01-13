@@ -342,3 +342,81 @@ if ( function_exists( 'acf_register_block_type' ) ) {
     }
     add_action( 'acf/init', '_3dp_register_capability_design_guide_block' );
 }
+
+/**
+ * 注册 Order Process Block
+ * 挂载于 acf/init 钩子中
+ */
+if ( function_exists( 'acf_register_block_type' ) ) {
+    function _3dp_register_order_process_block() {
+        acf_register_block_type( array(
+            'name'              => 'order-process',
+            'title'             => __( 'Order Process', '3d-printing' ),
+            'description'       => __( '展示订单流程的线性步骤模块，包含工业风格的步骤节点和进度轨道。', '3d-printing' ),
+            'render_template'   => 'blocks/global/order-process/render.php',
+            'category'          => 'layout',
+            'icon'              => 'list-view',
+            'keywords'          => array( 'order', 'process', 'steps', 'workflow', 'manufacturing' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_order_process_block' );
+}
+
+/**
+ * 注册 Material Comparison Block
+ * 挂载于 acf/init 钩子中
+ */
+if ( function_exists( 'acf_register_block_type' ) ) {
+    function _3dp_register_material_comparison_block() {
+        acf_register_block_type( array(
+            'name'              => 'material-comparison',
+            'title'             => __( 'Material Comparison', '3d-printing' ),
+            'description'       => __( '展示材料对比的交互式模块，包含顶部导航标签、材料列表和属性对比表。', '3d-printing' ),
+            'render_template'   => 'blocks/global/material-comparison/render.php',
+            'category'          => 'layout',
+            'icon'              => 'table-row-after',
+            'keywords'          => array( 'material', 'comparison', 'table', '3d printing', 'materials' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_material_comparison_block' );
+}
+
+/**
+ * 注册 Capability List Block
+ * 挂载于 acf/init 钩子中
+ */
+if ( function_exists( 'acf_register_block_type' ) ) {
+    function _3dp_register_capability_list_block() {
+        acf_register_block_type( array(
+            'name'              => 'capability-list',
+            'title'             => __( 'Capability List', '3d-printing' ),
+            'description'       => __( '展示所有制造工艺的列表模块，支持标签切换，显示工艺详情和可用材料。', '3d-printing' ),
+            'render_template'   => 'blocks/global/capability-list/render.php',
+            'category'          => 'layout',
+            'icon'              => 'grid-view',
+            'keywords'          => array( 'capability', 'list', 'manufacturing', '3d printing', 'processes' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_capability_list_block' );
+}

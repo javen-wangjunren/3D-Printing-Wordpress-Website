@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Process - Industrial Tech Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 变量注入 (基于 Tailwind Config [cite: 12-65]) --- */
+        :root {
+            --primary: #0047AB; /* [cite: 17] */
+            --primary-hover: #003A8C; /* [cite: 18] */
+            --heading: #1D2938; /* [cite: 21] */
+            --body: #667085; /* [cite: 22] */
+            --muted: #98A2B3; /* [cite: 23] */
+            --border: #E4E7EC; /* [cite: 31] */
+            --bg-section: #F2F4F7; /* [cite: 27] */
+            --radius-card: 12px; /* [cite: 59, 85] */
+            --container-max: 1280px; /* [cite: 49] */
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; /* [cite: 37, 73] */
+            color: var(--body); 
+            margin: 0; 
+            background: #fff; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .section-py { padding: 96px 0; } /* [cite: 53] */
+        .container { max-width: var(--container-max); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+
+        /* --- 头部层级：展现工业力量感  --- */
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .h2 { 
+            font-size: 36px; /* [cite: 41] */
+            color: var(--heading); 
+            font-weight: 700; 
+            margin: 0 0 16px 0; 
+            letter-spacing: -0.5px; /*  */
+        }
+        .section-desc { font-size: 18px; max-width: 720px; margin: 0 auto; color: var(--body); }
+
+        /* --- Stepper 线性布局  --- */
+        .stepper-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        /* 贯穿导轨 [cite: 86] */
+        .stepper-track {
+            position: absolute;
+            top: 32px; /* 居中于 64px 的 Node */
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .step-item {
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* --- 步骤节点 (Node) --- */
+        .step-node {
+            width: 64px;
+            height: 64px;
+            background: #fff;
+            border: 1px solid var(--border); /* [cite: 86] */
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* 数据字体：JetBrains Mono  */
+        .step-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .step-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        /* 交互状态 [cite: 79] */
+        .step-item:hover .step-node {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 71, 171, 0.08);
+        }
+
+        .step-item.active .step-node {
+            border-color: var(--primary);
+            background: var(--primary);
+        }
+        .step-item.active .step-icon, 
+        .step-item.active .step-number { color: #fff; }
+
+        /* --- 文字内容 --- */
+        .h4 { 
+            font-size: 20px; /* [cite: 43] */
+            color: var(--heading); 
+            margin: 0 0 12px 0; 
+            font-weight: 600; 
+            letter-spacing: -0.3px;
+        }
+        .step-text { 
+            font-size: 14px; /* [cite: 45] */
+            line-height: 1.6; 
+            color: var(--body); 
+        }
+
+        /* --- 📱 移动端自适应：纵向节省空间  --- */
+        @media (max-width: 767px) {
+            .section-py { padding: 64px 0; }
+            .section-header { text-align: left; margin-bottom: 48px; }
+            .h2 { font-size: 28px; }
+            
+            .stepper-wrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .stepper-track {
+                top: 0;
+                bottom: 0;
+                left: 32px; /* 居中于 Node */
+                width: 1px;
+                height: 100%;
+                right: auto;
+            }
+
+            .step-item {
+                flex-direction: row;
+                text-align: left;
+                align-items: flex-start;
+                padding: 0;
+            }
+
+            .step-node {
+                margin-bottom: 0;
+                margin-right: 24px;
+                flex-shrink: 0;
+            }
+
+            .step-content { padding-top: 8px; }
+            .h4 { font-size: 18px; margin-bottom: 8px; }
+        }
+
+        /* --- CTA 按钮 [cite: 60, 94] --- */
+        .cta-box { text-align: center; margin-top: 64px; }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: var(--radius-btn); /* [cite: 60] */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: var(--primary-hover); }
+    </style>
+</head>
+<body>
+
+<section class="section-py">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="h2">Prototypes and Parts Made Easy</h2>
+            <p class="section-desc">Steam guides your engineering team from CAD upload to global delivery with transparent pricing and precision DFM insight.</p>
+        </div>
+
+        <div class="stepper-wrapper">
+            <div class="stepper-track"></div>
+
+            <div class="step-item active">
+                <div class="step-node">
+                    <svg class="step-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                    <span class="step-number">01</span>
+                </div>
+                <div class="step-content">
+                    <h4 class="h4">Upload CAD Files</h4>
+                    <p class="step-text">Securely drag-and-drop STEP, STL, or IGES files for instant versioning and metadata analysis.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-node">
+                    <svg class="step-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="step-number">02</span>
+                </div>
+                <div class="step-content">
+                    <h4 class="h4">Quote & DFM Insight</h4>
+                    <p class="step-text">Get an automated quote and expert manufacturability feedback within seconds.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-node">
+                    <svg class="step-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    <span class="step-number">03</span>
+                </div>
+                <div class="step-content">
+                    <h4 class="h4">Smart Production</h4>
+                    <p class="step-text">Orders are routed to ISO-certified facilities with real-time manufacturing status updates.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-node">
+                    <svg class="step-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                    <span class="step-number">04</span>
+                </div>
+                <div class="step-content">
+                    <h4 class="h4">Fast Delivery</h4>
+                    <p class="step-text">Global express shipping with physical inspection reports and tracking included.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <a href="/quote" class="btn-primary">Start Your Instant Quote ›</a>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

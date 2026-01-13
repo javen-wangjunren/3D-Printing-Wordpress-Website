@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing Capabilities Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 变量注入 (基于 Tailwind Config [cite: 14-63]) --- */
+        :root {
+            --primary: #0047AB; /* [cite: 17] */
+            --primary-hover: #003A8C; /* [cite: 18] */
+            --heading: #1D2938; /* [cite: 21] */
+            --body: #667085; /* [cite: 22] */
+            --border: #E4E7EC; /* [cite: 31] */
+            --bg-section: #F2F4F7; /* [cite: 27] */
+            --radius-card: 12px; /* [cite: 59] */
+            --radius-btn: 8px; /* [cite: 60] */
+            --container-max: 1280px; /* [cite: 49] */
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; /* [cite: 37, 73] */
+            color: var(--body); 
+            margin: 0; 
+            background: #fff; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .section-py { padding: 96px 0; } /* [cite: 53] */
+        .container { max-width: var(--container-max); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+
+        .section-header { text-align: center; margin-bottom: 48px; }
+        .h2 { 
+            font-size: 36px; /* [cite: 41] */
+            color: var(--heading); 
+            font-weight: 700; 
+            margin: 0 0 16px 0; 
+            letter-spacing: -0.5px; /* [cite: 76] */
+        }
+
+        /* --- Tab 切换器逻辑 --- */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+        .tabs-nav::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            padding: 10px 24px;
+            background: var(--bg-section);
+            border: 1px solid transparent;
+            border-radius: 30px;
+            color: var(--body);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--primary); /* [cite: 79] */
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* --- 主面板容器 --- */
+        .capability-panel {
+            display: none; /* 默认隐藏，通过 JS 切换 */
+            grid-template-columns: 1.2fr 1fr;
+            gap: 64px;
+            align-items: center;
+            animation: fadeUp 0.4s ease-out;
+        }
+        .capability-panel.active { display: grid; }
+
+        /* 左侧内容区 */
+        .info-col { display: flex; flex-direction: column; }
+        .h3 { font-size: 28px; color: var(--heading); margin: 0 0 20px 0; font-weight: 700; }
+        .desc { font-size: 16px; line-height: 1.6; color: var(--body); margin-bottom: 32px; }
+
+        /* 参数仪表盘 (Metrics Grid) */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+        .spec-item { display: flex; flex-direction: column; }
+        .spec-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+        /* 数据字体强制使用 JetBrains Mono [cite: 74] */
+        .spec-value { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: var(--heading); 
+        }
+
+        /* 材料标签云 */
+        .materials-box { margin-bottom: 40px; }
+        .tag-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+        .tags-wrapper { display: flex; flex-wrap: wrap; gap: 8px; }
+        .material-tag {
+            background: var(--bg-section);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--heading);
+        }
+
+        /* 按钮组 */
+        .btn-group { display: flex; gap: 16px; }
+        .btn {
+            padding: 14px 28px;
+            border-radius: var(--radius-btn);
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-outline { border: 1px solid var(--border); color: var(--heading); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* 右侧视觉区 */
+        .visual-col { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--bg-section); }
+        .visual-col img { width: 100%; height: auto; display: block; mix-blend-mode: multiply; }
+        .machine-label {
+            position: absolute; bottom: 20px; right: 20px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);
+            padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700;
+            color: var(--heading); border: 1px solid var(--border);
+        }
+
+        /* 动画 */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- 📱 移动端自适应 --- */
+        @media (max-width: 900px) {
+            .capability-panel { grid-template-columns: 1fr; gap: 40px; }
+            .tabs-nav { justify-content: flex-start; padding-left: 0; }
+            .visual-col { order: -1; } /* 图片排在最上方 */
+            .btn-group { flex-direction: column; }
+            .btn { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<section class="section-py">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="h2">Manufacturing Capabilities</h2>
+            <p class="section-desc">Six industrial technologies optimized for prototyping and scalable production.</p>
+        </div>
+
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="showTab('sls')">Selective Laser Sintering</button>
+            <button class="tab-btn" onclick="showTab('mjf')">Multi Jet Fusion</button>
+            <button class="tab-btn" onclick="showTab('fdm')">FDM</button>
+            <button class="tab-btn" onclick="showTab('sla')">SLA</button>
+            <button class="tab-btn" onclick="showTab('dmls')">DMLS (Metal)</button>
+        </div>
+
+        <div id="sls" class="capability-panel active">
+            <div class="info-col">
+                <h3 class="h3">Selective Laser Sintering (SLS)</h3>
+                <p class="desc">The industry's strongest nylon parts with repeatable tolerances and exceptional isotropic properties. Support-free geometries enable designs impossible with traditional manufacturing.</p>
+                
+                <div class="specs-grid">
+                    <div class="spec-item"><span class="spec-label">Build Volume</span><span class="spec-value">340 × 340 × 600 mm</span></div>
+                    <div class="spec-item"><span class="spec-label">Layer Height</span><span class="spec-value">60 - 120 Microns</span></div>
+                    <div class="spec-item"><span class="spec-label">Tolerance</span><span class="spec-value">±0.25%</span></div>
+                    <div class="spec-item"><span class="spec-label">Lead Time</span><span class="spec-value">3 - 5 Days</span></div>
+                </div>
+
+                <div class="materials-box">
+                    <div class="tag-title">Available Materials</div>
+                    <div class="tags-wrapper">
+                        <span class="material-tag">Nylon PA12</span>
+                        <span class="material-tag">Glass Filled PA12</span>
+                        <span class="material-tag">TPU 88A</span>
+                        <span class="material-tag">PA11 Black</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <a href="/quote" class="btn btn-primary">Get Instant Quote</a>
+                    <a href="/sls-service" class="btn btn-outline">Explore SLS Details</a>
+                </div>
+            </div>
+            
+            <div class="visual-col">
+                <img src="https://placehold.co/800x1000/F2F4F7/1D2939?text=EOS+P396+Printer" alt="SLS Printer">
+                <div class="machine-label">EQUIPMENT: EOS P396</div>
+            </div>
+        </div>
+
+        <div id="mjf" class="capability-panel">
+            <div class="info-col">
+                <h3 class="h3">Multi Jet Fusion (MJF)</h3>
+                <p class="desc">High-speed production-grade nylon parts with excellent surface finish and fine detail resolution. Ideal for large batches and functional assemblies.</p>
+                
+                <div class="specs-grid">
+                    <div class="spec-item"><span class="spec-label">Build Volume</span><span class="spec-value">380 × 284 × 380 mm</span></div>
+                    <div class="spec-item"><span class="spec-label">Layer Height</span><span class="spec-value">80 Microns</span></div>
+                    <div class="spec-item"><span class="spec-label">Tolerance</span><span class="spec-value">±0.3%</span></div>
+                    <div class="spec-item"><span class="spec-label">Lead Time</span><span class="spec-value">2 - 4 Days</span></div>
+                </div>
+
+                <div class="materials-box">
+                    <div class="tag-title">Available Materials</div>
+                    <div class="tags-wrapper">
+                        <span class="material-tag">Nylon PA12</span>
+                        <span class="material-tag">Nylon PA11</span>
+                        <span class="material-tag">PA12 Glass Beads</span>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <a href="/quote" class="btn btn-primary">Get Instant Quote</a>
+                    <a href="/mjf-service" class="btn btn-outline">Explore MJF Details</a>
+                </div>
+            </div>
+            
+            <div class="visual-col">
+                <img src="https://placehold.co/800x1000/F2F4F7/1D2939?text=HP+5200+Series" alt="MJF Printer">
+                <div class="machine-label">EQUIPMENT: HP MJF 5200</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    function showTab(id) {
+        // 移除所有按钮的 active
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        // 隐藏所有面板
+        document.querySelectorAll('.capability-panel').forEach(panel => panel.classList.remove('active'));
+        
+        // 激活当前按钮和面板
+        event.currentTarget.classList.add('active');
+        document.getElementById(id).classList.add('active');
+    }
+</script>
+
+</body>
+</html>
