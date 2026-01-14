@@ -226,6 +226,99 @@ if ( function_exists( 'acf_register_block_type' ) )
         ) );
     }
     add_action( 'acf/init', '_3dp_register_material_list_block' );
+
+    // 注册Manufacturing Showcase Block
+    function _3dp_register_manufacturing_showcase_block() 
+    {
+        acf_register_block_type( array(
+            'name'              => 'manufacturing-showcase',
+            'title'             => __( 'Manufacturing Showcase', '3d-printing' ),
+            'description'       => __( '展示真实生产案例的滑块模块，包含图片与简要说明。', '3d-printing' ),
+            'render_template'   => 'blocks/global/manufacturing-showcase/render.php',
+            'category'          => 'layout',
+            'icon'              => 'format-gallery',
+            'keywords'          => array( 'manufacturing', 'showcase', 'examples', 'slider', 'production' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+                'jsx'       => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_manufacturing_showcase_block' );
+
+    // 注册Technical Specs Block
+    function _3dp_register_technical_specs_block() 
+    {
+        acf_register_block_type( array(
+            'name'              => 'technical-specs',
+            'title'             => __( 'Technical Specs', '3d-printing' ),
+            'description'       => __( '用于展示材料关键性能指标卡片和完整参数表的技术规格模块。', '3d-printing' ),
+            'render_template'   => 'blocks/global/technical-specs/render.php',
+            'category'          => 'layout',
+            'icon'              => 'analytics',
+            'keywords'          => array( 'technical', 'specs', 'performance', 'properties', 'material' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+                'jsx'       => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_technical_specs_block' );
+
+        // 注册材料卡片网格模块
+
+    function _3dp_register_material_card_block() 
+    {
+        acf_register_block_type( array(
+            'name'              => 'material-card',
+            'title'             => __( 'Material Card Grid', '3d-printing' ),
+            'description'       => __( '材料卡片网格模块：顶部浮动工艺/材料标签与底部决策勋章。', '3d-printing' ),
+            'render_template'   => 'blocks/global/material-card/render.php',
+            'category'          => 'layout',
+            'icon'              => 'index-card',
+            'keywords'          => array( 'material', 'card', 'grid', 'cost', 'lead time' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+                'jsx'       => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_material_card_block' );
+
+    // 注册Manufacturing Capabilities Block
+    function _3dp_register_manufacturing_capabilities_block() 
+    {
+        acf_register_block_type( array(
+            'name'              => 'manufacturing-capabilities',
+            'title'             => __( 'Manufacturing Capabilities', '3d-printing' ),
+            'description'       => __( '制造能力枢纽模块：顶部Tabs、左侧信息卡片网格与标签、右侧设备大图。', '3d-printing' ),
+            'render_template'   => 'blocks/global/manufacturing-capabilities/render.php',
+            'category'          => 'layout',
+            'icon'              => 'hammer',
+            'keywords'          => array( 'manufacturing', 'capabilities', 'hub', 'tabs', 'specs' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+                'jsx'       => true,
+            ),
+        ) );
+    }
+    add_action( 'acf/init', '_3dp_register_manufacturing_capabilities_block' );
 }
 
 
@@ -419,4 +512,25 @@ if ( function_exists( 'acf_register_block_type' ) ) {
         ) );
     }
     add_action( 'acf/init', '_3dp_register_capability_list_block' );
+}
+
+if ( function_exists( 'acf_register_block_type' ) ) {
+    add_action( 'acf/init', function() {
+        acf_register_block_type( array(
+            'name'              => 'filter-sidebar',
+            'title'             => __( 'Filter Sidebar', '3d-printing' ),
+            'description'       => __( '材料库侧边筛选模块：包含标题、搜索框和多维过滤组。', '3d-printing' ),
+            'render_template'   => 'blocks/global/filter-sidebar/render.php',
+            'category'          => 'layout',
+            'icon'              => 'filter',
+            'keywords'          => array( 'filter', 'sidebar', 'materials', 'library' ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array(
+                'align'     => array( 'full' ),
+                'anchor'    => true,
+                'mode'      => true,
+            ),
+        ) );
+    } );
 }

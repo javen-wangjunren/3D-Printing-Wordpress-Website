@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Library - Industrial Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 全局样式变量注入 [cite: 46-66, 91-93] --- */
+        :root {
+            --primary: #0047AB; /* 品牌蓝 [cite: 14, 49] */
+            --primary-hover: #003A8C; /* [cite: 50] */
+            --heading: #1D2938; /* 标题色 [cite: 53] */
+            --body: #667085; /* 正文色 [cite: 54] */
+            --muted: #98A2B3; /* 辅助色 [cite: 55] */
+            --border: #E4E7EC; /* 标准边框 [cite: 21, 63] */
+            --bg-page: #FFFFFF; /* 页面背景 [cite: 16, 58] */
+            --bg-section: #F2F4F7; /* 模块背景 [cite: 16, 59] */
+            --radius-card: 12px; /*  */
+            --radius-button: 8px; /* [cite: 92] */
+        }
+
+        /* 基础排版 [cite: 8, 69] */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--body);
+            background-color: var(--bg-page);
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .section-py { padding: 96px 0; } /* 标准垂直间距 [cite: 85] */
+        .container { 
+            max-width: 1280px; /* [cite: 81] */
+            margin: 0 auto; 
+            padding: 0 24px; 
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: 280px 1fr; /* 侧边栏宽度 */
+            gap: 48px;
+            align-items: start;
+        }
+
+        /* --- 1. 侧边筛选栏 (Filters Sidebar) --- */
+        .sidebar-header { margin-bottom: 32px; }
+        .h2 { 
+            font-size: 36px; color: var(--heading); font-weight: 700; 
+            margin: 0 0 8px 0; letter-spacing: -0.5px; /* [cite: 11, 73] */
+        }
+        
+        /* 搜索框设计 */
+        .search-wrapper { position: relative; margin-bottom: 40px; }
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-button);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--primary); }
+
+        /* 筛选组样式 */
+        .filter-group { margin-bottom: 32px; }
+        .filter-title { 
+            font-size: 11px; font-weight: 700; color: var(--muted); 
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; 
+        }
+        .checkbox-item {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 10px; font-size: 14px; color: var(--body);
+            cursor: pointer; transition: color 0.2s;
+        }
+        .checkbox-item:hover { color: var(--primary); }
+        .checkbox-item input { accent-color: var(--primary); width: 16px; height: 16px; }
+
+        /* --- 2. 材料网格 (Material Grid) --- */
+        .materials-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* PC端1行3个 */
+            gap: 24px; 
+        }
+
+        /* 卡片设计 */
+        .mat-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 24px rgba(0, 71, 171, 0.08);
+        }
+
+        /* 可视化区 [cite: 28] */
+        .mat-card-img {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            background: var(--bg-section);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .mat-card-img img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
+        /* 浮动标签 */
+        .tag-process {
+            position: absolute; top: 16px; left: 16px;
+            background: var(--heading); color: #fff;
+            font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+        }
+        .tag-type {
+            position: absolute; top: 16px; right: 16px;
+            background: #fff; border: 1px solid var(--border);
+            color: var(--heading); font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+        }
+
+        /* 内容区 */
+        .mat-card-body { padding: 24px; }
+        .mat-card-title {
+            font-size: 20px; color: var(--heading); font-weight: 700; 
+            margin: 0 0 16px 0; letter-spacing: -0.5px; /* [cite: 11, 75] */
+        }
+
+        /* 决策勋章 (Badges) */
+        .mat-card-footer { display: flex; gap: 10px; }
+        .badge {
+            background: #F0F5FF; /* 品牌蓝浅色版 */
+            border: 1px solid #D1E0FF;
+            border-radius: 6px;
+            padding: 6px 12px;
+            flex: 1;
+            display: flex; flex-direction: column;
+        }
+        .badge-label { font-size: 9px; font-weight: 700; color: var(--primary); opacity: 0.7; margin-bottom: 2px; }
+        
+        /* 数据显示  */
+        .badge-val { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 14px; font-weight: 700; color: var(--primary); 
+        }
+
+        .card-link { position: absolute; inset: 0; z-index: 10; cursor: pointer; }
+
+        /* --- 响应式适配 --- */
+        @media (max-width: 1024px) {
+            .container { grid-template-columns: 1fr; gap: 40px; }
+            .sidebar-filters { border-bottom: 1px solid var(--border); padding-bottom: 40px; }
+            .materials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .materials-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<section class="section-py">
+    <div class="container">
+        
+        <aside class="sidebar-filters">
+            <header class="sidebar-header">
+                <h2 class="h2">Material Library</h2>
+                <p style="font-size: 14px; color: var(--muted);">37 professional materials available.</p>
+            </header>
+
+            <div class="search-wrapper">
+                <input type="text" id="matSearch" class="search-input" placeholder="Search by name...">
+            </div>
+
+            <div class="filter-group">
+                <h4 class="filter-title">Process</h4>
+                <label class="checkbox-item"><input type="checkbox" name="process" value="SLS"> SLS (Polymer)</label>
+                <label class="checkbox-item"><input type="checkbox" name="process" value="MJF"> MJF (Polymer)</label>
+                <label class="checkbox-item"><input type="checkbox" name="process" value="FDM"> FDM (Polymer)</label>
+                <label class="checkbox-item"><input type="checkbox" name="process" value="DMLS"> DMLS (Metal)</label>
+            </div>
+
+            <div class="filter-group">
+                <h4 class="filter-title">Type</h4>
+                <label class="checkbox-item"><input type="checkbox" name="type" value="Plastic"> Plastic / Polymer</label>
+                <label class="checkbox-item"><input type="checkbox" name="type" value="Metal"> Metal / Alloy</label>
+                <label class="checkbox-item"><input type="checkbox" name="type" value="Resin"> Resin / Liquid</label>
+            </div>
+
+            <div class="filter-group">
+                <h4 class="filter-title">Cost</h4>
+                <label class="checkbox-item"><input type="checkbox" name="cost" value="$"> $ (Economical)</label>
+                <label class="checkbox-item"><input type="checkbox" name="cost" value="$$"> $$ (Standard)</label>
+                <label class="checkbox-item"><input type="checkbox" name="cost" value="$$$"> $$$ (Premium)</label>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <div class="materials-grid" id="materialsGrid">
+                
+                <div class="mat-card group" data-process="SLS" data-type="Plastic" data-cost="$$">
+                    <div class="mat-card-img">
+                        <span class="tag-process">SLS</span>
+                        <span class="tag-type">Plastic</span>
+                        <img src="https://placehold.co/600x450/F2F4F7/1D2938?text=PA12+Nylon" alt="PA 12 Black">
+                    </div>
+                    <div class="mat-card-body">
+                        <h4 class="mat-card-title">PA 12 Black (Nylon)</h4>
+                        <div class="mat-card-footer">
+                            <div class="badge">
+                                <span class="badge-label">COST</span>
+                                <span class="badge-val">$$</span>
+                            </div>
+                            <div class="badge">
+                                <span class="badge-label">LEAD TIME</span>
+                                <span class="badge-val">3-5 Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/material/pa12-black" class="card-link"></a>
+                </div>
+
+                <div class="mat-card group" data-process="DMLS" data-type="Metal" data-cost="$$$">
+                    <div class="mat-card-img">
+                        <span class="tag-process">DMLS</span>
+                        <span class="tag-type">Metal</span>
+                        <img src="https://placehold.co/600x450/F2F4F7/1D2938?text=Aluminum+6061" alt="Aluminum 6061">
+                    </div>
+                    <div class="mat-card-body">
+                        <h4 class="mat-card-title">Aluminum 6061</h4>
+                        <div class="mat-card-footer">
+                            <div class="badge">
+                                <span class="badge-label">COST</span>
+                                <span class="badge-val">$$$</span>
+                            </div>
+                            <div class="badge">
+                                <span class="badge-label">LEAD TIME</span>
+                                <span class="badge-val">7-10 Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/material/al6061" class="card-link"></a>
+                </div>
+
+                <div class="mat-card group" data-process="SLA" data-type="Resin" data-cost="$">
+                    <div class="mat-card-img">
+                        <span class="tag-process">SLA</span>
+                        <span class="tag-type">Resin</span>
+                        <img src="https://placehold.co/600x450/F2F4F7/1D2938?text=Draft+Resin" alt="Draft Resin">
+                    </div>
+                    <div class="mat-card-body">
+                        <h4 class="mat-card-title">Standard Draft Resin</h4>
+                        <div class="mat-card-footer">
+                            <div class="badge">
+                                <span class="badge-label">COST</span>
+                                <span class="badge-val">$</span>
+                            </div>
+                            <div class="badge">
+                                <span class="badge-label">LEAD TIME</span>
+                                <span class="badge-val">1-2 Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="card-link"></a>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</section>
+
+<script>
+    /* --- 纯前端筛选逻辑 (URL 不变) --- */
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('matSearch');
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const cards = document.querySelectorAll('.mat-card');
+
+        function filterMaterials() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilters = {
+                process: Array.from(document.querySelectorAll('input[name="process"]:checked')).map(i => i.value),
+                type: Array.from(document.querySelectorAll('input[name="type"]:checked')).map(i => i.value),
+                cost: Array.from(document.querySelectorAll('input[name="cost"]:checked')).map(i => i.value)
+            };
+
+            cards.forEach(card => {
+                const name = card.querySelector('.mat-card-title').textContent.toLowerCase();
+                const proc = card.dataset.process;
+                const type = card.dataset.type;
+                const cost = card.dataset.cost;
+
+                const matchesSearch = name.includes(searchTerm);
+                const matchesProc = activeFilters.process.length === 0 || activeFilters.process.includes(proc);
+                const matchesType = activeFilters.type.length === 0 || activeFilters.type.includes(type);
+                const matchesCost = activeFilters.cost.length === 0 || activeFilters.cost.includes(cost);
+
+                card.style.display = (matchesSearch && matchesProc && matchesType && matchesCost) ? 'block' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterMaterials);
+        checkboxes.forEach(cb => cb.addEventListener('change', filterMaterials));
+    });
+</script>
+</body>
+</html>

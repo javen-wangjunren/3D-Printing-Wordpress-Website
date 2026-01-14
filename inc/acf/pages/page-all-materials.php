@@ -1,0 +1,331 @@
+<?php
+
+if ( function_exists( 'acf_add_local_field_group' ) ) {
+
+    add_action( 'acf/init', function() {
+
+        acf_add_local_field_group( array(
+            'key' => 'group_page_all_materials',
+            'title' => 'All Materials Page (材料库总览页配置)',
+            'fields' => array(
+
+                array(
+                    'key' => 'field_alm_tab_content',
+                    'label' => 'Content',
+                    'type' => 'tab',
+                    'placement' => 'top',
+                ),
+
+                array(
+                    'key' => 'field_alm_hero_title',
+                    'label' => 'Hero Title',
+                    'name' => 'hero_title',
+                    'type' => 'text',
+                    'required' => 1,
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_hero_subtitle',
+                    'label' => 'Hero Subtitle',
+                    'name' => 'hero_subtitle',
+                    'type' => 'text',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_hero_content',
+                    'label' => 'Hero Content',
+                    'name' => 'hero_content',
+                    'type' => 'textarea',
+                    'rows' => 4,
+                ),
+
+                array(
+                    'key' => 'field_alm_seo_copy',
+                    'label' => 'SEO Copy',
+                    'name' => 'all_materials_seo_copy',
+                    'type' => 'wysiwyg',
+                    'tabs' => 'visual',
+                    'media_upload' => 0,
+                    'delay' => 1,
+                ),
+
+                array(
+                    'key' => 'field_alm_tab_design',
+                    'label' => 'Design',
+                    'type' => 'tab',
+                    'placement' => 'top',
+                ),
+
+                array(
+                    'key' => 'field_alm_sidebar_bg_style',
+                    'label' => 'Sidebar Background Style',
+                    'name' => 'filter_sidebar_bg_style',
+                    'type' => 'select',
+                    'choices' => array(
+                        'bg-page' => '白色背景（与页面同色）',
+                        'bg-section' => '浅灰背景（与内容区形成分区）',
+                    ),
+                    'default_value' => 'bg-page',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_mobile_compact_mode',
+                    'label' => 'Mobile Compact Mode',
+                    'name' => 'filter_sidebar_mobile_compact_mode',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 1,
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_mobile_hide_subtitle',
+                    'label' => 'Mobile Hide Subtitle',
+                    'name' => 'filter_sidebar_mobile_hide_subtitle',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 0,
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+
+                array(
+                    'key' => 'field_alm_tab_settings',
+                    'label' => 'Settings',
+                    'type' => 'tab',
+                    'placement' => 'top',
+                ),
+
+                array(
+                    'key' => 'field_alm_filter_title',
+                    'label' => 'Sidebar Title',
+                    'name' => 'filter_sidebar_title',
+                    'type' => 'text',
+                    'default_value' => 'Material Library',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_filter_subtitle',
+                    'label' => 'Sidebar Subtitle Template',
+                    'name' => 'filter_sidebar_subtitle',
+                    'type' => 'text',
+                    'instructions' => '支持占位符：{count}（材料数量）。',
+                    'default_value' => '{count} professional materials available.',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_search_placeholder',
+                    'label' => 'Search Placeholder',
+                    'name' => 'filter_sidebar_search_placeholder',
+                    'type' => 'text',
+                    'default_value' => 'Search by name...',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+
+                array(
+                    'key' => 'field_alm_show_process',
+                    'label' => 'Show Process Filter',
+                    'name' => 'filter_sidebar_show_process',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 1,
+                    'wrapper' => array(
+                        'width' => '25',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_show_type',
+                    'label' => 'Show Material Type Filter',
+                    'name' => 'filter_sidebar_show_type',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 1,
+                    'wrapper' => array(
+                        'width' => '25',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_show_cost',
+                    'label' => 'Show Cost Filter',
+                    'name' => 'filter_sidebar_show_cost',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 1,
+                    'wrapper' => array(
+                        'width' => '25',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_show_lead_time',
+                    'label' => 'Show Lead Time Filter',
+                    'name' => 'all_materials_show_lead_time',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 0,
+                    'wrapper' => array(
+                        'width' => '25',
+                    ),
+                ),
+
+                array(
+                    'key' => 'field_alm_default_processes',
+                    'label' => 'Default Processes',
+                    'name' => 'all_materials_default_processes',
+                    'type' => 'taxonomy',
+                    'taxonomy' => 'material_process',
+                    'field_type' => 'multi_select',
+                    'add_term' => 0,
+                    'save_terms' => 0,
+                    'load_terms' => 0,
+                    'return_format' => 'id',
+                    'allow_null' => 1,
+                    'multiple' => 1,
+                    'instructions' => '设置页面初始激活的 Process 过滤项（前端 JS 读取）。',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_default_types',
+                    'label' => 'Default Material Types',
+                    'name' => 'all_materials_default_types',
+                    'type' => 'taxonomy',
+                    'taxonomy' => 'material_type',
+                    'field_type' => 'multi_select',
+                    'add_term' => 0,
+                    'save_terms' => 0,
+                    'load_terms' => 0,
+                    'return_format' => 'id',
+                    'allow_null' => 1,
+                    'multiple' => 1,
+                    'instructions' => '设置页面初始激活的 Type 过滤项（前端 JS 读取）。',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_default_cost',
+                    'label' => 'Default Cost Levels',
+                    'name' => 'all_materials_default_cost_levels',
+                    'type' => 'select',
+                    'choices' => array(
+                        '$' => '$',
+                        '$$' => '$$',
+                        '$$$' => '$$$',
+                        '$$$$' => '$$$$',
+                    ),
+                    'return_format' => 'value',
+                    'multiple' => 1,
+                    'ui' => 1,
+                    'allow_null' => 1,
+                    'instructions' => '设置页面初始激活的 Cost 过滤项（前端 JS 读取）。',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_default_lead',
+                    'label' => 'Default Lead Times',
+                    'name' => 'all_materials_default_lead_times',
+                    'type' => 'select',
+                    'choices' => array(
+                        'As fast as 1 business day' => 'As fast as 1 business day',
+                        '1-2 Days' => '1-2 Days',
+                        '3-5 Days' => '3-5 Days',
+                        '7-10 Days' => '7-10 Days',
+                    ),
+                    'return_format' => 'value',
+                    'multiple' => 1,
+                    'ui' => 1,
+                    'allow_null' => 1,
+                    'instructions' => '可选：开启 Lead Time 过滤后才生效（前端 JS 读取）。',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_posts_per_page',
+                    'label' => 'Materials Per Page',
+                    'name' => 'all_materials_posts_per_page',
+                    'type' => 'number',
+                    'default_value' => 60,
+                    'min' => 1,
+                    'max' => 500,
+                    'wrapper' => array(
+                        'width' => '33',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_orderby',
+                    'label' => 'Order By',
+                    'name' => 'all_materials_orderby',
+                    'type' => 'select',
+                    'choices' => array(
+                        'title' => 'Title',
+                        'menu_order' => 'Menu Order',
+                        'date' => 'Date',
+                    ),
+                    'default_value' => 'title',
+                    'wrapper' => array(
+                        'width' => '33',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_order',
+                    'label' => 'Order',
+                    'name' => 'all_materials_order',
+                    'type' => 'select',
+                    'choices' => array(
+                        'ASC' => 'ASC',
+                        'DESC' => 'DESC',
+                    ),
+                    'default_value' => 'ASC',
+                    'wrapper' => array(
+                        'width' => '34',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_include_empty_terms',
+                    'label' => 'Include Empty Filter Terms',
+                    'name' => 'all_materials_include_empty_terms',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 0,
+                    'instructions' => '开启后将显示未被材料使用的分类项。',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+            ),
+            'location' => array(
+                array(
+                    array(
+                        'param' => 'page_template',
+                        'operator' => '==',
+                        'value' => 'templates/page-all-materials.php',
+                    ),
+                ),
+            ),
+            'menu_order' => 0,
+            'position' => 'normal',
+            'style' => 'seamless',
+            'label_placement' => 'top',
+            'instruction_placement' => 'label',
+            'active' => true,
+        ) );
+    } );
+}

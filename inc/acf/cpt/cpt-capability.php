@@ -335,7 +335,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                 ),
             ),
-            'style' => 'seamless',
+            'style' => 'default',
             'instruction_placement' => 'label',
         ) );
     });

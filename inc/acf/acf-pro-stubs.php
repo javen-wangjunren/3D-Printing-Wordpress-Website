@@ -3,10 +3,52 @@
  * ACF Pro Stubs
  * 用于解决Intelephense等IDE无法识别ACF函数的问题
  * 仅包含函数声明，不包含实现，主要是空函数
+ * 这个文件只是定义了acf相关的函数，
+ * 因为我的打开的文件夹并没有包含acf，
+ * 需要用了acf的一些函数就报错，
+ * 所以就创建了这么一个文件，并没有实际的函数功能，只是为了消除错误用的
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {}
+function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {}
+
+function __( $text, $domain = 'default' ) {
+    return $text;
+}
+
+function register_taxonomy( $taxonomy, $object_type, $args = array() ) {}
+function get_terms( $args = array(), $deprecated = '' ) { return array(); }
+function is_wp_error( $thing ) { return false; }
+function term_exists( $term, $taxonomy = '', $parent = 0 ) { return false; }
+function wp_insert_term( $term, $taxonomy, $args = array() ) { return array(); }
+
+function get_header() {}
+function get_footer() {}
+function get_template_part( $slug, $name = null, $args = array() ) {}
+function esc_html( $text = '' ) { return $text; }
+function esc_attr( $text = '' ) { return $text; }
+function esc_url( $url = '' ) { return $url; }
+function wp_kses_post( $data ) { return $data; }
+function wp_reset_postdata() {}
+function get_permalink( $post_id = 0 ) { return ''; }
+function get_the_ID() { return 0; }
+function get_the_title( $post_id = 0 ) { return ''; }
+function get_post_thumbnail_id( $post_id = 0 ) { return 0; }
+function has_post_thumbnail( $post = null ) { return false; }
+function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = array() ) { return ''; }
+function wp_get_attachment_image_url( $id, $size = 'thumbnail' ) { return ''; }
+function wp_get_attachment_image( $id, $size = 'thumbnail', $icon = false, $attr = array() ) { return ''; }
+function wp_get_post_terms( $post_id, $taxonomy, $args = array() ) { return array(); }
+function wp_set_object_terms( $object_id, $terms, $taxonomy, $append = false ) { return array(); }
+function get_post_type( $post = null ) { return ''; }
+function get_term_by( $field, $value, $taxonomy = '', $output = 'OBJECT', $filter = 'raw' ) { return false; }
+function the_title() { echo ''; }
+
+class WP_Query {
+    public $found_posts = 0;
+    public function __construct( $args = array() ) {}
+    public function have_posts() { return false; }
+    public function the_post() {}
 }
 
 /**
