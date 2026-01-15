@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO Header Navigation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .nav-link-hover::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0;
+            height: 2px; background: #0047AB; transition: width 0.2s ease;
+        }
+        .nav-link-hover:hover::after { width: 100%; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<header x-data="{ openMenu: null, mobileOpen: false }" 
+        @mouseleave="openMenu = null"
+        class="relative z-50 bg-white border-b border-border">
+    
+    <div class="mx-auto max-w-[1280px] px-6 lg:px-[64px]">
+        <div class="flex h-[80px] items-center justify-between">
+            
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-primary rounded-[4px] flex items-center justify-center shrink-0">
+                    <span class="text-white font-mono font-bold text-xs">3D</span>
+                </div>
+                <span class="text-heading font-bold text-xl tracking-tighter">PROTO_FAB</span>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-10">
+                <div class="relative" @mouseenter="openMenu = 'capabilities'">
+                    <button class="flex items-center gap-1 text-sm font-semibold text-heading nav-link-hover py-2">
+                        Capabilities
+                        <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                </div>
+
+                <div class="relative" @mouseenter="openMenu = 'materials'">
+                    <button class="flex items-center gap-1 text-sm font-semibold text-heading nav-link-hover py-2">
+                        Materials
+                        <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                </div>
+
+                <a href="/blog" class="text-sm font-semibold text-heading nav-link-hover">Blog</a>
+
+                <div class="relative" @mouseenter="openMenu = 'company'">
+                    <button class="flex items-center gap-1 text-sm font-semibold text-heading nav-link-hover py-2">
+                        Company
+                        <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="hidden lg:block">
+                <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-[8px] text-sm font-bold transition-all inline-flex items-center gap-2">
+                    Get Instant Quote
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+
+            <button class="lg:hidden" @click="mobileOpen = !mobileOpen">
+                <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div x-show="openMenu === 'capabilities'" 
+         x-cloak
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="absolute left-0 w-full bg-white border-b border-border shadow-sm">
+        <div class="mx-auto max-w-[1280px] px-[64px] py-10">
+            <div class="grid grid-cols-3 gap-y-8 gap-x-12">
+                <template x-for="tech in [
+                    { name: 'SLM (Selective Laser Melting)', sub: 'Industrial Metal 3D Printing', tag: 'METAL' },
+                    { name: 'SLS (Selective Laser Sintering)', sub: 'Functional Nylon Components', tag: 'PLASTIC' },
+                    { name: 'MJF (Multi Jet Fusion)', sub: 'Rapid Production Nylon', tag: 'FAST' },
+                    { name: 'SLA (Stereolithography)', sub: 'High-Resolution Smooth Finish', tag: 'RESIN' },
+                    { name: 'LCD/DLP Printing', sub: 'High Precision Prototyping', tag: 'PRECISION' }
+                ]">
+                    <a href="#" class="group flex flex-col gap-1 p-4 -m-4 rounded-xl hover:bg-bg-section transition-all">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-bold text-heading group-hover:text-primary" x-text="tech.name"></span>
+                            <span class="text-[9px] font-mono font-bold bg-border px-1.5 py-0.5 rounded text-muted" x-text="tech.tag"></span>
+                        </div>
+                        <span class="text-xs text-body" x-text="tech.sub"></span>
+                    </a>
+                </template>
+                <a href="/all-capabilities" class="text-sm font-bold text-primary flex items-center gap-2 hover:underline">
+                    View All Capabilities →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="openMenu === 'materials'" 
+         x-cloak
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="absolute left-0 w-full bg-white border-b border-border shadow-sm">
+        <div class="mx-auto max-w-[1280px] px-[64px] py-10">
+            <div class="grid grid-cols-4 gap-12">
+                <div>
+                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Metals (SLM)</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Aluminum (AlSi10Mg)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Stainless Steel (316L)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Titanium (Ti64)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Tool Steel (17-4 PH)</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Nylon (SLS/MJF)</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Nylon PA12 (Grey)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Nylon PA12 Glass-filled</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">HP Nylon PA12 (MJF)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Flexible TPU</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Engineering</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">ABS-like Plastic</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">ULTEM™ 9085</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">PEEK (High Performance)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Polycarbonate (PC)</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Resins (SLA)</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Standard Resin</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Clear Resin (Optical)</a></li>
+                        <li><a href="#" class="text-sm text-heading hover:text-primary">Tough Resin</a></li>
+                        <li><a href="/all-materials" class="text-sm font-bold text-primary">View All 37+ Materials →</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="openMenu === 'company'" 
+         x-cloak
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 -translate-y-2"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         class="absolute left-0 w-full bg-white border-b border-border shadow-sm">
+        <div class="mx-auto max-w-[1280px] px-[64px] py-6 flex justify-center gap-12">
+            <a href="/about" class="text-sm font-semibold text-heading hover:text-primary">About Us</a>
+            <a href="/contact" class="text-sm font-semibold text-heading hover:text-primary">Contact Us</a>
+        </div>
+    </div>
+</header>
+
+</body>
+</html>

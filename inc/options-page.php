@@ -5,43 +5,48 @@
  */
 
 if ( function_exists( 'acf_add_options_page' ) ) {
-    // 创建主选项页
-    acf_add_options_page( array(
-        'page_title'    => 'Global Settings',
-        'menu_title'    => 'Global Settings',
-        'menu_slug'     => 'global-settings',
-        'capability'    => 'edit_posts',
-        'redirect'      => false,
-        'icon_url'      => 'dashicons-admin-generic'
-    ) );
-    
-    // 创建子选项页 - 全局模块
-    acf_add_options_sub_page( array(
-        'page_title'    => 'Global Modules',
-        'menu_title'    => 'Global Modules',
-        'parent_slug'   => 'global-settings',
-    ) );
-    
-    // 创建子选项页 - 对比表
-    acf_add_options_sub_page( array(
-        'page_title'    => 'Comparison Table',
-        'menu_title'    => 'Comparison Table',
-        'parent_slug'   => 'global-settings',
-    ) );
+	add_action( 'acf/init', function() {
+		acf_add_options_page( array(
+			'page_title'    => 'Global Settings',
+			'menu_title'    => 'Global Settings',
+			'menu_slug'     => 'acf-options-global-settings',
+			'capability'    => 'edit_posts',
+			'redirect'      => true,
+			'icon_url'      => 'dashicons-admin-generic'
+		) );
+
+		acf_add_options_sub_page( array(
+			'page_title'  => 'Header',
+			'menu_title'  => 'Header',
+			'parent_slug' => 'acf-options-global-settings',
+		) );
+
+		acf_add_options_sub_page( array(
+			'page_title'  => 'Footer',
+			'menu_title'  => 'Footer',
+			'parent_slug' => 'acf-options-global-settings',
+		) );
+
+		acf_add_options_sub_page( array(
+			'page_title'  => 'Global Modules',
+			'menu_title'  => 'Global Modules',
+			'parent_slug' => 'acf-options-global-settings',
+		) );
+	} );
 }
 
 // 注册全局模块的ACF字段组
 if ( function_exists( 'acf_add_local_field_group' ) ) {
-    
-    add_action( 'acf/init', function() {
+	
+	add_action( 'acf/init', function() {
         
         // ======================================================
         // 全局模块字段组
         // ======================================================
-        acf_add_local_field_group( array(
-            'key' => 'group_3dp_global_modules',
-            'title' => 'Global Modules (全局通用模块)',
-            'fields' => array(
+		acf_add_local_field_group( array(
+			'key' => 'group_3dp_global_modules',
+			'title' => 'Global Modules (全局通用模块)',
+			'fields' => array(
                 // Why Choose Us
                 array(
                     'key' => 'field_global_why_choose_us',
@@ -278,85 +283,17 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         ),
                     ),
                 ),
-            ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'options_page',
-                        'operator' => '==',
-                        'value' => 'acf-options-global-modules',
-                    ),
-                ),
-            ),
-        ) );
-        
-        // ======================================================
-        // 全局对比表字段组
-        // ======================================================
-        acf_add_local_field_group( array(
-            'key' => 'group_3dp_global_comparison',
-            'title' => 'Global Comparison Table (全局对比表)',
-            'fields' => array(
-                array(
-                    'key' => 'field_global_comparison_table',
-                    'label' => 'Comparison Table',
-                    'name' => 'global_comparison_table',
-                    'type' => 'repeater',
-                    'collapsed' => 'field_global_comparison_tech_name',
-                    'layout' => 'table',
-                    'button_label' => 'Add Technology',
-                    'sub_fields' => array(
-                        array(
-                            'key' => 'field_global_comparison_tech_name',
-                            'label' => 'Technology Name',
-                            'name' => 'tech_name',
-                            'type' => 'text',
-                            'required' => 1,
-                        ),
-                        array(
-                            'key' => 'field_global_comparison_accuracy',
-                            'label' => 'Accuracy',
-                            'name' => 'accuracy',
-                            'type' => 'text',
-                        ),
-                        array(
-                            'key' => 'field_global_comparison_strengths',
-                            'label' => 'Strengths',
-                            'name' => 'strengths',
-                            'type' => 'text',
-                        ),
-                        array(
-                            'key' => 'field_global_comparison_build_volume',
-                            'label' => 'Build Volume',
-                            'name' => 'build_volume',
-                            'type' => 'text',
-                        ),
-                        array(
-                            'key' => 'field_global_comparison_layer_thickness',
-                            'label' => 'Layer Thickness',
-                            'name' => 'layer_thickness',
-                            'type' => 'text',
-                        ),
-                        array(
-                            'key' => 'field_global_comparison_min_feature',
-                            'label' => 'Min. Feature Size',
-                            'name' => 'min_feature_size',
-                            'type' => 'text',
-                        ),
-                        // 可以根据需要添加更多参数字段
-                    ),
-                ),
-            ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'options_page',
-                        'operator' => '==',
-                        'value' => 'acf-options-comparison-table',
-                    ),
-                ),
-            ),
-        ) );
-        
-    } );
+			),
+			'location' => array(
+				array(
+					array(
+						'param' => 'options_page',
+						'operator' => '==',
+						'value' => 'acf-options-global-modules',
+					),
+				),
+			),
+		) );
+
+	} );
 }

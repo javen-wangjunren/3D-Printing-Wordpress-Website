@@ -1,0 +1,103 @@
+<?php
+
+if ( function_exists( 'acf_add_local_field_group' ) ) {
+
+	add_action( 'acf/init', function() {
+		acf_add_local_field_group( array(
+			'key'    => 'group_3dp_footer_settings',
+			'title'  => 'Footer Settings',
+			'fields' => array(
+				array(
+					'key'   => 'field_footer_left_info',
+					'label' => 'Brand Info',
+					'name'  => 'footer_left_info',
+					'type'  => 'group',
+					'layout' => 'block',
+					'sub_fields' => array(
+						array(
+							'key'           => 'field_footer_logo_image',
+							'label'         => 'Logo Image',
+							'name'          => 'logo_image',
+							'type'          => 'image',
+							'return_format' => 'id',
+							'preview_size'  => 'medium',
+							'wrapper'       => array( 'width' => '50' ),
+						),
+						array(
+							'key'     => 'field_footer_description',
+							'label'   => 'Company Description',
+							'name'    => 'description',
+							'type'    => 'textarea',
+							'rows'    => 3,
+							'wrapper' => array( 'width' => '100' ),
+						),
+						array(
+							'key'       => 'field_footer_address',
+							'label'     => 'Contact Address',
+							'name'      => 'address',
+							'type'      => 'textarea',
+							'rows'      => 3,
+							'new_lines' => 'br',
+							'wrapper'   => array( 'width' => '100' ),
+						),
+					),
+				),
+				array(
+					'key'           => 'field_footer_copyright',
+					'label'         => 'Copyright Text',
+					'name'          => 'footer_copyright',
+					'type'          => 'text',
+					'default_value' => '© 2026 NOW3DP MANUFACTURING INC. ALL RIGHTS RESERVED.',
+				),
+				array(
+					'key'          => 'field_footer_social_links',
+					'label'        => 'Social Media Links',
+					'name'         => 'footer_social_links',
+					'type'         => 'repeater',
+					'layout'       => 'block',
+					'collapsed'    => 'field_footer_social_name',
+					'button_label' => 'Add Social Link',
+					'sub_fields'   => array(
+						array(
+							'key'     => 'field_footer_social_name',
+							'label'   => 'Platform Name',
+							'name'    => 'name',
+							'type'    => 'text',
+							'wrapper' => array( 'width' => '30' ),
+						),
+						array(
+							'key'     => 'field_footer_social_url',
+							'label'   => 'URL',
+							'name'    => 'url',
+							'type'    => 'url',
+							'wrapper' => array( 'width' => '70' ),
+						),
+						array(
+							'key'         => 'field_footer_social_icon',
+							'label'       => 'Icon SVG',
+							'name'        => 'icon_svg',
+							'type'        => 'textarea',
+							'rows'        => 3,
+							'instructions' => 'Paste SVG code here. Remove width/height attributes for better scaling.',
+						),
+					),
+				),
+			),
+			'location' => array(
+				array(
+					array(
+						'param'    => 'options_page',
+						'operator' => '==',
+						'value'    => 'acf-options-footer',
+					),
+				),
+			),
+			'menu_order'            => 0,
+			'position'              => 'normal',
+			'style'                 => 'default',
+			'label_placement'       => 'top',
+			'instruction_placement' => 'label',
+			'active'                => true,
+		) );
+	} );
+}

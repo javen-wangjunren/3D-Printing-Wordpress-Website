@@ -1,343 +1,237 @@
 <?php
 /**
- * Capability List Block 的渲染模板
- * 
- * 展示所有制造工艺，支持标签切换，显示工艺详情和可用材料
+ * Capability List Block 渲染模板（Tailwind + Alpine 版本）
+ *
+ * 设计映射：
+ * - 模块外层：bg/bg-section + py-section-y-small/lg:py-section-y，统一模块呼吸感
+ * - 标题排版：text-h2 + text-heading，正文 text-body + text-body 颜色
+ * - 工艺参数：font-mono 强调工业数据感，边界使用 border-border、primary/20
+ * - 卡片与按钮：rounded-card / rounded-button，对应 12px / 8px 圆角规范
  */
 
-// 获取当前模块的ACF字段数据
-$section_title = get_field('section_title') ?: 'Manufacturing Capabilities';
-$section_description = get_field('section_description') ?: 'Six industrial technologies optimized for prototyping and scalable production.';
-$capabilities = get_field('capabilities') ?: array();
-$bg_color = get_field('bg_color') ?: '#ffffff';
-$text_color = get_field('text_color') ?: '#667085';
-$accent_color = get_field('accent_color') ?: '#0047AB';
-$anchor_id = get_field('anchor_id') ? 'id="' . esc_attr(get_field('anchor_id')) . '"' : '';
+$section_title       = (string) ( get_field( 'section_title' ) ?: 'Manufacturing Capabilities' );
+$section_description = (string) ( get_field( 'section_description' ) ?: 'Six industrial technologies optimized for prototyping and scalable production.' );
+$capabilities        = get_field( 'capabilities' ) ?: array();
+$bg_color            = (string) ( get_field( 'bg_color' ) ?: '#ffffff' );
+$accent_color        = (string) ( get_field( 'accent_color' ) ?: '#0047AB' );
+$anchor_raw          = (string) ( get_field( 'anchor_id' ) ?: '' );
 
-// 如果没有工艺数据，不显示模块
-if (empty($capabilities)) {
+if ( empty( $capabilities ) ) {
     return;
 }
 
-// 计算第一个工艺的ID，用于默认显示
-$first_capability_id = $capabilities[0]['capability_id'] ?? '';
+// 默认激活第一个工艺的 ID（Alpine activeTab 初始值）
+$first_capability_id = '';
+foreach ( $capabilities as $capability ) {
+    if ( ! empty( $capability['capability_id'] ) ) {
+        $first_capability_id = (string) $capability['capability_id'];
+        break;
+    }
+}
+
+if ( ! $first_capability_id && ! empty( $capabilities[0]['capability_id'] ) ) {
+    $first_capability_id = (string) $capabilities[0]['capability_id'];
+}
+
+$anchor_id   = $anchor_raw ? 'id="' . esc_attr( $anchor_raw ) . '"' : '';
+$bg_classes  = 'bg-white';
+$bg_style    = '';
+
+// 简单映射：如果是浅灰背景，使用设计系统 bg-bg-section；否则按自定义色做 inline 背景
+if ( strtolower( $bg_color ) === '#f2f4f7' ) {
+    $bg_classes = 'bg-bg-section';
+} elseif ( strtolower( $bg_color ) !== '#ffffff' && strtolower( $bg_color ) !== '#fff' ) {
+    $bg_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
+}
 ?>
 
-<section <?php echo $anchor_id; ?> class="capability-list-block" style="background-color: <?php echo esc_attr($bg_color); ?>; color: <?php echo esc_attr($text_color); ?>">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="h2" style="color: var(--heading);"><?php echo esc_html($section_title); ?></h2>
-            <p class="section-desc" style="color: <?php echo esc_attr($text_color); ?>"><?php echo esc_html($section_description); ?></p>
+<div <?php echo $anchor_id; ?> class="capability-list-block <?php echo esc_attr( $bg_classes ); ?>" <?php echo $bg_style; ?>
+     x-data="{ activeTab: '<?php echo esc_attr( $first_capability_id ); ?>' }">
+    <div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y">
+        <div class="text-center mb-10 lg:mb-16">
+            <h2 class="text-h2 text-heading tracking-[-0.02em] mb-4">
+                <?php echo esc_html( $section_title ); ?>
+            </h2>
+            <?php if ( $section_description ) : ?>
+                <p class="mx-auto max-w-2xl text-body">
+                    <?php echo esc_html( $section_description ); ?>
+                </p>
+            <?php endif; ?>
         </div>
 
-        <div class="tabs-nav">
-            <?php foreach ($capabilities as $capability) : ?>
-                <?php 
-                $capability_id = $capability['capability_id'] ?? '';
-                $capability_name = $capability['name'] ?? '';
-                $capability_short = $capability['short_name'] ?? '';
-                $is_active = ($capability_id === $first_capability_id) ? 'active' : '';
-                
-                if (empty($capability_id) || empty($capability_name)) continue;
+        <div class="flex justify-start lg:justify-center gap-2 mb-10 lg:mb-16 overflow-x-auto no-scrollbar pb-4 -mx-container px-container lg:mx-0 lg:px-0">
+            <?php foreach ( $capabilities as $capability ) : ?>
+                <?php
+                $capability_id    = isset( $capability['capability_id'] ) ? (string) $capability['capability_id'] : '';
+                $capability_name  = isset( $capability['name'] ) ? (string) $capability['name'] : '';
+                $capability_short = isset( $capability['short_name'] ) ? (string) $capability['short_name'] : '';
+
+                if ( ! $capability_id || ! $capability_name ) {
+                    continue;
+                }
+
+                $tab_label = $capability_name . ( $capability_short ? ' (' . $capability_short . ')' : '' );
                 ?>
-                <button class="tab-btn <?php echo esc_attr($is_active); ?>" onclick="showCapabilityTab('<?php echo esc_attr($capability_id); ?>')" style="--accent-color: <?php echo esc_attr($accent_color); ?>">
-                    <?php echo esc_html($capability_name); ?><?php if (!empty($capability_short)) : ?> (<?php echo esc_html($capability_short); ?>)<?php endif; ?>
+                <button
+                    type="button"
+                    @click="activeTab = '<?php echo esc_attr( $capability_id ); ?>'"
+                    :class="activeTab === '<?php echo esc_attr( $capability_id ); ?>' ? 'bg-primary text-inverse shadow-lg shadow-primary/20 border-primary' : 'bg-bg-section text-body hover:bg-border border-transparent'"
+                    class="px-6 lg:px-8 py-2.5 lg:py-3 rounded-full text-[11px] lg:text-[12px] font-bold uppercase tracking-[0.14em] whitespace-nowrap border shrink-0 transition-all duration-300"
+                    data-capability-id="<?php echo esc_attr( $capability_id ); ?>">
+                    <?php echo esc_html( $tab_label ); ?>
                 </button>
             <?php endforeach; ?>
         </div>
 
-        <?php foreach ($capabilities as $capability) : ?>
-            <?php 
-            $capability_id = $capability['capability_id'] ?? '';
-            $capability_name = $capability['name'] ?? '';
-            $capability_desc = $capability['description'] ?? '';
-            $capability_specs = $capability['specs'] ?? array();
-            $capability_materials = $capability['materials'] ?? array();
-            $capability_equipment = $capability['equipment'] ?? '';
-            $capability_image = $capability['image'] ?? '';
-            $capability_quote_link = $capability['quote_link'] ?? array();
-            $capability_detail_link = $capability['detail_link'] ?? array();
-            $is_active = ($capability_id === $first_capability_id) ? 'active' : '';
-            
-            if (empty($capability_id) || empty($capability_name)) continue;
-            ?>
+        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-16 items-stretch">
+            <div class="order-1 lg:order-2 relative aspect-[4/3] lg:aspect-auto lg:min-h-0">
+                <div class="h-full rounded-card bg-bg-section border border-border overflow-hidden flex items-center justify-center p-6 lg:p-10 group transition-all duration-500">
+                    <?php foreach ( $capabilities as $capability ) : ?>
+                        <?php
+                        $capability_id   = isset( $capability['capability_id'] ) ? (string) $capability['capability_id'] : '';
+                        $capability_name = isset( $capability['name'] ) ? (string) $capability['name'] : '';
+                        $capability_img  = isset( $capability['image'] ) ? $capability['image'] : '';
+                        $equipment       = isset( $capability['equipment'] ) ? (string) $capability['equipment'] : '';
 
-            <div id="<?php echo esc_attr($capability_id); ?>" class="capability-panel <?php echo esc_attr($is_active); ?>">
-                <div class="info-col">
-                    <h3 class="h3" style="color: var(--heading);"><?php echo esc_html($capability_name); ?></h3>
-                    <p class="desc" style="color: <?php echo esc_attr($text_color); ?>"><?php echo esc_html($capability_desc); ?></p>
-                    
-                    <?php if (!empty($capability_specs)) : ?>
-                        <div class="specs-grid">
-                            <?php if (!empty($capability_specs['build_volume'])) : ?>
-                                <div class="spec-item">
-                                    <span class="spec-label">Build Volume</span>
-                                    <span class="spec-value" style="color: var(--heading);"><?php echo esc_html($capability_specs['build_volume']); ?></span>
+                        if ( ! $capability_id || ! $capability_name ) {
+                            continue;
+                        }
+                        ?>
+                        <div x-show="activeTab === '<?php echo esc_attr( $capability_id ); ?>'" x-transition.opacity.duration.300ms class="w-full h-full relative">
+                            <?php if ( $capability_img ) : ?>
+                                <?php echo wp_get_attachment_image( $capability_img, 'large', false, array( 'alt' => esc_attr( $capability_name ), 'class' => 'max-w-full max-h-full object-contain mix-blend-multiply mx-auto' ) ); ?>
+                            <?php else : ?>
+                                <div class="flex h-full items-center justify-center text-heading text-small font-semibold">
+                                    <?php echo esc_html( $capability_name ); ?>
                                 </div>
                             <?php endif; ?>
-                            <?php if (!empty($capability_specs['layer_height'])) : ?>
-                                <div class="spec-item">
-                                    <span class="spec-label">Layer Height</span>
-                                    <span class="spec-value" style="color: var(--heading);"><?php echo esc_html($capability_specs['layer_height']); ?></span>
-                                </div>
-                            <?php endif; ?>
-                            <?php if (!empty($capability_specs['tolerance'])) : ?>
-                                <div class="spec-item">
-                                    <span class="spec-label">Tolerance</span>
-                                    <span class="spec-value" style="color: var(--heading);"><?php echo esc_html($capability_specs['tolerance']); ?></span>
-                                </div>
-                            <?php endif; ?>
-                            <?php if (!empty($capability_specs['lead_time'])) : ?>
-                                <div class="spec-item">
-                                    <span class="spec-label">Lead Time</span>
-                                    <span class="spec-value" style="color: var(--heading);"><?php echo esc_html($capability_specs['lead_time']); ?></span>
+
+                            <?php if ( $equipment ) : ?>
+                                <div class="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 bg-white/90 backdrop-blur shadow-xl border border-border px-3 py-1.5 lg:px-4 lg:py-2 rounded-md">
+                                    <span class="text-[9px] lg:text-[11px] font-mono font-bold text-heading uppercase tracking-tight">
+                                        <?php echo esc_html( 'EQUIPMENT: ' . $equipment ); ?>
+                                    </span>
                                 </div>
                             <?php endif; ?>
                         </div>
-                    <?php endif; ?>
-
-                    <?php if (!empty($capability_materials)) : ?>
-                        <div class="materials-box">
-                            <div class="tag-title">Available Materials</div>
-                            <div class="tags-wrapper">
-                                <?php foreach ($capability_materials as $material) : ?>
-                                    <?php if ($material instanceof WP_Post) : ?>
-                                        <a href="<?php echo esc_url(get_permalink($material->ID)); ?>" class="material-tag" style="color: var(--heading);">
-                                            <?php echo esc_html(get_the_title($material->ID)); ?>
-                                        </a>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </div>
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="btn-group">
-                        <?php if (!empty($capability_quote_link['url'])) : ?>
-                            <a href="<?php echo esc_url($capability_quote_link['url']); ?>" 
-                               class="btn btn-primary" 
-                               style="background-color: <?php echo esc_attr($accent_color); ?>;" 
-                               <?php if (!empty($capability_quote_link['target'])) : ?>target="<?php echo esc_attr($capability_quote_link['target']); ?>"<?php endif; ?>>
-                                <?php echo esc_html($capability_quote_link['title']); ?>
-                            </a>
-                        <?php endif; ?>
-                        <?php if (!empty($capability_detail_link['url'])) : ?>
-                            <a href="<?php echo esc_url($capability_detail_link['url']); ?>" 
-                               class="btn btn-outline" 
-                               style="color: var(--heading); border-color: var(--border);" 
-                               <?php if (!empty($capability_detail_link['target'])) : ?>target="<?php echo esc_attr($capability_detail_link['target']); ?>"<?php endif; ?>>
-                                <?php echo esc_html($capability_detail_link['title']); ?>
-                            </a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <div class="visual-col">
-                    <?php if (!empty($capability_image)) : ?>
-                        <?php echo wp_get_attachment_image($capability_image, 'large', false, array('alt' => esc_attr($capability_name))); ?>
-                    <?php else : ?>
-                        <div class="placeholder-image" style="background-color: #F2F4F7; width: 100%; height: 500px; display: flex; align-items: center; justify-content: center; color: #1D2939; font-size: 18px; font-weight: bold;">
-                            <?php echo esc_html($capability_name); ?>
-                        </div>
-                    <?php endif; ?>
-                    <?php if (!empty($capability_equipment)) : ?>
-                        <div class="machine-label">EQUIPMENT: <?php echo esc_html($capability_equipment); ?></div>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
-        <?php endforeach; ?>
+
+            <div class="order-2 lg:order-1 flex flex-col">
+                <div x-show="activeTab" x-transition.opacity.duration.300ms class="flex flex-col h-full pt-4 lg:pt-0">
+                    <?php foreach ( $capabilities as $capability ) : ?>
+                        <?php
+                        $capability_id      = isset( $capability['capability_id'] ) ? (string) $capability['capability_id'] : '';
+                        $capability_name    = isset( $capability['name'] ) ? (string) $capability['name'] : '';
+                        $capability_desc    = isset( $capability['description'] ) ? (string) $capability['description'] : '';
+                        $capability_specs   = isset( $capability['specs'] ) && is_array( $capability['specs'] ) ? $capability['specs'] : array();
+                        $capability_materials = isset( $capability['materials'] ) && is_array( $capability['materials'] ) ? $capability['materials'] : array();
+                        $capability_quote   = isset( $capability['quote_link'] ) && is_array( $capability['quote_link'] ) ? $capability['quote_link'] : array();
+                        $capability_detail  = isset( $capability['detail_link'] ) && is_array( $capability['detail_link'] ) ? $capability['detail_link'] : array();
+
+                        if ( ! $capability_id || ! $capability_name ) {
+                            continue;
+                        }
+                        ?>
+
+                        <div x-show="activeTab === '<?php echo esc_attr( $capability_id ); ?>'" x-transition.opacity.duration.300ms class="flex flex-col h-full">
+                            <div class="mb-8">
+                                <h3 class="text-h3 text-heading mb-4 leading-tight">
+                                    <?php echo esc_html( $capability_name ); ?>
+                                </h3>
+                                <?php if ( $capability_desc ) : ?>
+                                    <p class="text-body text-small lg:text-body leading-relaxed mb-6">
+                                        <?php echo esc_html( $capability_desc ); ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+
+                            <?php
+                            $has_build   = ! empty( $capability_specs['build_volume'] );
+                            $has_layer   = ! empty( $capability_specs['layer_height'] );
+                            $has_tol     = ! empty( $capability_specs['tolerance'] );
+                            $has_lead    = ! empty( $capability_specs['lead_time'] );
+                            $has_specs   = $has_build || $has_layer || $has_tol || $has_lead;
+                            ?>
+
+                            <?php if ( $has_specs ) : ?>
+                                <div class="grid grid-cols-2 gap-y-6 lg:gap-y-8 gap-x-6 lg:gap-x-12 py-6 lg:py-8 border-y border-border mb-8">
+                                    <?php if ( $has_build ) : ?>
+                                        <div class="border-l-2 border-primary/20 pl-4">
+                                            <span class="block text-[10px] font-bold text-muted uppercase tracking-[0.1em] mb-1.5">Build Volume</span>
+                                            <span class="font-mono text-[14px] lg:text-[18px] font-bold text-heading leading-none">
+                                                <?php echo esc_html( (string) $capability_specs['build_volume'] ); ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php if ( $has_layer ) : ?>
+                                        <div class="border-l-2 border-primary/20 pl-4">
+                                            <span class="block text-[10px] font-bold text-muted uppercase tracking-[0.1em] mb-1.5">Layer Height</span>
+                                            <span class="font-mono text-[14px] lg:text-[18px] font-bold text-heading leading-none">
+                                                <?php echo esc_html( (string) $capability_specs['layer_height'] ); ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php if ( $has_tol ) : ?>
+                                        <div class="border-l-2 border-primary/20 pl-4">
+                                            <span class="block text-[10px] font-bold text-muted uppercase tracking-[0.1em] mb-1.5">Tolerance</span>
+                                            <span class="font-mono text-[14px] lg:text-[18px] font-bold text-heading leading-none">
+                                                <?php echo esc_html( (string) $capability_specs['tolerance'] ); ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <?php if ( $has_lead ) : ?>
+                                        <div class="border-l-2 border-primary/20 pl-4">
+                                            <span class="block text-[10px] font-bold text-muted uppercase tracking-[0.1em] mb-1.5">Lead Time</span>
+                                            <span class="font-mono text-[14px] lg:text-[18px] font-bold text-heading leading-none">
+                                                <?php echo esc_html( (string) $capability_specs['lead_time'] ); ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if ( $capability_materials ) : ?>
+                                <div class="mb-8">
+                                    <h4 class="text-[11px] font-bold text-muted uppercase tracking-[0.12em] mb-4">Available Materials</h4>
+                                    <div class="flex flex-wrap gap-2">
+                                        <?php foreach ( $capability_materials as $material ) : ?>
+                                            <?php if ( is_object( $material ) && isset( $material->ID ) ) : ?>
+                                                <a href="<?php echo esc_url( get_permalink( $material->ID ) ); ?>" class="bg-bg-section border border-border/60 px-3 py-1.5 rounded-md text-[11px] lg:text-[12px] font-semibold text-heading hover:bg-primary hover:text-inverse transition-colors">
+                                                    <?php echo esc_html( get_the_title( $material->ID ) ); ?>
+                                                </a>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="mt-auto pt-4 flex flex-col sm:flex-row gap-4">
+                                <?php if ( ! empty( $capability_quote['url'] ) ) : ?>
+                                    <a href="<?php echo esc_url( $capability_quote['url'] ); ?>"
+                                       class="bg-primary hover:bg-primary-hover text-inverse px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-[0.14em] text-center transition-all shadow-md"
+                                       style="background-color: <?php echo esc_attr( $accent_color ); ?>;"
+                                       <?php if ( ! empty( $capability_quote['target'] ) ) : ?>target="<?php echo esc_attr( $capability_quote['target'] ); ?>"<?php endif; ?>>
+                                        <?php echo esc_html( $capability_quote['title'] ?: 'Get Instant Quote' ); ?>
+                                    </a>
+                                <?php endif; ?>
+
+                                <?php if ( ! empty( $capability_detail['url'] ) ) : ?>
+                                    <a href="<?php echo esc_url( $capability_detail['url'] ); ?>"
+                                       class="border border-border text-heading hover:border-primary px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-[0.14em] text-center transition-all"
+                                       <?php if ( ! empty( $capability_detail['target'] ) ) : ?>target="<?php echo esc_attr( $capability_detail['target'] ); ?>"<?php endif; ?>>
+                                        <?php echo esc_html( $capability_detail['title'] ?: 'Explore Details' ); ?>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
     </div>
-</section>
-
-<style>
-    /* --- 变量注入 --- */
-    :root {
-        --primary: <?php echo esc_attr($accent_color); ?>;
-        --heading: #1D2938;
-        --body: <?php echo esc_attr($text_color); ?>;
-        --border: #E4E7EC;
-        --bg-section: #F2F4F7;
-        --radius-card: 12px;
-        --radius-btn: 8px;
-        --container-max: 1280px;
-    }
-
-    /* --- 基础样式 --- */
-    .capability-list-block {
-        padding: 96px 0;
-    }
-    .container {
-        max-width: var(--container-max);
-        margin: 0 auto;
-        padding: 0 24px;
-        box-sizing: border-box;
-    }
-
-    .section-header {
-        text-align: center;
-        margin-bottom: 48px;
-    }
-    .h2 {
-        font-size: 36px;
-        font-weight: 700;
-        margin: 0 0 16px 0;
-        letter-spacing: -0.5px;
-    }
-    .section-desc {
-        font-size: 16px;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    /* --- Tab 切换器逻辑 --- */
-    .tabs-nav {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        margin-bottom: 40px;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        scrollbar-width: none;
-    }
-    .tabs-nav::-webkit-scrollbar { display: none; }
-
-    .tab-btn {
-        padding: 10px 24px;
-        background: var(--bg-section);
-        border: 1px solid transparent;
-        border-radius: 30px;
-        color: var(--body);
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        white-space: nowrap;
-        transition: all 0.2s;
-    }
-    .tab-btn.active {
-        background: var(--primary);
-        color: #fff;
-        border-color: var(--primary);
-    }
-
-    /* --- 主面板容器 --- */
-    .capability-panel {
-        display: none;
-        grid-template-columns: 1.2fr 1fr;
-        gap: 64px;
-        align-items: center;
-        animation: fadeUp 0.4s ease-out;
-    }
-    .capability-panel.active { display: grid; }
-
-    /* 左侧内容区 */
-    .info-col { display: flex; flex-direction: column; }
-    .h3 { font-size: 28px; margin: 0 0 20px 0; font-weight: 700; }
-    .desc { font-size: 16px; line-height: 1.6; margin-bottom: 32px; }
-
-    /* 参数仪表盘 (Metrics Grid) */
-    .specs-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-bottom: 40px;
-        padding-top: 32px;
-        border-top: 1px solid var(--border);
-    }
-    .spec-item { display: flex; flex-direction: column; }
-    .spec-label { font-size: 12px; color: var(--body); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-    .spec-value {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    /* 材料标签云 */
-    .materials-box { margin-bottom: 40px; }
-    .tag-title { font-size: 11px; font-weight: 700; color: var(--body); text-transform: uppercase; margin-bottom: 12px; }
-    .tags-wrapper { display: flex; flex-wrap: wrap; gap: 8px; }
-    .material-tag {
-        background: var(--bg-section);
-        padding: 4px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s;
-    }
-    .material-tag:hover {
-        background: var(--primary);
-        color: #fff !important;
-    }
-
-    /* 按钮组 */
-    .btn-group { display: flex; gap: 16px; }
-    .btn {
-        padding: 14px 28px;
-        border-radius: var(--radius-btn);
-        font-size: 15px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s;
-        display: inline-block;
-        border: none;
-        cursor: pointer;
-        text-align: center;
-    }
-    .btn-primary:hover {
-        opacity: 0.9;
-    }
-    .btn-outline {
-        background-color: transparent;
-        transition: all 0.2s;
-    }
-    .btn-outline:hover {
-        border-color: var(--primary) !important;
-        color: var(--primary) !important;
-    }
-
-    /* 右侧视觉区 */
-    .visual-col { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--bg-section); }
-    .visual-col img { width: 100%; height: auto; display: block; }
-    .machine-label {
-        position: absolute; bottom: 20px; right: 20px;
-        background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);
-        padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700;
-        color: var(--heading); border: 1px solid var(--border);
-    }
-
-    /* 动画 */
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* --- 移动端自适应 --- */
-    @media (max-width: 900px) {
-        .capability-panel { grid-template-columns: 1fr; gap: 40px; }
-        .tabs-nav { justify-content: flex-start; padding-left: 0; }
-        .visual-col { order: -1; }
-        .btn-group { flex-direction: column; }
-        .btn { text-align: center; }
-    }
-</style>
-
-<script>
-    function showCapabilityTab(id) {
-        // 移除所有按钮的 active 类
-        document.querySelectorAll('.capability-list-block .tab-btn').forEach(btn => btn.classList.remove('active'));
-        // 隐藏所有面板
-        document.querySelectorAll('.capability-list-block .capability-panel').forEach(panel => panel.classList.remove('active'));
-        
-        // 激活当前按钮和面板
-        const eventTarget = event.currentTarget;
-        if (eventTarget) {
-            eventTarget.classList.add('active');
-        } else {
-            // 如果没有eventTarget（比如通过其他方式调用），找到对应按钮
-            const activeBtn = document.querySelector('.capability-list-block .tab-btn[onclick*="' + id + '"]');
-            if (activeBtn) {
-                activeBtn.classList.add('active');
-            }
-        }
-        const activePanel = document.getElementById(id);
-        if (activePanel) {
-            activePanel.classList.add('active');
-        }
-    }
-</script>
+</div>

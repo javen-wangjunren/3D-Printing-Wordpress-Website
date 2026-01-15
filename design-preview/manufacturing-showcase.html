@@ -1,0 +1,152 @@
+<section class="section-py" style="background-color: #fff; overflow: hidden;">
+    <div class="container">
+        <div class="slider-header" style="margin-bottom: 40px; text-align: center;">
+            <h2 class="h3" style="margin: 0; letter-spacing: -0.5px;">Production Examples</h2>
+            <p style="font-size: 14px; color: var(--muted); margin: 8px 0 0 0;">Real-world functional components manufactured with PA 12 Black.</p>
+        </div>
+
+        <div class="slider-relative" style="position: relative; padding: 0 20px;">
+            
+            <button class="nav-btn prev" onclick="scrollSlider(-1)" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="nav-btn next" onclick="scrollSlider(1)" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+
+            <div id="imageTrack" class="slider-track">
+                <div class="slider-item group">
+                    <div class="img-wrapper">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Automotive+Housing" alt="Automotive Part">
+                    </div>
+                    <div class="caption-box">
+                        <div class="caption-title">Automotive Housing</div>
+                        <div class="caption-sub">SLS / Matte Finish / High Temp</div>
+                    </div>
+                </div>
+                <div class="slider-item group">
+                    <div class="img-wrapper">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Robotic+Gripper" alt="Robotics Part">
+                    </div>
+                    <div class="caption-box">
+                        <div class="caption-title">End-of-Arm Tooling</div>
+                        <div class="caption-sub">MJF / Dyed Black / Durable</div>
+                    </div>
+                </div>
+                <div class="slider-item group">
+                    <div class="img-wrapper">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Drone+Frame" alt="Aerospace Part">
+                    </div>
+                    <div class="caption-box">
+                        <div class="caption-title">Lightweight Drone Frame</div>
+                        <div class="caption-sub">SLS / Complex Geometry</div>
+                    </div>
+                </div>
+                 <div class="slider-item group">
+                    <div class="img-wrapper">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Medical+Device" alt="Medical Part">
+                    </div>
+                    <div class="caption-box">
+                        <div class="caption-title">Medical Prototype</div>
+                        <div class="caption-sub">Biocompatible / Precision</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* 核心样式变量引用 */
+    .slider-track {
+        display: flex;
+        gap: 24px; /* 间距保持固定 */
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        padding: 10px 0 20px 0; /* 增加底部内边距，防止文字被截断或阴影显示不全 */
+        scroll-behavior: smooth;
+    }
+    .slider-track::-webkit-scrollbar { display: none; }
+
+    .slider-item {
+        /* 核心计算：(100%宽度 - 2个24px间距) / 3个项目 */
+        flex: 0 0 calc((100% - 48px) / 3);
+        scroll-snap-align: start;
+        position: relative;
+    }
+
+    /* 图片包裹层：用于实现悬停放大和圆角裁切 */
+    .img-wrapper {
+        border-radius: 12px; /* */
+        overflow: hidden;
+        position: relative;
+        aspect-ratio: 4 / 3;
+        background: var(--bg-section);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* 增加基础质感阴影 */
+        transition: box-shadow 0.3s ease;
+    }
+    
+    .img-wrapper img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* 丝滑的过渡曲线 */
+    }
+
+    /* 悬停交互：图片微放大，阴影加深 */
+    .slider-item:hover .img-wrapper img { transform: scale(1.05); }
+    .slider-item:hover .img-wrapper { box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+
+    /* 文本层级优化：居中 + 双层结构 */
+    .caption-box {
+        text-align: center; /* 居中对齐 */
+        margin-top: 16px;
+    }
+    .caption-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--heading);
+        margin-bottom: 4px;
+    }
+    .caption-sub {
+        font-size: 13px;
+        color: var(--muted); /* 使用更淡的颜色区分层级 */
+        font-weight: 500;
+    }
+
+    /* 箭头样式微调 */
+    .nav-btn {
+        position: absolute;
+        top: 40%; /* 稍微上移，对齐图片中心 */
+        transform: translateY(-50%);
+        width: 48px; height: 48px; /* 稍微加大触控区 */
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--heading);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 10; cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: all 0.2s;
+    }
+    .nav-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .prev { left: -24px; }
+    .next { right: -24px; }
+
+    /* 📱 移动端自适应 */
+    @media (max-width: 767px) {
+        /* 移动端回复到“露一点”的模式，引导滑动 */
+        .slider-item { flex: 0 0 85%; } 
+        .nav-btn { display: none; }
+        .slider-header { text-align: left; }
+        .caption-box { text-align: left; /* 移动端左对齐通常阅读体验更好，也可保持居中 */ }
+    }
+</style>
+
+<script>
+    function scrollSlider(direction) {
+        const track = document.getElementById('imageTrack');
+        // 每次滑动距离 = 容器宽度（约等于3张图的宽度）
+        const scrollAmount = track.offsetWidth;
+        track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+</script>

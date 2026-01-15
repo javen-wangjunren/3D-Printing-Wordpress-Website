@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROTO_FAB Global CTA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'button': '8px', 'card': '12px' }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-16 lg:py-24">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
+            
+            <div class="grid lg:grid-cols-2 items-center gap-12 p-8 lg:p-16">
+                
+                <div class="z-10 text-center lg:text-left">
+                    <h2 class="text-[32px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-6 leading-tight">
+                        You have the idea - we make it <span class="text-primary">a reality</span>
+                    </h2>
+                    <p class="text-body text-[16px] lg:text-[18px] max-w-lg mb-10 mx-auto lg:mx-0">
+                        Upload your CAD design and get a professional engineering review with an instant quote in <span class="font-mono text-primary font-bold">5 minutes</span>.
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                        <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20 group">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            Get an Instant Quote
+                        </a>
+                        <a href="/contact" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">
+                            Contact Sales
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hidden lg:block relative h-full">
+                    <div class="absolute inset-0 bg-gradient-to-l from-bg-section to-transparent z-10 w-20"></div>
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800" 
+                         alt="3D Engineering Illustration" 
+                         class="w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

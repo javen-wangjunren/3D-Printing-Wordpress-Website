@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Printing Hero Style-1 | Industrial Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0047AB', // 品牌蓝 [cite: 49]
+                            hover: '#003A8C',  // 悬停色 [cite: 50]
+                        },
+                        heading: '#1D2938', // 标题色 [cite: 53]
+                        body: '#667085',    // 正文色 [cite: 54]
+                        muted: '#98A2B3',   // 辅助色 [cite: 55]
+                        border: '#E4E7EC',  // 边框色 [cite: 63]
+                        bg: {
+                            page: '#FFFFFF',    // 页面背景 [cite: 58]
+                            section: '#F2F4F7', // 模块背景 
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'], // 正文字体 [cite: 69]
+                        mono: ['JetBrains Mono', 'monospace'] // 数据字体 
+                    },
+                    fontSize: {
+                        h1: ['48px', { lineHeight: '1.2', fontWeight: '700' }], // [cite: 72]
+                        body: ['16px', { lineHeight: '1.5', fontWeight: '400' }], // [cite: 76]
+                    },
+                    borderRadius: {
+                        card: '12px',   // 卡片圆角 [cite: 91]
+                        button: '8px'   // 按钮圆角 [cite: 92]
+                    },
+                    maxWidth: {
+                        container: '1280px' // [cite: 81]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="relative bg-bg-section pt-20 pb-32 lg:pt-32 lg:pb-48 overflow-visible">
+    <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+        <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+            
+            <div class="z-10 flex flex-col justify-center py-6">
+                <h1 class="text-h1 text-heading tracking-[-1px] mb-6">
+                    Your Streamlined<br>3D Printing Service
+                </h1>
+                <h2 class="text-[20px] font-semibold text-primary mb-4 uppercase tracking-wide">
+                    Get Quality Parts at the Best Price
+                </h2>
+                <p class="text-body text-body max-w-lg mb-10 leading-relaxed">
+                    Compare manufacturers around the world in real time. Order industrial-quality parts at the most competitive price. 我们致力于提供像素级的制造精度 。
+                </p>
+
+                <div class="flex flex-wrap gap-4">
+                    <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        Get instant quotes
+                    </a>
+                    <a href="/explore" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">
+                        Try it out
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative min-h-[360px] lg:min-h-0">
+                <div class="h-full rounded-card overflow-hidden bg-white border border-border shadow-sm">
+                    <img src="https://eu-central-1.graphassets.com/AW2dIPbpOQJCl5mn4yGf3z/resize=fit:max,height:720,width:1540/output=format:webp/cm9legb211x4207tbfrz5j7ff" 
+                         alt="Manufacturing Facility" class="w-full h-full object-cover opacity-95">
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
+            <div class="bg-white border border-border rounded-card shadow-xl py-8 px-10 grid grid-cols-2 md:grid-cols-5 gap-8">
+                <div class="text-center md:text-left">
+                    <strong class="block font-mono text-[24px] text-heading font-bold mb-1">8 Million+</strong> 
+                    <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Parts Produced</span>
+                </div>
+                <div class="text-center md:text-left">
+                    <strong class="block font-mono text-[24px] text-heading font-bold mb-1">140,000+</strong>
+                    <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Businesses Served</span>
+                </div>
+                <div class="text-center md:text-left">
+                    <strong class="block font-mono text-[24px] text-heading font-bold mb-1">200+</strong>
+                    <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Materials</span>
+                </div>
+                <div class="text-center md:text-left">
+                    <strong class="block font-mono text-[24px] text-heading font-bold mb-1">31</strong>
+                    <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Technologies</span>
+                </div>
+                <div class="text-center md:text-left">
+                    <strong class="block font-mono text-[24px] text-heading font-bold mb-1">95</strong>
+                    <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Countries</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>

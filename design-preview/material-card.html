@@ -1,145 +1,165 @@
-<section class="section-py" style="background-color: var(--bg-page);">
-    <div class="container">
-        <div class="materials-grid">
+<div class="materials-grid" id="materialsGrid">
+    
+    <div class="mat-card group" data-process="SLS" data-type="Plastic" data-cost="$$">
+        <div class="mat-card-img">
+            <span class="tag-process">SLS</span>
+            <span class="tag-type">Plastic</span>
             
-            <div class="mat-card-v group">
-                <div class="mat-card-img">
-                    <span class="process-tag">SLS</span>
-                    <img src="https://placehold.co/600x450/F9FAFB/1D2939?text=PA12+Visual" alt="PA 12 Black">
-                </div>
-
-                <div class="mat-card-body">
-                    <h4 class="mat-card-title">PA 12 Black (Nylon)</h4>
-                    <p class="mat-card-subtitle">Type: Plastic / Polymer</p>
-                    
-                    <div class="mat-card-footer">
-                        <div class="badge-blue-sm">
-                            <span class="label">COST</span>
-                            <span class="val">$$</span>
-                        </div>
-                        <div class="badge-blue-lg">
-                            <span class="label">LEAD TIME</span>
-                            <span class="val">3-5 Days</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <a href="/material/pa12-black" class="card-link" aria-label="View details for PA 12 Black"></a>
-            </div>
-
-            <div class="mat-card-v group">
-                <div class="mat-card-img">
-                    <span class="process-tag">MJF</span>
-                    <img src="https://placehold.co/600x450/F9FAFB/1D2939?text=MJF+PA12+Glass" alt="MJF PA12">
-                </div>
-                <div class="mat-card-body">
-                    <h4 class="mat-card-title">PA 12 Glass-Filled</h4>
-                    <p class="mat-card-subtitle">Type: Reinforced Plastic</p>
-                    <div class="mat-card-footer">
-                        <div class="badge-blue-sm"><span class="label">COST</span><span class="val">$$$</span></div>
-                        <div class="badge-blue-lg"><span class="label">LEAD TIME</span><span class="val">5-7 Days</span></div>
-                    </div>
-                </div>
-                <a href="#" class="card-link"></a>
-            </div>
-
-            <div class="mat-card-v group">
-                <div class="mat-card-img">
-                    <span class="process-tag">FDM</span>
-                    <img src="https://placehold.co/600x450/F9FAFB/1D2939?text=ULTEM+9085+Visual" alt="ULTEM">
-                </div>
-                <div class="mat-card-body">
-                    <h4 class="mat-card-title">ULTEM™ 9085 Resin</h4>
-                    <p class="mat-card-subtitle">Type: High-Temp Plastic</p>
-                    <div class="mat-card-footer">
-                        <div class="badge-blue-sm"><span class="label">COST</span><span class="val">$$$$</span></div>
-                        <div class="badge-blue-lg"><span class="label">LEAD TIME</span><span class="val">3-5 Days</span></div>
-                    </div>
-                </div>
-                <a href="#" class="card-link"></a>
-            </div>
-
+            <img src="https://placehold.co/600x450/F2F4F7/1D2938?text=PA12+Nylon" alt="PA 12 Black">
         </div>
+
+        <div class="mat-card-body">
+            <h4 class="mat-card-title">PA 12 Black (Nylon)</h4>
+            
+            <div class="mat-card-footer">
+                <div class="badge">
+                    <span class="badge-label">COST</span>
+                    <span class="badge-val">$$</span>
+                </div>
+                <div class="badge">
+                    <span class="badge-label">LEAD TIME</span>
+                    <span class="badge-val">3-5 Days</span>
+                </div>
+            </div>
+        </div>
+        
+        <a href="/material/pa12-black" class="card-link" aria-label="View PA 12 Black details"></a>
     </div>
-</section>
+
+    </div>
 
 <style>
-    /* 核心样式变量引用 [cite: 14-65, 78-86] */
+    /* --- 基于全局规范的样式声明 [cite: 46-66] --- */
+    :root {
+        --primary: #0047AB;        /* 品牌蓝 [cite: 49] */
+        --heading: #1D2938;        /* 标题深色 [cite: 53] */
+        --body: #667085;           /* 正文灰色 [cite: 54] */
+        --muted: #98A2B3;          /* 辅助淡灰色 [cite: 55] */
+        --border: #E4E7EC;         /* 标准边框线 [cite: 63] */
+        --bg-section: #F2F4F7;     /* 浅灰背景 [cite: 59] */
+        --radius-card: 12px;       /* 卡片圆角 [cite: 91] */
+    }
+
+    /* 网格布局：标准 3 列，24px 间距 */
     .materials-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* PC端3列 [cite: 49] */
+        grid-template-columns: repeat(3, 1fr);
         gap: 24px;
     }
 
-    .mat-card-v {
-        background: #fff;
-        border: 1px solid var(--border); /* #E4E7EC */
-        border-radius: var(--radius-card); /* 12px [cite: 59] */
+    /* 卡片基础样式 [cite: 19-21] */
+    .mat-card {
+        background: #FFFFFF;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-card);
         overflow: hidden;
         position: relative;
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        /* 丝滑的动效过渡 */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* 悬停效果：强化蓝色品牌感 */
-    .mat-card-v:hover {
-        border-color: var(--primary); /* #0047AB [cite: 17] */
-        box-shadow: 0 12px 24px rgba(0, 71, 171, 0.06);
+    /* 悬停动效：位移 + 品牌蓝边框 + 阴影 */
+    .mat-card:hover {
         transform: translateY(-4px);
+        border-color: var(--primary);
+        box-shadow: 0 12px 24px rgba(0, 71, 171, 0.08);
     }
 
+    /* 图片可视化区 [cite: 16] */
     .mat-card-img {
         position: relative;
         aspect-ratio: 4 / 3;
-        background: var(--bg-section); /* #F2F4F7 [cite: 27] */
-        display: flex; align-items: center; justify-content: center;
+        background-color: var(--bg-section);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .mat-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        mix-blend-mode: multiply; /* 混合模式使产品图更自然 */
     }
 
-    .mat-card-img img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
-
-    .process-tag {
-        position: absolute; top: 16px; left: 16px;
-        background: var(--heading); /* #1D2938 [cite: 21] */
-        color: #fff; font-size: 10px; font-weight: 700;
-        padding: 4px 10px; border-radius: 4px; letter-spacing: 0.5px;
+    /* 浮动标签逻辑 */
+    .tag-process, .tag-type {
+        position: absolute;
+        top: 16px;
+        z-index: 2;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
-
-    .mat-card-body { padding: 24px; } /* [cite: 55] */
-
+    .tag-process {
+        left: 16px;
+        background: var(--heading);
+        color: #FFFFFF;
+    }
+    .tag-type {
+        right: 16px;
+        background: #FFFFFF;
+        border: 1px solid var(--border);
+        color: var(--heading);
+    }
+ 
+    /* 内容排版 [cite: 10-12] */
+    .mat-card-body {
+        padding: 24px;
+    }
     .mat-card-title {
-        font-size: 20px; color: var(--heading); /* [cite: 43] */
-        font-weight: 700; margin: 0 0 6px 0;
-        letter-spacing: -0.5px; /* [cite: 76] */
+        font-size: 20px;
+        color: var(--heading);
+        font-weight: 700;
+        margin: 0 0 16px 0;
+        letter-spacing: -0.5px; /* 展现工业力量感  */
     }
 
-    .mat-card-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 24px; } /* [cite: 23] */
-
-    /* --- 核心调整：蓝色系标签逻辑 --- */
-    .mat-card-footer { display: flex; gap: 10px; }
-
-    .badge-blue-sm, .badge-blue-lg {
-        background: #F0F5FF; /* 极淡品牌蓝 */
+    /* 决策勋章样式 */
+    .mat-card-footer {
+        display: flex;
+        gap: 10px;
+    }
+    .badge {
+        background: #F0F5FF; /* 极浅蓝背景 */
         border: 1px solid #D1E0FF;
         border-radius: 6px;
         padding: 6px 12px;
-        display: flex; flex-direction: column;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .badge-label {
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--primary);
+        opacity: 0.7;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+    }
+    /* 数据字体强制使用等宽字体 [cite: 9] */
+    .badge-val {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--primary);
     }
 
-    .badge-blue-sm { min-width: 50px; text-align: center; }
-    .badge-blue-lg { flex: 1; }
-
-    .label { font-size: 9px; font-weight: 700; color: var(--primary); opacity: 0.7; margin-bottom: 2px; }
-    
-    /* 数据字体：JetBrains Mono [cite: 74] */
-    .val { 
-        font-family: 'JetBrains Mono', monospace; 
-        font-size: 14px; 
-        font-weight: 700; 
-        color: var(--primary); /* #0047AB [cite: 17] */
+    /* 点击区域遮罩 */
+    .card-link {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        cursor: pointer;
     }
 
-    .card-link { position: absolute; inset: 0; z-index: 10; }
-
-    /* 📱 移动端自适应 */
-    @media (max-width: 1024px) { .materials-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .materials-grid { grid-template-columns: 1fr; } }
+    /* 📱 响应式适配 */
+    @media (max-width: 1024px) {
+        .materials-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+        .materials-grid { grid-template-columns: 1fr; }
+    }
 </style>

@@ -8,24 +8,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {
 
-        // 1. 注册积木身份
-        acf_register_block_type( array(
-            'name'              => 'surface-finish',
-            'title'             => __( 'Surface Finish Gallery', '3d-printing' ),
-            'description'       => __( '展示3D打印表面处理工艺，包含视觉名片、技术参数及多级筛选功能。', '3d-printing' ),
-            'render_template'   => 'blocks/global/surface-finish/render.php',
-            'category'          => 'layout',
-            'icon'              => 'admin-appearance',
-            'keywords'          => array( 'surface', 'finish', 'post-processing', 'gallery' ),
-            'mode'              => 'auto', // 宽阔的内容区编辑模式
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true, // 支持 SEO 锚点跳转
-                'mode'      => true,
-            ),
-        ) );
-
         // 2. 定义字段 Schema
         acf_add_local_field_group( array(
             'key' => 'group_3dp_surface_finish',

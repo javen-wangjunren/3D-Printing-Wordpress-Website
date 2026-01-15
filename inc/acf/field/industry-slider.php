@@ -9,24 +9,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {
 
-        // 1. 注册积木身份
-        acf_register_block_type( array(
-            'name'              => 'industry-slider',
-            'title'             => __( 'Industry Slider', '3d-printing' ),
-            'description'       => __( '展示行业应用案例，包含技术标签背书与解决方案导流。', '3d-printing' ),
-            'render_template'   => 'blocks/global/industry-slider/render.php',
-            'category'          => 'layout',
-            'icon'              => 'images-alt2',
-            'keywords'          => array( 'industry', 'slider', 'solutions', 'sls', 'applications' ),
-            'mode'              => 'auto', // 宽阔内容区编辑模式
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-            ),
-        ) );
-
         // 2. 定义字段 Schema
         acf_add_local_field_group( array(
             'key' => 'group_3dp_industry_slider',

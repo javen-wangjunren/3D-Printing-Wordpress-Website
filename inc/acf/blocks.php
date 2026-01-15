@@ -319,13 +319,8 @@ if ( function_exists( 'acf_register_block_type' ) )
         ) );
     }
     add_action( 'acf/init', '_3dp_register_manufacturing_capabilities_block' );
-}
 
-
-
-// 注册 Surface Finish Gallery
-if ( function_exists( 'acf_register_block_type' ) ) {
-
+    // 注册 Surface Finish Gallery
     function _3dp_register_surface_finish_block() 
     {
         acf_register_block_type( array(
@@ -360,10 +355,9 @@ if ( function_exists( 'acf_register_block_type' ) ) {
             ),
         ) );
     }
-
-    // 挂载到 acf/init 钩子，确保安全性
     add_action( 'acf/init', '_3dp_register_surface_finish_block' );
 }
+
 /**
  * 推荐文件路径：inc/acf/blocks.php
  * 注册 How It Works (工艺流程步骤) 积木

@@ -87,6 +87,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'instructions' => '开启后数据列将使用 JetBrains Mono 字体，增强工业严谨感。',
                     'wrapper' => array('width' => '50'),
                 ),
+                array(
+                    'key' => 'field_ct_mobile_compact',
+                    'label' => 'Mobile Compact Mode',
+                    'name' => 'comparison_mobile_compact_mode',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'instructions' => '开启后在移动端减小表格行高和字体，优化阅读体验。',
+                ),
 
                 // ==========================================
                 // TAB 3: SETTINGS (系统辅助)
@@ -102,6 +110,13 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'anchor_id',
                     'type' => 'text',
                     'instructions' => '用于锚点定位，如 #mechanical-properties。',
+                ),
+                array(
+                    'key' => 'field_ct_custom_class',
+                    'label' => 'Custom CSS Class',
+                    'name' => 'comparison_table_custom_class',
+                    'type' => 'text',
+                    'instructions' => '添加额外的 CSS 类名，用于特殊样式定制。',
                 ),
             ),
             'location' => array(

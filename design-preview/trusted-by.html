@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trusted By - Industrial Tech Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        bg: { section: '#F2F4F7' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* --- 无限水平滚动核心动画 --- */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 5)); } /* 250px 是每个 logo 容器的宽度，5 是 logo 总数 */
+        }
+
+        .animate-logo-cloud {
+            animation: scroll 30s linear infinite; /* 控制滑动速度 */
+        }
+
+        /* 鼠标悬停时暂停 */
+        .slider-container:hover .animate-logo-cloud {
+            animation-play-state: paused;
+        }
+
+        /* 两侧羽化渐变蒙层，增加科技感 [cite: 21] */
+        .mask-fade {
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-[96px] bg-white border-b border-border overflow-hidden"> <div class="max-w-[1280px] mx-auto px-6 lg:px-[24px]"> <div class="text-center mb-16">
+            <h3 class="text-[28px] font-bold text-heading tracking-[-0.5px] mb-4"> Trusted by Global Industry Leaders
+            </h3>
+            <p class="text-[16px] text-body max-w-2xl mx-auto"> We empower <span class="font-mono text-primary font-bold">140,000+</span> engineering teams across 95 countries with precision-grade manufacturing.
+            </p>
+        </div>
+
+        <div class="slider-container relative mask-fade">
+            <div class="flex items-center gap-12 animate-logo-cloud w-[max-content]">
+                
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Partner 1" class="h-8 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Partner 2" class="h-8 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Tesla_Motors_logo.svg" alt="Partner 3" class="h-10 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="Partner 4" class="h-12 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Partner 5" class="h-10 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Partner 1" class="h-8 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Partner 2" class="h-8 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Tesla_Motors_logo.svg" alt="Partner 3" class="h-10 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="Partner 4" class="h-12 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+                <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Partner 5" class="h-10 opacity-40 hover:opacity-100 transition-opacity">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

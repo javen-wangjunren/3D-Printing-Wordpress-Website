@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO Blog Slider v2.0 - 5 Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .slider-mask {
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        /* 平滑滚动 */
+        .scroll-smooth { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-[96px] bg-white overflow-hidden" 
+         x-data="{ 
+            active: 0,
+            posts: [
+                { tag: 'Metal AM', title: 'The Future of AlSi10Mg in Aerospace', excerpt: '探索铝合金 3D 打印如何通过拓扑优化减少 40% 的结构重量。', date: 'Dec 17, 2025', read: '6 min', img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'Design Guide', title: 'Mastering Tolerances for SLS', excerpt: '深入了解 SLS 工艺中的公差控制，以及如何针对复杂的尼龙装配体进行 DfM 优化。', date: 'Dec 12, 2025', read: '8 min', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'Case Study', title: 'Custom Medical Implants via SLA', excerpt: '案例研究：利用高精度 SLA 树脂在 48 小时内为医疗机构交付定制化手术导板。', date: 'Dec 04, 2025', read: '5 min', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'News', title: 'Global 3D Printing Trends 2026', excerpt: '分析即将到来的工业级增材制造趋势，包括可持续材料和全自动化云端工厂。', date: 'Nov 28, 2025', read: '10 min', img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'Tech Deep Dive', title: 'Advanced Post-Processing Techniques', excerpt: '从化学抛光到喷砂，我们将详细解析不同表面处理对工业级零件性能的影响。', date: 'Nov 15, 2025', read: '7 min', img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800' }
+            ],
+            scrollNext() {
+                const el = document.getElementById('blog-slider');
+                el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' });
+            },
+            scrollPrev() {
+                const el = document.getElementById('blog-slider');
+                el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' });
+            }
+         }">
+    
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div class="max-w-xl text-left">
+                <h2 class="text-[36px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-4">
+                    Latest Manufacturing <span class="text-primary">Insights</span>
+                </h2>
+                <p class="text-body text-[16px]">
+                    获取全球制造网络的最新技术指南、材料突破与行业案例。
+                </p>
+            </div>
+            
+            <div class="hidden md:flex gap-3 pb-2">
+                <button @click="scrollPrev" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all group">
+                    <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button @click="scrollNext" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all group">
+                    <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth lg:slider-mask" 
+                 id="blog-slider"
+                 style="scroll-snap-type: x mandatory;">
+                
+                <template x-for="(post, index) in posts" :key="index">
+                    <div class="w-[85%] md:w-[45%] lg:w-[31%] flex-shrink-0" style="scroll-snap-align: start;">
+                        <a href="#" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
+                            
+                            <div class="aspect-[16/10] overflow-hidden relative">
+                                <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Post Cover">
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest" x-text="post.tag"></span>
+                                </div>
+                            </div>
+
+                            <div class="p-6 lg:p-8 flex flex-col flex-1">
+                                <h3 class="text-[18px] lg:text-[20px] font-bold text-heading mb-4 line-clamp-2 leading-tight group-hover:text-primary transition-colors" x-text="post.title"></h3>
+                                <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3" x-text="post.excerpt"></p>
+                                
+                                <div class="mt-auto pt-6 border-t border-border/60 flex justify-between items-center text-[12px] font-mono text-muted uppercase">
+                                    <span x-text="post.date"></span>
+                                    <span x-text="post.read"></span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex justify-center mt-8 gap-2 md:hidden">
+                <template x-for="(post, index) in posts">
+                    <div class="h-1 rounded-full transition-all duration-300"
+                         :class="index === 0 ? 'bg-primary w-8' : 'bg-border w-2'"></div>
+                </template>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

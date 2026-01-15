@@ -1,258 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufacturing Capabilities Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <title>3DPROTO Capability Hub - Mobile Priority</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- 变量注入 (基于 Tailwind Config [cite: 14-63]) --- */
-        :root {
-            --primary: #0047AB; /* [cite: 17] */
-            --primary-hover: #003A8C; /* [cite: 18] */
-            --heading: #1D2938; /* [cite: 21] */
-            --body: #667085; /* [cite: 22] */
-            --border: #E4E7EC; /* [cite: 31] */
-            --bg-section: #F2F4F7; /* [cite: 27] */
-            --radius-card: 12px; /* [cite: 59] */
-            --radius-btn: 8px; /* [cite: 60] */
-            --container-max: 1280px; /* [cite: 49] */
-        }
-
-        body { 
-            font-family: 'Inter', sans-serif; /* [cite: 37, 73] */
-            color: var(--body); 
-            margin: 0; 
-            background: #fff; 
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .section-py { padding: 96px 0; } /* [cite: 53] */
-        .container { max-width: var(--container-max); margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
-
-        .section-header { text-align: center; margin-bottom: 48px; }
-        .h2 { 
-            font-size: 36px; /* [cite: 41] */
-            color: var(--heading); 
-            font-weight: 700; 
-            margin: 0 0 16px 0; 
-            letter-spacing: -0.5px; /* [cite: 76] */
-        }
-
-        /* --- Tab 切换器逻辑 --- */
-        .tabs-nav {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 40px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: none;
-        }
-        .tabs-nav::-webkit-scrollbar { display: none; }
-
-        .tab-btn {
-            padding: 10px 24px;
-            background: var(--bg-section);
-            border: 1px solid transparent;
-            border-radius: 30px;
-            color: var(--body);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: var(--primary); /* [cite: 79] */
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        /* --- 主面板容器 --- */
-        .capability-panel {
-            display: none; /* 默认隐藏，通过 JS 切换 */
-            grid-template-columns: 1.2fr 1fr;
-            gap: 64px;
-            align-items: center;
-            animation: fadeUp 0.4s ease-out;
-        }
-        .capability-panel.active { display: grid; }
-
-        /* 左侧内容区 */
-        .info-col { display: flex; flex-direction: column; }
-        .h3 { font-size: 28px; color: var(--heading); margin: 0 0 20px 0; font-weight: 700; }
-        .desc { font-size: 16px; line-height: 1.6; color: var(--body); margin-bottom: 32px; }
-
-        /* 参数仪表盘 (Metrics Grid) */
-        .specs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 40px;
-            padding-top: 32px;
-            border-top: 1px solid var(--border);
-        }
-        .spec-item { display: flex; flex-direction: column; }
-        .spec-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-        /* 数据字体强制使用 JetBrains Mono [cite: 74] */
-        .spec-value { 
-            font-family: 'JetBrains Mono', monospace; 
-            font-size: 18px; 
-            font-weight: 700; 
-            color: var(--heading); 
-        }
-
-        /* 材料标签云 */
-        .materials-box { margin-bottom: 40px; }
-        .tag-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
-        .tags-wrapper { display: flex; flex-wrap: wrap; gap: 8px; }
-        .material-tag {
-            background: var(--bg-section);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--heading);
-        }
-
-        /* 按钮组 */
-        .btn-group { display: flex; gap: 16px; }
-        .btn {
-            padding: 14px 28px;
-            border-radius: var(--radius-btn);
-            font-size: 15px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .btn-primary { background: var(--primary); color: #fff; }
-        .btn-primary:hover { background: var(--primary-hover); }
-        .btn-outline { border: 1px solid var(--border); color: var(--heading); }
-        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-
-        /* 右侧视觉区 */
-        .visual-col { position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--bg-section); }
-        .visual-col img { width: 100%; height: auto; display: block; mix-blend-mode: multiply; }
-        .machine-label {
-            position: absolute; bottom: 20px; right: 20px;
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);
-            padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 700;
-            color: var(--heading); border: 1px solid var(--border);
-        }
-
-        /* 动画 */
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- 📱 移动端自适应 --- */
-        @media (max-width: 900px) {
-            .capability-panel { grid-template-columns: 1fr; gap: 40px; }
-            .tabs-nav { justify-content: flex-start; padding-left: 0; }
-            .visual-col { order: -1; } /* 图片排在最上方 */
-            .btn-group { flex-direction: column; }
-            .btn { text-align: center; }
-        }
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
+<body class="bg-white font-sans text-body antialiased">
 
-<section class="section-py">
-    <div class="container">
-        <div class="section-header">
-            <h2 class="h2">Manufacturing Capabilities</h2>
-            <p class="section-desc">Six industrial technologies optimized for prototyping and scalable production.</p>
+<section x-data="{ 
+    activeTab: 'sls',
+    techs: {
+        sls: {
+            title: 'Selective Laser Sintering (SLS)',
+            desc: 'SLS 技术通过激光烧结尼龙粉末，制造出具备出色机械性能的功能性零件。无需支撑结构，适合复杂几何形状。',
+            specs: { 'Build Volume': '340 × 340 × 600 mm', 'Layer Height': '60 - 120 Microns', 'Tolerance': '±0.25%', 'Lead Time': '3 - 5 Days' },
+            tags: ['Nylon PA12', 'Glass Filled PA12', 'TPU 88A'],
+            img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Feos-p396-sls.webp&w=1920&q=75',
+            machine: 'EQUIPMENT: EOS P396'
+        },
+        mjf: {
+            title: 'Multi Jet Fusion (MJF)',
+            desc: '高产量的尼龙打印方案，具备出色的表面精细度。理想的批量生产与功能件装配选择。',
+            specs: { 'Build Volume': '380 × 284 × 380 mm', 'Layer Height': '80 Microns', 'Tolerance': '±0.3%', 'Lead Time': '2 - 4 Days' },
+            tags: ['HP Nylon PA12', 'PA12 Glass Beads', 'PA11 (Bio-based)'],
+            img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Fhp-5200-mjf.webp&w=1920&q=75',
+            machine: 'EQUIPMENT: HP MJF 5200'
+        },
+        slm: {
+            title: 'Selective Laser Melting (SLM)',
+            desc: '工业级金属 3D 打印。直接从 CAD 数据生产高密度、高强度的金属零部件。',
+            specs: { 'Build Volume': '250 × 250 × 325 mm', 'Layer Height': '20 - 40 Microns', 'Tolerance': '±0.1%', 'Lead Time': '5 - 8 Days' },
+            tags: ['Aluminum AlSi10Mg', 'Stainless Steel 316L', 'Titanium Ti64'],
+            img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Feos-m290-dmls.webp&w=1920&q=75',
+            machine: 'EQUIPMENT: EOS M290'
+        },
+        sla: {
+            title: 'Stereolithography (SLA)',
+            desc: '光固化技术，提供极高的尺寸精度和极其光滑的表面。是展示模型和高精度原型的最佳选择。',
+            specs: { 'Build Volume': '450 × 450 × 300 mm', 'Layer Height': '50 - 100 Microns', 'Tolerance': '±0.15%', 'Lead Time': '1 - 2 Days' },
+            tags: ['Standard Resin', 'Clear Resin', 'Tough Resin'],
+            img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2F3dsystems-prox800-sla.webp&w=1920&q=75',
+            machine: 'EQUIPMENT: PROX 800'
+        },
+        fdm: {
+            title: 'Fused Deposition Modeling (FDM)',
+            desc: '工业级熔融沉积造型。通过挤出工程塑料丝材，实现低成本、大尺寸的结构件制造。',
+            specs: { 'Build Volume': '914 × 610 × 914 mm', 'Layer Height': '127 - 330 Microns', 'Tolerance': '±0.2%', 'Lead Time': '2 - 3 Days' },
+            tags: ['ABS-M30', 'ASA (UV Resistant)', 'PC-10'],
+            img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Fstratasys-f770-fdm.webp&w=1920&q=75',
+            machine: 'EQUIPMENT: FORTUS 900MC'
+        },
+        polyjet: {
+            title: 'PolyJet Technology',
+            desc: '多材料喷墨技术，可在同一零件中混合多种硬度与色彩。适合触感仿真与多材料验证。',
+            specs: { 'Build Volume': '490 × 390 × 200 mm', 'Layer Height': '16 - 32 Microns', 'Tolerance': '±0.1%', 'Lead Time': '3 - 4 Days' },
+            tags: ['Vero (Rigid)', 'Agilus (Rubber-like)', 'Digital ABS'],
+            img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2F3dsystems-prox800-sla.webp&w=1920&q=75',
+            machine: 'EQUIPMENT: STRATASYS J850'
+        }
+    }
+}" class="py-[64px] lg:py-[96px] bg-white">
+    
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <div class="text-center mb-10 lg:mb-16">
+            <h2 class="text-[32px] lg:text-[36px] font-bold text-heading tracking-[-0.5px] mb-4">Manufacturing <span class="text-primary">Capabilities</span></h2>
+            <p class="text-body max-w-2xl mx-auto">六大工业级 3D 打印工艺，专为原型验证与大规模生产优化。</p>
         </div>
 
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="showTab('sls')">Selective Laser Sintering</button>
-            <button class="tab-btn" onclick="showTab('mjf')">Multi Jet Fusion</button>
-            <button class="tab-btn" onclick="showTab('fdm')">FDM</button>
-            <button class="tab-btn" onclick="showTab('sla')">SLA</button>
-            <button class="tab-btn" onclick="showTab('dmls')">DMLS (Metal)</button>
+        <div class="flex justify-start lg:justify-center gap-2 mb-10 lg:mb-16 overflow-x-auto no-scrollbar pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 flex-nowrap">
+            <template x-for="(tech, key) in techs" :key="key">
+                <button @click="activeTab = key"
+                        :class="activeTab === key ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-bg-section text-body hover:bg-border border-transparent'"
+                        class="px-8 py-3 rounded-full text-[12px] font-bold transition-all duration-300 uppercase tracking-[2px] whitespace-nowrap border shrink-0"
+                        x-text="key">
+                </button>
+            </template>
         </div>
 
-        <div id="sls" class="capability-panel active">
-            <div class="info-col">
-                <h3 class="h3">Selective Laser Sintering (SLS)</h3>
-                <p class="desc">The industry's strongest nylon parts with repeatable tolerances and exceptional isotropic properties. Support-free geometries enable designs impossible with traditional manufacturing.</p>
-                
-                <div class="specs-grid">
-                    <div class="spec-item"><span class="spec-label">Build Volume</span><span class="spec-value">340 × 340 × 600 mm</span></div>
-                    <div class="spec-item"><span class="spec-label">Layer Height</span><span class="spec-value">60 - 120 Microns</span></div>
-                    <div class="spec-item"><span class="spec-label">Tolerance</span><span class="spec-value">±0.25%</span></div>
-                    <div class="spec-item"><span class="spec-label">Lead Time</span><span class="spec-value">3 - 5 Days</span></div>
-                </div>
-
-                <div class="materials-box">
-                    <div class="tag-title">Available Materials</div>
-                    <div class="tags-wrapper">
-                        <span class="material-tag">Nylon PA12</span>
-                        <span class="material-tag">Glass Filled PA12</span>
-                        <span class="material-tag">TPU 88A</span>
-                        <span class="material-tag">PA11 Black</span>
+        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-16 items-stretch">
+            
+            <div class="order-1 lg:order-2 relative aspect-[4/3] lg:aspect-auto lg:min-h-0">
+                <div class="h-full rounded-card bg-bg-section border border-border overflow-hidden flex items-center justify-center p-8 lg:p-12 group transition-all duration-500">
+                    <img :src="techs[activeTab].img" 
+                         :alt="techs[activeTab].title" 
+                         class="max-w-full max-h-full object-contain mix-blend-multiply transition-all duration-500 transform group-hover:scale-105"
+                         x-transition.opacity.duration.400ms>
+                    
+                    <div class="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 bg-white/90 backdrop-blur shadow-xl border border-border px-3 py-1.5 lg:px-4 lg:py-2 rounded-md">
+                        <span class="text-[9px] lg:text-[11px] font-mono font-bold text-heading uppercase tracking-tight" x-text="techs[activeTab].machine"></span>
                     </div>
                 </div>
-
-                <div class="btn-group">
-                    <a href="/quote" class="btn btn-primary">Get Instant Quote</a>
-                    <a href="/sls-service" class="btn btn-outline">Explore SLS Details</a>
-                </div>
             </div>
-            
-            <div class="visual-col">
-                <img src="https://placehold.co/800x1000/F2F4F7/1D2939?text=EOS+P396+Printer" alt="SLS Printer">
-                <div class="machine-label">EQUIPMENT: EOS P396</div>
-            </div>
-        </div>
 
-        <div id="mjf" class="capability-panel">
-            <div class="info-col">
-                <h3 class="h3">Multi Jet Fusion (MJF)</h3>
-                <p class="desc">High-speed production-grade nylon parts with excellent surface finish and fine detail resolution. Ideal for large batches and functional assemblies.</p>
-                
-                <div class="specs-grid">
-                    <div class="spec-item"><span class="spec-label">Build Volume</span><span class="spec-value">380 × 284 × 380 mm</span></div>
-                    <div class="spec-item"><span class="spec-label">Layer Height</span><span class="spec-value">80 Microns</span></div>
-                    <div class="spec-item"><span class="spec-label">Tolerance</span><span class="spec-value">±0.3%</span></div>
-                    <div class="spec-item"><span class="spec-label">Lead Time</span><span class="spec-value">2 - 4 Days</span></div>
-                </div>
+            <div class="order-2 lg:order-1 flex flex-col">
+                <div x-show="activeTab" x-transition.opacity.duration.400ms class="flex flex-col h-full pt-4 lg:pt-0">
+                    
+                    <div class="mb-8">
+                        <h3 class="text-[24px] lg:text-[28px] font-bold text-heading mb-4 leading-tight" x-text="techs[activeTab].title"></h3>
+                        <p class="text-body text-sm lg:text-base leading-relaxed mb-6" x-text="techs[activeTab].desc"></p>
+                        <a :href="'/capabilities/' + activeTab" class="group inline-flex items-center text-primary text-[13px] font-bold uppercase tracking-wider">
+                            Learn more about this technology
+                            <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7l5 5-5 5M6 7l5 5-5 5"/></svg>
+                        </a>
+                    </div>
 
-                <div class="materials-box">
-                    <div class="tag-title">Available Materials</div>
-                    <div class="tags-wrapper">
-                        <span class="material-tag">Nylon PA12</span>
-                        <span class="material-tag">Nylon PA11</span>
-                        <span class="material-tag">PA12 Glass Beads</span>
+                    <div class="grid grid-cols-2 gap-y-6 lg:gap-y-8 gap-x-8 lg:gap-x-12 py-6 lg:py-8 border-y border-border mb-8">
+                        <template x-for="(val, label) in techs[activeTab].specs">
+                            <div class="border-l-2 border-primary/20 pl-4">
+                                <span class="block text-[10px] font-bold text-muted uppercase tracking-[1.5px] mb-1.5" x-text="label"></span>
+                                <span class="font-mono text-[14px] lg:text-[18px] font-bold text-heading leading-none" x-text="val"></span>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="mb-10">
+                        <h4 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-4">Available Materials</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="tag in techs[activeTab].tags">
+                                <span class="bg-bg-section border border-border/50 px-3 py-1.5 rounded-md text-[11px] lg:text-[12px] font-semibold text-heading" x-text="tag"></span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-4 flex flex-col sm:flex-row gap-4">
+                        <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-wider text-center transition-all shadow-md">
+                            Get Instant Quote
+                        </a>
+                        <a href="/contact" class="border border-border text-heading hover:border-primary px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-wider text-center transition-all">
+                            Consult an Engineer
+                        </a>
                     </div>
                 </div>
+            </div>
 
-                <div class="btn-group">
-                    <a href="/quote" class="btn btn-primary">Get Instant Quote</a>
-                    <a href="/mjf-service" class="btn btn-outline">Explore MJF Details</a>
-                </div>
-            </div>
-            
-            <div class="visual-col">
-                <img src="https://placehold.co/800x1000/F2F4F7/1D2939?text=HP+5200+Series" alt="MJF Printer">
-                <div class="machine-label">EQUIPMENT: HP MJF 5200</div>
-            </div>
         </div>
-
     </div>
 </section>
-
-<script>
-    function showTab(id) {
-        // 移除所有按钮的 active
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        // 隐藏所有面板
-        document.querySelectorAll('.capability-panel').forEach(panel => panel.classList.remove('active'));
-        
-        // 激活当前按钮和面板
-        event.currentTarget.classList.add('active');
-        document.getElementById(id).classList.add('active');
-    }
-</script>
 
 </body>
 </html>

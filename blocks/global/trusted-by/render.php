@@ -1,88 +1,95 @@
 <?php
-/**
- * Trusted By Block 的渲染模板
- * 
- * 展示信任的客户或合作伙伴列表，支持自动化内容填充
- */
+$block_id = isset($block['id']) ? $block['id'] : uniqid('trusted-by-');
+$block_class = isset($block['className']) ? $block['className'] : '';
 
-// 尝试获取缓存数据
-$transient_key = 'trusted_by_all';
-$trusted_data = get_transient( $transient_key );
+$title = get_field('trusted_by_title') ?: '';
+$description = get_field('trusted_by_description') ?: '';
+$logos = get_field('trusted_by_logos') ?: array();
 
-// 如果没有缓存或缓存过期，重新生成数据
-if ( false === $trusted_data ) {
-    
-    // 获取信任的客户/合作伙伴数据
-    $trusted_logos = get_field( 'trusted_by_logos', 'option' ) ?: array();
-    $section_title = get_field( 'trusted_by_title', 'option' ) ?: 'Trusted By';
-    $section_desc = get_field( 'trusted_by_description', 'option' ) ?: 'We partner with leading companies across various industries';
-    $show_title = get_field( 'trusted_by_show_title', 'option' ) !== false;
-    $show_desc = get_field( 'trusted_by_show_description', 'option' ) !== false;
-    
-    // 缓存数据，有效期1小时
-    $trusted_data = array(
-        'trusted_logos' => $trusted_logos,
-        'section_title' => $section_title,
-        'section_desc' => $section_desc,
-        'show_title' => $show_title,
-        'show_desc' => $show_desc,
-        'has_logos' => ! empty( $trusted_logos )
-    );
-    
-    set_transient( $transient_key, $trusted_data, HOUR_IN_SECONDS );
-}
+$bg_color = get_field('trusted_by_background_color') ?: '#ffffff';
+$title_color = get_field('trusted_by_title_color') ?: '#1D2938';
 
-// 从缓存数据中提取变量
-$trusted_logos = $trusted_data['trusted_logos'];
-$section_title = $trusted_data['section_title'];
-$section_desc = $trusted_data['section_desc'];
-$show_title = $trusted_data['show_title'];
-$show_desc = $trusted_data['show_desc'];
-$has_logos = $trusted_data['has_logos'];
+$enable_animation = get_field('trusted_by_enable_animation');
+$animation_speed = get_field('trusted_by_animation_speed') ?: 'normal';
+$pause_on_hover = get_field('trusted_by_pause_on_hover');
 
-// 如果没有logo数据，不显示模块
-if ( ! $has_logos ) {
+if (empty($logos)) {
     return;
 }
+
+$section_classes = array(
+    'py-[96px]',
+    'border-b',
+    'border-border',
+    'overflow-hidden',
+    'bg-white',
+    $block_class,
+);
+
+$section_classes = array_filter($section_classes);
+$section_class_attr = implode(' ', $section_classes);
 ?>
 
-<section class="trusted-by-block">
-    <?php if ( $show_title || $show_desc ) : ?>
-        <div class="trusted-by-header">
-            <?php if ( $show_title && $section_title ) : ?>
-                <h2 class="trusted-by-title"><?php echo esc_html( $section_title ); ?></h2>
+<div id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr($section_class_attr); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[24px]">
+        <div class="text-center mb-16">
+            <?php if ($title) : ?>
+                <h3 class="text-[28px] font-bold text-heading tracking-[-0.5px] mb-4" style="color: <?php echo esc_attr($title_color); ?>;">
+                    <?php echo esc_html($title); ?>
+                </h3>
             <?php endif; ?>
-            
-            <?php if ( $show_desc && $section_desc ) : ?>
-                <p class="trusted-by-description"><?php echo esc_html( $section_desc ); ?></p>
+            <?php if ($description) : ?>
+                <p class="text-[16px] text-body max-w-2xl mx-auto">
+                    <?php echo wp_kses_post($description); ?>
+                </p>
             <?php endif; ?>
         </div>
-    <?php endif; ?>
 
-    <div class="trusted-by-logos">
-        <?php foreach ( $trusted_logos as $logo ) : ?>
-            <?php 
-            $logo_image = $logo['logo_image'] ?? '';
-            $logo_link = $logo['logo_link'] ?? array();
-            $logo_alt_text = $logo['logo_alt_text'] ?? '';
-            
-            if ( ! $logo_image ) continue;
-            ?>
-            
-            <div class="trusted-by-logo-item">
-                <?php if ( $logo_link && isset( $logo_link['url'] ) && isset( $logo_link['title'] ) ) : ?>
-                    <a href="<?php echo esc_url( $logo_link['url'] ); ?>" 
-                       class="trusted-by-logo-link" 
-                       target="<?php echo isset( $logo_link['target'] ) ? esc_attr( $logo_link['target'] ) : '_blank'; ?>" 
-                       title="<?php echo esc_attr( $logo_link['title'] ); ?>">
-                        <?php echo wp_get_attachment_image( $logo_image, 'medium', false, array( 'alt' => $logo_alt_text ) ); ?>
-                    </a>
-                <?php else : ?>
-                    <div class="trusted-by-logo">
-                        <?php echo wp_get_attachment_image( $logo_image, 'medium', false, array( 'alt' => $logo_alt_text ) ); ?>
-                    </div>
-                <?php endif; ?>
+        <div
+            class="slider-container relative"
+            data-animation-enabled="<?php echo $enable_animation ? '1' : '0'; ?>"
+            data-animation-speed="<?php echo esc_attr($animation_speed); ?>"
+            data-pause-on-hover="<?php echo $pause_on_hover ? '1' : '0'; ?>"
+        >
+            <div class="mask-fade">
+                <div class="flex items-center gap-12 w-[max-content]<?php echo $enable_animation ? ' animate-logo-cloud' : ''; ?>">
+                    <?php foreach ($logos as $logo) : ?>
+                        <?php
+                        $logo_id = isset($logo['logo_image']) ? $logo['logo_image'] : 0;
+                        if (!$logo_id) {
+                            continue;
+                        }
+                        $logo_label = isset($logo['logo_label']) ? $logo['logo_label'] : '';
+                        $logo_alt = isset($logo['logo_alt_text']) && $logo['logo_alt_text'] ? $logo['logo_alt_text'] : $logo_label;
+                        ?>
+                        <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                            <?php echo wp_get_attachment_image($logo_id, 'medium', false, array(
+                                'class' => 'h-8 lg:h-10 opacity-40 hover:opacity-100 transition-opacity',
+                                'alt'   => esc_attr($logo_alt),
+                            )); ?>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <?php if ($enable_animation) : ?>
+                        <?php foreach ($logos as $logo) : ?>
+                            <?php
+                            $logo_id = isset($logo['logo_image']) ? $logo['logo_image'] : 0;
+                            if (!$logo_id) {
+                                continue;
+                            }
+                            $logo_label = isset($logo['logo_label']) ? $logo['logo_label'] : '';
+                            $logo_alt = isset($logo['logo_alt_text']) && $logo['logo_alt_text'] ? $logo['logo_alt_text'] : $logo_label;
+                            ?>
+                            <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300">
+                                <?php echo wp_get_attachment_image($logo_id, 'medium', false, array(
+                                    'class' => 'h-8 lg:h-10 opacity-40 hover:opacity-100 transition-opacity',
+                                    'alt'   => esc_attr($logo_alt),
+                                )); ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
             </div>
-        <?php endforeach; ?>
+        </div>
     </div>
-</section>
+</div>

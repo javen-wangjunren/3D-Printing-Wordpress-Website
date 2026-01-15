@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO Reviews Slider - Industrial Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-[96px] bg-bg-section/40 overflow-hidden" 
+         x-data="{ 
+            active: 0,
+            reviews: [
+                { name: 'Marcus Chen', role: 'CTO, AeroSpace Dynamic', text: 'PROTO_FAB 交付的 316L 金属零件精度超出了我们的预期，表面光洁度几乎达到了免处理级别。', initial: 'M' },
+                { name: 'Sarah Miller', role: 'Lead Designer, BioMed', text: '我们在医疗器械原型阶段使用了他们的 SLA 树脂工艺，响应速度极快，报价透明。', initial: 'S' },
+                { name: 'David Weber', role: 'Operations Manager', text: '大规模生产尼龙零件的稳定性非常好，是目前市场上性价比最高的工业打印服务。', initial: 'D' },
+                { name: 'Elena Rossi', role: 'Project Lead, AutoGen', text: '多材料打印技术帮我们解决了复杂的总成验证问题，交期缩短了 40%。', initial: 'E' }
+            ],
+            next() { this.active = (this.active + 1) % (this.reviews.length - 2) },
+            prev() { this.active = this.active === 0 ? this.reviews.length - 3 : this.active - 1 }
+         }">
+    
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div class="max-w-xl">
+                <h2 class="text-[36px] font-bold text-heading tracking-[-1px] mb-4">
+                    Global Partner <span class="text-primary">Trust</span>
+                </h2>
+                <p class="text-body leading-relaxed">
+                    在 95 个国家/地区，数以万计的工程师正在通过我们的数字化平台将灵感转化为精密实体。
+                </p>
+            </div>
+            
+            <div class="hidden md:flex gap-3">
+                <button @click="prev" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button @click="next" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div class="flex transition-transform duration-500 ease-in-out" 
+                 :style="`transform: translateX(-${active * (100 / (window.innerWidth >= 1024 ? 3 : 1))}%)`"
+                 class="w-full">
+                
+                <template x-for="(rev, index) in reviews" :key="index">
+                    <div class="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3">
+                        <div class="bg-white border border-border p-8 rounded-card h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
+                            
+                            <div class="flex justify-between items-center mb-6">
+                                <div class="flex gap-1 text-primary">
+                                    <template x-for="s in 5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></template>
+                                </div>
+                                <span class="bg-green-50 text-green-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-green-100 uppercase">Verified</span>
+                            </div>
+
+                            <p class="text-[15px] leading-relaxed mb-10 flex-1 italic text-heading">
+                                "<span x-text="rev.text"></span>"
+                            </p>
+
+                            <div class="flex items-center gap-4 pt-6 border-t border-border/50">
+                                <div class="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center font-bold text-primary shrink-0" x-text="rev.initial"></div>
+                                <div class="overflow-hidden">
+                                    <span class="block text-[14px] font-bold text-heading truncate" x-text="rev.name"></span>
+                                    <span class="block text-[12px] text-muted truncate" x-text="rev.role"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+
+        <div class="mt-12 flex justify-center gap-2 md:hidden">
+            <template x-for="(rev, index) in reviews" :key="index">
+                <button @click="active = Math.min(index, reviews.length - 1)" 
+                        :class="active === index ? 'bg-primary w-8' : 'bg-border w-2'"
+                        class="h-1.5 rounded-full transition-all duration-300"></button>
+            </template>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

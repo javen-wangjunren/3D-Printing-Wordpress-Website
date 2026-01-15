@@ -1,75 +1,176 @@
 <?php
 /**
- * Comparison Table - 纯净手动版
+ * Comparison Table Block Template
+ * 
+ * @package GeneratePressChild
  */
 
-// 直接获取当前页面的 ACF Table 字段
-$table_data = get_field('capability_comparison_table');
+// 1. 获取数据作用域 (Data Scope)
+$title           = get_field( 'table_title' );
+$headers         = get_field( 'headers' ); // Group: h1..h5
+$rows            = get_field( 'comparison_rows' ); // Repeater: v1..v5
+$highlight_idx   = get_field( 'highlight_index' ) ?: 1;
+$use_mono        = get_field( 'use_mono' );
+$mobile_compact  = get_field( 'comparison_mobile_compact_mode' );
+$anchor_id       = get_field( 'anchor_id' );
+$custom_class    = get_field( 'comparison_table_custom_class' );
 
-// 如果没填或缺少必要数据，直接关掉模块
-if ( ! $table_data || empty($table_data['comparison_rows']) ) {
+// 2. 数据预处理
+// 确定有效列（检查表头是否有内容）
+$valid_cols = array();
+if ( $headers ) {
+    foreach ( array( 'h1', 'h2', 'h3', 'h4', 'h5' ) as $k ) {
+        if ( ! empty( $headers[ $k ] ) ) {
+            $valid_cols[] = $k; // e.g., 'h1', 'h2'
+        }
+    }
+}
+
+// 如果没有数据，不渲染
+if ( empty( $valid_cols ) || empty( $rows ) ) {
+    if ( is_admin() ) {
+        echo '<div class="p-4 border border-dashed text-gray-400">Please add table headers and rows.</div>';
+    }
     return;
 }
 
-// 提取必要的数据
-$table_title = $table_data['table_title'] ?? '';
-$table_headers = $table_data['headers'] ?? array();
-$comparison_rows = $table_data['comparison_rows'];
-$use_mono = $table_data['use_mono'] ?? false;
+// ID与Class
+$id_attr = $anchor_id ? 'id="' . esc_attr( $anchor_id ) . '"' : '';
+$classes = 'py-[96px] ' . ( $custom_class ? esc_attr( $custom_class ) : '' );
 
-// 过滤掉空的表头
-$filtered_headers = array_filter($table_headers);
+// 字体配置
+$font_mono_class = $use_mono ? 'font-mono' : '';
+// 移动端紧凑模式
+$td_padding = $mobile_compact ? 'py-4 px-4 lg:py-6 lg:px-8' : 'py-6 px-8';
+$th_padding = $mobile_compact ? 'py-3 px-4 lg:py-5 lg:px-8' : 'py-5 px-8';
+$text_size  = $mobile_compact ? 'text-xs lg:text-sm' : 'text-sm';
 
-// 过滤掉空的数据行
-$filtered_rows = array_filter($comparison_rows, function($row) {
-    return array_filter($row);
-});
+// Alpine Config
+$alpine_data = sprintf( '{ activeIndex: %d }', esc_attr( $highlight_idx ) );
 
-// 如果没有过滤后的数据行，直接关掉模块
-if (empty($filtered_rows)) {
-    return;
-}
 ?>
 
-<section class="comparison-table-block">
-    <?php if ( $table_title ) : ?>
-        <h2 class="comparison-table-title"><?php echo esc_html( $table_title ); ?></h2>
-    <?php endif; ?>
+<section <?php echo $id_attr; ?> class="<?php echo esc_attr( $classes ); ?>" x-data="<?php echo esc_attr( $alpine_data ); ?>">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <?php if ( $title ) : ?>
+        <div class="mb-12 flex justify-between items-end">
+            <div>
+                <h2 class="text-[36px] font-bold text-heading tracking-[-1.5px] mb-2 uppercase">
+                    <?php echo esc_html( $title ); ?>
+                </h2>
+                <p class="text-body text-sm font-medium opacity-80">物理级锁定展示：四周等厚边框及双色背景矩阵。</p>
+            </div>
+            <div class="hidden md:block border-2 border-primary/20 rounded-md px-3 py-1 rotate-12">
+                <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest">NOW3DP Verified</span>
+            </div>
+        </div>
+        <?php endif; ?>
 
-    <div class="comparison-table-wrapper">
-        <table class="comparison-table<?php if ( $use_mono ) echo ' use-mono'; ?>">
-            <?php if ( !empty($filtered_headers) ) : ?>
-                <thead>
-                    <tr>
+        <div class="bg-white rounded-xl border border-border shadow-sm p-[3px] overflow-hidden">
+            <div class="overflow-x-auto no-scrollbar">
+                <table class="w-full text-left border-separate border-spacing-0 min-w-[1000px]">
+                    <thead>
+                        <tr class="bg-bg-table text-heading uppercase tracking-[2px] text-[11px] font-bold">
+                            <?php 
+                            $col_count = count( $valid_cols );
+                            foreach ( $valid_cols as $index => $key ) : 
+                                $is_first = $index === 0;
+                                $is_last  = $index === ( $col_count - 1 );
+                                $is_even  = ( $index + 1 ) % 2 === 0;
+                                
+                                // Header Styles
+                                $th_class = $th_padding . ' border-b border-border';
+                                if ( $is_first ) $th_class .= ' rounded-tl-lg';
+                                if ( $is_last )  $th_class .= ' rounded-tr-lg';
+                                if ( $is_even )  $th_class .= ' bg-bg-table/60';
+                                ?>
+                                <th class="<?php echo esc_attr( $th_class ); ?>">
+                                    <?php echo esc_html( $headers[ $key ] ); ?>
+                                </th>
+                            <?php endforeach; ?>
+                        </tr>
+                    </thead>
+                    
+                    <tbody class="<?php echo esc_attr( $text_size ); ?>">
                         <?php 
-                        // 动态渲染表头
-                        foreach ( $filtered_headers as $header ) {
-                            if ( $header ) {
-                                echo '<th>' . esc_html( $header ) . '</th>';
-                            }
-                        }
-                        ?>
-                    </tr>
-                </thead>
-            <?php endif; ?>
-            <tbody>
-                <?php 
-                // 动态渲染数据行
-                foreach ( $filtered_rows as $row ) :
-                    // 获取当前行的所有值
-                    $row_values = array_values(array_filter($row));
-                    if (empty($row_values)) continue;
-                ?>
-                    <tr>
-                        <?php 
-                        // 动态渲染数据列
-                        foreach ( $row_values as $value ) :
-                            echo '<td>' . esc_html( $value ) . '</td>';
-                        endforeach;
-                        ?>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                        foreach ( $rows as $row_idx => $row ) : 
+                            // Alpine index matches loop index (1-based)
+                            $current_idx = $row_idx + 1;
+                            
+                            // Row Logic hooks
+                            // lock-row styles mapped to Tailwind arbitrary values
+                            // relative z-10 after:absolute after:inset-0 after:border-[3px] after:border-primary after:rounded-xl after:pointer-events-none after:z-30 after:shadow-[0_12px_30px_-10px_rgba(0,71,171,0.3)]
+                            $lock_row_cls = 'relative z-10 after:content-[\'\'] after:absolute after:inset-0 after:border-[3px] after:border-primary after:rounded-xl after:pointer-events-none after:z-30 after:shadow-[0_12px_30px_-10px_rgba(0,71,171,0.3)]';
+                            ?>
+                            <tr @click="activeIndex = <?php echo $current_idx; ?>"
+                                :class="activeIndex === <?php echo $current_idx; ?> ? '<?php echo $lock_row_cls; ?>' : 'hover:bg-bg-table/40 cursor-pointer'"
+                                class="transition-all duration-150 group">
+                                
+                                <?php 
+                                foreach ( $valid_cols as $col_idx => $key ) : 
+                                    // Map h1->v1, h2->v2...
+                                    $val_key = str_replace( 'h', 'v', $key );
+                                    $value   = isset( $row[ $val_key ] ) ? $row[ $val_key ] : '';
+                                    
+                                    $is_first_col = $col_idx === 0;
+                                    $is_last_col  = $col_idx === ( $col_count - 1 );
+                                    $is_even_col  = ( $col_idx + 1 ) % 2 === 0;
+                                    
+                                    // Cell Base Classes
+                                    $td_base = $td_padding . ' border-b border-border transition-colors ' . ( $use_mono && ! $is_first_col ? 'font-mono' : '' );
+                                    
+                                    // Dynamic Classes for Active State
+                                    // Need to construct the :class string for Alpine
+                                    // Default State (Inactive)
+                                    $bg_default = $is_even_col ? 'bg-bg-table/40' : 'bg-white';
+                                    $text_default = $is_first_col ? 'text-heading font-bold' : 'text-body';
+                                    if ( $is_last_col && ! $is_first_col ) $text_default = 'text-heading'; // Last col often bold/heading
+                                    
+                                    // Active State
+                                    $bg_active = $is_even_col ? 'bg-[#DEEAFF]' : 'bg-[#EBF2FF]';
+                                    $text_active = $is_first_col ? 'text-primary' : 'text-heading'; // Simplify: Active is always darker/primary
+                                    if ( $is_even_col && ! $is_first_col ) $text_active = 'text-primary'; // Even cols active text
+                                    
+                                    // Corner rounding
+                                    $extra_active = '';
+                                    if ( $is_first_col ) $extra_active = 'rounded-l-xl';
+                                    if ( $is_last_col )  $extra_active = 'rounded-r-xl';
+                                    
+                                    // Special: Lock row hides border bottom? Design says: .lock-row td { border-bottom-color: transparent !important; }
+                                    // We can add border-transparent to active state
+                                    $border_active = 'border-transparent';
+                                    
+                                    // Construct the Alpine ternary strings
+                                    $class_active   = "$bg_active $text_active $extra_active $border_active";
+                                    $class_inactive = "$bg_default $text_default";
+                                    ?>
+                                    <td class="<?php echo esc_attr( $td_base ); ?>"
+                                        :class="activeIndex === <?php echo $current_idx; ?> ? '<?php echo $class_active; ?>' : '<?php echo $class_inactive; ?>'">
+                                        
+                                        <?php if ( $is_first_col ) : ?>
+                                            <!-- First Column: ID/Label -->
+                                            <span><?php echo esc_html( $value ); ?></span>
+                                        <?php elseif ( $is_even_col ) : ?>
+                                            <!-- Even Column: With Dot Indicator -->
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-1.5 h-1.5 rounded-full" 
+                                                      :class="activeIndex === <?php echo $current_idx; ?> ? 'bg-primary' : 'bg-primary/20'">
+                                                </span>
+                                                <span><?php echo esc_html( $value ); ?></span>
+                                            </div>
+                                        <?php else : ?>
+                                            <!-- Regular Column -->
+                                            <span class="opacity-90"><?php echo esc_html( $value ); ?></span>
+                                        <?php endif; ?>
+                                        
+                                    </td>
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>

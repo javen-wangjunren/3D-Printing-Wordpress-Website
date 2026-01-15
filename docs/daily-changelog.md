@@ -1,4 +1,4 @@
-#1/13:
+#1/13 上午修改：
 
 所有功能已实现完成，现在总结工作成果。已成功完成single-capability.php模板的优化和所有自动化功能的实现。主要工作包括：
 
@@ -29,3 +29,31 @@
 - 实现了数据的自动回退机制，确保即使没有特定数据也能正常显示
 - 支持响应式设计和移动端优化
 所有文件已通过语法检查，确保了代码的质量和稳定性。
+
+#1/13 下午修改：
+
+- 修复 All Capabilities 页面 ACF Tabs 不显示的问题
+
+- 原因是字段组 location 的 page_template 路径写错（ template/ vs 实际 templates/ ）。
+- 修复文件： page-all-capabilities.php
+- 修复 Related Blog 手动挑选博文不生效
+
+- 让 render.php 优先读取模板注入的 related_blog_posts （relationship 结果），没传则走原来的自动匹配查询逻辑。
+- 解释并处理 Page 默认出现古腾堡编辑器的原因
+
+- Page 默认支持 editor ，WP 5+ 默认用 Gutenberg 编辑支持 editor 的内容类型。
+- Capability CPT 因为 supports 通常不含 editor ，所以更“干净”。
+- 针对 Page 增加“是否启用内容编辑器”的页面级开关（一劳永逸）
+
+- 新增页面字段组（侧边栏单一开关）： page-editor-settings.php
+- setup 里读取该开关决定启用/禁用 Gutenberg + editor support： setup.php
+- 修复 setup.php 把代码当文本输出导致页面报错
+
+- 原因是 inc/setup.php 缺少 <?php 开头。
+- 已补齐并加了 ABSPATH 防直连保护： setup.php
+- 优化 all-capabilities 后台“空荡荡无边框”的观感
+
+- 字段组从 style => seamless 改为 style => default ，恢复 metabox 边框： page-all-capabilities.php
+- 移除 Page 编辑页的 Slug 元框（你截图那块）
+
+- 在后台编辑 Page 的 screen 上移除 slugdiv metabox： setup.php

@@ -1,175 +1,157 @@
 <?php
-/**
- * Related Blog Block 的渲染模板
- * 
- * 展示与当前工艺相关的博客文章，基于标签或分类自动匹配
- */
+$title            = get_field( 'blog_title' ) ?: '';
+$title_highlight  = get_field( 'blog_title_highlight' ) ?: '';
+$subtitle         = get_field( 'blog_subtitle' );
+$posts_mode       = get_field( 'posts_mode' ) ?: 'latest';
+$select_category  = get_field( 'select_category' );
+$manual_posts     = get_field( 'manual_posts' );
+$posts_count      = (int) get_field( 'posts_count' );
+$posts_count      = $posts_count > 0 ? $posts_count : 3;
+$posts_per_row    = (int) get_field( 'posts_per_row' );
+$posts_per_row    = $posts_per_row > 0 ? $posts_per_row : 3;
+$show_excerpt     = (bool) get_field( 'show_excerpt' );
+$mobile_compact   = (bool) get_field( 'mobile_compact_mode' );
+$mobile_hide_sub  = (bool) get_field( 'mobile_hide_subtitle' );
+$button_text      = get_field( 'button_text' ) ?: '';
+$button_link      = get_field( 'button_link' ) ?: '';
+$custom_id        = get_field( 'related_blog_block_id' );
+$custom_class     = get_field( 'related_blog_custom_class' );
 
-// 从查询变量获取当前工艺信息
-$current_capability = get_query_var( 'current_capability' );
-
-$manual_related_posts = get_query_var( 'related_blog_posts' );
-
-if ( $manual_related_posts && is_array( $manual_related_posts ) ) {
-    $related_posts = array();
-    foreach ( $manual_related_posts as $maybe_post ) {
-        if ( $maybe_post instanceof WP_Post ) {
-            $related_posts[] = $maybe_post;
-            continue;
-        }
-
-        $post_obj = get_post( $maybe_post );
-        if ( $post_obj instanceof WP_Post ) {
-            $related_posts[] = $post_obj;
-        }
-    }
-
-    $section_title = get_field( 'related_blog_title' ) ?: ( get_field( 'related_blog_title', 'option' ) ?: 'Related Blog Posts' );
-    $section_desc = get_field( 'related_blog_description' ) ?: ( get_field( 'related_blog_description', 'option' ) ?: 'Stay updated with the latest news and insights about 3D printing technology.' );
-    $cta_text = get_field( 'related_blog_cta_text', 'option' ) ?: 'View All Blog Posts';
-    $cta_link = get_field( 'related_blog_cta_link', 'option' ) ?: array( 'url' => get_permalink( get_option( 'page_for_posts' ) ), 'title' => 'View All Blog Posts' );
-    $has_posts = ! empty( $related_posts );
-} else {
-    // 尝试获取缓存数据
-    $transient_key = 'related_blog_' . ( $current_capability ? $current_capability['id'] : 'all' );
-    $blog_data = get_transient( $transient_key );
-
-    // 如果没有缓存或缓存过期，重新生成数据
-    if ( false === $blog_data ) {
-
-        // 初始化查询参数
-        $args = array(
-            'post_type' => 'post',
-            'posts_per_page' => 3,
-            'orderby' => 'date',
-            'order' => 'DESC',
-            'post_status' => 'publish'
-        );
-
-        // 如果有当前工艺信息，尝试根据标签或分类筛选相关博客
-        if ( $current_capability && ! empty( $current_capability['id'] ) ) {
-            // 尝试获取当前工艺的标签
-            $capability_tags = wp_get_post_tags( $current_capability['id'] );
-            $capability_categories = wp_get_post_categories( $current_capability['id'] );
-
-            // 如果有标签，使用标签查询相关博客
-            if ( ! empty( $capability_tags ) ) {
-                $tag_ids = array();
-                foreach ( $capability_tags as $tag ) {
-                    $tag_ids[] = $tag->term_id;
-                }
-
-                $args['tax_query'] = array(
-                    array(
-                        'taxonomy' => 'post_tag',
-                        'field' => 'id',
-                        'terms' => $tag_ids
-                    )
-                );
-            }
-            // 如果没有标签但有分类，使用分类查询相关博客
-            elseif ( ! empty( $capability_categories ) ) {
-                $args['category__in'] = $capability_categories;
-            }
-            // 如果没有标签和分类，尝试使用工艺标题作为关键词搜索
-            elseif ( ! empty( $current_capability['title'] ) ) {
-                $args['s'] = $current_capability['title'];
-            }
-        }
-
-        $blog_query = new WP_Query( $args );
-        $related_posts = $blog_query->posts;
-
-        // 获取模块设置
-        $section_title = get_field( 'related_blog_title' ) ?: ( get_field( 'related_blog_title', 'option' ) ?: 'Related Blog Posts' );
-        $section_desc = get_field( 'related_blog_description' ) ?: ( get_field( 'related_blog_description', 'option' ) ?: 'Stay updated with the latest news and insights about 3D printing technology.' );
-        $cta_text = get_field( 'related_blog_cta_text', 'option' ) ?: 'View All Blog Posts';
-        $cta_link = get_field( 'related_blog_cta_link', 'option' ) ?: array( 'url' => get_permalink( get_option( 'page_for_posts' ) ), 'title' => 'View All Blog Posts' );
-
-        // 缓存数据，有效期1小时
-        $blog_data = array(
-            'related_posts' => $related_posts,
-            'section_title' => $section_title,
-            'section_desc' => $section_desc,
-            'cta_text' => $cta_text,
-            'cta_link' => $cta_link,
-            'has_posts' => $blog_query->have_posts()
-        );
-
-        set_transient( $transient_key, $blog_data, HOUR_IN_SECONDS );
-
-        // 重置查询
-        wp_reset_postdata();
-    }
-
-    // 从缓存数据中提取变量
-    $related_posts = $blog_data['related_posts'];
-    $section_title = $blog_data['section_title'];
-    $section_desc = $blog_data['section_desc'];
-    $cta_text = $blog_data['cta_text'];
-    $cta_link = $blog_data['cta_link'];
-    $has_posts = $blog_data['has_posts'];
+$block_id = 'related-blog-' . ( isset( $block['id'] ) ? $block['id'] : uniqid() );
+if ( ! empty( $custom_id ) ) {
+    $block_id = $custom_id;
+}
+if ( ! empty( $block['anchor'] ) ) {
+    $block_id = $block['anchor'];
 }
 
-// 如果没有相关博客，不显示模块
-if ( ! $has_posts ) {
-    return;
+$class_name = 'related-blog-block py-section-y bg-white overflow-hidden';
+if ( ! empty( $block['className'] ) ) {
+    $class_name .= ' ' . $block['className'];
 }
+if ( ! empty( $custom_class ) ) {
+    $class_name .= ' ' . $custom_class;
+}
+
+$query_args = array(
+    'post_type'           => 'post',
+    'posts_per_page'      => $posts_count,
+    'ignore_sticky_posts' => true,
+);
+
+if ( $posts_mode === 'category' && $select_category ) {
+    $query_args['tax_query'] = array(
+        array(
+            'taxonomy' => 'category',
+            'field'    => 'term_id',
+            'terms'    => $select_category,
+        ),
+    );
+} elseif ( $posts_mode === 'manual' && ! empty( $manual_posts ) && is_array( $manual_posts ) ) {
+    $query_args['post__in']       = $manual_posts;
+    $query_args['orderby']        = 'post__in';
+    $query_args['posts_per_page'] = count( $manual_posts );
+}
+
+$read_time = function ( $post_id ) {
+    return '';
+};
+
+$cards_query = new WP_Query( $query_args );
+
+$width_mobile  = 'w-[85%]';
+$width_tablet  = 'md:w-[45%]';
+$width_desktop = $posts_per_row === 4 ? 'lg:w-[23%]' : 'lg:w-[31%]';
+$card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
+
 ?>
 
-<section class="related-blog-block">
-    <?php if ( $section_title ) : ?>
-        <h2 class="related-blog-title"><?php echo esc_html( $section_title ); ?></h2>
-    <?php endif; ?>
-    
-    <?php if ( $section_desc ) : ?>
-        <p class="related-blog-description"><?php echo esc_html( $section_desc ); ?></p>
-    <?php endif; ?>
-
-    <div class="related-blog-wrapper">
-        <?php foreach ( $related_posts as $post ) : setup_postdata( $post ); ?>
-            <div class="related-blog-item">
-                <?php if ( has_post_thumbnail() ) : ?>
-                    <div class="related-blog-image">
-                        <a href="<?php echo get_permalink(); ?>">
-                            <?php the_post_thumbnail( 'medium' ); ?>
-                        </a>
+<div id="<?php echo esc_attr( $block_id ); ?>" class="<?php echo esc_attr( $class_name ); ?>">
+    <div x-data="{ scrollNext(){ const el = $refs.slider; if(el){ el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' }); } }, scrollPrev(){ const el = $refs.slider; if(el){ el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' }); } } }" class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div class="max-w-xl text-left">
+                <?php if ( $title || $title_highlight ) : ?>
+                    <h2 class="text-h2 font-bold text-heading tracking-[-0.04em] mb-4">
+                        <?php echo esc_html( $title ); ?><?php if ( $title_highlight ) : ?> <span class="text-primary"><?php echo esc_html( $title_highlight ); ?></span><?php endif; ?>
+                    </h2>
+                <?php endif; ?>
+                <?php if ( $subtitle ) : ?>
+                    <p class="text-body text-base <?php echo $mobile_hide_sub ? 'hidden md:block' : ''; ?>">
+                        <?php echo wp_kses_post( $subtitle ); ?>
+                    </p>
+                <?php endif; ?>
+            </div>
+            <div class="flex flex-col items-end gap-3 pb-2 md:flex-row md:items-center">
+                <?php if ( $button_text && $button_link ) : ?>
+                    <a href="<?php echo esc_url( $button_link ); ?>" class="inline-flex items-center justify-center px-4 py-2 rounded-button border border-border text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors">
+                        <span><?php echo esc_html( $button_text ); ?></span>
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                <?php endif; ?>
+                <?php if ( $cards_query->have_posts() ) : ?>
+                    <div class="hidden md:flex gap-3">
+                        <button type="button" @click="scrollPrev" class="w-11 h-11 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all">
+                            <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button type="button" @click="scrollNext" class="w-11 h-11 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all">
+                            <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                        </button>
                     </div>
                 <?php endif; ?>
-                
-                <div class="related-blog-content">
-                    <div class="related-blog-meta">
-                        <span class="related-blog-date"><?php echo get_the_date(); ?></span>
-                    </div>
-                    
-                    <h3 class="related-blog-post-title">
-                        <a href="<?php echo get_permalink(); ?>">
-                            <?php the_title(); ?>
-                        </a>
-                    </h3>
-                    
-                    <div class="related-blog-excerpt">
-                        <?php the_excerpt(); ?>
-                    </div>
-                    
-                    <div class="related-blog-read-more">
-                        <a href="<?php echo get_permalink(); ?>" class="read-more-link">
-                            Read More
-                        </a>
-                    </div>
-                </div>
             </div>
-        <?php endforeach; ?>
-        <?php wp_reset_postdata(); ?>
-    </div>
-    
-    <?php if ( $cta_link && isset( $cta_link['url'] ) && isset( $cta_link['title'] ) ) : ?>
-        <div class="related-blog-cta">
-            <a href="<?php echo esc_url( $cta_link['url'] ); ?>" 
-               class="cta-button" 
-               <?php if ( isset( $cta_link['target'] ) ) echo 'target="' . esc_attr( $cta_link['target'] ) . '"'; ?>>
-                <?php echo esc_html( $cta_link['title'] ); ?>
-            </a>
         </div>
-    <?php endif; ?>
-</section>
+
+        <div class="relative">
+            <div x-ref="slider" class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth" style="scroll-snap-type: x mandatory;">
+                <?php if ( $cards_query->have_posts() ) : ?>
+                    <?php while ( $cards_query->have_posts() ) : $cards_query->the_post(); ?>
+                        <?php
+                        $post_id    = get_the_ID();
+                        $categories = array();
+                        $tag_label  = '';
+                        $date_label = '';
+                        $read_label = '';
+                        ?>
+                        <div class="<?php echo esc_attr( $card_width ); ?> flex-shrink-0" style="scroll-snap-align: start;">
+                            <a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
+                                <div class="aspect-[16/10] overflow-hidden relative">
+                                    <?php if ( has_post_thumbnail( $post_id ) ) : ?>
+                                        <?php echo get_the_post_thumbnail( $post_id, 'large', array( 'class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' ) ); ?>
+                                    <?php else : ?>
+                                        <div class="w-full h-full bg-bg-section"></div>
+                                    <?php endif; ?>
+                                    <?php if ( $tag_label ) : ?>
+                                        <div class="absolute top-4 left-4">
+                                            <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase tracking-[0.16em]">
+                                                <?php echo esc_html( $tag_label ); ?>
+                                            </span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="p-6 lg:p-8 flex flex-col flex-1 <?php echo $mobile_compact ? 'max-md:p-5' : ''; ?>">
+                                    <h3 class="text-[18px] lg:text-[20px] font-bold text-heading mb-4 leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+                                        <?php the_title(); ?>
+                                    </h3>
+                                    <?php if ( $show_excerpt ) : ?>
+                                        <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3"></p>
+                                    <?php endif; ?>
+                                    <div class="mt-auto pt-6 border-t border-border/60 flex justify-between items-center text-[12px] font-mono text-muted uppercase">
+                                        <?php if ( $date_label ) : ?>
+                                            <span><?php echo esc_html( $date_label ); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ( $read_label ) : ?>
+                                            <span><?php echo esc_html( $read_label ); ?></span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    <?php endwhile; ?>
+                    <?php wp_reset_postdata(); ?>
+                <?php else : ?>
+                    <div class="w-full text-center text-muted py-8"></div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>

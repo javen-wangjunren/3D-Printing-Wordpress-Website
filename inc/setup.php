@@ -17,6 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+add_action( 'after_setup_theme', function() {
+	register_nav_menus( array(
+		'footer_capabilities' => 'Footer – Capabilities',
+		'footer_materials'    => 'Footer – Materials',
+		'footer_resources'    => 'Footer – Resources',
+		'footer_company'      => 'Footer – Company',
+	) );
+} );
+
 add_filter( 'use_block_editor_for_post', function( $use_block_editor, $post ) {
     if ( ! $post || 'page' !== $post->post_type ) {
         return $use_block_editor;
