@@ -28,6 +28,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'capability_design_guide_title',
                     'type' => 'text',
                     'instructions' => '如：SLS 3D Printing Capabilities',
+                    'wrapper' => array('width' => '50'),
                 ),
                 // 第一层：核心指标金字塔 (4大卡片)
                 array(
@@ -39,6 +40,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'min' => 4,
                     'max' => 4,
                     'layout' => 'table', // 核心指标建议横向紧凑排列
+                    'collapsed' => 'field_cdg_core_label',
                     'sub_fields' => array(
                         array(
                             'key' => 'field_cdg_core_label',
@@ -108,8 +110,10 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'key' => 'field_cdg_advice_text',
                             'label' => 'Advice Content',
                             'name' => 'text',
-                            'type' => 'textarea',
-                            'rows' => 3,
+                            'type' => 'wysiwyg',
+                            'toolbar' => 'basic',
+                            'media_upload' => 0,
+                            'delay' => 1,
                         ),
                     ),
                 ),
@@ -132,6 +136,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         'stack' => 'Vertical Stack (垂直堆叠)',
                     ),
                     'default_value' => 'grid', // 对应你设计的 2x2 磁铁布局
+                    'wrapper' => array('width' => '50'),
                 ),
                 array(
                     'key' => 'field_cdg_hide_advice_mb',
@@ -139,7 +144,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'capability_design_guide_hide_advice_mb',
                     'type' => 'true_false',
                     'ui' => 1,
-                    'instructions' => '手机端是否置底并全宽显示建议框',
+                    'instructions' => '手机端是否隐藏专家建议模块（桌面端仍显示）。',
+                    'wrapper' => array('width' => '50'),
                 ),
 
                 // ==========================================
@@ -169,6 +175,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
             ),
             'style' => 'seamless',
+            'instruction_placement' => 'label',
         ) );
     });
 }

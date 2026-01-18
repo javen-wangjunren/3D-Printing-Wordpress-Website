@@ -29,6 +29,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Section Title',
                     'name' => 'title',
                     'type' => 'text',
+                    'wrapper' => array('width' => '50'),
                     'placeholder' => '例如：The SLS Manufacturing Process',
                 ),
                 array(
@@ -36,6 +37,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Section Description',
                     'name' => 'desc',
                     'type' => 'textarea',
+                    'wrapper' => array('width' => '50'),
                     'rows' => 2,
                 ),
                 array(
@@ -90,6 +92,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'instructions' => '固定 2 项参数。如：层厚、室温。',
                             'max' => 2,
                             'layout' => 'table', // 小规模数据使用 Table
+                            'collapsed' => 'field_hiw_data_label',
                             'sub_fields' => array(
                                 array(
                                     'key' => 'field_hiw_data_label',
@@ -110,8 +113,10 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'key' => 'field_hiw_pro_tip',
                             'label' => 'Pro Tip',
                             'name' => 'pro_tip',
-                            'type' => 'textarea',
-                            'rows' => 2,
+                            'type' => 'wysiwyg',
+                            'toolbar' => 'basic',
+                            'media_upload' => 0,
+                            'delay' => 1,
                             'placeholder' => '输入针对该步骤的专家建议...',
                         ),
                     ),
@@ -134,6 +139,15 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'ui' => 1,
                     'wrapper' => array('width' => '50'),
                 ),
+                array(
+                    'key' => 'field_hiw_mb_compact_mode',
+                    'label' => 'Mobile Compact Mode',
+                    'name' => 'mb_compact_mode',
+                    'type' => 'true_false',
+                    'instructions' => '开启后，手机端仅保留最关键信息，弱化大图和次要文案。',
+                    'ui' => 1,
+                    'wrapper' => array('width' => '50'),
+                ),
 
                 // ==========================================
                 // TAB 3: SETTINGS (SEO 与辅助)
@@ -150,9 +164,26 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'text',
                     'wrapper' => array('width' => '50'),
                 ),
+                array(
+                    'key' => 'field_hiw_cta_label',
+                    'label' => 'Primary Button Label',
+                    'name' => 'cta_label',
+                    'type' => 'text',
+                    'wrapper' => array('width' => '50'),
+                    'placeholder' => '例如：Get Quote',
+                ),
+                array(
+                    'key' => 'field_hiw_cta_url',
+                    'label' => 'Primary Button Link',
+                    'name' => 'cta_url',
+                    'type' => 'url',
+                    'wrapper' => array('width' => '50'),
+                    'instructions' => '留空则使用默认报价页面链接。',
+                ),
             ),
             'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/how-it-works' ) ) ),
             'style' => 'seamless',
+            'instruction_placement' => 'label',
         ) );
     });
 }

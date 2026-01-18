@@ -3,136 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufacturing Capabilities - Style Match v4.0</title>
+    <title>3DPROTO - Manufacturing Capabilities Matrix</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- 变量注入 (基于全站统一规范) --- */
-        :root {
-            --primary: #0047AB;
-            --primary-hover: #003A8C;
-            --heading: #1D2938;
-            --body: #667085;
-            --muted: #98A2B3;
-            --border: #E4E7EC;
-            --bg-section: #F9FAFB;
-            --radius-card: 12px;
-            --radius-pill: 99px;
-        }
-
-        body { font-family: 'Inter', sans-serif; color: var(--body); margin: 0; background: #fff; }
-        .section-py { padding: 96px 0; }
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 64px; box-sizing: border-box; }
-
-        /* --- 1. 顶部固定区：居中标题与 Tab --- */
-        .header-stack { text-align: center; margin-bottom: 56px; }
-        .h2 { font-size: 36px; color: var(--heading); font-weight: 700; margin: 0 0 24px 0; letter-spacing: -1px; }
-
-        /* 修复后的 Tab 样式 */
-        .tabs-nav { display: flex; gap: 10px; justify-content: center; }
-        .tab-btn {
-            padding: 10px 24px; border: 1px solid var(--border); background: #FFFFFF;
-            color: var(--body); font-size: 14px; font-weight: 600; cursor: pointer; 
-            border-radius: var(--radius-pill); transition: all 0.2s ease;
-        }
-        .tab-btn.active { background: var(--primary); border-color: var(--primary); color: #FFFFFF; }
-
-        /* --- 2. 主体对齐网格 --- */
-        .hub-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: stretch; }
-        .hub-info { display: flex; flex-direction: column; }
-
-        /* 文字层级：收紧间距 */
-        .hub-h3 { font-size: 22px; font-weight: 700; color: var(--heading); margin: 0 0 8px 0; letter-spacing: -0.5px; }
-        .hub-desc { color: var(--body); line-height: 1.6; margin: 0 0 32px 0; font-size: 15px; max-width: 540px; }
-
-        /* --- 3. 参数卡片 (完全同步 Technical Performance 样式) --- */
-        .perf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
-        .perf-card {
-            padding: 24px; border: 1px solid var(--border); border-radius: var(--radius-card);
-            background: #fff; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .perf-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 12px 24px rgba(0,71,171,0.06); }
-        .perf-tag { font-size: 9px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1.2px; display: block; margin-bottom: 6px; }
-        .perf-title { font-size: 13px; color: var(--heading); margin: 0 0 12px 0; font-weight: 600; }
-        .perf-value { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--heading); }
-        .unit { font-size: 12px; color: var(--muted); font-weight: 400; margin-left: 2px; }
-
-        /* 标签 */
-        .tags-row { display: flex; flex-wrap: wrap; gap: 6px; }
-        .t-item { background: var(--bg-section); border: 1px solid var(--border); padding: 3px 10px; border-radius: 4px; font-size: 11px; color: var(--body); }
-
-        /* --- 4. 按钮：固定间距，实现底部对齐锚点 --- */
-        .btn-tech-service {
-            display: inline-flex; align-items: center; gap: 10px; margin-top: 40px; /* 固定间距解决过远问题 */
-            background: var(--primary); color: #FFFFFF; padding: 12px 28px; border-radius: 8px;
-            font-size: 14px; font-weight: 600; text-decoration: none; transition: 0.2s;
-        }
-        .btn-tech-service:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 71, 171, 0.2); }
-
-        /* --- 5. 右侧视觉：强制同步高度 --- */
-        .hub-visual { height: 100%; }
-        .img-frame { height: 100%; position: relative; border-radius: var(--radius-card); overflow: hidden; background: var(--bg-section); }
-        .img-frame img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.95; }
-        .frame-tag { 
-            position: absolute; bottom: 0; right: 0; background: var(--primary); padding: 6px 14px; 
-            font-size: 10px; font-weight: 700; letter-spacing: 1px; color: #FFFFFF;
-        }
-
-        /* 动画 */
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 1024px) {
-            .container { padding: 0 24px; }
-            .hub-grid { grid-template-columns: 1fr; gap: 40px; }
-            .perf-grid { grid-template-columns: 1fr; }
-            .hub-visual { height: 360px; order: -1; }
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* 标题工业感规范 [cite: 11] */
+        .industrial-h2 { letter-spacing: -0.5px; }
+        
+        /* 移动端 3 列网格锁定  */
+        @media (max-width: 767px) {
+            .perf-grid-mobile {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
         }
     </style>
 </head>
-<body>
+<body class="bg-white font-sans text-body antialiased">
 
-<section class="section-py">
-    <div class="container">
-        <header class="header-stack">
-            <h2 class="h2">Manufacturing Capabilities</h2>
-            <div class="tabs-nav">
-                <button class="tab-btn active" onclick="updateSpec('dmls', this)">DMLS (Metal)</button>
-                <button class="tab-btn" onclick="updateSpec('sls', this)">SLS (Polymer)</button>
+<section class="py-12 lg:py-20">
+    <div class="max-w-[1280px] mx-auto px-5 lg:px-8">
+        
+        <header class="text-center mb-10 lg:mb-16">
+            <h2 class="industrial-h2 text-[28px] lg:text-[36px] font-bold text-heading mb-6">Manufacturing Capabilities</h2>
+            <div class="flex gap-2 justify-center">
+                <button onclick="updateSpec('dmls', this)" class="tab-btn active px-6 py-2.5 rounded-full border border-primary bg-primary text-white text-[13px] font-bold transition-all shadow-md">DMLS (Metal)</button>
+                <button onclick="updateSpec('sls', this)" class="tab-btn px-6 py-2.5 rounded-full border border-border bg-white text-body text-[13px] font-bold hover:border-primary/50 transition-all">SLS (Polymer)</button>
             </div>
         </header>
 
-        <div class="hub-grid">
-            <div class="hub-info">
-                <div id="spec-content" class="fade-in">
-                    <h3 id="hub-title" class="hub-h3">Precision DMLS Manufacturing</h3>
-                    <p id="hub-desc" class="hub-desc">
-                        Using advanced laser sintering technology to produce fully dense metal components with exceptional mechanical properties.
+        <div class="grid lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-12 items-center">
+            
+            <div class="flex flex-col justify-center order-2 lg:order-1 pr-0 lg:pr-4">
+                <div id="spec-content" class="opacity-100 transition-opacity duration-300">
+                    <h3 id="hub-title" class="text-[18px] lg:text-[24px] font-bold text-heading mb-2 tracking-tight">Precision DMLS Manufacturing</h3>
+                    <p id="hub-desc" class="text-[13px] lg:text-[15px] leading-relaxed mb-6 lg:mb-8 max-w-xl text-body">
+                        Advanced powder-bed fusion process producing industrial-grade metal parts with superior structural integrity.
                     </p>
 
-                    <div class="perf-grid" id="card-container">
+                    <div class="perf-grid-mobile grid grid-cols-3 gap-2 lg:gap-4 mb-6 lg:mb-8" id="card-container">
                         </div>
 
-                    <div style="margin-top: 24px;">
-                        <span style="font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; display: block; margin-bottom: 12px;">Available Finishing</span>
-                        <div class="tags-row" id="hub-tags">
+                    <div class="mb-6 lg:mb-8">
+                        <span class="text-[9px] font-bold text-muted uppercase tracking-[1.5px] block mb-2 lg:mb-3">Available Finishing</span>
+                        <div class="flex flex-wrap gap-2" id="hub-tags">
                             </div>
                     </div>
                 </div>
 
                 <div>
-                    <a href="/technical-services" id="hub-link" class="btn-tech-service">
-                        <span>Technical Service Details</span>
-                        <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    <a href="/technical-services" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 lg:px-8 lg:py-3.5 rounded-button font-bold text-[11px] lg:text-[12px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-lg shadow-primary/10 group">
+                        <span>Technical Details</span>
+                        <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                     </a>
                 </div>
             </div>
 
-            <div class="hub-visual">
-                <div class="img-frame">
-                    <img id="hub-img" src="https://placehold.co/1200x1200/F2F4F7/1D2939?text=DMLS+Metal+Production" alt="Manufacturing System">
-                    <div class="frame-tag" id="machine-model">EOS M 400-4</div>
+            <div class="aspect-[4/3] lg:aspect-auto lg:h-auto order-1 lg:order-2">
+                <div class="h-full relative rounded-card overflow-hidden border border-border bg-bg-subtle group shadow-sm">
+                    <img id="hub-img" src="https://placehold.co/1200x1200/F2F4F7/1D2939?text=DMLS+Production" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System">
+                    <div class="absolute bottom-0 right-0 bg-primary/90 backdrop-blur-sm px-3 py-1.5 lg:px-4 lg:py-2 text-[9px] lg:text-[10px] font-mono font-bold text-white tracking-widest uppercase border-tl-card" id="machine-model">EOS M 400-4</div>
                 </div>
             </div>
+
         </div>
     </div>
 </section>
@@ -141,56 +97,59 @@
     const specData = {
         dmls: {
             title: "Precision DMLS Manufacturing",
-            desc: "Using advanced laser sintering technology to produce fully dense metal components with exceptional mechanical properties.",
+            desc: "Advanced powder-bed fusion process producing industrial-grade metal parts with superior structural integrity.",
             tag: "DMLS",
             highlights: [
-                { title: "Layer Height", value: "30 - 60", unit: "µm" },
-                { title: "Tolerance", value: "± 0.3", unit: "mm" },
-                { title: "Build Volume", value: "400³", unit: "mm" }
+                { title: "Layer", value: "30-60", unit: "µm" },
+                { title: "Tol.", value: "±0.3", unit: "mm" },
+                { title: "Build", value: "400³", unit: "mm" }
             ],
-            machine: "EOS M 400-4",
+            machine: "SYSTEM: EOS M 400-4",
             tags: ["Support Removal", "Heat Treatment", "CNC Machining", "Anodizing"],
             img: "https://placehold.co/1200x1200/F2F4F7/1D2939?text=DMLS+Metal+Production"
         },
         sls: {
             title: "Industrial SLS Production",
-            desc: "Our SLS process delivers strong, isotropic nylon parts with excellent surface finish and no support structures needed.",
+            desc: "The gold standard for functional polymer prototypes and end-use parts without the need for support structures.",
             tag: "SLS",
             highlights: [
-                { title: "Layer Height", value: "60 - 120", unit: "µm" },
-                { title: "Tolerance", value: "± 0.25", unit: "mm" },
-                { title: "Build Volume", value: "340×340×600", unit: "mm" }
+                { title: "Layer", value: "60-120", unit: "µm" },
+                { title: "Tol.", value: "±0.25", unit: "mm" },
+                { title: "Build", value: "340²", unit: "mm" }
             ],
-            machine: "EOS P 396 SYSTEM",
-            tags: ["Media Tumbled", "Dyeing", "Vapor Smoothing", "Chemical Coating"],
+            machine: "SYSTEM: EOS P 396",
+            tags: ["Media Tumble", "Dyeing", "Vapor Smooth", "Coating"],
             img: "https://placehold.co/1200x1200/F2F4F7/1D2939?text=SLS+Polymer+Production"
         }
     };
 
     function updateSpec(type, btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(b => {
+            b.classList.remove('active', 'bg-primary', 'text-white', 'border-primary', 'shadow-md');
+            b.classList.add('bg-white', 'text-body', 'border-border');
+        });
+        btn.classList.add('active', 'bg-primary', 'text-white', 'border-primary', 'shadow-md');
+        btn.classList.remove('bg-white', 'text-body', 'border-border');
 
         const d = specData[type];
-        const content = document.getElementById('spec-content');
-        content.classList.remove('fade-in');
-        void content.offsetWidth; 
-        content.classList.add('fade-in');
-
         document.getElementById('hub-title').innerText = d.title;
         document.getElementById('hub-desc').innerText = d.desc;
         document.getElementById('machine-model').innerText = d.machine;
         document.getElementById('hub-img').src = d.img;
 
         document.getElementById('card-container').innerHTML = d.highlights.map(item => `
-            <div class="perf-card">
-                <span class="perf-tag">${d.tag}</span>
-                <h3 class="perf-title">${item.title}</h3>
-                <div class="perf-value">${item.value} <span class="unit">${item.unit}</span></div>
+            <div class="p-2 lg:p-6 border border-border rounded-card bg-white hover:border-primary/50 transition-all text-center lg:text-left flex flex-col justify-center h-full">
+                <span class="hidden lg:inline-block text-[8px] font-bold text-primary uppercase tracking-widest mb-1.5 opacity-80">${d.tag}</span>
+                <h3 class="text-[9px] lg:text-[14px] font-bold text-heading mb-0.5 lg:mb-2 truncate w-full">${item.title}</h3>
+                <div class="font-mono text-[15px] lg:text-[22px] font-bold text-heading leading-tight">
+                    ${item.value}<span class="text-[8px] lg:text-[11px] font-medium text-muted ml-0.5">${item.unit}</span>
+                </div>
             </div>
         `).join('');
 
-        document.getElementById('hub-tags').innerHTML = d.tags.map(t => `<span class="t-item">${t}</span>`).join('');
+        document.getElementById('hub-tags').innerHTML = d.tags.map(t => `
+            <span class="bg-bg-subtle border border-border px-2.5 py-1 rounded text-[11px] font-medium text-body">${t}</span>
+        `).join('');
     }
 
     window.onload = () => updateSpec('dmls', document.querySelector('.tab-btn'));

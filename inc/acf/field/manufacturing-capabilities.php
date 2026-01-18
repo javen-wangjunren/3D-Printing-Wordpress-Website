@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * 角色：Manufacturing Capabilities (制造能力枢纽)
+ * 备注：主要是在single material页面展示该材料，支持的工艺和表面处理有哪些
+ * 是一个特色版块
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {
@@ -190,7 +196,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'true_false',
                     'ui' => 1,
                     'default_value' => 1,
-                    'wrapper' => array('width' => '33'),
+                    'wrapper' => array('width' => '50'),
                 ),
                 array(
                     'key' => 'field_mcap_use_mono_font',
@@ -199,16 +205,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'true_false',
                     'ui' => 1,
                     'default_value' => 1,
-                    'wrapper' => array('width' => '33'),
-                ),
-                array(
-                    'key' => 'field_mcap_show_tabs',
-                    'label' => 'Show Tabs Navigation',
-                    'name' => 'manufacturing_capabilities_show_tabs',
-                    'type' => 'true_false',
-                    'ui' => 1,
-                    'default_value' => 1,
-                    'wrapper' => array('width' => '34'),
+                    'wrapper' => array('width' => '50'),
                 ),
 
                 array(

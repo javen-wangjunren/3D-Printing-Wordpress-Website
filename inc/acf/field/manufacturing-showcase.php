@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * 角色：Manufacturing Showcase (生产案例展示)
+ * 备注：主要是在single material页面展示该材料的生产的实际案例
+ * 是一个特色版块
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {
@@ -86,6 +92,16 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             ),
                         ),
                         array(
+                            'key' => 'field_mfs_item_badge',
+                            'label' => 'Badge Label',
+                            'name' => 'item_badge',
+                            'type' => 'text',
+                            'instructions' => '如：SLS PROCESS（卡片左上角徽标文案）。',
+                            'wrapper' => array(
+                                'width' => '33',
+                            ),
+                        ),
+                        array(
                             'key' => 'field_mfs_item_subtitle',
                             'label' => 'Subtitle',
                             'name' => 'item_subtitle',
@@ -93,6 +109,19 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'instructions' => '如：SLS / Matte Finish / High Temp。',
                             'wrapper' => array(
                                 'width' => '50',
+                            ),
+                        ),
+                        array(
+                            'key' => 'field_mfs_item_description',
+                            'label' => 'Description',
+                            'name' => 'item_description',
+                            'type' => 'wysiwyg',
+                            'tabs' => 'visual',
+                            'media_upload' => 0,
+                            'delay' => 1,
+                            'instructions' => '1-2 句精炼描述，移动端紧凑展示。',
+                            'wrapper' => array(
+                                'width' => '100',
                             ),
                         ),
                         array(
@@ -217,4 +246,3 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
         ) );
     });
 }
-

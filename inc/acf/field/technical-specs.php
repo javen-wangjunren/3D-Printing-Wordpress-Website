@@ -1,4 +1,9 @@
 <?php
+/**
+ * 角色：Technical Specs (技术规格面板)
+ * 备注：在材料页展示材料的技术规格，包括物理特性，机械性能等等
+ * 目前是在材料页用的
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {
@@ -47,26 +52,39 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Tab Title',
                             'name' => 'tab_title',
                             'type' => 'text',
+                            'instructions' => 'Full title (e.g. Mechanical Properties)',
                             'wrapper' => array(
-                                'width' => '40',
+                                'width' => '30',
+                            ),
+                        ),
+                        array(
+                            'key' => 'field_ts_tab_short_title',
+                            'label' => 'Mobile Short Title',
+                            'name' => 'tab_short_title',
+                            'type' => 'text',
+                            'instructions' => 'Optional. Shown on mobile (e.g. Mechanical)',
+                            'wrapper' => array(
+                                'width' => '20',
                             ),
                         ),
                         array(
                             'key' => 'field_ts_tab_slug',
-                            'label' => 'Tab Key',
+                            'label' => 'Tab Key (Slug)',
                             'name' => 'tab_key',
                             'type' => 'text',
+                            'instructions' => 'Unique ID (e.g. mechanical)',
                             'wrapper' => array(
-                                'width' => '30',
+                                'width' => '25',
                             ),
                         ),
                         array(
                             'key' => 'field_ts_tab_tag',
-                            'label' => 'Highlight Tag',
+                            'label' => 'Card Tag',
                             'name' => 'tab_tag',
                             'type' => 'text',
+                            'instructions' => 'Label on cards (e.g. Mechanical)',
                             'wrapper' => array(
-                                'width' => '30',
+                                'width' => '25',
                             ),
                         ),
                         array(

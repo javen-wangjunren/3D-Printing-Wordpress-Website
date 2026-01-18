@@ -1,102 +1,101 @@
+<!--
+
+single-material 的物理特性模块 
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technical Dashboard - Aluminum 6061</title>
+    <title>3DPROTO - Compact Technical Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px' }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- 变量注入 (基于 Tailwind Config [cite: 14-63]) --- */
-        :root {
-            --primary: #0047AB; /* [cite: 17] */
-            --primary-hover: #003A8C; /* [cite: 18] */
-            --heading: #1D2938; /* [cite: 21] */
-            --body: #667085; /* [cite: 22] */
-            --muted: #98A2B3; /* [cite: 23] */
-            --border: #E4E7EC; /* [cite: 31] */
-            --bg-section: #F9FAFB;
-            --radius-card: 12px; /* [cite: 59] */
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .industrial-h2 { letter-spacing: -0.5px; }
+        
+        /* 移动端紧凑滑动流 (Compact Snap Flow) */
+        @media (max-width: 767px) {
+            .perf-grid-mobile {
+                display: flex;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 4px; /* 留出阴影空间 */
+                scroll-snap-type: x mandatory;
+                /* 隐藏滚动条但保留功能 */
+                scrollbar-width: none; 
+                -ms-overflow-style: none;
+            }
+            .perf-grid-mobile::-webkit-scrollbar {
+                display: none;
+            }
+            .perf-card-mobile {
+                /* 核心逻辑：40% 宽度，一屏可见 2.3 个，暗示可滑动，既不拥挤也不过大 */
+                flex: 0 0 40%; 
+                min-width: 0;
+                scroll-snap-align: start;
+            }
         }
-
-        body { font-family: 'Inter', sans-serif; color: var(--body); margin: 0; background: #fff; }
-        .section-py { padding: 96px 0; } /* [cite: 53] */
-        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
-
-        /* 头部逻辑 [cite: 76, 77] */
-        .section-header { margin-bottom: 48px; }
-        .h2 { font-size: 36px; color: var(--heading); font-weight: 700; margin: 0 0 16px 0; letter-spacing: -0.5px; }
-        .body-text { font-size: 16px; line-height: 1.6; max-width: 800px; }
-
-        /* --- Tabs 导航 --- */
-        .tabs-nav { display: flex; gap: 8px; margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
-        .tab-btn {
-            background: transparent; border: none; padding: 8px 16px;
-            font-size: 14px; font-weight: 600; color: var(--body);
-            cursor: pointer; transition: all 0.2s; position: relative;
-        }
-        .tab-btn.active { color: var(--primary); }
-        .tab-btn.active::after {
-            content: ''; position: absolute; bottom: -17px; left: 0; right: 0;
-            height: 2px; background: var(--primary);
-        }
-
-        /* --- 核心卡片网格 --- */
-        .perf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 64px; }
-        .perf-card {
-            padding: 32px; border: 1px solid var(--border); border-radius: var(--radius-card);
-            background: #fff; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .perf-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 12px 24px rgba(0,71,171,0.06); }
-        .perf-tag { font-size: 10px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; }
-        .perf-title { font-size: 16px; color: var(--heading); margin: 8px 0 16px 0; font-weight: 600; }
-        .perf-value { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: var(--heading); }
-        .unit { font-size: 14px; color: var(--muted); font-weight: 400; margin-left: 4px; }
-
-        /* --- 表格区域 --- */
-        .table-title { font-size: 12px; font-weight: 700; color: var(--heading); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1.5px; }
-        .table-wrapper { border: 1px solid var(--border); border-radius: var(--radius-card); overflow: hidden; }
-        .tech-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .tech-table th { background: var(--bg-section); padding: 16px 24px; font-size: 13px; font-weight: 600; color: var(--heading); }
-        .tech-table td { padding: 16px 24px; font-size: 14px; border-bottom: 1px solid var(--border); }
-        .data-mono { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--heading); }
-
-        /* 动画 [cite: 68] */
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        @media (max-width: 768px) { .perf-grid { grid-template-columns: 1fr; } .h2 { font-size: 28px; } }
     </style>
 </head>
-<body>
+<body class="bg-white font-sans text-body antialiased">
 
-<section class="section-py">
-    <div class="container">
-        <header class="section-header">
-            <h2 class="h2">Technical Performance: Aluminum 6061</h2>
-            <p class="body-text">A versatile aerospace-grade alloy known for its exceptional strength-to-weight ratio and corrosion resistance.</p>
+<section class="py-10 lg:py-16">
+    <div class="max-w-[1280px] mx-auto px-5 lg:px-8">
+        
+        <header class="mb-6 lg:mb-8">
+            <h2 class="industrial-h2 text-[26px] lg:text-[36px] font-bold text-heading mb-3">
+                Technical Performance: <span class="text-primary">Aluminum 6061</span>
+            </h2>
+            <p class="text-[14px] lg:text-[15px] max-w-2xl leading-relaxed opacity-90">
+                A versatile aerospace-grade alloy known for its exceptional strength-to-weight ratio and corrosion resistance.
+            </p>
         </header>
 
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="switchTab('mechanical', this)">Mechanical Properties</button>
-            <button class="tab-btn" onclick="switchTab('physical', this)">Physical Properties</button>
-            <button class="tab-btn" onclick="switchTab('thermal', this)">Thermal Properties</button>
+        <div class="flex flex-nowrap gap-1 border-b border-border mb-6 lg:mb-8 overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('mechanical', this)" class="tab-btn active whitespace-nowrap px-4 py-3 text-[13px] font-bold text-primary border-b-2 border-primary">Mechanical Properties</button>
+            <button onclick="switchTab('physical', this)" class="tab-btn whitespace-nowrap px-4 py-3 text-[13px] font-bold text-body hover:text-primary transition-colors">Physical Properties</button>
+            <button onclick="switchTab('thermal', this)" class="tab-btn whitespace-nowrap px-4 py-3 text-[13px] font-bold text-body hover:text-primary transition-colors">Thermal Properties</button>
         </div>
 
-        <div id="card-container" class="perf-grid fade-in">
+        <div id="card-container" class="perf-grid-mobile md:grid md:grid-cols-3 gap-5 mb-8 lg:mb-12">
             </div>
 
         <div class="table-area">
-            <div class="table-title">Full Property Data</div>
-            <div class="table-wrapper">
-                <table class="tech-table">
+            <h3 class="text-[10px] font-bold text-muted uppercase tracking-[2px] mb-4">Full Property Data</h3>
+            <div class="border border-border rounded-card overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr>
-                            <th>Measurement</th>
-                            <th>Aluminum 6061 Value</th>
-                            <th>Standard / Condition</th>
+                        <tr class="bg-bg-subtle border-b border-border text-[11px] font-bold text-heading uppercase">
+                            <th class="px-5 lg:px-8 py-3.5">Measurement</th>
+                            <th class="px-5 lg:px-8 py-3.5">Value</th>
+                            <th class="px-5 lg:px-8 py-3.5 hidden md:table-cell">Standard</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="fade-in">
+                    <tbody id="table-body" class="text-[13px] lg:text-[14px]">
                         </tbody>
                 </table>
             </div>
@@ -105,7 +104,6 @@
 </section>
 
 <script>
-    // 1. 数据结构：将图片中的硬核参数转化为代码对象
     const materialData = {
         mechanical: {
             tag: "Mechanical",
@@ -125,8 +123,8 @@
             tag: "Physical",
             highlights: [
                 { title: "Density", value: "2.70", unit: "g/cm³" },
-                { title: "Elec. Conductivity", value: "43", unit: "% IACS" },
-                { title: "Elec. Resistivity", value: "0.040", unit: "Ω·mm²/m" }
+                { title: "Conductivity", value: "43", unit: "% IACS" },
+                { title: "Resistivity", value: "0.040", unit: "Ω·mm²/m" }
             ],
             table: [
                 { label: "Specific Gravity", val: "2.70", std: "—" },
@@ -147,43 +145,36 @@
         }
     };
 
-    // 2. 切换逻辑 
     function switchTab(category, element) {
-        // 更新 Tab 按钮状态
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active', 'text-primary', 'border-b-2', 'border-primary');
+            btn.classList.add('text-body');
+        });
+        element.classList.add('active', 'text-primary', 'border-b-2', 'border-primary');
+        element.classList.remove('text-body');
 
         const data = materialData[category];
-        const cardContainer = document.getElementById('card-container');
-        const tableBody = document.getElementById('table-body');
-
-        // 执行淡入动画
-        cardContainer.classList.remove('fade-in');
-        tableBody.classList.remove('fade-in');
-        void cardContainer.offsetWidth; // 触发重绘
-        cardContainer.classList.add('fade-in');
-        tableBody.classList.add('fade-in');
-
-        // 更新 3 个高亮卡片 [cite: 89]
-        cardContainer.innerHTML = data.highlights.map(item => `
-            <div class="perf-card">
-                <span class="perf-tag">${data.tag}</span>
-                <h3 class="perf-title">${item.title}</h3>
-                <div class="perf-value">${item.value} <span class="unit">${item.unit}</span></div>
+        
+        // 移动端卡片极致紧凑 (p-2) 与 数值适配 (text-[16px])
+        document.getElementById('card-container').innerHTML = data.highlights.map(item => `
+            <div class="perf-card-mobile p-2 lg:p-8 border border-border rounded-card bg-white hover:border-primary/50 transition-all flex flex-col justify-between h-full">
+                <span class="text-[8px] lg:text-[9px] font-bold text-primary uppercase tracking-widest opacity-80 truncate w-full block">${data.tag}</span>
+                <h3 class="text-[11px] lg:text-[17px] font-bold text-heading mt-1 mb-1 lg:mb-3 leading-tight h-[2.5em] lg:h-auto overflow-hidden text-ellipsis line-clamp-2">${item.title}</h3>
+                <div class="font-mono text-[16px] lg:text-[32px] font-bold text-heading leading-none mt-auto">
+                    ${item.value}<span class="text-[10px] lg:text-[12px] font-medium text-muted ml-0.5 block lg:inline">${item.unit}</span>
+                </div>
             </div>
         `).join('');
 
-        // 更新表格
-        tableBody.innerHTML = data.table.map(row => `
-            <tr>
-                <td>${row.label}</td>
-                <td class="data-mono">${row.val}</td>
-                <td style="color: var(--muted);">${row.std}</td>
+        document.getElementById('table-body').innerHTML = data.table.map(row => `
+            <tr class="border-b border-border/50 hover:bg-bg-subtle/50 transition-colors">
+                <td class="px-5 lg:px-8 py-3 font-semibold text-heading">${row.label}</td>
+                <td class="px-5 lg:px-8 py-3 font-mono text-primary font-bold">${row.val}</td>
+                <td class="px-5 lg:px-8 py-3 text-muted hidden md:table-cell">${row.std}</td>
             </tr>
         `).join('');
     }
 
-    // 初始化页面
     document.addEventListener('DOMContentLoaded', () => {
         const firstTab = document.querySelector('.tab-btn');
         switchTab('mechanical', firstTab);

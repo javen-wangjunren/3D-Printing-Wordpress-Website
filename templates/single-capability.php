@@ -17,14 +17,6 @@ $current_capability = array(
     'slug' => get_post_field( 'post_name' )
 );
 
-// 获取材料显示模式
-$material_display_mode = get_field( 'material_display_mode' ) ?: 'single';
-
-// 获取工艺特定数据
-$process_title = get_field( 'process_title' ) ?: 'How It Works';
-$process_description = get_field( 'process_description' );
-$process_steps = get_field( 'process_steps' );
-
 // 设置全局变量，供子模块使用
 $GLOBALS['current_capability'] = $current_capability;
 
@@ -56,15 +48,9 @@ get_header(); ?>
                 get_template_part( 'blocks/global/trusted-by/render' );
 
                 // ==========================================
-                // 3. How It Works Module (Current CPT Repeater)
+                // 3. How It Works Module (Current CPT Fields)
                 // ==========================================
-                if ( $process_steps ) {
-                    // 传递当前工艺的工艺流程数据
-                    set_query_var( 'process_title', $process_title );
-                    set_query_var( 'process_description', $process_description );
-                    set_query_var( 'process_steps', $process_steps );
-                    get_template_part( 'blocks/global/how-it-works/render' );
-                }
+                get_template_part( 'blocks/global/how-it-works/render' );
 
                 // ==========================================
                 // 4. Industry Slider Module (Global Options)
@@ -79,16 +65,11 @@ get_header(); ?>
                 // ==========================================
                 // 6. Material List Module (Current CPT)
                 // ==========================================
-                // 传递当前工艺ID给材料列表模板
-                set_query_var( 'current_capability_id', $current_capability['id'] );
-                set_query_var( 'material_display_mode', $material_display_mode );
                 get_template_part( 'blocks/global/material-list/render' );
 
                 // ==========================================
                 // 7. Comparison Table Module (Current CPT)
                 // ==========================================
-                // 传递当前工艺的对比表数据
-                set_query_var( 'capability_comparison_table', get_field( 'capability_comparison_table' ) );
                 get_template_part( 'blocks/global/comparison-table/render' );
 
                 // ==========================================
