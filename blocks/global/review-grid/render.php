@@ -35,10 +35,8 @@ $card_style_map = array(
 $card_class = $card_base_class . ' ' . ( isset( $card_style_map[ $card_style ] ) ? $card_style_map[ $card_style ] : $card_style_map['default'] );
 
 // Block ID & Classes
-$block_id = 'review-grid-' . $block['id'];
-if ( ! empty( $block['anchor'] ) ) {
-    $block_id = $block['anchor'];
-}
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'review-grid' );
 
 $class_name = 'review-grid-block py-section-y bg-bg-section/40 overflow-hidden';
 if ( ! empty( $block['className'] ) ) {

@@ -1,4 +1,6 @@
 <?php
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'cta' );
 $cta_title             = (string) ( get_field( 'cta_title' ) ?: '' );
 $cta_title_highlight   = (string) ( get_field( 'cta_title_highlight' ) ?: '' );
 $cta_description       = (string) ( get_field( 'cta_description' ) ?: '' );

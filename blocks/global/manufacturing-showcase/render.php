@@ -1,5 +1,6 @@
 <?php
-$anchor_id   = (string) get_field('manufacturing_showcase_anchor_id') ?: '';
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'manufacturing-showcase' );
 $custom_class = (string) get_field('manufacturing_showcase_css_class') ?: '';
 $title       = (string) get_field('manufacturing_showcase_title') ?: '';
 $subtitle    = (string) get_field('manufacturing_showcase_subtitle') ?: '';

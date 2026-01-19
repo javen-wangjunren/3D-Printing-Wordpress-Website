@@ -5,7 +5,9 @@
  * 使用区块自身的 ACF 字段渲染对称订单流程，适配桌面端网格和移动端垂直流程。
  */
 
-$anchor_id    = (string) get_field( 'order_process_anchor_id' ) ?: '';
+$block = isset( $block ) ? $block : array();
+
+$block_id = _3dp_get_safe_block_id( $block, 'order-process' );
 $custom_class = (string) get_field( 'order_process_custom_class' ) ?: '';
 $bg_style     = (string) get_field( 'order_process_bg_style' ) ?: 'bg-white';
 

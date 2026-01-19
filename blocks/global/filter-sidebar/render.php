@@ -2,6 +2,8 @@
     <?php
     global $wpdb;
 
+    $material_count = (int) get_query_var( 'material_count', 0 );
+
     $include_empty_terms = (bool) get_field( 'all_materials_include_empty_terms' );
 
     $show_process = (bool) get_field( 'filter_sidebar_show_process' );
@@ -11,15 +13,6 @@
     $sidebar_title = (string) ( get_field( 'filter_sidebar_title' ) ?: '' );
     $sidebar_subtitle_template = (string) ( get_field( 'filter_sidebar_subtitle' ) ?: '' );
     $search_placeholder = (string) ( get_field( 'filter_sidebar_search_placeholder' ) ?: '' );
-
-    $material_query = new WP_Query( array(
-        'post_type'      => 'material',
-        'post_status'    => 'publish',
-        'posts_per_page' => -1,
-        'no_found_rows'  => false,
-    ) );
-
-    $material_count = (int) $material_query->found_posts;
     $sidebar_subtitle = $sidebar_subtitle_template ? str_replace( '{count}', (string) $material_count, $sidebar_subtitle_template ) : '';
 
     $terms_hide_empty = $include_empty_terms ? false : true;

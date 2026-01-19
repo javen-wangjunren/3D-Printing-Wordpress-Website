@@ -6,6 +6,8 @@
  */
 
 // 1. 获取数据作用域 (Data Scope)
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'comparison-table' );
 $title           = get_field( 'table_title' );
 $headers         = get_field( 'headers' ); // Group: h1..h5
 $rows            = get_field( 'comparison_rows' ); // Repeater: v1..v5

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * 角色：Header 模块的字段 Schema 定义
+ * 位置：/inc/acf/field/header.php
+ * 说明：页头模块的字段逻辑,挂载在global setting中的header设置中
+ */
+
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
 	add_action( 'acf/init', function() {
@@ -30,7 +36,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 						),
 						array(
 							'key'           => 'field_header_logo_width',
-							'label'         => 'Logo Display Width',
+							'label'         => 'Desktop Width',
 							'name'          => 'logo_width',
 							'type'          => 'number',
 							'suffix'        => 'px',
@@ -39,11 +45,21 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 							'wrapper'       => array( 'width' => '25' ),
 						),
 						array(
+							'key'           => 'field_header_logo_width_mobile',
+							'label'         => 'Mobile Width',
+							'name'          => 'logo_width_mobile',
+							'type'          => 'number',
+							'suffix'        => 'px',
+							'min'           => 16,
+							'max'           => 200,
+							'wrapper'       => array( 'width' => '25' ),
+						),
+						array(
 							'key'           => 'field_header_cta_button',
 							'label'         => 'Primary CTA Button',
 							'name'          => 'cta_button',
 							'type'          => 'link',
-							'wrapper'       => array( 'width' => '25' ),
+							'wrapper'       => array( 'width' => '100' ),
 						),
 					),
 				),
@@ -125,14 +141,53 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 									'label' => 'Label',
 									'name'  => 'label',
 									'type'  => 'text',
+									'wrapper' => array( 'width' => '50' ),
 								),
 								array(
 									'key'   => 'field_header_material_link_url',
 									'label' => 'URL',
 									'name'  => 'url',
 									'type'  => 'url',
+									'wrapper' => array( 'width' => '50' ),
 								),
 							),
+						),
+					),
+				),
+				array(
+					'key'   => 'field_header_company_tab',
+					'label' => 'Company Dropdown',
+					'type'  => 'tab',
+				),
+				array(
+					'key'          => 'field_header_company_items',
+					'label'        => 'Company Items',
+					'name'         => 'header_company_items',
+					'type'         => 'repeater',
+					'layout'       => 'block',
+					'collapsed'    => 'field_header_company_title',
+					'button_label' => 'Add Item',
+					'sub_fields'   => array(
+						array(
+							'key'     => 'field_header_company_title',
+							'label'   => 'Title',
+							'name'    => 'title',
+							'type'    => 'text',
+							'wrapper' => array( 'width' => '30' ),
+						),
+						array(
+							'key'     => 'field_header_company_desc',
+							'label'   => 'Description',
+							'name'    => 'description',
+							'type'    => 'text',
+							'wrapper' => array( 'width' => '40' ),
+						),
+						array(
+							'key'     => 'field_header_company_link',
+							'label'   => 'Link',
+							'name'    => 'link',
+							'type'    => 'link',
+							'wrapper' => array( 'width' => '30' ),
 						),
 					),
 				),
@@ -149,7 +204,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 			'menu_order'            => 0,
 			'position'              => 'normal',
 			'active'                => true,
-			'style'                 => 'default',
+			'style'                 => 'seamless',
 			'label_placement'       => 'top',
 			'instruction_placement' => 'label',
 		) );

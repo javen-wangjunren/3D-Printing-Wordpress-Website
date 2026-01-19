@@ -1,8 +1,9 @@
 <?php
 /**
- * 推荐文件路径：inc/acf/specific-field/material-list.php
+ * 推荐文件路径：inc/acf/field/material-list.php
  * * 工业级 Material List Block 后端定义
  * 包含：三级嵌套内容建模 + 响应式布局控制 + 开发者设置
+ * 备注：这个名字起的不那么有辨识度，主要是 all capability 和 single capability 展示该工艺的材料用的
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {
@@ -218,7 +219,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                 ),
             ),
-            'style' => 'seamless',
+            'style' => 'default',
         ) );
     });
 }

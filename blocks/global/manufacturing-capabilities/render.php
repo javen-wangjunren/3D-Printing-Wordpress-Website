@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // 1. 获取 ACF 字段数据
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'manufacturing-capabilities' );
 $section_title  = get_field( 'manufacturing_capabilities_title' );
 $section_title  = $section_title ? $section_title : 'Manufacturing Capabilities';
 $section_intro  = get_field( 'manufacturing_capabilities_intro' );
@@ -24,7 +26,7 @@ $use_mono       = (bool) get_field( 'manufacturing_capabilities_use_mono_font' )
 $anchor_id      = get_field( 'manufacturing_capabilities_anchor_id' );
 $extra_class    = get_field( 'manufacturing_capabilities_css_class' );
 
-// 2. 数据清洗与结构化
+// 2. Data cleaning and structuring
 $tabs = array();
 foreach ( $tabs_raw as $tab ) {
     // 处理高亮参数 (Highlights)

@@ -8,3 +8,142 @@
  Version:      0.1
 */
 
+
+* --- Fluent Forms Custom Styling --- */
+
+/* 1. 基础输入框样式 (Global Input Styles) */
+.fluentform .ff-el-form-control {
+    border: 1px solid #E4E7EC; /* Gray-200 equivalent */
+    border-radius: 6px;        /* 收紧圆角，更精密 */
+    padding: 12px 16px;
+    background-color: #fff;
+    color: #1D2938;            /* Heading Color */
+    font-size: 15px;
+    transition: all 0.15s ease-out; /* 更快的响应速度 */
+}
+
+/* 物理锁定感：Focus 时边框变粗且无模糊阴影 */
+.fluentform .ff-el-form-control:focus {
+    border-color: #0047AB;     /* Brand Blue */
+    border-width: 1px;         /* 保持 1px 但颜色变深，或者 2px 强调锁定 */
+    box-shadow: 0 0 0 2px rgba(0, 71, 171, 0.1); /* 极微弱的扩散，仅用于辅助 */
+    outline: none;
+}
+
+/* Labels */
+.fluentform .ff-el-input--label {
+    font-weight: 600;
+    color: #1D2938;            /* Heading Color */
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;   /* 微缩字距 */
+    font-size: 14px;
+}
+
+/* Required Asterisk */
+.fluentform .ff-el-input--label.ff-el-is-required:after {
+    color: #D92D20;            /* Error Red */
+    margin-left: 4px;
+}
+
+/* 2. Container 间距优化 (Class: form-row-gap-md) */
+.fluentform .form-row-gap-md {
+    margin-bottom: 24px;
+}
+
+/* 3. 文件上传区域美化 (Class: form-upload-zone) */
+.fluentform .form-upload-zone .ff-upload-btn-wrapper {
+    border: 1px dashed #D0D5DD; /* Gray-300 */
+    border-radius: 8px;
+    background-color: #F9FAFB;  /* Gray-50 */
+    padding: 32px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.fluentform .form-upload-zone .ff-upload-btn-wrapper:hover {
+    border-color: #0047AB;      /* Brand Blue */
+    background-color: #F0F5FF;  /* Brand Blue Light */
+}
+
+/* 4. 提交按钮 (Global Submit Button) */
+.fluentform .ff-btn-submit {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 6px;
+    background-color: #0047AB;  /* Brand Blue */
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    transition: background-color 0.2s;
+}
+
+.fluentform .ff-btn-submit:hover {
+    background-color: #003380;  /* Darker Brand Blue */
+}
+
+/* 5. 移动端优化 */
+@media (max-width: 768px) {
+    .fluentform .ff-t-cell {
+        display: block;
+        width: 100% !important;
+        padding-right: 0 !important;
+        margin-bottom: 16px;
+    }
+    .fluentform .ff-t-container {
+        display: block;
+    }
+}
+
+
+/* --- Mission Module Styles --- */
+
+/* 工业网格背景微纹理 */
+.industrial-grid-bg {
+    background-color: #F2F4F7;
+    background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+/* 图片上的技术遮罩层 */
+.tech-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
+    pointer-events: none;
+}
+/* 模拟屏幕扫描线 */
+.scanline {
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: rgba(0, 71, 171, 0.3);
+    animation: scan 4s linear infinite;
+    opacity: 0;
+}
+.group:hover .scanline { opacity: 1; }
+@keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+
+
+/* --- Team Module Styles (Leadership) --- */
+
+/* Title Typography */
+.industrial-h2 { 
+    letter-spacing: -0.5px; 
+}/* Card Styling (Static, Clean) */
+.team-card { 
+    position: relative; 
+    border: 1px solid #E4E7EC; 
+    background: #fff;
+    overflow: hidden;
+    border-radius: 12px;
+}
+/* Mono Tag Styling */
+.mono-stat {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+}

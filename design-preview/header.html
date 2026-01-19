@@ -1,184 +1,272 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3DPROTO Header Navigation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
-                        heading: '#1D2938',
-                        body: '#667085',
-                        muted: '#98A2B3',
-                        border: '#E4E7EC'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace']
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        [x-cloak] { display: none !important; }
-        .nav-link-hover::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; width: 0;
-            height: 2px; background: #0047AB; transition: width 0.2s ease;
-        }
-        .nav-link-hover:hover::after { width: 100%; }
-    </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>3DPROTO Header Navigation</title>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script>
+		tailwind.config = {
+			theme: {
+				extend: {
+					colors: {
+						primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+						heading: '#1D2938',
+						body: '#667085',
+						muted: '#98A2B3',
+						border: '#E4E7EC'
+					},
+					fontFamily: {
+						sans: ['Inter', 'sans-serif'],
+						mono: ['JetBrains Mono', 'monospace']
+					},
+					maxWidth: {
+						container: '1280px'
+					},
+					spacing: {
+						container: '64px'
+					}
+				}
+			}
+		}
+	</script>
+	<style>
+		[x-cloak] { display: none !important; }
+		.nav-link-hover::after {
+			content: ''; position: absolute; bottom: -2px; left: 0; width: 0;
+			height: 2px; background: #0047AB; transition: width 0.2s ease;
+		}
+		.nav-link-hover:hover::after { width: 100%; }
+	</style>
 </head>
 <body class="bg-white font-sans text-body antialiased">
 
-<header x-data="{ openMenu: null, mobileOpen: false }" 
-        @mouseleave="openMenu = null"
-        class="relative z-50 bg-white border-b border-border">
-    
-    <div class="mx-auto max-w-[1280px] px-6 lg:px-[64px]">
-        <div class="flex h-[80px] items-center justify-between">
-            
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-primary rounded-[4px] flex items-center justify-center shrink-0">
-                    <span class="text-white font-mono font-bold text-xs">3D</span>
-                </div>
-                <span class="text-heading font-bold text-xl tracking-tighter">PROTO_FAB</span>
-            </div>
+<header x-data="{ openMenu: null, mobileOpen: false }" @mouseleave="openMenu = null" class="relative z-40 bg-white border-b border-border">
+	<div class="mx-auto max-w-container px-container">
+		<div class="flex h-20 items-center justify-between">
+			<div class="flex items-center gap-4">
+				<div class="w-8 h-8 bg-primary rounded-[4px] flex items-center justify-center shrink-0">
+					<span class="text-white font-mono font-bold text-xs">3D</span>
+				</div>
+				<span class="text-heading font-bold text-xl tracking-[-0.03em]">PROTO_FAB</span>
+			</div>
 
-            <nav class="hidden lg:flex items-center gap-10">
-                <div class="relative" @mouseenter="openMenu = 'capabilities'">
-                    <button class="flex items-center gap-1 text-sm font-semibold text-heading nav-link-hover py-2">
-                        Capabilities
-                        <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                </div>
+			<nav class="hidden items-center gap-10 lg:flex">
+				<div class="relative group" @mouseenter="openMenu = 'capabilities'">
+					<button type="button" class="nav-link-hover relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary">
+						<span>Capabilities</span>
+						<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'capabilities' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+				</div>
 
-                <div class="relative" @mouseenter="openMenu = 'materials'">
-                    <button class="flex items-center gap-1 text-sm font-semibold text-heading nav-link-hover py-2">
-                        Materials
-                        <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                </div>
+				<div class="relative group" @mouseenter="openMenu = 'materials'">
+					<button type="button" class="nav-link-hover relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary">
+						<span>Materials</span>
+						<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'materials' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+				</div>
 
-                <a href="/blog" class="text-sm font-semibold text-heading nav-link-hover">Blog</a>
+				<a href="/blog" class="nav-link-hover relative text-sm font-semibold text-heading hover:text-primary">Blog</a>
 
-                <div class="relative" @mouseenter="openMenu = 'company'">
-                    <button class="flex items-center gap-1 text-sm font-semibold text-heading nav-link-hover py-2">
-                        Company
-                        <svg class="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                    </button>
-                </div>
-            </nav>
+				<div class="relative group" @mouseenter="openMenu = 'company'">
+					<button type="button" class="nav-link-hover relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary">
+						<span>Company</span>
+						<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'company' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+							<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+						</svg>
+					</button>
+				</div>
+			</nav>
 
-            <div class="hidden lg:block">
-                <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-[8px] text-sm font-bold transition-all inline-flex items-center gap-2">
-                    Get Instant Quote
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
-            </div>
+			<div class="hidden lg:block">
+				<a href="/quote" class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white border border-[#E4E7EC] transition hover:bg-primary-hover">
+					<span>Get Instant Quote</span>
+					<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M17 8l4 4m0 0-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+				</a>
+			</div>
 
-            <button class="lg:hidden" @click="mobileOpen = !mobileOpen">
-                <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-        </div>
-    </div>
+			<button class="lg:hidden" @click="mobileOpen = !mobileOpen" aria-label="Toggle navigation">
+				<svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+			</button>
+		</div>
+	</div>
 
-    <div x-show="openMenu === 'capabilities'" 
-         x-cloak
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 -translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         class="absolute left-0 w-full bg-white border-b border-border shadow-sm">
-        <div class="mx-auto max-w-[1280px] px-[64px] py-10">
-            <div class="grid grid-cols-3 gap-y-8 gap-x-12">
-                <template x-for="tech in [
-                    { name: 'SLM (Selective Laser Melting)', sub: 'Industrial Metal 3D Printing', tag: 'METAL' },
-                    { name: 'SLS (Selective Laser Sintering)', sub: 'Functional Nylon Components', tag: 'PLASTIC' },
-                    { name: 'MJF (Multi Jet Fusion)', sub: 'Rapid Production Nylon', tag: 'FAST' },
-                    { name: 'SLA (Stereolithography)', sub: 'High-Resolution Smooth Finish', tag: 'RESIN' },
-                    { name: 'LCD/DLP Printing', sub: 'High Precision Prototyping', tag: 'PRECISION' }
-                ]">
-                    <a href="#" class="group flex flex-col gap-1 p-4 -m-4 rounded-xl hover:bg-bg-section transition-all">
-                        <div class="flex items-center gap-3">
-                            <span class="text-sm font-bold text-heading group-hover:text-primary" x-text="tech.name"></span>
-                            <span class="text-[9px] font-mono font-bold bg-border px-1.5 py-0.5 rounded text-muted" x-text="tech.tag"></span>
-                        </div>
-                        <span class="text-xs text-body" x-text="tech.sub"></span>
-                    </a>
-                </template>
-                <a href="/all-capabilities" class="text-sm font-bold text-primary flex items-center gap-2 hover:underline">
-                    View All Capabilities →
-                </a>
-            </div>
-        </div>
-    </div>
+	<div x-show="mobileOpen" x-cloak
+		 x-transition:enter="transition ease-out duration-200"
+		 x-transition:enter-start="opacity-0 -translate-y-2"
+		 x-transition:enter-end="opacity-100 translate-y-0"
+		 x-transition:leave="transition ease-in duration-150"
+		 x-transition:leave-start="opacity-100 translate-y-0"
+		 x-transition:leave-end="opacity-0 -translate-y-2"
+		 class="absolute top-full left-0 w-full bg-white border-t border-border lg:hidden max-h-[calc(100vh-80px)] overflow-y-auto">
+		<div class="px-container py-6 space-y-6">
+			<div>
+				<h3 class="mb-3 text-xs font-semibold tracking-[-0.01em] text-muted">Capabilities</h3>
+				<div class="grid gap-2">
+					<a href="#" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">SLM (Selective Laser Melting)</a>
+					<a href="#" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">SLS (Selective Laser Sintering)</a>
+					<a href="#" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">MJF (Multi Jet Fusion)</a>
+				</div>
+			</div>
 
-    <div x-show="openMenu === 'materials'" 
-         x-cloak
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 -translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         class="absolute left-0 w-full bg-white border-b border-border shadow-sm">
-        <div class="mx-auto max-w-[1280px] px-[64px] py-10">
-            <div class="grid grid-cols-4 gap-12">
-                <div>
-                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Metals (SLM)</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Aluminum (AlSi10Mg)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Stainless Steel (316L)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Titanium (Ti64)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Tool Steel (17-4 PH)</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Nylon (SLS/MJF)</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Nylon PA12 (Grey)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Nylon PA12 Glass-filled</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">HP Nylon PA12 (MJF)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Flexible TPU</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Engineering</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">ABS-like Plastic</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">ULTEM™ 9085</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">PEEK (High Performance)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Polycarbonate (PC)</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-6">Resins (SLA)</h3>
-                    <ul class="space-y-4">
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Standard Resin</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Clear Resin (Optical)</a></li>
-                        <li><a href="#" class="text-sm text-heading hover:text-primary">Tough Resin</a></li>
-                        <li><a href="/all-materials" class="text-sm font-bold text-primary">View All 37+ Materials →</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div>
+				<h3 class="mb-3 text-xs font-semibold tracking-[-0.01em] text-muted">Materials</h3>
+				<div class="space-y-4">
+					<div>
+						<div class="mb-2 text-[11px] font-bold text-gray-400 pl-3">Metals (SLM)</div>
+						<div class="grid gap-1 border-l-2 border-gray-100 ml-3 pl-3">
+							<a href="#" class="block py-1 text-sm text-heading hover:text-primary">Aluminum (AlSi10Mg)</a>
+							<a href="#" class="block py-1 text-sm text-heading hover:text-primary">Stainless Steel (316L)</a>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <div x-show="openMenu === 'company'" 
-         x-cloak
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0 -translate-y-2"
-         x-transition:enter-end="opacity-100 translate-y-0"
-         class="absolute left-0 w-full bg-white border-b border-border shadow-sm">
-        <div class="mx-auto max-w-[1280px] px-[64px] py-6 flex justify-center gap-12">
-            <a href="/about" class="text-sm font-semibold text-heading hover:text-primary">About Us</a>
-            <a href="/contact" class="text-sm font-semibold text-heading hover:text-primary">Contact Us</a>
-        </div>
-    </div>
+			<div>
+				<h3 class="mb-3 text-xs font-semibold tracking-[-0.01em] text-muted">Company</h3>
+				<div class="grid gap-2">
+					<a href="/blog" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">Blog</a>
+					<a href="/about" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">About Us</a>
+					<a href="/contact" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">Contact Us</a>
+				</div>
+			</div>
+
+			<div class="pt-4 border-t border-gray-100">
+				<a href="/quote" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-hover">
+					<span>Get Instant Quote</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div x-show="openMenu === 'capabilities'" x-cloak 
+		 @mouseenter="openMenu = 'capabilities'" 
+		 @mouseleave="openMenu = null"
+		 x-transition:enter="transition ease-out duration-200" 
+		 x-transition:enter-start="opacity-0 -translate-y-2" 
+		 x-transition:enter-end="opacity-100 translate-y-0" 
+		 x-transition:leave="transition ease-in duration-150" 
+		 x-transition:leave-start="opacity-100 translate-y-0" 
+		 x-transition:leave-end="opacity-0 -translate-y-2" 
+		 class="absolute left-0 w-full bg-white border-b border-border z-50">
+		<div class="mx-auto max-w-container px-container py-8 lg:py-10">
+			<div class="grid gap-y-6 gap-x-12 lg:grid-cols-3">
+				<a href="#" class="group flex flex-col gap-1 rounded-xl p-4 transition duration-200 hover:bg-gray-50 border border-transparent hover:border-gray-100">
+					<div class="flex items-center gap-3">
+						<span class="text-sm font-bold text-heading group-hover:text-primary transition-colors">SLM (Selective Laser Melting)</span>
+						<span class="rounded px-1.5 py-0.5 text-[10px] tracking-[-0.01em] font-semibold text-muted bg-gray-100 group-hover:bg-white group-hover:text-primary transition-all">METAL</span>
+					</div>
+					<span class="text-xs text-body/80 group-hover:text-body transition-colors">Industrial Metal 3D Printing</span>
+				</a>
+				<a href="#" class="group flex flex-col gap-1 rounded-xl p-4 transition duration-200 hover:bg-gray-50 border border-transparent hover:border-gray-100">
+					<div class="flex items-center gap-3">
+						<span class="text-sm font-bold text-heading group-hover:text-primary transition-colors">SLS (Selective Laser Sintering)</span>
+						<span class="rounded px-1.5 py-0.5 text-[10px] tracking-[-0.01em] font-semibold text-muted bg-gray-100 group-hover:bg-white group-hover:text-primary transition-all">PLASTIC</span>
+					</div>
+					<span class="text-xs text-body/80 group-hover:text-body transition-colors">Functional Nylon Components</span>
+				</a>
+				<a href="#" class="group flex flex-col gap-1 rounded-xl p-4 transition duration-200 hover:bg-gray-50 border border-transparent hover:border-gray-100">
+					<div class="flex items-center gap-3">
+						<span class="text-sm font-bold text-heading group-hover:text-primary transition-colors">MJF (Multi Jet Fusion)</span>
+						<span class="rounded px-1.5 py-0.5 text-[10px] tracking-[-0.01em] font-semibold text-muted bg-gray-100 group-hover:bg-white group-hover:text-primary transition-all">FAST</span>
+					</div>
+					<span class="text-xs text-body/80 group-hover:text-body transition-colors">Rapid Production Nylon</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div x-show="openMenu === 'materials'" x-cloak 
+		 @mouseenter="openMenu = 'materials'" 
+		 @mouseleave="openMenu = null"
+		 x-transition:enter="transition ease-out duration-200" 
+		 x-transition:enter-start="opacity-0 -translate-y-2" 
+		 x-transition:enter-end="opacity-100 translate-y-0" 
+		 x-transition:leave="transition ease-in duration-150" 
+		 x-transition:leave-start="opacity-100 translate-y-0" 
+		 x-transition:leave-end="opacity-0 -translate-y-2" 
+		 class="absolute left-0 w-full bg-white border-b border-border z-50">
+		<div class="mx-auto max-w-container px-container py-8 lg:py-10">
+			<div class="grid gap-8 lg:grid-cols-4">
+				<div>
+					<h3 class="mb-4 text-[11px] font-semibold tracking-[-0.01em] text-muted border-b border-gray-100 pb-2">Metals (SLM)</h3>
+					<ul class="space-y-2">
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Aluminum (AlSi10Mg)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Stainless Steel (316L)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Titanium (Ti64)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Tool Steel (17-4 PH)</a></li>
+					</ul>
+				</div>
+				<div>
+					<h3 class="mb-4 text-[11px] font-semibold tracking-[-0.01em] text-muted border-b border-gray-100 pb-2">Nylon (SLS/MJF)</h3>
+					<ul class="space-y-2">
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Nylon PA12 (Grey)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Nylon PA12 Glass-filled</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">HP Nylon PA12 (MJF)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Flexible TPU</a></li>
+					</ul>
+				</div>
+				<div>
+					<h3 class="mb-4 text-[11px] font-semibold tracking-[-0.01em] text-muted border-b border-gray-100 pb-2">Engineering</h3>
+					<ul class="space-y-2">
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">ABS-like Plastic</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">ULTEM™ 9085</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">PEEK (High Performance)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Polycarbonate (PC)</a></li>
+					</ul>
+				</div>
+				<div>
+					<h3 class="mb-4 text-[11px] font-semibold tracking-[-0.01em] text-muted border-b border-gray-100 pb-2">Resins (SLA)</h3>
+					<ul class="space-y-2">
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Standard Resin</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Clear Resin (Optical)</a></li>
+						<li><a href="#" class="block py-1 text-sm text-heading hover:text-primary hover:translate-x-1 transition-transform duration-200">Tough Resin</a></li>
+						<li><a href="/all-materials" class="block py-1 text-sm font-bold text-primary hover:translate-x-1 transition-transform duration-200">View All 37+ Materials →</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div x-show="openMenu === 'company'" x-cloak 
+		 @mouseenter="openMenu = 'company'" 
+		 @mouseleave="openMenu = null"
+		 x-transition:enter="transition ease-out duration-200" 
+		 x-transition:enter-start="opacity-0 -translate-y-2" 
+		 x-transition:enter-end="opacity-100 translate-y-0" 
+		 x-transition:leave="transition ease-in duration-150" 
+		 x-transition:leave-start="opacity-100 translate-y-0" 
+		 x-transition:leave-end="opacity-0 -translate-y-2" 
+		 class="absolute left-0 w-full border-b border-border bg-white z-50">
+		<div class="mx-auto flex max-w-container justify-center gap-12 px-container py-8">
+			<a href="/about" class="group flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
+				<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition">
+					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+				</div>
+				<div>
+					<span class="block text-sm font-bold text-heading">About Us</span>
+					<span class="text-xs text-body">Learn about our story</span>
+				</div>
+			</a>
+			<a href="/contact" class="group flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
+				<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition">
+					<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+				</div>
+				<div>
+					<span class="block text-sm font-bold text-heading">Contact Us</span>
+					<span class="text-xs text-body">Get in touch with us</span>
+				</div>
+			</a>
+		</div>
+	</div>
 </header>
 
 </body>

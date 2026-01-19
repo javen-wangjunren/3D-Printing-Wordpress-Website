@@ -1,6 +1,7 @@
 <?php
 /**
  * 角色：Universal Comparison Table 字段定义
+ * 位置：通用的参数对比表，哪里需要就放哪里
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {
@@ -128,7 +129,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                 ),
             ),
-            'style' => 'seamless',
+            'style' => 'default',
         ) );
     }
 

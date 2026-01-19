@@ -3,6 +3,7 @@
  * 推荐文件路径：inc/acf/field/capability-list.php
  * 角色：Capability List (工艺列表模块)
  * 逻辑：展示所有制造工艺，支持标签切换，显示工艺详情和可用材料
+ * 位置： 首页介绍所有工艺
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {

@@ -3,6 +3,7 @@
  * 推荐文件路径：inc/acf/specific-field/order-process.php
  * 工业级 Order Process Block 后端定义
  * 包含：线性步骤流 + 工业风格节点 + 响应式布局控制
+ * 备注：全局模块，下单的流程
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {

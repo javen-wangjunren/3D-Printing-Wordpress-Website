@@ -1,152 +1,121 @@
-<section class="section-py" style="background-color: #fff; overflow: hidden;">
-    <div class="container">
-        <div class="slider-header" style="margin-bottom: 40px; text-align: center;">
-            <h2 class="h3" style="margin: 0; letter-spacing: -0.5px;">Production Examples</h2>
-            <p style="font-size: 14px; color: var(--muted); margin: 8px 0 0 0;">Real-world functional components manufactured with PA 12 Black.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Production Examples (Compact)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' }, // 品牌蓝
+                        heading: '#1D2938', // 标题深炭灰
+                        body: '#667085', // 正文柔和灰
+                        border: '#E4E7EC', // 冷灰描边
+                        'bg-subtle': '#F8F9FB' // 浅灰底色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 
+                        'card': '12px' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* 标题力量感规范：-0.5px 间距 */
+        .industrial-h2 { letter-spacing: -0.5px; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-16 lg:py-24 bg-white overflow-hidden" x-data="{ 
+    scrollSlider(dir) {
+        const track = this.$refs.track;
+        const amt = track.offsetWidth * 0.8;
+        track.scrollBy({ left: dir * amt, behavior: 'smooth' });
+    }
+}">
+    <div class="max-w-[1280px] mx-auto px-6">
+        
+        <div class="mb-12 lg:mb-16 text-center">
+            <h2 class="industrial-h2 text-[32px] lg:text-[40px] font-bold text-heading mb-4">
+                Production <span class="text-primary">Examples</span>
+            </h2>
+            <p class="text-body max-w-2xl mx-auto text-[15px] lg:text-[16px]">
+                Explore functional components precision-manufactured through our validated industrial processes.
+            </p>
         </div>
 
-        <div class="slider-relative" style="position: relative; padding: 0 20px;">
-            
-            <button class="nav-btn prev" onclick="scrollSlider(-1)" aria-label="Previous">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        <div class="relative group">
+            <button @click="scrollSlider(-1)" 
+                    class="hidden lg:flex absolute left-[-24px] top-1/3 z-20 w-12 h-12 bg-white border border-border rounded-full items-center justify-center text-heading shadow-lg hover:bg-primary hover:text-white transition-all duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <button class="nav-btn next" onclick="scrollSlider(1)" aria-label="Next">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            <button @click="scrollSlider(1)" 
+                    class="hidden lg:flex absolute right-[-24px] top-1/3 z-20 w-12 h-12 bg-white border border-border rounded-full items-center justify-center text-heading shadow-lg hover:bg-primary hover:text-white transition-all duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 18l6-6-6-6"/></svg>
             </button>
 
-            <div id="imageTrack" class="slider-track">
-                <div class="slider-item group">
-                    <div class="img-wrapper">
-                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Automotive+Housing" alt="Automotive Part">
+            <div x-ref="track" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-8">
+                
+                <div class="flex-none w-[85%] lg:w-[calc(33.333%-16px)] snap-start group/card">
+                    <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-subtle transition-all duration-300 group-hover/card:border-primary/60 group-hover/card:shadow-xl">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Automotive+Part" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" 
+                             alt="Automotive Housing">
+                        <div class="absolute top-4 left-4">
+                            <span class="font-mono text-[10px] font-bold bg-white/95 backdrop-blur px-2.5 py-1 rounded text-primary border border-primary/20 tracking-tight">SLS PROCESS</span>
+                        </div>
                     </div>
-                    <div class="caption-box">
-                        <div class="caption-title">Automotive Housing</div>
-                        <div class="caption-sub">SLS / Matte Finish / High Temp</div>
-                    </div>
-                </div>
-                <div class="slider-item group">
-                    <div class="img-wrapper">
-                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Robotic+Gripper" alt="Robotics Part">
-                    </div>
-                    <div class="caption-box">
-                        <div class="caption-title">End-of-Arm Tooling</div>
-                        <div class="caption-sub">MJF / Dyed Black / Durable</div>
+                    <div class="mt-6 text-center lg:text-left">
+                        <h4 class="text-[18px] lg:text-[20px] font-bold text-heading mb-2">Automotive Housing</h4>
+                        <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90">High-performance components for functional engine bay prototyping.</p>
                     </div>
                 </div>
-                <div class="slider-item group">
-                    <div class="img-wrapper">
-                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Drone+Frame" alt="Aerospace Part">
+
+                <div class="flex-none w-[85%] lg:w-[calc(33.333%-16px)] snap-start group/card">
+                    <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-subtle transition-all duration-300 group-hover/card:border-primary/60 group-hover/card:shadow-xl">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Robotic+Gripper" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" 
+                             alt="End-of-Arm Tooling">
+                        <div class="absolute top-4 left-4">
+                            <span class="font-mono text-[10px] font-bold bg-white/95 backdrop-blur px-2.5 py-1 rounded text-primary border border-primary/20 tracking-tight">MJF PROCESS</span>
+                        </div>
                     </div>
-                    <div class="caption-box">
-                        <div class="caption-title">Lightweight Drone Frame</div>
-                        <div class="caption-sub">SLS / Complex Geometry</div>
-                    </div>
-                </div>
-                 <div class="slider-item group">
-                    <div class="img-wrapper">
-                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Medical+Device" alt="Medical Part">
-                    </div>
-                    <div class="caption-box">
-                        <div class="caption-title">Medical Prototype</div>
-                        <div class="caption-sub">Biocompatible / Precision</div>
+                    <div class="mt-6 text-center lg:text-left">
+                        <h4 class="text-[18px] lg:text-[20px] font-bold text-heading mb-2">End-of-Arm Tooling</h4>
+                        <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90">Lightweight robotic grippers featuring optimized internal air channels.</p>
                     </div>
                 </div>
+
+                <div class="flex-none w-[85%] lg:w-[calc(33.333%-16px)] snap-start group/card">
+                    <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-subtle transition-all duration-300 group-hover/card:border-primary/60 group-hover/card:shadow-xl">
+                        <img src="https://placehold.co/800x600/F2F4F7/1D2939?text=Drone+Frame" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" 
+                             alt="Lightweight Drone Frame">
+                        <div class="absolute top-4 left-4">
+                            <span class="font-mono text-[10px] font-bold bg-white/95 backdrop-blur px-2.5 py-1 rounded text-primary border border-primary/20 tracking-tight">DMLS PROCESS</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center lg:text-left">
+                        <h4 class="text-[18px] lg:text-[20px] font-bold text-heading mb-2">Lightweight Drone Frame</h4>
+                        <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90">High strength-to-weight ratio aerospace structural components.</p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </section>
-
-<style>
-    /* 核心样式变量引用 */
-    .slider-track {
-        display: flex;
-        gap: 24px; /* 间距保持固定 */
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
-        padding: 10px 0 20px 0; /* 增加底部内边距，防止文字被截断或阴影显示不全 */
-        scroll-behavior: smooth;
-    }
-    .slider-track::-webkit-scrollbar { display: none; }
-
-    .slider-item {
-        /* 核心计算：(100%宽度 - 2个24px间距) / 3个项目 */
-        flex: 0 0 calc((100% - 48px) / 3);
-        scroll-snap-align: start;
-        position: relative;
-    }
-
-    /* 图片包裹层：用于实现悬停放大和圆角裁切 */
-    .img-wrapper {
-        border-radius: 12px; /* */
-        overflow: hidden;
-        position: relative;
-        aspect-ratio: 4 / 3;
-        background: var(--bg-section);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* 增加基础质感阴影 */
-        transition: box-shadow 0.3s ease;
-    }
-    
-    .img-wrapper img {
-        width: 100%; height: 100%; object-fit: cover;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* 丝滑的过渡曲线 */
-    }
-
-    /* 悬停交互：图片微放大，阴影加深 */
-    .slider-item:hover .img-wrapper img { transform: scale(1.05); }
-    .slider-item:hover .img-wrapper { box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
-
-    /* 文本层级优化：居中 + 双层结构 */
-    .caption-box {
-        text-align: center; /* 居中对齐 */
-        margin-top: 16px;
-    }
-    .caption-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--heading);
-        margin-bottom: 4px;
-    }
-    .caption-sub {
-        font-size: 13px;
-        color: var(--muted); /* 使用更淡的颜色区分层级 */
-        font-weight: 500;
-    }
-
-    /* 箭头样式微调 */
-    .nav-btn {
-        position: absolute;
-        top: 40%; /* 稍微上移，对齐图片中心 */
-        transform: translateY(-50%);
-        width: 48px; height: 48px; /* 稍微加大触控区 */
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: 50%;
-        color: var(--heading);
-        display: flex; align-items: center; justify-content: center;
-        z-index: 10; cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transition: all 0.2s;
-    }
-    .nav-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .prev { left: -24px; }
-    .next { right: -24px; }
-
-    /* 📱 移动端自适应 */
-    @media (max-width: 767px) {
-        /* 移动端回复到“露一点”的模式，引导滑动 */
-        .slider-item { flex: 0 0 85%; } 
-        .nav-btn { display: none; }
-        .slider-header { text-align: left; }
-        .caption-box { text-align: left; /* 移动端左对齐通常阅读体验更好，也可保持居中 */ }
-    }
-</style>
-
-<script>
-    function scrollSlider(direction) {
-        const track = document.getElementById('imageTrack');
-        // 每次滑动距离 = 容器宽度（约等于3张图的宽度）
-        const scrollAmount = track.offsetWidth;
-        track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-    }
-</script>
+</body>
+</html>

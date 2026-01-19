@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * 角色：all Material
+ * 备注：all materials页面模板的后台设置功能
+ */
+
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {
@@ -37,10 +42,55 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 array(
                     'key' => 'field_alm_hero_content',
-                    'label' => 'Hero Content',
-                    'name' => 'hero_content',
+                    'label' => 'Hero Description',
+                    'name' => 'hero_description',
                     'type' => 'textarea',
                     'rows' => 4,
+                ),
+                array(
+                    'key' => 'field_alm_hero_image',
+                    'label' => 'Hero Image',
+                    'name' => 'hero_image',
+                    'type' => 'image',
+                    'return_format' => 'id',
+                    'preview_size' => 'medium',
+                    'library' => 'all',
+                    'wrapper' => array(
+                        'width' => '50',
+                    ),
+                ),
+                array(
+                    'key' => 'field_alm_hero_buttons',
+                    'label' => 'Hero Buttons',
+                    'name' => 'hero_buttons',
+                    'type' => 'repeater',
+                    'layout' => 'table',
+                    'button_label' => 'Add Button',
+                    'sub_fields' => array(
+                        array(
+                            'key' => 'field_alm_hero_btn_text',
+                            'label' => 'Text',
+                            'name' => 'button_text',
+                            'type' => 'text',
+                        ),
+                        array(
+                            'key' => 'field_alm_hero_btn_url',
+                            'label' => 'URL',
+                            'name' => 'button_url',
+                            'type' => 'url',
+                        ),
+                        array(
+                            'key' => 'field_alm_hero_btn_style',
+                            'label' => 'Style',
+                            'name' => 'button_style',
+                            'type' => 'select',
+                            'choices' => array(
+                                'primary' => 'Primary',
+                                'secondary' => 'Secondary',
+                            ),
+                            'default_value' => 'primary',
+                        ),
+                    ),
                 ),
 
                 array(

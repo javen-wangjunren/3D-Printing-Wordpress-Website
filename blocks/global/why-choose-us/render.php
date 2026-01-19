@@ -1,4 +1,5 @@
 <?php
+$block = isset( $block ) ? $block : array();
 $header_title       = (string) ( get_field( 'wcu_header_title' ) ?: '' );
 $header_description = (string) ( get_field( 'wcu_header_description' ) ?: '' );
 $slides             = get_field( 'wcu_slides' ) ?: array();
@@ -9,7 +10,7 @@ $layout_style       = (string) ( get_field( 'why_choose_us_layout_style' ) ?: 'i
 $spacing            = (string) ( get_field( 'why_choose_us_spacing' ) ?: 'medium' );
 $auto_rotate        = (bool) ( get_field( 'wcu_auto_rotate' ) !== false );
 $rotate_interval    = (int) ( get_field( 'wcu_rotate_interval' ) ?: 5000 );
-$block_id           = (string) ( get_field( 'why_choose_us_block_id' ) ?: '' );
+$block_id           = _3dp_get_safe_block_id( $block, 'why-choose-us' );
 $custom_class       = (string) ( get_field( 'why_choose_us_custom_class' ) ?: '' );
 
 if ( empty( $reasons ) ) {

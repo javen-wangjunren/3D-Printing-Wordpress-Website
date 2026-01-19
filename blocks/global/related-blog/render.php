@@ -14,13 +14,25 @@ $mobile_compact   = (bool) get_field( 'mobile_compact_mode' );
 $mobile_hide_sub  = (bool) get_field( 'mobile_hide_subtitle' );
 $button_text      = get_field( 'button_text' ) ?: '';
 $button_link      = get_field( 'button_link' ) ?: '';
-$custom_id        = get_field( 'related_blog_block_id' );
 $custom_class     = get_field( 'related_blog_custom_class' );
 
-$block_id = 'related-blog-' . ( isset( $block['id'] ) ? $block['id'] : uniqid() );
-if ( ! empty( $custom_id ) ) {
-    $block_id = $custom_id;
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'related-blog' );
+
+// 1. 优先检查外部传入的“手动指定文章”
+if ( ! empty( $block['related_blog_posts'] ) && is_array( $block['related_blog_posts'] ) ) {
+    $posts_mode   = 'manual';
+    $manual_posts = $block['related_blog_posts'];
 }
+
+// 2. 优先检查外部传入的“当前工艺” (用于自动匹配)
+if ( ! empty( $block['current_capability'] ) ) {
+    // 这里可以根据 capability 获取 tag 或 category，暂时保留逻辑扩展点
+    // $current_capability = $block['current_capability'];
+    // $posts_mode = 'category'; 
+    // ...
+}
+
 if ( ! empty( $block['anchor'] ) ) {
     $block_id = $block['anchor'];
 }

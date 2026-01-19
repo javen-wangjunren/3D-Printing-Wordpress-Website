@@ -1,5 +1,6 @@
 <?php
-$block_id = isset($block['id']) ? $block['id'] : uniqid('trusted-by-');
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'trusted-by' );
 $block_class = isset($block['className']) ? $block['className'] : '';
 
 $title = get_field('trusted_by_title') ?: '';

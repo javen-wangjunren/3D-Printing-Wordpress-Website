@@ -1,0 +1,191 @@
+<!-- 
+* 这个模块是通用的how-it-works模块
+* 主要是介绍不同工艺的一个流程的，用于丰富工艺页面的内容
+--> 
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>3DPROTO - Compact Process Stepper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-section': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .progress-fill { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-12 lg:py-20 bg-bg-section/50">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <div class="text-center mb-8 lg:mb-12">
+            <h2 class="text-[28px] lg:text-[36px] font-bold text-heading tracking-[-1px] mb-2 uppercase">
+                Manufacturing <span class="text-primary">Process</span>
+            </h2>
+            <p class="text-body text-sm lg:text-base max-w-2xl mx-auto italic opacity-80">Precision engineering at every stage.</p>
+        </div>
+
+        <div class="bg-white rounded-card border border-border shadow-lg shadow-gray-200/30 overflow-hidden grid lg:grid-cols-[1fr_1.1fr] items-stretch">
+            
+            <div class="relative bg-gray-900 aspect-video lg:aspect-auto lg:min-h-0 overflow-hidden">
+                <img id="step-img" src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000" 
+                     class="w-full h-full object-cover transition-opacity duration-700" alt="Process View">
+                
+                <div class="absolute top-4 left-4 bg-primary text-white px-3 py-1.5 rounded-md shadow-lg z-10 scale-90 lg:scale-100">
+                    <span class="text-[11px] font-mono font-bold uppercase tracking-widest" id="img-step-badge">Step 01</span>
+                </div>
+            </div>
+
+            <div class="p-6 lg:p-10 flex flex-col justify-between">
+                
+                <div id="content-area">
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-[10px] font-mono font-bold text-muted uppercase tracking-tighter" id="progress-text-label">Step 1 of 4</span>
+                    </div>
+
+                    <div class="flex gap-1.5 mb-8 lg:mb-10">
+                        <div class="h-1 flex-1 bg-border rounded-full overflow-hidden"><div class="progress-fill h-full bg-primary" style="width: 0%"></div></div>
+                        <div class="h-1 flex-1 bg-border rounded-full overflow-hidden"><div class="progress-fill h-full bg-primary" style="width: 0%"></div></div>
+                        <div class="h-1 flex-1 bg-border rounded-full overflow-hidden"><div class="progress-fill h-full bg-primary" style="width: 0%"></div></div>
+                        <div class="h-1 flex-1 bg-border rounded-full overflow-hidden"><div class="progress-fill h-full bg-primary" style="width: 0%"></div></div>
+                    </div>
+
+                    <div class="mb-6 lg:mb-8">
+                        <span class="inline-flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider mb-3 px-2 py-0.5 bg-primary/5 rounded-md" id="qc-label">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                            Automated Distribution
+                        </span>
+                        <h3 class="text-[22px] lg:text-[28px] font-bold text-heading leading-tight mb-4" id="step-title">Powder Coating & Heating</h3>
+                        <p class="text-body text-[14px] lg:text-[15px] leading-relaxed mb-6" id="step-desc">
+                            A precision roller spreads a microscopic layer of polymer powder across the build platform, heated just below melting point.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 p-4 bg-bg-section border border-border rounded-card mb-6">
+                        <div class="border-l-2 border-primary/20 pl-3">
+                            <span class="block text-[9px] font-bold text-muted uppercase tracking-tighter mb-1" id="spec-label-1">Layer Thickness</span>
+                            <span class="font-mono text-[16px] font-bold text-heading" id="spec-val-1">100 μm</span>
+                        </div>
+                        <div class="border-l-2 border-primary/20 pl-3">
+                            <span class="block text-[9px] font-bold text-muted uppercase tracking-tighter mb-1" id="spec-label-2">Chamber Temp</span>
+                            <span class="font-mono text-[16px] font-bold text-heading" id="spec-val-2">~175°C</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 p-4 bg-primary/[0.03] border-l-4 border-primary rounded-r-md mb-6" id="tip-container">
+                        <svg class="w-4 h-4 text-primary shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p class="text-[13px] text-heading leading-snug" id="tip-text"></p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-6 border-t border-border/50">
+                    <button id="prev-btn" class="flex-1 h-12 border border-border text-heading rounded-button font-bold text-[12px] uppercase tracking-widest hover:bg-bg-section transition-all disabled:opacity-30">
+                        Prev
+                    </button>
+                    <button id="next-btn" class="flex-[1.5] h-12 bg-primary text-white rounded-button font-bold text-[12px] uppercase tracking-widest hover:bg-primary-hover transition-all flex items-center justify-center gap-2 group">
+                        <span id="next-text">Next Step</span>
+                        <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    const stepData = [
+        {
+            title: "Powder Coating & Heating",
+            desc: "A precision roller spreads a microscopic layer of polymer powder across the build platform, heated just below melting point.",
+            qc: "Automated Distribution",
+            specs: [{label:"Layer Thickness", val:"100 μm"}, {label:"Chamber Temp", val:"~175°C"}],
+            tip: "<strong>Engineering Tip:</strong> Thermal stability prevents warping. We monitor temp 50x per second.",
+            img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000"
+        },
+        {
+            title: "CO2 Laser Sintering",
+            desc: "High-powered lasers selectively fuse powder particles based on the 3D CAD data. Unfused powder acts as support.",
+            qc: "Path Verification",
+            specs: [{label:"Laser Power", val:"60 Watt"}, {label:"Scan Speed", val:"12m/s"}],
+            tip: "<strong>Process Tip:</strong> Support-free sintering allows for complex internal cooling channels.",
+            img: "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=1000"
+        },
+        {
+            title: "Phase Cooling Cycle",
+            desc: "The build chamber undergoes a controlled cooling cycle to prevent thermal stress and ensure stability.",
+            qc: "Stress Relief",
+            specs: [{label:"Cooling Cycle", val:"12-24 Hrs"}, {label:"Precision Control", val:"±0.5°C"}],
+            tip: "<strong>QC Tip:</strong> Controlled cooling ensures the material achieves its full tensile strength.",
+            img: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1000"
+        },
+        {
+            title: "Extraction & Finishing",
+            desc: "Finished parts are excavated, bead blasted, and receive final surface post-processing.",
+            qc: "Final Inspection",
+            specs: [{label:"Surface Finish", val:"Ra 6.3-10"}, {label:"Material Yield", val:"~98%"}],
+            tip: "<strong>Final Tip:</strong> Ask about our Vapor Smoothing for an injection-molded surface finish.",
+            img: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1000"
+        }
+    ];
+
+    let currentStep = 0;
+
+    function updateStep() {
+        const data = stepData[currentStep];
+        
+        document.getElementById('img-step-badge').innerText = `Step 0${currentStep + 1}`;
+        document.getElementById('progress-text-label').innerText = `Step ${currentStep + 1} of ${stepData.length}`;
+        document.getElementById('step-title').innerText = data.title;
+        document.getElementById('step-desc').innerText = data.desc;
+        document.getElementById('qc-label').innerHTML = `<svg class='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-width='3' d='M5 13l4 4L19 7'/></svg> ${data.qc}`;
+        document.getElementById('spec-label-1').innerText = data.specs[0].label;
+        document.getElementById('spec-val-1').innerText = data.specs[0].val;
+        document.getElementById('spec-label-2').innerText = data.specs[1].label;
+        document.getElementById('spec-val-2').innerText = data.specs[1].val;
+        document.getElementById('tip-text').innerHTML = data.tip;
+        document.getElementById('step-img').src = data.img;
+
+        const progressFills = document.querySelectorAll('.progress-fill');
+        progressFills.forEach((fill, i) => {
+            fill.style.width = i <= currentStep ? '100%' : '0%';
+        });
+
+        document.getElementById('prev-btn').disabled = currentStep === 0;
+        document.getElementById('next-text').innerText = currentStep === stepData.length - 1 ? 'Get Quote' : 'Next Step';
+    }
+
+    document.getElementById('next-btn').onclick = () => {
+        if(currentStep < stepData.length - 1) { currentStep++; updateStep(); }
+        else { window.location.href = '/quote'; }
+    };
+    document.getElementById('prev-btn').onclick = () => {
+        if(currentStep > 0) { currentStep--; updateStep(); }
+    };
+
+    updateStep();
+</script>
+</body>
+</html>

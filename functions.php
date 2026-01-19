@@ -2,9 +2,16 @@
 /**
  * Theme Name: 3D Printing Child Theme
  * Description: GeneratePress 子主题（开发阶段）
- * Author: Your Name
+ * Author: Javen
  * Template: generatepress
- * Version: 0.1.0
+ * Version: 1.0
+ * 说明：
+ * 这个文件是整个主题的总控台，只负责加载各种文件，不在这个文件里写业务逻辑
+ * - 定义主题常量：版本、主题目录/URL、inc 目录入口
+ * - 集中加载模块：把 inc/ 里的各功能文件一次性引入（主题设置、资源、ACF 字段/区块、CPT/Taxonomy、工具函数等）
+ * - 加载样式：按 GeneratePress 规范，先加载父主题 CSS，再加载子主题 CSS
+ * - ACF JSON 同步：把字段组的 JSON 存到主题内并在加载时优先使用，方便版本控制与多人协作
+ * - 样式加载顺序固定：父主题先、子主题后，避免样式覆盖异常 （这个就得看怎么调整了，因为GP默认了很多样式了，我需要用子主题覆盖
  */
 
 // 🚫 防止直接访问

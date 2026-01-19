@@ -3,6 +3,7 @@
  * 推荐文件路径：inc/acf/specific-field/how-it-works.php
  * 角色：How It Works (工艺流程步骤模块)
  * 逻辑：进度感知 > 沉浸视觉 > 理性指标 > 专家建议
+ * 备注：主要是单个工艺页面用的模块
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {

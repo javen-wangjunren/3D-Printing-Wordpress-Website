@@ -9,6 +9,8 @@
  * - 卡片与按钮：rounded-card / rounded-button，对应 12px / 8px 圆角规范
  */
 
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'capability-list' );
 $section_title       = (string) ( get_field( 'section_title' ) ?: 'Manufacturing Capabilities' );
 $section_description = (string) ( get_field( 'section_description' ) ?: 'Six industrial technologies optimized for prototyping and scalable production.' );
 $capabilities        = get_field( 'capabilities' ) ?: array();

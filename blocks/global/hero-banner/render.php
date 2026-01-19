@@ -9,8 +9,9 @@
  */
 
 // 1. 获取 Block 核心数据
-$block_id    = $block['id'];
-$block_class = isset($block['className']) ? $block['className'] : '';
+$block       = isset( $block ) ? $block : array();
+$block_id    = _3dp_get_safe_block_id( $block, 'hero' );
+$block_class = isset( $block['className'] ) ? $block['className'] : '';
 $is_preview  = isset($is_preview) && $is_preview;
 
 // 2. 获取 ACF 字段数据

@@ -5,6 +5,9 @@
  * 展示行业应用案例，支持基于当前工艺的自动内容筛选
  */
 
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'industry-slider' );
+
 // 从全局变量获取当前工艺信息
 $current_capability = isset( $GLOBALS['current_capability'] ) ? $GLOBALS['current_capability'] : null;
 

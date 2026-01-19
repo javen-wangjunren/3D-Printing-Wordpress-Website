@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * 角色：Review Grid (客户评价网格)
+ * 备注：在材料页展示客户评价的网格，每个评价卡片都包含客户的头像、姓名、评价内容和星级评分
+ * 目前是在首页用的
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
     function _3dp_review_grid_fields() {
         acf_add_local_field_group( array(

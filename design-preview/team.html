@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Leadership Team (Clean Industrial)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 
+                        'card': '12px',
+                        'tag': '4px' 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Title Typography */
+        .industrial-h2 { letter-spacing: -0.5px; }
+        
+        /* Background Texture */
+        .industrial-grid-bg {
+            background-color: #F2F4F7;
+            background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Card Styling (Static, Clean) */
+        .team-card { 
+            position: relative; 
+            border: 1px solid #E4E7EC; 
+            background: #fff;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        /* Mono Tag Styling */
+        .mono-stat {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.05em;
+        }
+    </style>
+</head>
+<body class="font-sans text-body antialiased">
+
+<section class="py-16 lg:py-24 industrial-grid-bg">
+    <div class="max-w-[1280px] mx-auto px-6">
+        
+        <!-- Header -->
+        <div class="mb-12 lg:mb-16 flex flex-col lg:flex-row justify-between items-end gap-6">
+            <div class="max-w-2xl">
+                <h2 class="industrial-h2 text-[32px] lg:text-[40px] font-bold text-heading mb-4 leading-tight">
+                    Leadership <span class="text-primary">Architects</span>
+                </h2>
+                <p class="text-[16px] lg:text-[18px] text-body opacity-90 leading-relaxed">
+                    Engineering intelligence defined by parametric transparency and global manufacturing excellence.
+                </p>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 lg:gap-8">
+            
+            <!-- Card 1 -->
+            <div class="team-card group">
+                <!-- Image Container -->
+                <div class="relative aspect-[4/5] bg-bg-subtle overflow-hidden">
+                    <img src="https://placehold.co/600x800/F2F4F7/1D2939?text=CEO" class="w-full h-full object-cover" alt="Mike Cannon-Brookes">
+                    
+                    <!-- Floating Data Badge (Static) -->
+                    <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-20 bg-white/95 backdrop-blur-sm px-2 py-1 md:px-3 md:py-1.5 rounded-tag border border-border/50 flex items-center shadow-sm">
+                        <div class="font-mono text-[10px] font-bold text-heading leading-none">
+                            <span class="text-primary block text-[8px] md:text-[9px] mb-0.5 opacity-80">EXPERIENCE</span>
+                            <span class="text-[13px] md:text-[16px] mono-stat">25.8</span><span class="text-[9px] md:text-[10px] opacity-60 ml-0.5">YRS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content (No Border Top) -->
+                <div class="p-3 md:p-5 lg:p-6 bg-white">
+                    <h3 class="text-[15px] md:text-[20px] font-bold text-heading leading-tight mb-1">Mike Cannon-Brookes</h3>
+                    <div class="flex items-center justify-between mt-1 md:mt-2">
+                        <p class="text-[9px] md:text-[11px] font-mono text-body uppercase tracking-widest font-bold truncate pr-2">CEO & Co-Founder</p>
+                        <!-- Social Icon (Always Visible) -->
+                        <a href="#" class="text-primary hover:text-primary-hover transition-colors flex-shrink-0" aria-label="LinkedIn">
+                            <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="team-card group">
+                <div class="relative aspect-[4/5] bg-bg-subtle overflow-hidden">
+                    <img src="https://placehold.co/600x800/F2F4F7/1D2939?text=CFO" class="w-full h-full object-cover" alt="Joe Binz">
+                    <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-20 bg-white/95 backdrop-blur-sm px-2 py-1 md:px-3 md:py-1.5 rounded-tag border border-border/50 flex items-center shadow-sm">
+                        <div class="font-mono text-[10px] font-bold text-heading leading-none">
+                            <span class="text-primary block text-[8px] md:text-[9px] mb-0.5 opacity-80">EXPERIENCE</span>
+                            <span class="text-[13px] md:text-[16px] mono-stat">22.4</span><span class="text-[9px] md:text-[10px] opacity-60 ml-0.5">YRS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3 md:p-5 lg:p-6 bg-white">
+                    <h3 class="text-[15px] md:text-[20px] font-bold text-heading leading-tight mb-1">Joe Binz</h3>
+                    <div class="flex items-center justify-between mt-1 md:mt-2">
+                        <p class="text-[9px] md:text-[11px] font-mono text-body uppercase tracking-widest font-bold truncate pr-2">Chief Financial Officer</p>
+                        <a href="#" class="text-primary hover:text-primary-hover transition-colors flex-shrink-0" aria-label="LinkedIn">
+                            <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="team-card group">
+                <div class="relative aspect-[4/5] bg-bg-subtle overflow-hidden">
+                    <img src="https://placehold.co/600x800/F2F4F7/1D2939?text=CRO" class="w-full h-full object-cover" alt="Brian Duffy">
+                    <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-20 bg-white/95 backdrop-blur-sm px-2 py-1 md:px-3 md:py-1.5 rounded-tag border border-border/50 flex items-center shadow-sm">
+                        <div class="font-mono text-[10px] font-bold text-heading leading-none">
+                            <span class="text-primary block text-[8px] md:text-[9px] mb-0.5 opacity-80">EXPERIENCE</span>
+                            <span class="text-[13px] md:text-[16px] mono-stat">18.2</span><span class="text-[9px] md:text-[10px] opacity-60 ml-0.5">YRS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3 md:p-5 lg:p-6 bg-white">
+                    <h3 class="text-[15px] md:text-[20px] font-bold text-heading leading-tight mb-1">Brian Duffy</h3>
+                    <div class="flex items-center justify-between mt-1 md:mt-2">
+                        <p class="text-[9px] md:text-[11px] font-mono text-body uppercase tracking-widest font-bold truncate pr-2">Chief Revenue Officer</p>
+                        <a href="#" class="text-primary hover:text-primary-hover transition-colors flex-shrink-0" aria-label="LinkedIn">
+                            <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

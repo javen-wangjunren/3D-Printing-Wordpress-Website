@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Strategic Alignment (Visual)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        section: '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 工业网格背景微纹理 */
+        .industrial-grid-bg {
+            background-color: #F2F4F7;
+            background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        /* 图片上的技术遮罩层 */
+        .tech-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
+            pointer-events: none;
+        }
+        /* 模拟屏幕扫描线 */
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: rgba(0, 71, 171, 0.3);
+            animation: scan 4s linear infinite;
+            opacity: 0;
+        }
+        .group:hover .scanline { opacity: 1; }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+    </style>
+</head>
+<body class="bg-white antialiased">
+
+<section class="py-[96px] industrial-grid-bg border-y border-border">
+    <div class="max-w-[1280px] mx-auto px-6">
+        
+        <div class="mb-20 text-center">
+            <h2 class="text-[36px] font-bold text-heading tracking-[-0.5px] mb-4 inline-block relative">
+                Strategic <span class="text-primary">Alignment</span>
+                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary"></span>
+            </h2>
+            <p class="text-[18px] text-body max-w-2xl mx-auto mt-8 font-sans">
+                将工业级制造能力转化为客户的竞争优势。我们的战略基于两个核心支柱：加速创新与全球可靠性。
+            </p>
+        </div>
+
+        <div class="space-y-24">
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center group">
+                <div class="relative rounded-card overflow-hidden border border-border shadow-xl shadow-primary/5 tech-overlay h-[400px] lg:h-[480px]">
+                    <div class="scanline"></div>
+                    <img src="https://placehold.co/800x600/1D2939/FFFFFF?text=Industrial+Laser+Sintering+Process" alt="Accelerate Innovation" class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale hover:grayscale-0">
+                    <div class="absolute top-4 left-4 w-4 h-4 border-t border-l border-primary/50"></div>
+                    <div class="absolute top-4 right-4 w-4 h-4 border-t border-r border-primary/50"></div>
+                </div>
+
+                <div class="lg:pl-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-[8px] bg-primary/10 flex items-center justify-center text-primary">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <span class="font-mono text-[12px] font-bold text-primary uppercase tracking-widest">Our Mission</span>
+                    </div>
+                    <h3 class="text-[30px] font-bold text-heading mb-6 leading-tight">Accelerate Global Innovation</h3>
+                    <p class="text-[16px] text-body leading-relaxed mb-10">
+                        通过提供高可及性、工业级的增材制造方案，消除复杂零件从 CAD 到实体的阻碍。我们助力工程师大幅缩短 R&D 周期，确保原型件即是量产的前哨。
+                    </p>
+                    
+                    <div class="bg-white border-l-2 border-primary pl-6 py-4 grid grid-cols-2 gap-8">
+                        <div>
+                            <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">R&D Lead Time</p>
+                            <p class="font-mono text-[24px] font-bold text-heading">&lt; 48 HRS</p>
+                        </div>
+                        <div>
+                            <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">Target Outcome</p>
+                            <p class="font-mono text-[12px] font-bold text-primary mt-2">FASTER_TIME_TO_MARKET</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-center group">
+                <div class="relative rounded-card overflow-hidden border border-border shadow-xl shadow-primary/5 tech-overlay h-[400px] lg:h-[480px] lg:order-last">
+                    <div class="scanline" style="animation-delay: 2s;"></div>
+                    <img src="https://placehold.co/800x600/1D2939/FFFFFF?text=Automated+Global+Factory+Network" alt="Global Production Hub" class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale hover:grayscale-0">
+                    <div class="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-primary/50"></div>
+                    <div class="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-primary/50"></div>
+                </div>
+
+                <div class="lg:pr-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-[8px] bg-primary/10 flex items-center justify-center text-primary">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9-9H3m9 9L3 5m12 12l7 7M7 7l10 10"/></svg>
+                        </div>
+                        <span class="font-mono text-[12px] font-bold text-primary uppercase tracking-widest">Our Vision</span>
+                    </div>
+                    <h3 class="text-[30px] font-bold text-heading mb-6 leading-tight">Most Reliable Factory-Direct Partner</h3>
+                    <p class="text-[16px] text-body leading-relaxed mb-10">
+                        构建无缝覆盖的数字制造网络，实现从单件快速原型到小批量生产的柔性切换。我们致力于重塑全球制造供应链的韧性，成为客户最稳定的后盾。
+                    </p>
+                    
+                    <div class="bg-white border-l-2 border-primary pl-6 py-4 grid grid-cols-2 gap-8">
+                        <div>
+                            <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">System Uptime</p>
+                            <p class="font-mono text-[24px] font-bold text-heading">99.98%</p>
+                        </div>
+                        <div>
+                            <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">Core Promise</p>
+                            <p class="font-mono text-[12px] font-bold text-primary mt-2">CONSISTENT_QUALITY_FLOW</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

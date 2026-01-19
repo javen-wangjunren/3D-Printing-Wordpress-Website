@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * 角色：Page Editor Settings (页面编辑器控制)
+ * 备注：主要是用于控制页面是否开启Gutenberg编辑器或者传统的经典编辑器
+ * 因为之前创建的模板，会出现后台还出现古腾堡的情况，所以在这里配置了一下
+ */
+
 if ( function_exists( 'acf_add_local_field_group' ) && function_exists( 'add_action' ) ) {
 
     add_action( 'acf/init', function() {

@@ -1,266 +1,150 @@
+<!-- 
+* 这个模块是针对all-capabilities的材料模块，
+* 主要就是将所有的材料按照工艺进行划分
+--> 
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>材料详情快照预览</title>
-    <style>
-        /* --- 基础设置 (模拟移动端环境) --- */
-        :root {
-            --brand-color: #ff6600; /* 品牌主色 (例如橙色) */
-            --text-dark: #333333;
-            --text-gray: #666666;
-            --bg-light: #f8f9fa;
-            --border-color: #e9ecef;
+    <title>3DPROTO - Balanced Material Matrix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            margin: 0;
-        }
-
-        /* 模拟手风琴展开后的容器 wrapper */
-        .mobile-preview-container {
-            width: 100%;
-            max-width: 375px; /* 限制为常见手机宽度 */
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #ddd; /* 模拟手风琴展开的边框 */
-        }
-
-        /* 模拟手风琴标题 (未展开状态) */
-        .accordion-header-mock {
-            padding: 15px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #ddd;
-            color: var(--text-gray);
-            font-weight: 500;
-        }
-
-        /* 模拟手风琴标题 (当前激活状态) */
-        .accordion-header-active {
-            padding: 15px;
-            background: #fff;
-            color: var(--text-dark);
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: none; /* 展开后与内容融合 */
-        }
-
-        /* =========================================
-           核心组件：材料快照 (Material Snapshot) 样式
-           ========================================= */
-        .material-snapshot {
-            padding: 16px;
-            background-color: #fff;
-        }
-
-        /* --- A. 顶部：视觉与数据快照 (Flex Row) --- */
-        .snapshot-top-section {
-            display: flex;
-            gap: 12px; /* 图片和网格之间的间距 */
-            margin-bottom: 16px;
-        }
-
-        .material-image-container {
-            flex-shrink: 0; /* 防止图片被挤压 */
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: var(--bg-light);
-            border: 1px solid var(--border-color);
-        }
-
-        .material-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 确保纹理图填充 */
-        }
-
-        /* 2x2 数据网格 */
-        .material-data-grid {
-            flex-grow: 1; /* 占据剩余空间 */
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 两列等宽 */
-            grid-template-rows: 1fr 1fr; /* 两行等高 */
-            gap: 8px; /* 网格间距 */
-        }
-
-        .data-item {
-            background-color: var(--bg-light);
-            border-radius: 6px;
-            padding: 8px 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .data-icon {
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .data-label {
-            font-size: 11px;
-            color: var(--text-gray);
-            line-height: 1.2;
-        }
-
-        .data-value {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-top: 2px;
-        }
-
-        /* --- B. 中部：关键特性摘要 (List) --- */
-        .snapshot-middle-section {
-            margin-bottom: 20px;
-            padding: 12px;
-            background-color: #f9f9f9; /* 稍微区分背景 */
-            border-radius: 8px;
-        }
-
-        .feature-list {
-            margin: 0;
-            padding-left: 20px; /* 留出项目符号空间 */
-            font-size: 13px;
-            color: var(--text-dark);
-            line-height: 1.5;
-        }
-
-        .feature-list li {
-            margin-bottom: 6px;
-        }
-        
-        .feature-list li:last-child {
-            margin-bottom: 0;
-        }
-
-        /* --- C. 底部：双路径行动按钮 (Flex Row) --- */
-        .snapshot-bottom-section {
-            display: flex;
-            gap: 12px; /* 两个按钮之间的间距 */
-        }
-
-        .btn {
-            flex: 1; /* 两个按钮等宽 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 8px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            text-align: center;
-            line-height: 1.2;
-        }
-
-        /* 主按钮 (Quote) */
-        .btn-primary {
-            background-color: var(--brand-color);
-            color: white;
-            border: 1px solid var(--brand-color);
-            box-shadow: 0 2px 6px rgba(255, 102, 0, 0.2);
-        }
-        .btn-primary:active {
-            background-color: #e65c00; /* 点击态 */
-        }
-
-        /* 次按钮 (View Specs) */
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--brand-color);
-            border: 1px solid var(--brand-color);
-        }
-        .btn-secondary:active {
-            background-color: #fff5eb; /* 点击态 */
-        }
-        
-        .btn-icon {
-            margin-right: 6px;
-        }
-        
-        .btn-arrow {
-            margin-left: 4px;
-            font-size: 16px;
-            font-weight: normal;
-        }
-
-    </style>
+    </script>
+    <style>[x-cloak] { display: none !important; }</style>
 </head>
-<body>
+<body class="bg-white font-sans text-body antialiased">
 
-<div class="mobile-preview-container">
-    <div class="accordion-header-mock">▶ 📂 Stainless Steel 316L</div>
-
-    <div class="accordion-header-active">
-        <span>▼ 📂 Aluminum 6061 <span style="font-size: 12px; color: #ff6600; background: #fff5eb; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">High Strength</span></span>
-    </div>
-
-    <div class="material-snapshot">
+<section class="py-10 lg:py-20" x-data="{ 
+    activeProcess: 'SLS', 
+    openMaterial: 'PA12', 
+    processes: ['DMLS', 'SLS', 'SLA'],
+    materials: {
+        'DMLS': [
+            { id: '316L', title: 'Stainless Steel 316L', tag: 'Medical Grade', cost: '$$$$', lead: '5-7D', tol: '±0.10', heat: '600°C', desc: 'Superior corrosion resistance combined with high mechanical strength makes 316L the standard for medical implants and chemical processing. This material maintains excellent performance under extreme thermal conditions.' }
+        ],
+        'SLS': [
+            { id: 'PA12', title: 'Nylon PA12', tag: 'Functional Parts', cost: '$ (Low)', lead: '2-3D', tol: '±0.30', heat: '95°C', desc: 'Nylon PA12 is the most versatile industrial 3D printing material. It offers perfectly balanced mechanical properties and high chemical resistance, making it ideal for both complex functional prototypes and durable end-use components.' }
+        ],
+        'SLA': [
+            { id: 'CLEAR', title: 'Clear Resin', tag: 'Visual Master', cost: '$$', lead: '3-4D', tol: '±0.15', heat: '50°C', desc: 'Our premium Clear Resin delivers exceptional optical clarity and an ultra-smooth surface finish. It is specifically engineered for fluid flow analysis, light-transmitting visual prototypes, and high-detail verified masters.' }
+        ]
+    }
+}">
+    <div class="max-w-[1280px] mx-auto px-5">
         
-        <div class="snapshot-top-section">
-            <div class="material-image-container">
-                <img src="https://placehold.co/200x200/e0e0e0/999999?text=Alu+Texture" alt="Aluminum 6061 Texture">
-            </div>
-
-            <div class="material-data-grid">
-                <div class="data-item">
-                    <div class="data-icon">💲</div>
-                    <div class="data-label">Cost Level</div>
-                    <div class="data-value">$$ (Medium)</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-icon">⏱️</div>
-                    <div class="data-label">Lead Time</div>
-                    <div class="data-value">3-5 Days</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-icon">📏</div>
-                    <div class="data-label">Tolerance</div>
-                    <div class="data-value">±0.05 mm</div>
-                </div>
-                <div class="data-item">
-                    <div class="data-icon">💪</div>
-                    <div class="data-label">Key Feature</div>
-                    <div class="data-value">Lightweight</div>
-                </div>
-            </div>
+        <div class="mb-8 lg:mb-12">
+            <h2 class="text-[26px] lg:text-[36px] font-bold text-heading tracking-[-1px] mb-3">
+                Explore <span class="text-primary">Manufacturing Materials</span>
+            </h2>
+            <p class="text-body max-w-2xl text-[14px] lg:text-[15px] opacity-90 leading-snug">
+                Compare engineering properties and lead times across our specialized catalog to select the optimal solution for your industrial project.
+            </p>
         </div>
 
-        <div class="snapshot-middle-section">
-            <ul class="feature-list">
-                <li>Excellent strength-to-weight ratio, ideal for structural parts.</li>
-                <li>Good corrosion resistance; suitable for anodizing.</li>
-                <li>Typical uses: Aerospace brackets, automotive prototypes.</li>
-            </ul>
-        </div>
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+            
+            <aside class="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 lg:w-[150px] shrink-0 lg:border-r lg:border-border lg:pr-5">
+                <template x-for="proc in processes" :key="proc">
+                    <button @click="activeProcess = proc; openMaterial = materials[proc][0].id" 
+                            :class="activeProcess === proc ? 'bg-primary text-white shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                            class="whitespace-nowrap px-4 py-2.5 lg:w-full lg:text-left rounded-button border font-bold text-[11px] uppercase tracking-wider transition-all"
+                            x-text="proc"></button>
+                </template>
+            </aside>
 
-        <div class="snapshot-bottom-section">
-            <a href="/quote" class="btn btn-primary">
-                <span class="btn-icon">🚀</span> Get Instant Quote
-            </a>
-            <a href="/materials/aluminum-6061" class="btn btn-secondary">
-                <span class="btn-icon">📄</span> View Full Specs <span class="btn-arrow">›</span>
-            </a>
-        </div>
+            <main class="flex-1 w-full">
+                <div class="space-y-3">
+                    <template x-for="mat in materials[activeProcess]" :key="mat.id">
+                        <div class="border border-border rounded-card bg-white overflow-hidden shadow-sm">
+                            
+                            <button @click="openMaterial = (openMaterial === mat.id ? '' : mat.id)"
+                                    class="w-full flex justify-between items-center p-4 lg:px-6 lg:py-5 bg-white hover:bg-bg-subtle/40 transition-colors text-left">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-[15px] lg:text-[17px] font-bold text-heading" x-text="mat.title"></span>
+                                    <span class="text-[8px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-widest" x-text="mat.tag"></span>
+                                </div>
+                                <svg class="w-4 h-4 text-muted transition-transform duration-300" :class="openMaterial === mat.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
 
+                            <div x-show="openMaterial === mat.id" x-collapse x-cloak>
+                                <div class="p-5 lg:p-10 border-t border-border">
+                                    <div class="grid lg:grid-cols-[1fr_320px] gap-8 lg:gap-12 items-stretch">
+                                        
+                                        <div class="flex flex-col justify-center h-full">
+                                            <p class="text-[14px] leading-relaxed text-body mb-8 lg:max-w-[95%]" x-text="mat.desc"></p>
+
+                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-8">
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Tolerance</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.tol"></div>
+                                                </div>
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Max Temp</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.heat"></div>
+                                                </div>
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Lead Time</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-primary" x-text="mat.lead"></div>
+                                                </div>
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Cost</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.cost"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-wrap gap-3">
+                                                <a href="/quote" class="inline-flex items-center justify-center bg-primary text-white px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-sm">
+                                                    🚀 Start Quote
+                                                </a>
+                                                <a href="#" class="inline-flex items-center justify-center border border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wider hover:bg-primary/5 transition-all">
+                                                    📄 Technical Specs
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="hidden lg:block shrink-0 h-full">
+                                            <div class="aspect-square w-[320px] bg-gray-100 rounded-lg border border-border overflow-hidden relative group">
+                                                <img :src="'https://placehold.co/600x600/eeeeee/666666?text=' + mat.id" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                                <div class="absolute bottom-2 left-2 bg-white/80 backdrop-blur px-2 py-0.5 rounded text-[9px] font-mono text-muted uppercase tracking-tighter">Sample: <span x-text="mat.id"></span></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="lg:hidden w-full aspect-video rounded-lg overflow-hidden border border-border mt-2">
+                                            <img :src="'https://placehold.co/600x600/eeeeee/666666?text=' + mat.id" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </main>
+        </div>
     </div>
-    <div class="accordion-header-mock" style="border-top: 1px solid #ddd;">▶ 📂 Titanium Ti6Al4V</div>
-</div>
+</section>
 
 </body>
 </html>

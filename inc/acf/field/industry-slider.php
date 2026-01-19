@@ -3,6 +3,8 @@
  * 推荐文件路径：inc/acf/specific-field/industry-slider.php
  * 角色：Industry Slider (行业解决方案轮播)
  * 逻辑：身份识别 > 视觉实证 > 技术背书 > 场景描述 > 路径导流
+ * 备注：首页和single capacility目前用到这个模块，但是呢我觉得不是第一阶段搞得页面
+ * 所以这个模块的字段我还没优化
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {

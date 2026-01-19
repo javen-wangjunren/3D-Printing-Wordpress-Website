@@ -40,59 +40,61 @@ get_header(); ?>
                 // ==========================================
                 // 1. Hero Banner Module (Current CPT)
                 // ==========================================
-                get_template_part( 'blocks/global/hero-banner/render' );
+                _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview' ) );
 
                 // ==========================================
                 // 2. Trusted By Module (Global)
                 // ==========================================
-                get_template_part( 'blocks/global/trusted-by/render' );
+                _3dp_render_block( 'blocks/global/trusted-by/render', array( 'id' => 'trusted-partners' ) );
 
                 // ==========================================
                 // 3. How It Works Module (Current CPT Fields)
                 // ==========================================
-                get_template_part( 'blocks/global/how-it-works/render' );
+                _3dp_render_block( 'blocks/global/how-it-works/render', array( 'id' => 'process' ) );
 
                 // ==========================================
-                // 4. Industry Slider Module (Global Options)
+                // 4. Industry Slider Module (Global Options)-第一阶段不放这个内容
                 // ==========================================
-                get_template_part( 'blocks/global/industry-slider/render' );
+                _3dp_render_block( 'blocks/global/industry-slider/render', array( 'id' => 'applications' ) );
 
                 // ==========================================
                 // 5. Capability Design Guide Module (Current CPT Specs)
                 // ==========================================
-                get_template_part( 'blocks/global/capability-design-guide/render' );
+                _3dp_render_block( 'blocks/global/capability-design-guide/render', array( 'id' => 'design-guide' ) );
 
                 // ==========================================
                 // 6. Material List Module (Current CPT)
                 // ==========================================
-                get_template_part( 'blocks/global/material-list/render' );
+                _3dp_render_block( 'blocks/global/material-list/render', array( 'id' => 'materials' ) );
 
                 // ==========================================
                 // 7. Comparison Table Module (Current CPT)
                 // ==========================================
-                get_template_part( 'blocks/global/comparison-table/render' );
+                _3dp_render_block( 'blocks/global/comparison-table/render', array( 'id' => 'comparison' ) );
 
                 // ==========================================
                 // 8. Why Choose Us Module (Global Options)
                 // ==========================================
-                get_template_part( 'blocks/global/why-choose-us/render' );
+                _3dp_render_block( 'blocks/global/why-choose-us/render', array( 'id' => 'why-us' ) );
 
                 // ==========================================
                 // 9. Order Process Module (Global Options)
                 // ==========================================
-                get_template_part( 'blocks/global/order-process/render' );
+                _3dp_render_block( 'blocks/global/order-process/render', array( 'id' => 'order-process' ) );
 
                 // ==========================================
                 // 10. CTA Module (Global Options)
                 // ==========================================
-                get_template_part( 'blocks/global/cta/render' );
+                _3dp_render_block( 'blocks/global/cta/render', array( 'id' => 'cta' ) );
 
                 // ==========================================
                 // 11. Related Blog Module (Auto Tag Match)
                 // ==========================================
-                // 传递当前工艺信息给博客相关模块
-                set_query_var( 'current_capability', $current_capability );
-                get_template_part( 'blocks/global/related-blog/render' );
+                // 显式传递当前工艺信息
+                _3dp_render_block( 'blocks/global/related-blog/render', array( 
+                    'id'                 => 'related-stories',
+                    'current_capability' => $current_capability
+                ) );
 
             endwhile;
         }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * 角色：Material Card (材料卡片网格)--Template Part
+ * 备注：主要是在all material页面展示我们所有材料的卡片
+ * 有非常复杂的筛选逻辑在里面
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {

@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * 角色：Related Blog (相关博客)
+ * 备注：在材料页展示相关的博客文章，支持的功能比较多，可以自动展示最新的博客，也可以按照tag筛选，也可以自己选
+ * 是一个相当强大的模块功能，当然得等后续blog相关的模板做好了再次进行调试
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     function _3dp_related_blog_fields() {
@@ -320,7 +326,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             ),
             'menu_order'            => 0,
             'position'              => 'normal',
-            'style'                 => 'seamless',
+            'style'                 => 'default',
             'label_placement'       => 'top',
             'instruction_placement' => 'label',
             'hide_on_screen'        => '',

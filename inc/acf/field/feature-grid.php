@@ -2,6 +2,7 @@
 /**
  * Feature Grid 区块的ACF字段定义
  * 位置: /inc/acf/field/feature-grid.php
+ * 说明：这个模块已经不用了，主要是刚开始参考protolabs的所有工艺的模块做的，后续已经用其他模块替代
  */
 
 // 确保函数在ACF可用时才执行

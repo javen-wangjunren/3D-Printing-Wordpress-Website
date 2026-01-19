@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Manufacturing Evolution Track Refined</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' }, // 品牌蓝 [cite: 14, 48]
+                        heading: '#1D2938', // 深炭灰标题 [cite: 50]
+                        body: '#667085',    // 柔和灰正文 [cite: 50]
+                        border: '#E4E7EC',  // 冷灰边框 [cite: 21]
+                        'bg-subtle': '#F8F9FB' // 工业浅灰底色 [cite: 49]
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px' } // 统一圆角规范 [cite: 20, 55]
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* 工业网格背景 (复用 style.css) */
+        .industrial-grid-bg {
+            background-color: #F2F4F7;
+            background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* 精密导轨刻度 */
+        .ruler-ticks-x {
+            background-image: linear-gradient(90deg, #E4E7EC 1px, transparent 1px);
+            background-size: 20px 100%;
+        }
+        
+        h2, h4 { letter-spacing: -0.5px; } /* 标题力量感规范 [cite: 11] */
+        
+        /* 物理锁定边框样式  */
+        .card-locked { border: 3px solid #0047AB !important; }
+    </style>
+</head>
+<body class="bg-white antialiased font-sans">
+
+<section class="py-16 lg:py-24 industrial-grid-bg border-y border-border overflow-hidden" x-data="{ 
+    scrollNext() { this.$refs.scrollContainer.scrollBy({ left: 340, behavior: 'smooth' }) },
+    scrollPrev() { this.$refs.scrollContainer.scrollBy({ left: -340, behavior: 'smooth' }) }
+}">
+    <div class="max-w-[1280px] mx-auto px-6">
+        
+        <div class="mb-16 lg:mb-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6">
+            <div class="max-w-2xl">
+                <h2 class="text-[32px] lg:text-[40px] font-bold text-heading leading-tight mb-4">
+                    Evolution and <span class="text-primary">Milestones</span>
+                </h2>
+                <p class="text-[16px] lg:text-[18px] text-body opacity-90">
+                    A quantitative journey from a single production line to a global digital manufacturing hub.
+                </p>
+            </div>
+            
+            <div class="hidden lg:flex gap-3 mb-2">
+                <button @click="scrollPrev()" class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-heading hover:border-primary hover:text-primary transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button @click="scrollNext()" class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-heading hover:border-primary hover:text-primary transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="hidden lg:block relative">
+            <div class="overflow-x-auto no-scrollbar pb-12" x-ref="scrollContainer">
+                <div class="inline-flex min-w-full relative py-10">
+                    
+                    <!-- 桌面端连接线 (Clean Solid Line) -->
+                    <div class="absolute top-[148px] left-0 right-0 h-[2px] bg-border z-0"></div>
+
+                    <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                        <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2019</span></div>
+                        <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                        <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-[18px] font-bold text-heading mb-3">Founded and Setup</h4>
+                                <p class="text-[14px] text-body leading-relaxed">Establish initial industrial-grade production line with precision delivery protocols[cite: 43].</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-border/50">
+                                <span class="font-mono text-[11px] font-bold text-primary uppercase">Metric: <span class="text-heading">1st Line Live</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                        <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2021</span></div>
+                        <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                        <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-[18px] font-bold text-heading mb-3">SLM Cluster & ISO</h4>
+                                <p class="text-[14px] text-body leading-relaxed">Deployment of industrial SLM metal printing cluster and ISO 9001 certification.</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-border/50">
+                                <span class="font-mono text-[11px] font-bold text-primary uppercase">Status: <span class="text-heading">ISO Certified</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                        <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2022</span></div>
+                        <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                        <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-[18px] font-bold text-heading mb-3">Smart Facility Move</h4>
+                                <p class="text-[14px] text-body leading-relaxed">Relocation to a 3,700m² modern smart factory to handle global demand surge[cite: 36].</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-border/50">
+                                <span class="font-mono text-[11px] font-bold text-primary uppercase">Area: <span class="text-heading">3,700 SQM</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                        <div class="mb-12"><span class="font-mono text-[56px] font-bold text-primary leading-none">23/24</span></div>
+                        <div class="w-6 h-6 rounded-full border-4 border-white bg-primary shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                        <div class="bg-white p-8 rounded-card card-locked transition-all min-h-[220px] flex flex-col justify-between shadow-xl shadow-primary/5">
+                            <div>
+                                <div class="flex justify-between items-start mb-3">
+                                    <h4 class="text-[18px] font-bold text-heading">Scale Operations</h4>
+                                    <span class="bg-primary text-white text-[8px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">Active</span>
+                                </div>
+                                <p class="text-[14px] text-body leading-relaxed">Delivered 30,000+ industrial projects with a fully digitized global supply chain[cite: 37].</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-border/50">
+                                <span class="font-mono text-[11px] font-bold text-primary uppercase">Output: <span class="text-heading">30k+ Projects</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="lg:hidden relative">
+            <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-border z-0"></div>
+            <div class="space-y-8 pl-8 relative z-10">
+                <div class="relative">
+                    <div class="absolute -left-[39px] top-1.5 w-3.5 h-3.5 rounded-full border-4 border-white bg-primary shadow-[0_0_0_1px_#0047AB]"></div>
+                    <span class="font-mono text-[20px] font-bold text-heading block mb-2 opacity-50">2019</span>
+                    <div class="bg-bg-subtle p-5 rounded-card border border-border">
+                        <h4 class="text-[16px] font-bold text-heading mb-2">Founded and Setup</h4>
+                        <p class="text-[13px] text-body">1st industrial line live with precision protocols[cite: 43].</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -left-[39px] top-1.5 w-3.5 h-3.5 rounded-full border-4 border-white bg-primary shadow-[0_0_0_1px_#0047AB]"></div>
+                    <span class="font-mono text-[20px] font-bold text-heading block mb-2 opacity-50">2021</span>
+                    <div class="bg-bg-subtle p-5 rounded-card border border-border">
+                        <h4 class="text-[16px] font-bold text-heading mb-2">SLM Cluster & ISO</h4>
+                        <p class="text-[13px] text-body">Deployment of industrial SLM metal printing cluster and ISO 9001 certification.</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -left-[39px] top-1.5 w-3.5 h-3.5 rounded-full border-4 border-white bg-primary shadow-[0_0_0_1px_#0047AB]"></div>
+                    <span class="font-mono text-[20px] font-bold text-heading block mb-2 opacity-50">2022</span>
+                    <div class="bg-bg-subtle p-5 rounded-card border border-border">
+                        <h4 class="text-[16px] font-bold text-heading mb-2">Smart Facility Move</h4>
+                        <p class="text-[13px] text-body">Relocation to a 3,700m² modern smart factory to handle global demand surge[cite: 36].</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute -left-[39px] top-1.5 w-3.5 h-3.5 rounded-full border-4 border-white bg-primary shadow-[0_0_0_1px_#0047AB]"></div>
+                    <span class="font-mono text-[20px] font-bold text-primary block mb-2">23/24</span>
+                    <div class="bg-white p-5 rounded-card card-locked">
+                        <h4 class="text-[16px] font-bold text-heading mb-2">Scale Operations</h4>
+                        <p class="text-[13px] text-body">30k+ projects delivered globally via digital hub[cite: 37].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

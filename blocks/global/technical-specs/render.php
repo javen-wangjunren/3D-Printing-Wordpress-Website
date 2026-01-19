@@ -9,7 +9,8 @@
  */
 
 // 1. 获取基础数据
-$anchor = get_field('technical_specs_anchor_id') ?: 'technical-specs-' . $block['id'];
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'technical-specs' );
 $classes = get_field('technical_specs_css_class') ?: '';
 $material_label = get_field('technical_specs_material_label');
 $intro = get_field('technical_specs_intro');

@@ -2,6 +2,7 @@
 /**
  * 角色：Capability Design Guide 模块的字段 Schema 定义
  * 逻辑：金字塔排布 - 核心指标 > 深度规格 > 专家建议
+ * 位置：single-capability介绍某个特定工艺的参数信息
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {
@@ -174,7 +175,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                 ),
             ),
-            'style' => 'seamless',
+            'style' => 'default',
             'instruction_placement' => 'label',
         ) );
     });

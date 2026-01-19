@@ -2,7 +2,7 @@
 /**
  * Module: Hero Banner
  * Path: inc/acf/field/hero-banner.php
- * Description: Defines the ACF fields for the Hero Banner block.
+ * 备注：有两种样式，左图右文，和背景大图两种样式可以切换，一般首页用第二种大气一些，其他的capability和 material用第一种
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {

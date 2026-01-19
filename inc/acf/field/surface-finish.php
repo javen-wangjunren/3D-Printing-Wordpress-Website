@@ -2,6 +2,7 @@
 /**
  * * 角色：Surface Finish Gallery (表面处理工艺库)
  * 功能：支持多重筛选、视觉对比展示、2x2 参数网格以及响应式交互切换
+ * 备注：这个功能模块需要重做，现在过于复杂了，目前是用于all capabilities页面的
  */
 
 if ( function_exists( 'acf_add_local_field_group' ) ) {

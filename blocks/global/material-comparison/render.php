@@ -6,8 +6,8 @@
  */
 
 // 获取块数据
-$block = $args['block'];
-$block_id = $block['id'];
+$block = isset( $block ) ? $block : (isset($args['block']) ? $args['block'] : array());
+$block_id = _3dp_get_safe_block_id( $block, 'comparison' );
 $block_class = $block['className'] ?? '';
 $anchor = $block['anchor'] ?? '';
 

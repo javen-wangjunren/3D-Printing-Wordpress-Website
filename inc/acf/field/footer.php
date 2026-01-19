@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 角色：Footer 模块的字段 Schema 定义
+ * 位置：/inc/acf/field/footer.php
+ * 说明：页脚模块的字段逻辑,挂载在global setting中的footer设置中
+ */
+
+
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
 	add_action( 'acf/init', function() {
@@ -47,7 +54,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 					'label'         => 'Copyright Text',
 					'name'          => 'footer_copyright',
 					'type'          => 'text',
-					'default_value' => '© 2026 NOW3DP MANUFACTURING INC. ALL RIGHTS RESERVED.',
+					'instructions'  => '使用 {year} 自动替换为当前年份。',
+					'default_value' => '© {year} NOW3DP MANUFACTURING INC. ALL RIGHTS RESERVED.',
 				),
 				array(
 					'key'          => 'field_footer_social_links',

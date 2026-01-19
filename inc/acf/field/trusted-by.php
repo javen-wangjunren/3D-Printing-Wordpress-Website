@@ -1,4 +1,9 @@
 <?php
+/**
+ * 角色：Trusted By (受信任的客户)
+ * 备注：在材料页展示受信任的客户logo，通常是服务企业的logo
+ * 目前是全局模块，用于首页的
+ */
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 	add_action( 'acf/init', function() {
 		acf_add_local_field_group( array(

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * 角色：Filter Sidebar 模块的字段 Schema 定义--Template Part
+ * 位置：/inc/acf/field/filter-sidebar.php
+ * 说明：all materials的侧边筛选栏的字段逻辑
+ */
+
+
+
 if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     add_action( 'acf/init', function() {

@@ -1,10 +1,10 @@
 <?php
 /**
- * ACF Fields 定义文件 - Material Comparison
- * 推荐文件路径：inc/acf/field/material-comparison.php
+ * 备注：这个模块已经不用了，被通用的对比表替代
+ * 之前是考虑放在材料页做对比用的
  */
 
-// 确保函数在ACF可用时才执行
+
 if ( function_exists( 'acf_add_local_field_group' ) ) {
     // 挂载钩子
     add_action('acf/init', function() {

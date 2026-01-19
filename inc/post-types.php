@@ -1,7 +1,7 @@
 <?php
 /**
  * Register Custom Post Types (CPTs)
- *
+ * 备注： 目前注册了材料，工艺，后续应该还会注册应用行业，表面处理工艺
  * @package 3D Printing
  */
 

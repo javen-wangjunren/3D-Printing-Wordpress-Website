@@ -1,0 +1,131 @@
+<!-- 
+* 这个模块是通用的对比表格
+* 目前网站的对比表有不同的参数进行对比，以及不同的材料进行对比
+只要是需要对比的参数，都可以在这个表格中进行对比
+--> 
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Precision Comparative Matrix v5.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-table': '#F8F9FB' // 优化的工业底色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* 极致物理锁定框 */
+        .lock-row { position: relative; z-index: 10; }
+        .lock-row::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 3px solid #0047AB; 
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 30;
+            box-shadow: 0 12px 30px -10px rgba(0, 71, 171, 0.3);
+        }
+        .lock-row td { border-bottom-color: transparent !important; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-[96px]" x-data="{ highlighted: 'SLS' }">
+    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+        
+        <div class="mb-12 flex justify-between items-end">
+            <div>
+                <h2 class="text-[36px] font-bold text-heading tracking-[-1.5px] mb-2 uppercase">
+                    Comparative <span class="text-primary">Matrix</span>
+                </h2>
+                <p class="text-body text-sm font-medium opacity-80">物理级锁定展示：四周等厚边框及双色背景矩阵。</p>
+            </div>
+            <div class="hidden md:block border-2 border-primary/20 rounded-md px-3 py-1 rotate-12">
+                <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest">NOW3DP Verified</span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-border shadow-sm p-[3px] overflow-hidden">
+            <div class="overflow-x-auto no-scrollbar">
+                <table class="w-full text-left border-separate border-spacing-0 min-w-[1000px]">
+                    <thead>
+                        <tr class="bg-bg-table text-heading uppercase tracking-[2px] text-[11px] font-bold">
+                            <th class="py-5 px-8 border-b border-border rounded-tl-lg">Technology</th>
+                            <th class="py-5 px-6 border-b border-border bg-bg-table/60">Dimensional Accuracy</th>
+                            <th class="py-5 px-8 border-b border-border">Key Strengths</th>
+                            <th class="py-5 px-6 border-b border-border bg-bg-table/60">Build Volume</th>
+                            <th class="py-5 px-8 border-b border-border rounded-tr-lg">Layer</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody class="text-[14px]">
+                        <template x-for="tech in [
+                            { id: 'SLS', acc: '± 0.3%', strength: 'Support-free, High flexibility', vol: '395 × 500 × 395 mm', layer: '100μm' },
+                            { id: 'MJF', acc: '± 0.3%', strength: 'Isotropic, Rapid production', vol: '380 × 285 × 380 mm', layer: '80μm' },
+                            { id: 'SLA', acc: '± 0.2%', strength: 'Fine detail, Smooth finish', vol: '500 × 500 × 500 mm', layer: '50μm' },
+                            { id: 'DMLS', acc: '± 0.2%', strength: 'Complex metals, Engineering-grade', vol: '400 × 400 × 400 mm', layer: '40μm' }
+                        ]">
+                            <tr @click="highlighted = tech.id"
+                                :class="highlighted === tech.id ? 'lock-row' : 'hover:bg-bg-table/40 cursor-pointer'"
+                                class="transition-all duration-150 group">
+                                
+                                <td class="py-6 px-8 font-bold border-b border-border transition-colors"
+                                    :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-primary rounded-l-xl' : 'bg-white text-heading'">
+                                    <span x-text="tech.id"></span>
+                                </td>
+                                
+                                <td class="py-6 px-6 font-mono border-b border-border transition-colors"
+                                    :class="highlighted === tech.id ? 'bg-[#DEEAFF] text-primary' : 'bg-bg-table/40 text-body'">
+                                    <div class="flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 rounded-full" :class="highlighted === tech.id ? 'bg-primary' : 'bg-primary/20'"></span>
+                                        <span x-text="tech.acc"></span>
+                                    </div>
+                                </td>
+
+                                <td class="py-6 px-8 border-b border-border transition-colors leading-relaxed"
+                                    :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-body' : 'bg-white text-body'">
+                                    <span x-text="tech.strength" class="opacity-90"></span>
+                                </td>
+
+                                <td class="py-6 px-6 font-mono border-b border-border transition-colors text-right pr-12"
+                                    :class="highlighted === tech.id ? 'bg-[#DEEAFF] text-heading' : 'bg-bg-table/40 text-heading'">
+                                    <span x-text="tech.vol"></span>
+                                </td>
+
+                                <td class="py-6 px-8 font-mono border-b border-border transition-colors"
+                                    :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-heading rounded-r-xl' : 'bg-white text-heading'">
+                                    <span x-text="tech.layer"></span>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

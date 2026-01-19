@@ -1,12 +1,7 @@
 <?php
 
-$anchor_field = get_field( 'anchor_id' );
-$block_anchor = ! empty( $block['anchor'] ) ? $block['anchor'] : '';
-$block_id     = $anchor_field ? $anchor_field : ( $block_anchor ? $block_anchor : ( isset( $block['id'] ) ? $block['id'] : '' ) );
-
-if ( ! $block_id ) {
-    return;
-}
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'how-it-works' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 

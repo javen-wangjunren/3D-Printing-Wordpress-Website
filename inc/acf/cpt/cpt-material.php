@@ -12,17 +12,12 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             'key'   => 'group_cpt_material_fields',
             'title' => 'Material Fields',
             'fields' => array(
-                // ==========================================
-                // TAB: Content
-                // ==========================================
                 array(
-                    'key'       => 'field_mat_tab_content',
-                    'label'     => 'Content',
+                    'key'       => 'field_mat_tab_overview',
+                    'label'     => 'Overview',
                     'type'      => 'tab',
                     'placement' => 'top',
                 ),
-
-                // Hero Banner 内容（复用 Hero 模块 Schema）
                 array(
                     'key'          => 'field_mat_hero_clone_content',
                     'label'        => 'Hero Content',
@@ -39,8 +34,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name'  => 0,
                     'wrapper'      => array( 'width' => '100' ),
                 ),
-
-                // Manufacturing Showcase 内容（复用模块 Schema）
                 array(
                     'key'          => 'field_mat_mfs_clone_content',
                     'label'        => 'Manufacturing Showcase Content',
@@ -56,52 +49,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name'  => 0,
                     'wrapper'      => array( 'width' => '100' ),
                 ),
-
-                // Technical Specs 内容（复用模块 Schema）
-                array(
-                    'key'          => 'field_mat_ts_clone_content',
-                    'label'        => 'Technical Specs Content',
-                    'name'         => 'mat_ts_content',
-                    'type'         => 'clone',
-                    'clone'        => array(
-                        'field_ts_material_label',
-                        'field_ts_intro',
-                        'field_ts_tabs',
-                    ),
-                    'display'      => 'seamless',
-                    'prefix_label' => 0,
-                    'prefix_name'  => 0,
-                    'wrapper'      => array( 'width' => '100' ),
-                ),
-
-                // Manufacturing Capabilities 内容（复用模块 Schema）
-                array(
-                    'key'          => 'field_mat_mcap_clone_content',
-                    'label'        => 'Manufacturing Capabilities Content',
-                    'name'         => 'mat_mcap_content',
-                    'type'         => 'clone',
-                    'clone'        => array(
-                        'field_mcap_section_title',
-                        'field_mcap_intro',
-                        'field_mcap_tabs',
-                    ),
-                    'display'      => 'seamless',
-                    'prefix_label' => 0,
-                    'prefix_name'  => 0,
-                    'wrapper'      => array( 'width' => '100' ),
-                ),
-
-                // ==========================================
-                // TAB: Design
-                // ==========================================
-                array(
-                    'key'       => 'field_mat_tab_design',
-                    'label'     => 'Design',
-                    'type'      => 'tab',
-                    'placement' => 'top',
-                ),
-
-                // Hero 设计与统计条
                 array(
                     'key'          => 'field_mat_hero_clone_design',
                     'label'        => 'Hero Design & Stats',
@@ -124,8 +71,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name'  => 0,
                     'wrapper'      => array( 'width' => '100' ),
                 ),
-
-                // Manufacturing Showcase 设计
                 array(
                     'key'          => 'field_mat_mfs_clone_design',
                     'label'        => 'Manufacturing Showcase Design',
@@ -142,51 +87,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name'  => 0,
                     'wrapper'      => array( 'width' => '100' ),
                 ),
-
-                // Technical Specs 设计
-                array(
-                    'key'          => 'field_mat_ts_clone_design',
-                    'label'        => 'Technical Specs Design',
-                    'name'         => 'mat_ts_design',
-                    'type'         => 'clone',
-                    'clone'        => array(
-                        'field_ts_table_mono',
-                        'field_ts_mobile_hide_table',
-                        'field_ts_table_scroll',
-                    ),
-                    'display'      => 'seamless',
-                    'prefix_label' => 0,
-                    'prefix_name'  => 0,
-                    'wrapper'      => array( 'width' => '100' ),
-                ),
-
-                // Manufacturing Capabilities 设计
-                array(
-                    'key'          => 'field_mat_mcap_clone_design',
-                    'label'        => 'Manufacturing Capabilities Design',
-                    'name'         => 'mat_mcap_design',
-                    'type'         => 'clone',
-                    'clone'        => array(
-                        'field_mcap_mobile_compact',
-                        'field_mcap_use_mono_font',
-                    ),
-                    'display'      => 'seamless',
-                    'prefix_label' => 0,
-                    'prefix_name'  => 0,
-                    'wrapper'      => array( 'width' => '100' ),
-                ),
-
-                // ==========================================
-                // TAB: Settings
-                // ==========================================
-                array(
-                    'key'       => 'field_mat_tab_settings',
-                    'label'     => 'Settings',
-                    'type'      => 'tab',
-                    'placement' => 'top',
-                ),
-
-                // Manufacturing Showcase 设置
                 array(
                     'key'          => 'field_mat_mfs_clone_settings',
                     'label'        => 'Manufacturing Showcase Settings',
@@ -202,7 +102,71 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'wrapper'      => array( 'width' => '100' ),
                 ),
 
-                // Technical Specs 设置
+                array(
+                    'key'       => 'field_mat_tab_tech',
+                    'label'     => 'Technical Specs',
+                    'type'      => 'tab',
+                    'placement' => 'top',
+                ),
+                array(
+                    'key'          => 'field_mat_ts_clone_content',
+                    'label'        => 'Technical Specs Content',
+                    'name'         => 'mat_ts_content',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_ts_material_label',
+                        'field_ts_intro',
+                        'field_ts_tabs',
+                    ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
+                ),
+                array(
+                    'key'          => 'field_mat_mcap_clone_content',
+                    'label'        => 'Manufacturing Capabilities Content',
+                    'name'         => 'mat_mcap_content',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_mcap_section_title',
+                        'field_mcap_intro',
+                        'field_mcap_tabs',
+                    ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
+                ),
+                array(
+                    'key'          => 'field_mat_ts_clone_design',
+                    'label'        => 'Technical Specs Design',
+                    'name'         => 'mat_ts_design',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_ts_table_mono',
+                        'field_ts_mobile_hide_table',
+                        'field_ts_table_scroll',
+                    ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
+                ),
+                array(
+                    'key'          => 'field_mat_mcap_clone_design',
+                    'label'        => 'Manufacturing Capabilities Design',
+                    'name'         => 'mat_mcap_design',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_mcap_mobile_compact',
+                        'field_mcap_use_mono_font',
+                    ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
+                ),
                 array(
                     'key'          => 'field_mat_ts_clone_settings',
                     'label'        => 'Technical Specs Settings',
@@ -217,8 +181,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name'  => 0,
                     'wrapper'      => array( 'width' => '100' ),
                 ),
-
-                // Manufacturing Capabilities 设置
                 array(
                     'key'          => 'field_mat_mcap_clone_settings',
                     'label'        => 'Manufacturing Capabilities Settings',
@@ -234,70 +196,64 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'wrapper'      => array( 'width' => '100' ),
                 ),
 
-                // All Materials 列表筛选配置（保留在 Settings 分区）
                 array(
-                    'key'       => 'field_mat_msg_listing_filters',
-                    'label'     => 'Listing Filters',
-                    'type'      => 'message',
-                    'message'   => '<h3>Listing Filters (Process / Type / Cost / Lead Time)</h3>',
-                    'new_lines' => 'wpautop',
+                    'key'       => 'field_mat_tab_blog',
+                    'label'     => 'Blog',
+                    'type'      => 'tab',
+                    'placement' => 'top',
                 ),
                 array(
-                    'key'           => 'field_mat_process',
-                    'label'         => 'Process',
-                    'name'          => 'material_process',
-                    'type'          => 'select',
-                    'choices'       => array(),
-                    'allow_null'    => 0,
-                    'multiple'      => 0,
-                    'ui'            => 1,
-                    'return_format' => 'value',
-                    'wrapper'       => array( 'width' => '33' ),
-                ),
-                array(
-                    'key'           => 'field_mat_type',
-                    'label'         => 'Material Type',
-                    'name'          => 'material_type',
-                    'type'          => 'select',
-                    'choices'       => array(),
-                    'allow_null'    => 0,
-                    'multiple'      => 0,
-                    'ui'            => 1,
-                    'return_format' => 'value',
-                    'wrapper'       => array( 'width' => '33' ),
-                ),
-                array(
-                    'key'           => 'field_mat_cost',
-                    'label'         => 'Cost Level',
-                    'name'          => 'material_cost_level',
-                    'type'          => 'radio',
-                    'choices'       => array(
-                        '$'    => '$ (Economical)',
-                        '$$'   => '$$ (Standard)',
-                        '$$$'  => '$$$ (Premium)',
-                        '$$$$' => '$$$$ (Enterprise)',
+                    'key'          => 'field_mat_related_blog_clone_content',
+                    'label'        => 'Related Blog Content',
+                    'name'         => 'mat_related_blog_content',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_66e3b0c0f0c8b1f',
+                        'field_blog_title_highlight',
+                        'field_66e3b0c0f0c8b29',
+                        'field_66e3b0c0f0c8b33',
+                        'field_66e3b0c0f0c8b3d',
+                        'field_66e3b0c0f0c8b47',
+                        'field_66e3b0c0f0c8b51',
+                        'field_66e3b0c0f0c8b5b',
+                        'field_66e3b0c0f0c8b65',
                     ),
-                    'layout'        => 'horizontal',
-                    'return_format' => 'value',
-                    'wrapper'       => array( 'width' => '34' ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
                 ),
                 array(
-                    'key'           => 'field_mat_lead_time',
-                    'label'         => 'Lead Time',
-                    'name'          => 'material_lead_time',
-                    'type'          => 'select',
-                    'choices'       => array(
-                        'As fast as 1 business day' => 'As fast as 1 business day',
-                        '1-2 Days'                   => '1-2 Days',
-                        '3-5 Days'                   => '3-5 Days',
-                        '7-10 Days'                  => '7-10 Days',
+                    'key'          => 'field_mat_related_blog_clone_design',
+                    'label'        => 'Related Blog Design',
+                    'name'         => 'mat_related_blog_design',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_66e3b0c0f0c8b79',
+                        'field_66e3b0c0f0c8b83',
+                        'field_related_blog_mobile_compact',
+                        'field_related_blog_mobile_hide_subtitle',
                     ),
-                    'allow_null'    => 0,
-                    'multiple'      => 0,
-                    'ui'            => 0,
-                    'return_format' => 'value',
-                    'wrapper'       => array( 'width' => '50' ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
                 ),
+                array(
+                    'key'          => 'field_mat_related_blog_clone_settings',
+                    'label'        => 'Related Blog Settings',
+                    'name'         => 'mat_related_blog_settings',
+                    'type'         => 'clone',
+                    'clone'        => array(
+                        'field_related_blog_block_id',
+                        'field_related_blog_custom_class',
+                    ),
+                    'display'      => 'seamless',
+                    'prefix_label' => 0,
+                    'prefix_name'  => 0,
+                    'wrapper'      => array( 'width' => '100' ),
+                ),
+
             ),
             'location' => array(
                 array(
@@ -310,10 +266,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             ),
             'menu_order'            => 0,
             'position'              => 'normal',
-            'style'                 => 'seamless',
+            'style'                 => 'default',
             'label_placement'       => 'top',
             'instruction_placement' => 'label',
             'active'                => true,
         ) );
+
     } );
 }

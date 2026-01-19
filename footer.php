@@ -19,10 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
  $logo_id = 0;
  $description = '';
+ $address = '';
 
  if ( is_array( $left_info ) ) {
 	 $logo_id = isset( $left_info['logo_image'] ) ? (int) $left_info['logo_image'] : 0;
 	 $description = isset( $left_info['description'] ) ? $left_info['description'] : '';
+	 $address = isset( $left_info['address'] ) ? $left_info['address'] : '';
  }
 
 ?>
@@ -52,6 +54,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</p>
 				<?php endif; ?>
 
+				<?php if ( $address ) : ?>
+				<p class="text-muted text-xs leading-5 max-w-xs mt-4 font-mono">
+					<?php echo nl2br( esc_html( $address ) ); ?>
+				</p>
+				<?php endif; ?>
+
                 <!-- Social Links -->
                 <?php if ( $social_links ) : ?>
                 <div class="flex gap-x-6">
@@ -63,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                     ?>
                     <a href="<?php echo esc_url( $url ); ?>" class="text-muted hover:text-primary transition-colors" aria-label="<?php echo esc_attr( $name ); ?>">
                         <?php 
-                            // 输出 SVG (允许原生 HTML)
+                            // 输出 SVG (允许原生 HTML - 仅管理员可编辑 ACF 选项)
                             if ( $icon ) {
                                 echo $icon; 
                             } else {
@@ -153,6 +161,8 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <p class="text-[12px] font-mono text-muted tracking-tight"> 
                     <?php 
                         if ( $copyright_text ) {
+                            // 支持 {year} 占位符
+                            $copyright_text = str_replace( '{year}', date( 'Y' ), $copyright_text );
                             echo esc_html( $copyright_text );
                         } else {
                             echo '&copy; ' . date('Y') . ' ' . get_bloginfo( 'name' ) . '. ALL RIGHTS RESERVED.';
