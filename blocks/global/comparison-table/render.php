@@ -4,18 +4,21 @@
  * 
  * @package GeneratePressChild
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // 1. 获取数据作用域 (Data Scope)
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'comparison-table' );
-$title           = get_field( 'table_title' );
-$headers         = get_field( 'headers' ); // Group: h1..h5
-$rows            = get_field( 'comparison_rows' ); // Repeater: v1..v5
-$highlight_idx   = get_field( 'highlight_index' ) ?: 1;
-$use_mono        = get_field( 'use_mono' );
-$mobile_compact  = get_field( 'comparison_mobile_compact_mode' );
-$anchor_id       = get_field( 'anchor_id' );
-$custom_class    = get_field( 'comparison_table_custom_class' );
+$title           = get_field($pfx . 'table_title' );
+$headers         = get_field($pfx . 'headers' ); // Group: h1..h5
+$rows            = get_field($pfx . 'comparison_rows' ); // Repeater: v1..v5
+$highlight_idx   = get_field($pfx . 'highlight_index' ) ?: 1;
+$use_mono        = get_field($pfx . 'use_mono' );
+$mobile_compact  = get_field($pfx . 'comparison_mobile_compact_mode' );
+$anchor_id       = get_field($pfx . 'anchor_id' );
+$custom_class    = get_field($pfx . 'comparison_table_custom_class' );
 
 // 2. 数据预处理
 // 确定有效列（检查表头是否有内容）

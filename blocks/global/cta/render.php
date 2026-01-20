@@ -1,15 +1,49 @@
 <?php
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'cta' );
-$cta_title             = (string) ( get_field( 'cta_title' ) ?: '' );
-$cta_title_highlight   = (string) ( get_field( 'cta_title_highlight' ) ?: '' );
-$cta_description       = (string) ( get_field( 'cta_description' ) ?: '' );
-$cta_highlight_metric  = (string) ( get_field( 'cta_highlight_metric' ) ?: '' );
-$cta_image             = get_field( 'cta_image' );
-$cta_button_group      = get_field( 'cta_button_group' ) ?: array();
-$cta_secondary_button  = get_field( 'cta_secondary_button' ) ?: array();
-$layout_reverse        = (bool) get_field( 'layout_reverse' );
-$bg_color              = get_field( 'bg_color' );
+
+// Init variables
+$cta_title = '';
+$cta_title_highlight = '';
+$cta_description = '';
+$cta_highlight_metric = '';
+$cta_image = null;
+$cta_button_group = array();
+$cta_secondary_button = array();
+$layout_reverse = false;
+$bg_color = '';
+
+if ( empty( $pfx ) ) {
+    // Global Settings Mode
+    $global_data = get_field('global_cta', 'option');
+    if ( $global_data ) {
+        $cta_title = isset($global_data['cta_title']) ? (string)$global_data['cta_title'] : '';
+        $cta_title_highlight = isset($global_data['cta_title_highlight']) ? (string)$global_data['cta_title_highlight'] : '';
+        $cta_description = isset($global_data['cta_description']) ? (string)$global_data['cta_description'] : '';
+        $cta_highlight_metric = isset($global_data['cta_highlight_metric']) ? (string)$global_data['cta_highlight_metric'] : '';
+        $cta_image = isset($global_data['cta_image']) ? $global_data['cta_image'] : null;
+        
+        $cta_button_group = isset($global_data['cta_button_group']) ? $global_data['cta_button_group'] : array();
+        $cta_secondary_button = isset($global_data['cta_secondary_button']) ? $global_data['cta_secondary_button'] : array();
+        
+        $layout_reverse = isset($global_data['layout_reverse']) ? (bool)$global_data['layout_reverse'] : false;
+        $bg_color = isset($global_data['bg_color']) ? $global_data['bg_color'] : '';
+    }
+} else {
+    // Local/Page Builder Mode
+    $cta_title             = (string) ( get_field($pfx . 'cta_title' ) ?: '' );
+    $cta_title_highlight   = (string) ( get_field($pfx . 'cta_title_highlight' ) ?: '' );
+    $cta_description       = (string) ( get_field($pfx . 'cta_description' ) ?: '' );
+    $cta_highlight_metric  = (string) ( get_field($pfx . 'cta_highlight_metric' ) ?: '' );
+    $cta_image             = get_field($pfx . 'cta_image' );
+    $cta_button_group      = get_field($pfx . 'cta_button_group' ) ?: array();
+    $cta_secondary_button  = get_field($pfx . 'cta_secondary_button' ) ?: array();
+    $layout_reverse        = (bool) get_field($pfx . 'layout_reverse' );
+    $bg_color              = get_field($pfx . 'bg_color' );
+}
 
 $primary_text   = isset( $cta_button_group['button_text'] ) ? (string) $cta_button_group['button_text'] : '';
 $primary_url    = isset( $cta_button_group['button_link'] ) ? (string) $cta_button_group['button_link'] : '';

@@ -9,7 +9,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 
     function _3dp_related_blog_fields() {
         acf_add_local_field_group( array(
-            'key'                   => 'group_66e3b0c0f0c8b0b',
+            'key'                   => 'group_related_blog',
             'title'                 => 'Related Blog Block',
             'fields'                => array(
                 array(
@@ -247,7 +247,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key'           => 'field_related_blog_mobile_compact',
                     'label'         => 'Mobile Compact Mode',
-                    'name'          => 'mobile_compact_mode',
+                    'name'          => 'blog_mobile_compact',
                     'type'          => 'true_false',
                     'instructions'  => '在手机端使用更紧凑的卡片间距与排版',
                     'required'      => 0,

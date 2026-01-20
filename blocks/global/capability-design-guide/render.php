@@ -1,22 +1,25 @@
 <?php
 
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'capability-design-guide' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 
-$section_title = get_field( 'capability_design_guide_title' );
+$section_title = get_field($pfx . 'capability_design_guide_title' );
 
-$core_specs = get_field( 'capability_design_guide_core_specs' ) ?: array();
-$tech_list  = get_field( 'capability_design_guide_tech_list' ) ?: array();
-$advice     = get_field( 'capability_design_guide_advice_group' ) ?: array();
+$core_specs = get_field($pfx . 'capability_design_guide_core_specs' ) ?: array();
+$tech_list  = get_field($pfx . 'capability_design_guide_tech_list' ) ?: array();
+$advice     = get_field($pfx . 'capability_design_guide_advice_group' ) ?: array();
 
 if ( ! $section_title && ! $core_specs && ! $tech_list && ! $advice ) {
     return;
 }
 
-$mb_mode        = get_field( 'capability_design_guide_mb_mode' ) ?: 'grid';
-$hide_advice_mb = (bool) get_field( 'capability_design_guide_hide_advice_mb' );
+$mb_mode        = get_field($pfx . 'capability_design_guide_mb_mode' ) ?: 'grid';
+$hide_advice_mb = (bool) get_field($pfx . 'capability_design_guide_hide_advice_mb' );
 
 $grid_cols_class = 'grid-cols-2 lg:grid-cols-4';
 

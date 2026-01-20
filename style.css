@@ -9,7 +9,7 @@
 */
 
 
-* --- Fluent Forms Custom Styling --- */
+/* --- Fluent Forms Custom Styling --- */
 
 /* 1. 基础输入框样式 (Global Input Styles) */
 .fluentform .ff-el-form-control {
@@ -146,4 +146,59 @@
 .mono-stat {
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.05em;
+}
+
+
+/* --- Header Styles (Custom Overrides) --- */
+
+/* Alpine.js Cloak */
+[x-cloak] { display: none !important; }
+
+/* Force remove underlines from all links in the header to override theme defaults */
+header a {
+    text-decoration: none !important;
+}
+
+/* Explicitly remove list styles for header dropdowns */
+header ul {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+header li {
+    list-style-type: none !important;
+}
+
+/* Header Material Column Title Border */
+header .border-b,
+.material-column-heading {
+    border-bottom-width: 1px !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: #E4E7EC !important; /* Explicitly set color */
+}
+
+/* Global Link Reset (Override Theme Defaults) */
+a {
+    text-decoration: none !important;
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+/* Nav Link Hover Effect (from design-preview/header.html) */
+.nav-link-hover::after {
+    content: ''; 
+    position: absolute; 
+    bottom: -2px; 
+    left: 0; 
+    width: 0;
+    height: 2px; 
+    background: #0047AB; 
+    transition: width 0.2s ease;
+}
+
+.nav-link-hover:hover::after { 
+    width: 100%; 
 }

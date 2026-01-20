@@ -31,6 +31,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Section Title',
                     'name' => 'title',
                     'type' => 'text',
+                    'required' => 0,
                     'placeholder' => '例如：SLS Applications Across Industries',
                     'wrapper' => array('width' => '50'),
                 ),

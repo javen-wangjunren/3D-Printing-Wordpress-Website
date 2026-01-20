@@ -29,7 +29,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_about_hero_clone',
                     'label' => 'Hero Banner',
-                    'name' => '',
+                    'name' => 'about_hero',
                     'type' => 'clone',
                     'clone' => array(
                         'field_hero_title',
@@ -50,7 +50,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'display' => 'group',
                     'layout' => 'block',
                     'prefix_label' => 0,
-                    'prefix_name' => 0,
+                    'prefix_name' => 1,
                 ),
 
                 // ======================================================
@@ -67,7 +67,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_about_mission_clone',
                     'label' => 'Mission & Vision',
-                    'name' => '',
+                    'name' => 'about_mission',
                     'type' => 'clone',
                     'clone' => array(
                         'field_mission_header_group',
@@ -79,14 +79,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'display' => 'group',
                     'layout' => 'block',
                     'prefix_label' => 0,
-                    'prefix_name' => 0,
+                    'prefix_name' => 1,
                 ),
 
                 // Module: Timeline
                 array(
                     'key' => 'field_about_timeline_clone',
                     'label' => 'Timeline & History',
-                    'name' => '',
+                    'name' => 'about_timeline',
                     'type' => 'clone',
                     'clone' => array(
                         'field_timeline_header_group',
@@ -97,14 +97,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'display' => 'group',
                     'layout' => 'block',
                     'prefix_label' => 0,
-                    'prefix_name' => 0,
+                    'prefix_name' => 1,
                 ),
 
                 // Module: Team
                 array(
                     'key' => 'field_about_team_clone',
                     'label' => 'Leadership Team',
-                    'name' => '',
+                    'name' => 'about_team',
                     'type' => 'clone',
                     'clone' => array(
                         'field_team_header',
@@ -116,7 +116,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'display' => 'group',
                     'layout' => 'block',
                     'prefix_label' => 0,
-                    'prefix_name' => 0,
+                    'prefix_name' => 1,
                 ),
 
                 // ======================================================
@@ -131,7 +131,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_about_factory_clone',
                     'label' => 'Factory Image Grid',
-                    'name' => '',
+                    'name' => 'about_factory',
                     'type' => 'clone',
                     'clone' => array(
                         'field_factory_image_header',
@@ -144,7 +144,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'display' => 'group',
                     'layout' => 'block',
                     'prefix_label' => 0,
-                    'prefix_name' => 0,
+                    'prefix_name' => 1,
                 ),
             ),
             'location' => array(

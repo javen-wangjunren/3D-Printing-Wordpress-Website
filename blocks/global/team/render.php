@@ -7,13 +7,16 @@
  * Note: This template is used by including it in page-about.php or via get_template_part().
  * It relies on ACF fields being available for the current post.
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // Retrieve fields
-$header     = get_field('team_header');
-$members    = get_field('team_members');
-$bg_style   = get_field('background_style');
-$section_id = get_field('section_id');
-$mobile_hide = get_field('mobile_hide_content');
+$header     = get_field($pfx . 'team_header');
+$members    = get_field($pfx . 'team_members');
+$bg_style   = get_field($pfx . 'background_style');
+$section_id = get_field($pfx . 'section_id');
+$mobile_hide = get_field($pfx . 'mobile_hide_content');
 
 // Defaults
 $title     = $header['title'] ?? 'Leadership';

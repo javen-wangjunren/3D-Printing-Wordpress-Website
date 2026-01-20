@@ -186,7 +186,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_cl_bg_color',
                     'label' => 'Background Color',
-                    'name' => 'bg_color',
+                    'name' => 'cl_bg_color',
                     'type' => 'color_picker',
                     'default_value' => '#ffffff',
                     'instructions' => '模块的背景颜色',
@@ -195,7 +195,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_cl_text_color',
                     'label' => 'Text Color',
-                    'name' => 'text_color',
+                    'name' => 'cl_text_color',
                     'type' => 'color_picker',
                     'default_value' => '#667085',
                     'instructions' => '模块的文本颜色',
@@ -204,7 +204,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_cl_accent_color',
                     'label' => 'Accent Color',
-                    'name' => 'accent_color',
+                    'name' => 'cl_accent_color',
                     'type' => 'color_picker',
                     'default_value' => '#0047AB',
                     'instructions' => '模块的强调色（按钮、激活标签）',
@@ -222,7 +222,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key' => 'field_cl_anchor',
                     'label' => 'Block ID (Anchor)',
-                    'name' => 'anchor_id',
+                    'name' => 'cl_anchor_id',
                     'type' => 'text',
                     'instructions' => '用于锚点定位，如：#manufacturing-capabilities',
                     'wrapper' => array('width' => '50'),

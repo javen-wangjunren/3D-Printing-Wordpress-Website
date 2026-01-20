@@ -3,14 +3,17 @@
  * Block: Factory Image (Factory Tour)
  * Description: Frontend render template for the Industrial Factory Image Grid module.
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // 1. Get Fields
-$header_group   = get_field('header_group');
-$items          = get_field('gallery_items');
-$bg_style       = get_field('background_style') ?: 'industrial';
-$mobile_opts    = get_field('mobile_options') ?: array();
-$block_id       = get_field('block_id') ?: 'factory-image-' . $block['id'];
-$custom_class   = get_field('custom_class') ?: '';
+$header_group   = get_field($pfx . 'header_group');
+$items          = get_field($pfx . 'gallery_items');
+$bg_style       = get_field($pfx . 'background_style') ?: 'industrial';
+$mobile_opts    = get_field($pfx . 'mobile_options') ?: array();
+$block_id       = get_field($pfx . 'block_id') ?: 'factory-image-' . $block['id'];
+$custom_class   = get_field($pfx . 'custom_class') ?: '';
 
 // 2. Process Header Data
 $title          = isset($header_group['title']) ? $header_group['title'] : '';

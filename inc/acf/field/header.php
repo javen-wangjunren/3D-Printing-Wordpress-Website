@@ -152,6 +152,13 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 								),
 							),
 						),
+						array(
+							'key'     => 'field_header_material_view_all_link',
+							'label'   => 'View All Link',
+							'name'    => 'view_all_link',
+							'type'    => 'link',
+							'instructions' => 'Optional "View All" link at the bottom of the list',
+						),
 					),
 				),
 				array(

@@ -5,12 +5,15 @@
  * Path: blocks/global/mission/render.php
  * Description: Renders the Mission & Vision section with split-card layout.
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // 1. Data Retrieval
-$header         = get_field('mission_header');
-$bg_style       = get_field('background_style');
-$mobile_hide    = get_field('mobile_hide_content');
-$anchor_id      = get_field('anchor_id');
+$header         = get_field($pfx . 'mission_header');
+$bg_style       = get_field($pfx . 'background_style');
+$mobile_hide    = get_field($pfx . 'mobile_hide_content');
+$anchor_id      = get_field($pfx . 'anchor_id');
 
 // 2. Class Logic
 $section_classes = 'py-[96px] border-y border-border relative';

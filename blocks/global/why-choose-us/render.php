@@ -1,17 +1,58 @@
 <?php
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
-$header_title       = (string) ( get_field( 'wcu_header_title' ) ?: '' );
-$header_description = (string) ( get_field( 'wcu_header_description' ) ?: '' );
-$slides             = get_field( 'wcu_slides' ) ?: array();
-$fallback_image_id  = (int) ( get_field( 'why_choose_us_left_image' ) ?: 0 );
-$reasons            = get_field( 'why_choose_us_reasons' ) ?: array();
-$cta_link           = get_field( 'wcu_cta_link' ) ?: array();
-$layout_style       = (string) ( get_field( 'why_choose_us_layout_style' ) ?: 'image-left' );
-$spacing            = (string) ( get_field( 'why_choose_us_spacing' ) ?: 'medium' );
-$auto_rotate        = (bool) ( get_field( 'wcu_auto_rotate' ) !== false );
-$rotate_interval    = (int) ( get_field( 'wcu_rotate_interval' ) ?: 5000 );
+
+// Initialize variables with defaults
+$header_title = '';
+$header_description = '';
+$slides = array();
+$fallback_image_id = 0;
+$reasons = array();
+$cta_link = array();
+$layout_style = 'image-left';
+$spacing = 'medium';
+$auto_rotate = true;
+$rotate_interval = 5000;
+$custom_class = '';
+
+if ( empty( $pfx ) ) {
+    // Global Settings Mode
+    $global_data = get_field('global_why_choose_us', 'option');
+    if ( $global_data ) {
+        $header_title = isset($global_data['wcu_header_title']) ? (string)$global_data['wcu_header_title'] : '';
+        $header_description = isset($global_data['wcu_header_description']) ? (string)$global_data['wcu_header_description'] : '';
+        
+        $slides = isset($global_data['wcu_slides']) ? $global_data['wcu_slides'] : array();
+        $fallback_image_id = isset($global_data['why_choose_us_left_image']) ? (int)$global_data['why_choose_us_left_image'] : 0;
+        $cta_link = isset($global_data['wcu_cta_link']) ? $global_data['wcu_cta_link'] : array();
+        
+        $layout_style = isset($global_data['why_choose_us_layout_style']) ? (string)$global_data['why_choose_us_layout_style'] : 'image-left';
+        $spacing = isset($global_data['why_choose_us_spacing']) ? (string)$global_data['why_choose_us_spacing'] : 'medium';
+        $auto_rotate = isset($global_data['wcu_auto_rotate']) ? (bool)$global_data['wcu_auto_rotate'] : true;
+        $rotate_interval = isset($global_data['wcu_rotate_interval']) ? (int)$global_data['wcu_rotate_interval'] : 5000;
+        $custom_class = isset($global_data['why_choose_us_custom_class']) ? (string)$global_data['why_choose_us_custom_class'] : '';
+        
+        // Map global features list to reasons format
+        $reasons = isset($global_data['why_choose_us_reasons']) ? $global_data['why_choose_us_reasons'] : array();
+    }
+} else {
+    // Local/Page Builder Mode
+    $header_title       = (string) ( get_field($pfx . 'wcu_header_title' ) ?: '' );
+    $header_description = (string) ( get_field($pfx . 'wcu_header_description' ) ?: '' );
+    $slides             = get_field($pfx . 'wcu_slides' ) ?: array();
+    $fallback_image_id  = (int) ( get_field($pfx . 'why_choose_us_left_image' ) ?: 0 );
+    $reasons            = get_field($pfx . 'why_choose_us_reasons' ) ?: array();
+    $cta_link           = get_field($pfx . 'wcu_cta_link' ) ?: array();
+    $layout_style       = (string) ( get_field($pfx . 'why_choose_us_layout_style' ) ?: 'image-left' );
+    $spacing            = (string) ( get_field($pfx . 'why_choose_us_spacing' ) ?: 'medium' );
+    $auto_rotate        = (bool) ( get_field($pfx . 'wcu_auto_rotate' ) !== false );
+    $rotate_interval    = (int) ( get_field($pfx . 'wcu_rotate_interval' ) ?: 5000 );
+    $custom_class       = (string) ( get_field($pfx . 'why_choose_us_custom_class' ) ?: '' );
+}
+
 $block_id           = _3dp_get_safe_block_id( $block, 'why-choose-us' );
-$custom_class       = (string) ( get_field( 'why_choose_us_custom_class' ) ?: '' );
 
 if ( empty( $reasons ) ) {
     return;

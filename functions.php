@@ -95,15 +95,16 @@ add_action( 'wp_enqueue_scripts', function () {
  * ==================================================
  */
 
-add_filter( 'acf/settings/save_json', function () {
-    return TDP_THEME_DIR . '/acf-json';
-} );
+// add_filter( 'acf/settings/save_json', function () {
+//     return TDP_THEME_DIR . '/acf-json';
+// } );
 
-add_filter( 'acf/settings/load_json', function ( $paths ) {
-    unset( $paths[0] );
-    $paths[] = TDP_THEME_DIR . '/acf-json';
-    return $paths;
-} );
+// add_filter( 'acf/settings/load_json', function ( $paths ) {
+//     unset( $paths[0] );
+//     $paths[] = TDP_THEME_DIR . '/acf-json';
+//     return $paths;
+// } );
+
 
 /**
  * ==================================================
@@ -118,3 +119,22 @@ add_filter( 'acf/settings/load_json', function ( $paths ) {
  *
  * ✅ 所有功能请放入 inc/ 中对应文件
  */
+
+/** 
+ * 允许 WordPress 上传 SVG 文件 
+ */ 
+// 1. 添加 SVG 到允许上传的文件类型列表 
+add_filter( 'upload_mimes', function( $mimes ) { 
+    $mimes['svg'] = 'image/svg+xml'; 
+    return $mimes; 
+} ); 
+
+// 2. 修正 WordPress 对文件类型检查的逻辑（确保不因扩展名冲突被拦截） 
+add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mimes ) { 
+    $filetype = wp_check_filetype( $filename, $mimes ); 
+    return [ 
+        'ext'             => $filetype['ext'], 
+        'type'            => $filetype['type'], 
+        'proper_filename' => $data['proper_filename'] 
+    ]; 
+}, 10, 4 );

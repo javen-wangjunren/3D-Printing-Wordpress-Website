@@ -23,22 +23,22 @@ get_header();
             /**
              * 1. Hero Banner
              */
-            _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview' ) );
+            _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview', 'prefix' => 'mat_hero_' ) );
 
             /**
              * 2. Manufacturing Showcase
              */
-            _3dp_render_block( 'blocks/global/manufacturing-showcase/render', array( 'id' => 'gallery' ) );
+            _3dp_render_block( 'blocks/global/manufacturing-showcase/render', array( 'id' => 'gallery', 'prefix' => 'mat_showcase_' ) );
 
             /**
              * 3. Technical Specs
              */
-            _3dp_render_block( 'blocks/global/technical-specs/render', array( 'id' => 'specifications' ) );
+            _3dp_render_block( 'blocks/global/technical-specs/render', array( 'id' => 'specifications', 'prefix' => 'mat_tech_specs_' ) );
 
             /**
              * 4. Manufacturing Capabilities
              */
-            _3dp_render_block( 'blocks/global/manufacturing-capabilities/render', array( 'id' => 'capabilities' ) );
+            _3dp_render_block( 'blocks/global/manufacturing-capabilities/render', array( 'id' => 'capabilities', 'prefix' => 'mat_capabilities_' ) );
 
             /**
              * 5. CTA (Global)
@@ -48,7 +48,7 @@ get_header();
             /**
              * 6. Related Blog
              */
-            _3dp_render_block( 'blocks/global/related-blog/render', array( 'id' => 'related-stories' ) );
+            _3dp_render_block( 'blocks/global/related-blog/render', array( 'id' => 'related-stories', 'prefix' => 'mat_related_blog_' ) );
             ?>
 
         </article>

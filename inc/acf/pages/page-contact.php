@@ -26,7 +26,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             'active'                => true,
             'fields'                => array(
                 // ======================================================
-                // TAB 1-3: HERO BANNER (Cloned)
+                // TAB 1: HERO BANNER (Cloned)
                 // ======================================================
                 // The Hero Banner group already contains 3 tabs: Content, Design, Settings.
                 // We clone it seamlessly so these tabs appear directly.
@@ -38,10 +38,10 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'clone'         => array(
                         0 => 'group_hero_banner',
                     ),
-                    'display'       => 'seamless',
+                    'display'       => 'group', // Use group display to nest tabs
                     'layout'        => 'block',
                     'prefix_label'  => 0,
-                    'prefix_name'   => 0, // Keep original field names (hero_title, etc.)
+                    'prefix_name'   => 1, // Use prefix to avoid conflicts
                 ),
 
                 // ======================================================

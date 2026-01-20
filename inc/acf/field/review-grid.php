@@ -168,7 +168,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 array(
                     'key'           => 'field_mobile_compact',
                     'label'         => 'Mobile Compact Mode',
-                    'name'          => 'mobile_compact_mode',
+                    'name'          => 'review_mobile_compact',
                     'type'          => 'true_false',
                     'wrapper'       => array( 'width' => '50' ),
                     'message'       => '启用移动端紧凑模式',

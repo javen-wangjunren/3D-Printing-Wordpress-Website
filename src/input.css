@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  a {
+    /* 彻底取消全局链接下划线 */
+    text-decoration: none !important;
+  }
+  
+  /* 如果你希望鼠标悬停时也不要有下划线 */
+  a:hover {
+    text-decoration: none !important;
+  }
+}

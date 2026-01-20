@@ -4,26 +4,58 @@
  *
  * 使用区块自身的 ACF 字段渲染对称订单流程，适配桌面端网格和移动端垂直流程。
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 $block = isset( $block ) ? $block : array();
 
 $block_id = _3dp_get_safe_block_id( $block, 'order-process' );
-$custom_class = (string) get_field( 'order_process_custom_class' ) ?: '';
-$bg_style     = (string) get_field( 'order_process_bg_style' ) ?: 'bg-white';
 
-$title        = (string) get_field( 'order_process_title' ) ?: '';
-$description  = (string) get_field( 'order_process_description' ) ?: '';
+// Init variables
+$custom_class = '';
+$bg_style = 'bg-white';
+$title = '';
+$description = '';
+$steps = array();
+$cta_group = array();
+$active_step = 1;
 
-$steps        = get_field( 'order_process_steps' );
-$steps        = is_array( $steps ) ? $steps : array();
-
-$cta_group    = get_field( 'order_process_cta' );
-$cta_group    = is_array( $cta_group ) ? $cta_group : array();
+if ( empty( $pfx ) ) {
+    // Global Settings Mode
+    $global_data = get_field('global_order_process', 'option');
+    if ( $global_data ) {
+        $title = isset($global_data['order_process_title']) ? (string)$global_data['order_process_title'] : '';
+        $description = isset($global_data['order_process_description']) ? (string)$global_data['order_process_description'] : '';
+        $steps = isset($global_data['order_process_steps']) ? $global_data['order_process_steps'] : array();
+        
+        $cta_group = isset($global_data['order_process_cta']) ? $global_data['order_process_cta'] : array();
+        
+        $bg_style = isset($global_data['order_process_bg_style']) ? (string)$global_data['order_process_bg_style'] : 'bg-white';
+        $active_step = isset($global_data['order_process_active_step']) ? (int)$global_data['order_process_active_step'] : 1;
+        $anchor_id = isset($global_data['order_process_anchor_id']) ? (string)$global_data['order_process_anchor_id'] : '';
+        $custom_class = isset($global_data['order_process_custom_class']) ? (string)$global_data['order_process_custom_class'] : '';
+    }
+} else {
+    // Local/Page Builder Mode
+    $custom_class = (string) get_field($pfx . 'order_process_custom_class' ) ?: '';
+    $bg_style     = (string) get_field($pfx . 'order_process_bg_style' ) ?: 'bg-white';
+    
+    $title        = (string) get_field($pfx . 'order_process_title' ) ?: '';
+    $description  = (string) get_field($pfx . 'order_process_description' ) ?: '';
+    
+    $steps        = get_field($pfx . 'order_process_steps' );
+    $steps        = is_array( $steps ) ? $steps : array();
+    
+    $cta_group    = get_field($pfx . 'order_process_cta' );
+    $cta_group    = is_array( $cta_group ) ? $cta_group : array();
+    
+    $active_step  = (int) get_field($pfx . 'order_process_active_step' );
+}
 
 $cta_text     = isset( $cta_group['text'] ) ? (string) $cta_group['text'] : '';
 $cta_link     = isset( $cta_group['link'] ) && is_array( $cta_group['link'] ) ? $cta_group['link'] : array();
 
-$active_step  = (int) get_field( 'order_process_active_step' );
 if ( $active_step < 1 ) {
 	$active_step = 1;
 }

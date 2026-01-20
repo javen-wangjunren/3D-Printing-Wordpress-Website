@@ -8,15 +8,18 @@
  * - 工艺参数：font-mono 强调工业数据感，边界使用 border-border、primary/20
  * - 卡片与按钮：rounded-card / rounded-button，对应 12px / 8px 圆角规范
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'capability-list' );
-$section_title       = (string) ( get_field( 'section_title' ) ?: 'Manufacturing Capabilities' );
-$section_description = (string) ( get_field( 'section_description' ) ?: 'Six industrial technologies optimized for prototyping and scalable production.' );
-$capabilities        = get_field( 'capabilities' ) ?: array();
-$bg_color            = (string) ( get_field( 'bg_color' ) ?: '#ffffff' );
-$accent_color        = (string) ( get_field( 'accent_color' ) ?: '#0047AB' );
-$anchor_raw          = (string) ( get_field( 'anchor_id' ) ?: '' );
+$section_title       = (string) ( get_field($pfx . 'section_title' ) ?: 'Manufacturing Capabilities' );
+$section_description = (string) ( get_field($pfx . 'section_description' ) ?: 'Six industrial technologies optimized for prototyping and scalable production.' );
+$capabilities        = get_field($pfx . 'capabilities' ) ?: array();
+$bg_color            = (string) ( get_field($pfx . 'cl_bg_color' ) ?: '#ffffff' );
+$accent_color        = (string) ( get_field($pfx . 'cl_accent_color' ) ?: '#0047AB' );
+$anchor_raw          = (string) ( get_field($pfx . 'cl_anchor_id' ) ?: '' );
 
 if ( empty( $capabilities ) ) {
     return;

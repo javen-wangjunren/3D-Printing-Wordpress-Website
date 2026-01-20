@@ -4,6 +4,9 @@
  * 推荐文件路径：blocks/global/material-comparison/render.php
  * 该文件由ACF自动调用，用于渲染Material Comparison模块
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // 获取块数据
 $block = isset( $block ) ? $block : (isset($args['block']) ? $args['block'] : array());
@@ -12,16 +15,16 @@ $block_class = $block['className'] ?? '';
 $anchor = $block['anchor'] ?? '';
 
 // 获取字段数据
-$title = get_field('material_comparison_title') ?? '';
-$intro = get_field('material_comparison_intro') ?? '';
-$tabs = get_field('material_comparison_tabs') ?? [];
-$materials = get_field('material_comparison_materials') ?? [];
-$property_table = get_field('material_comparison_property_table') ?? [];
+$title = get_field($pfx . 'material_comparison_title') ?? '';
+$intro = get_field($pfx . 'material_comparison_intro') ?? '';
+$tabs = get_field($pfx . 'material_comparison_tabs') ?? [];
+$materials = get_field($pfx . 'material_comparison_materials') ?? [];
+$property_table = get_field($pfx . 'material_comparison_property_table') ?? [];
 
 // 获取设计和设置选项
-$mobile_layout = get_field('material_comparison_mobile_layout') ?? 'list';
-$hide_table_mobile = get_field('material_comparison_hide_table_mobile') ?? false;
-$table_scrollable = get_field('material_comparison_table_scrollable') ?? true;
+$mobile_layout = get_field($pfx . 'material_comparison_mobile_layout') ?? 'list';
+$hide_table_mobile = get_field($pfx . 'material_comparison_hide_table_mobile') ?? false;
+$table_scrollable = get_field($pfx . 'material_comparison_table_scrollable') ?? true;
 
 // 构建CSS类
 $classes = [

@@ -74,21 +74,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<nav class="hidden items-center gap-10 lg:flex">
 					<!-- Capabilities Dropdown -->
 					<div class="relative group" @mouseenter="openMenu = 'capabilities'">
-						<button type="button" class="nav-link-hover relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary">
+						<button type="button" class="bg-transparent border-none relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary" :class="{ 'text-primary': openMenu === 'capabilities' }">
 							<span>Capabilities</span>
 							<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'capabilities' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 								<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 							</svg>
+							<span class="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200" :class="openMenu === 'capabilities' ? 'w-full' : 'w-0'"></span>
 						</button>
 					</div>
 
 					<!-- Materials Dropdown -->
 					<div class="relative group" @mouseenter="openMenu = 'materials'">
-						<button type="button" class="nav-link-hover relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary">
+						<button type="button" class="bg-transparent border-none relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary" :class="{ 'text-primary': openMenu === 'materials' }">
 							<span>Materials</span>
 							<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'materials' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 								<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 							</svg>
+							<span class="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200" :class="openMenu === 'materials' ? 'w-full' : 'w-0'"></span>
 						</button>
 					</div>
 
@@ -97,11 +99,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<!-- Company Dropdown -->
 					<div class="relative group" @mouseenter="openMenu = 'company'">
-						<button type="button" class="nav-link-hover relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary">
+						<button type="button" class="bg-transparent border-none relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary" :class="{ 'text-primary': openMenu === 'company' }">
 							<span>Company</span>
 							<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'company' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 								<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 							</svg>
+							<span class="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200" :class="openMenu === 'company' ? 'w-full' : 'w-0'"></span>
 						</button>
 					</div>
 				</nav>
@@ -124,7 +127,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 
 				<!-- Mobile Toggle -->
-				<button type="button" class="lg:hidden" @click="mobileOpen = ! mobileOpen" aria-label="Toggle navigation">
+				<button type="button" class="lg:hidden bg-transparent border-none p-0 focus:outline-none" @click="mobileOpen = ! mobileOpen" aria-label="Toggle navigation">
 					<svg class="h-6 w-6 text-heading" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 						<path x-show="!mobileOpen" d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 						<path x-show="mobileOpen" x-cloak d="M6 18L18 6M6 6l12 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -254,7 +257,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php endif; ?>
 								</div>
 								<?php if ( $subtitle ) : ?>
-									<span class="text-xs text-body/80 group-hover:text-body transition-colors"><?php echo esc_html( $subtitle ); ?></span>
+									<span class="text-xs text-body/80 group-hover:text-body/100 transition-colors"><?php echo esc_html( $subtitle ); ?></span>
 								<?php endif; ?>
 							</a>
 						<?php endforeach; ?>
@@ -284,10 +287,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 							<div>
 								<?php if ( $column_title ) : ?>
-									<h3 class="mb-4 text-[11px] font-semibold tracking-[-0.01em] text-muted border-b border-gray-100 pb-2"><?php echo esc_html( $column_title ); ?></h3>
+									<h3 class="material-column-heading mb-4 text-[11px] font-semibold tracking-[-0.01em] text-muted border-b border-border pb-2"><?php echo esc_html( $column_title ); ?></h3>
 								<?php endif; ?>
 								<?php if ( ! empty( $links ) && is_array( $links ) ) : ?>
-									<ul class="space-y-2">
+									<ul class="space-y-2 list-none m-0 p-0">
 										<?php foreach ( $links as $link_item ) : ?>
 											<?php
 												$label = isset( $link_item['label'] ) ? $link_item['label'] : '';
@@ -302,6 +305,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 											</li>
 										<?php endforeach; ?>
 									</ul>
+								<?php endif; ?>
+								<?php
+									$view_all = isset( $column['view_all_link'] ) ? $column['view_all_link'] : null;
+									if ( is_array( $view_all ) && ! empty( $view_all['url'] ) ) :
+								?>
+									<a href="<?php echo esc_url( $view_all['url'] ); ?>" class="block mt-2 py-1 text-sm font-bold text-primary hover:translate-x-1 transition-transform duration-200">
+										<?php echo esc_html( $view_all['title'] ); ?> →
+									</a>
 								<?php endif; ?>
 							</div>
 						<?php endforeach; ?>
@@ -332,8 +343,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 						?>
 						<a href="<?php echo $link_url; ?>" class="group flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
 							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition">
-								<!-- 这里的 Icon 暂时使用通用图标，如果需要不同图标，建议增加 Icon 字段 -->
-								<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+								<?php if ( stripos( $title, 'Contact' ) !== false ) : ?>
+									<!-- Envelope Icon for Contact Us -->
+									<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+								<?php else : ?>
+									<!-- Info Icon for About Us / Others -->
+									<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+								<?php endif; ?>
 							</div>
 							<div>
 								<span class="block text-sm font-bold text-heading"><?php echo esc_html( $title ); ?></span>

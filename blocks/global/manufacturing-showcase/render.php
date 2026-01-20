@@ -1,14 +1,17 @@
 <?php
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'manufacturing-showcase' );
-$custom_class = (string) get_field('manufacturing_showcase_css_class') ?: '';
-$title       = (string) get_field('manufacturing_showcase_title') ?: '';
-$subtitle    = (string) get_field('manufacturing_showcase_subtitle') ?: '';
-$layout_mode = (string) get_field('manufacturing_showcase_layout_mode') ?: 'slider';
-$items_per   = (int) get_field('manufacturing_showcase_items_per_view');
+$custom_class = (string) get_field($pfx . 'manufacturing_showcase_css_class') ?: '';
+$title       = (string) get_field($pfx . 'manufacturing_showcase_title') ?: '';
+$subtitle    = (string) get_field($pfx . 'manufacturing_showcase_subtitle') ?: '';
+$layout_mode = (string) get_field($pfx . 'manufacturing_showcase_layout_mode') ?: 'slider';
+$items_per   = (int) get_field($pfx . 'manufacturing_showcase_items_per_view');
 if ( ! $items_per ) { $items_per = 3; }
-$show_nav    = (bool) get_field('manufacturing_showcase_show_nav');
-$compact     = (bool) get_field('manufacturing_showcase_mobile_compact_mode');
+$show_nav    = (bool) get_field($pfx . 'manufacturing_showcase_show_nav');
+$compact     = (bool) get_field($pfx . 'manufacturing_showcase_mobile_compact_mode');
 
 $lg_card_w = $items_per === 2 ? 'lg:w-[calc(50%-16px)]' : ( $items_per === 4 ? 'lg:w-[calc(25%-16px)]' : 'lg:w-[calc(33.333%-16px)]' );
 $mb_card_w = $compact ? 'w-[85%]' : 'w-full';

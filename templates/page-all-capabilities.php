@@ -15,19 +15,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 // Hero Banner
-_3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview' ) );
+_3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview', 'prefix' => 'all_caps_hero_' ) );
 
 // Capability List
-_3dp_render_block( 'blocks/global/capability-list/render', array( 'id' => 'list' ) );
+_3dp_render_block( 'blocks/global/capability-list/render', array( 'id' => 'list', 'prefix' => 'allcaps_capability_list_' ) );
 
 // Comparison Table
-_3dp_render_block( 'blocks/global/comparison-table/render', array( 'id' => 'comparison' ) );
+_3dp_render_block( 'blocks/global/comparison-table/render', array( 'id' => 'comparison', 'prefix' => 'allcaps_comparison_' ) );
 
 // Material List
-_3dp_render_block( 'blocks/global/material-list/render', array( 'id' => 'materials' ) );
+_3dp_render_block( 'blocks/global/material-list/render', array( 'id' => 'materials', 'prefix' => 'allcaps_material_list_' ) );
 
 // Surface Finish
-_3dp_render_block( 'blocks/global/surface-finish/render', array( 'id' => 'finishes' ) );
+_3dp_render_block( 'blocks/global/surface-finish/render', array( 'id' => 'finishes', 'prefix' => 'allcaps_surface_finish_' ) );
 
 // Why Choose Us (Global Options)
 if ( have_rows( 'why_choose_us', 'option' ) ) {
@@ -50,13 +50,9 @@ if ( have_rows( 'cta', 'option' ) ) {
 }
 
 // Related Blog (Current Page with manual selection)
-$related_blog_posts = get_field( 'related_blog_posts' );
-if ( $related_blog_posts && ! empty( $related_blog_posts ) ) {
-    // 显式传递数据给模块，不再使用 set_query_var
-    _3dp_render_block( 'blocks/global/related-blog/render', array( 
-        'id'                 => 'related-stories',
-        'related_blog_posts' => $related_blog_posts 
-    ) );
-}
+_3dp_render_block( 'blocks/global/related-blog/render', array( 
+    'id'     => 'related-stories',
+    'prefix' => 'allcaps_related_blog_' 
+) );
 
 get_footer();

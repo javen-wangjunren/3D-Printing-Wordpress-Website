@@ -4,6 +4,9 @@
  * 
  * @package GeneratePress Child
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -12,19 +15,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 // 1. 获取 ACF 字段数据
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'manufacturing-capabilities' );
-$section_title  = get_field( 'manufacturing_capabilities_title' );
+$section_title  = get_field($pfx . 'manufacturing_capabilities_title' );
 $section_title  = $section_title ? $section_title : 'Manufacturing Capabilities';
-$section_intro  = get_field( 'manufacturing_capabilities_intro' );
+$section_intro  = get_field($pfx . 'manufacturing_capabilities_intro' );
 
 // 获取 Tab 数据
-$tabs_raw = get_field( 'manufacturing_capabilities_tabs' );
+$tabs_raw = get_field($pfx . 'manufacturing_capabilities_tabs' );
 $tabs_raw = is_array( $tabs_raw ) ? $tabs_raw : array();
 
 // 配置开关 (保留用于后续扩展，目前主要依赖 CSS 类)
-$mobile_compact = (bool) get_field( 'manufacturing_capabilities_mobile_compact_mode' );
-$use_mono       = (bool) get_field( 'manufacturing_capabilities_use_mono_font' );
-$anchor_id      = get_field( 'manufacturing_capabilities_anchor_id' );
-$extra_class    = get_field( 'manufacturing_capabilities_css_class' );
+$mobile_compact = (bool) get_field($pfx . 'manufacturing_capabilities_mobile_compact_mode' );
+$use_mono       = (bool) get_field($pfx . 'manufacturing_capabilities_use_mono_font' );
+$anchor_id      = get_field($pfx . 'manufacturing_capabilities_anchor_id' );
+$extra_class    = get_field($pfx . 'manufacturing_capabilities_css_class' );
 
 // 2. Data cleaning and structuring
 $tabs = array();

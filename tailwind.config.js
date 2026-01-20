@@ -8,6 +8,7 @@ module.exports = {
     "./functions.php",
     "./*.php",
   ],
+  important: true,
   theme: {
     extend: {
       // Color System

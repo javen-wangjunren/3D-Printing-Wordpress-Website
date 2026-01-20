@@ -110,7 +110,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'why_choose_us_reasons',
                     'type' => 'repeater',
                     'instructions' => '添加选择我们的理由列表，每个理由包含标题和描述',
-                    'required' => 1,
+                    'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
                         'width' => '100',

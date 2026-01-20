@@ -36,7 +36,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'cta_title',
                     'type' => 'text',
                     'instructions' => '输入CTA模块的主标题（支持加粗或颜色高亮）',
-                    'required' => 1,
+                    'required' => 0,
                     'conditional_logic' => 0,
                     'wrapper' => array(
                         'width' => '100',

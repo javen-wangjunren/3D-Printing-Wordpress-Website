@@ -1,5 +1,10 @@
 <?php
-/* Template Name: Home */
+/**
+ * Front Page Template
+ *
+ * 作用：物理锁定首页渲染逻辑，无需后台手动指定模板。
+ * 对应源：templates/page-home.php (已固化到此文件)
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -22,4 +27,3 @@ get_header();
 
 <?php
 get_footer();
-

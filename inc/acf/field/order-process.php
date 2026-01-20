@@ -29,6 +29,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Section Title',
                     'name' => 'order_process_title',
                     'type' => 'text',
+                    'required' => 0,
                     'instructions' => '如：Prototypes and Parts Made Easy',
                 ),
                 array(

@@ -1,21 +1,24 @@
 <?php
 
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'material-list' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 
-$raw_processes = get_field( 'material_list_processes' ) ?: array();
+$raw_processes = get_field($pfx . 'material_list_processes' ) ?: array();
 
 if ( ! $raw_processes ) {
     return;
 }
 
-$display_single    = (bool) get_field( 'material_list_display_mode' );
-$mobile_layout     = get_field( 'material_list_mobile_layout' ) ?: 'accordion';
-$hide_image_mobile = (bool) get_field( 'material_list_hide_image_mobile' );
-$bg_style          = get_field( 'material_list_bg_style' ) ?: 'bg-page';
-$custom_class      = get_field( 'material_list_custom_class' ) ?: '';
+$display_single    = (bool) get_field($pfx . 'material_list_display_mode' );
+$mobile_layout     = get_field($pfx . 'material_list_mobile_layout' ) ?: 'accordion';
+$hide_image_mobile = (bool) get_field($pfx . 'material_list_hide_image_mobile' );
+$bg_style          = get_field($pfx . 'material_list_bg_style' ) ?: 'bg-page';
+$custom_class      = get_field($pfx . 'material_list_custom_class' ) ?: '';
 
 if ( $display_single && $raw_processes ) {
     $raw_processes = array_slice( $raw_processes, 0, 1 );

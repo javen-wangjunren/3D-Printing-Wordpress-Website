@@ -7,17 +7,20 @@
  * 2. Separate logic for 'Active' vs 'Past' milestones.
  * 3. Render Desktop (Horizontal) and Mobile (Vertical) layouts.
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
-$header = get_field('timeline_header');
+
+$header = get_field($pfx . 'timeline_header');
 $prefix = $header['prefix'] ?? 'Evolution and';
 $highlight = $header['highlight'] ?? 'Milestones';
 $desc = $header['description'] ?? '';
 
-$bg_style = get_field('background_style') ?: 'grid';
+$bg_style = get_field($pfx . 'background_style') ?: 'grid';
 $bg_class = ($bg_style === 'grid') ? 'industrial-grid-bg' : 'bg-white';
-$anchor = get_field('anchor_id') ? 'id="' . esc_attr(get_field('anchor_id')) . '"' : '';
+$anchor = get_field($pfx . 'anchor_id') ? 'id="' . esc_attr(get_field($pfx . 'anchor_id')) . '"' : '';
 
-$items = get_field('timeline_items'); // Get all items as array
+$items = get_field($pfx . 'timeline_items'); // Get all items as array
 ?>
 
 <section <?php echo $anchor; ?> class="py-16 lg:py-24 <?php echo esc_attr($bg_class); ?> border-y border-border overflow-hidden" x-data="{ 

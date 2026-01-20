@@ -7,6 +7,9 @@
  * @package 3D_Printing
  * @author Javen
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // 1. 获取 Block 核心数据
 $block       = isset( $block ) ? $block : array();
@@ -16,26 +19,26 @@ $is_preview  = isset($is_preview) && $is_preview;
 
 // 2. 获取 ACF 字段数据
 // Content
-$title       = get_field('hero_title') ?: 'Your Streamlined 3D Printing Service';
-$subtitle    = get_field('hero_subtitle') ?: 'Get Quality Parts at the Best Price';
-$description = get_field('hero_description');
-$buttons     = get_field('hero_buttons');
+$title       = isset($block['hero_title']) ? $block['hero_title'] : (get_field($pfx . 'hero_title') ?: 'Your Streamlined 3D Printing Service');
+$subtitle    = isset($block['hero_subtitle']) ? $block['hero_subtitle'] : (get_field($pfx . 'hero_subtitle') ?: 'Get Quality Parts at the Best Price');
+$description = isset($block['hero_description']) ? $block['hero_description'] : get_field($pfx . 'hero_description');
+$buttons     = isset($block['hero_buttons']) ? $block['hero_buttons'] : get_field($pfx . 'hero_buttons');
 
 // Design & Layout
-$layout          = get_field('hero_layout') ?: 'split'; // split | centered
-$mobile_compact  = get_field('hero_mobile_compact');
-$desktop_img_id  = get_field('hero_image');
-$mobile_img_id   = get_field('hero_mobile_image') ?: $desktop_img_id; // Fallback to desktop image
+$layout          = isset($block['hero_layout']) ? $block['hero_layout'] : (get_field($pfx . 'hero_layout') ?: 'split');
+$mobile_compact  = isset($block['hero_mobile_compact']) ? $block['hero_mobile_compact'] : get_field($pfx . 'hero_mobile_compact');
+$desktop_img_id  = isset($block['hero_image']) ? $block['hero_image'] : get_field($pfx . 'hero_image');
+$mobile_img_id   = isset($block['hero_mobile_image']) ? $block['hero_mobile_image'] : (get_field($pfx . 'hero_mobile_image') ?: $desktop_img_id);
 
 // Colors
-$bg_color    = get_field('hero_background_color') ?: '#ffffff';
-$text_color  = get_field('hero_text_color') ?: '#000000';
-$btn_p_color = get_field('hero_primary_button_color') ?: '#0073aa';
-$btn_s_color = get_field('hero_secondary_button_color') ?: '#ffffff';
+$bg_color    = isset($block['hero_background_color']) ? $block['hero_background_color'] : (get_field($pfx . 'hero_background_color') ?: '#ffffff');
+$text_color  = isset($block['hero_text_color']) ? $block['hero_text_color'] : (get_field($pfx . 'hero_text_color') ?: '#000000');
+$btn_p_color = isset($block['hero_primary_button_color']) ? $block['hero_primary_button_color'] : (get_field($pfx . 'hero_primary_button_color') ?: '#0073aa');
+$btn_s_color = isset($block['hero_secondary_button_color']) ? $block['hero_secondary_button_color'] : (get_field($pfx . 'hero_secondary_button_color') ?: '#ffffff');
 
 // Stats
-$show_stats = get_field('hero_show_stats');
-$stats      = get_field('hero_stats');
+$show_stats = isset($block['hero_show_stats']) ? $block['hero_show_stats'] : get_field($pfx . 'hero_show_stats');
+$stats      = isset($block['hero_stats']) ? $block['hero_stats'] : get_field($pfx . 'hero_stats');
 
 // 3. 预处理类名与样式
 // Base classes
@@ -101,7 +104,7 @@ if ($mobile_compact) {
             </div>
             <?php endif; ?>
 
-            <?php if ($buttons): ?>
+            <?php if (is_array($buttons) || is_object($buttons)): ?>
             <div class="flex flex-wrap justify-center gap-4">
                 <?php foreach ($buttons as $btn): 
                     $style = $btn['button_style'];
@@ -152,7 +155,7 @@ if ($mobile_compact) {
                     </div>
                     <?php endif; ?>
 
-                    <?php if ($buttons): ?>
+                    <?php if (is_array($buttons) || is_object($buttons)): ?>
                     <div class="flex flex-wrap gap-4">
                         <?php foreach ($buttons as $btn): 
                             $style = $btn['button_style'];
@@ -194,7 +197,7 @@ if ($mobile_compact) {
     // ==========================================
     // SHARED: STATS BAR
     // ==========================================
-    if ($show_stats && $stats): 
+    if ($show_stats && (is_array($stats) || is_object($stats))): 
         // 动态计算列数逻辑：
         // Desktop: 如果是 5 个数据就分 5 列，默认 4 个分 4 列。为了安全起见，我们使用 flex 布局自动分配，或者 grid。
         // 根据 Design Demo，使用 Flex wrap 且 justify-center，min-w-[140px]

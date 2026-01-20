@@ -1,24 +1,27 @@
 <?php
 
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'how-it-works' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 
-$section_title = get_field( 'title' ) ?: '';
-$section_desc  = get_field( 'desc' ) ?: '';
+$section_title = get_field($pfx . 'title' ) ?: '';
+$section_desc  = get_field($pfx . 'desc' ) ?: '';
 
-$steps_field = get_field( 'steps' );
+$steps_field = get_field($pfx . 'steps' );
 
 if ( ! $steps_field || ! is_array( $steps_field ) || ! count( $steps_field ) ) {
     return;
 }
 
-$mb_hide_tip = (bool) get_field( 'mb_hide_tip' );
-$mb_compact  = (bool) get_field( 'mb_compact_mode' );
+$mb_hide_tip = (bool) get_field($pfx . 'mb_hide_tip' );
+$mb_compact  = (bool) get_field($pfx . 'mb_compact_mode' );
 
-$cta_label = get_field( 'cta_label' );
-$cta_url   = get_field( 'cta_url' );
+$cta_label = get_field($pfx . 'cta_label' );
+$cta_url   = get_field($pfx . 'cta_url' );
 
 if ( ! $cta_label ) {
     $cta_label = 'Get Quote';

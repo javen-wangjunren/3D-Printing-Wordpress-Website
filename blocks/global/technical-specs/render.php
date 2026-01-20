@@ -7,17 +7,20 @@
  * @param   bool $is_preview True during AJAX preview.
  * @param   (int|string) $post_id The post ID this block is saved to.
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // 1. 获取基础数据
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'technical-specs' );
-$classes = get_field('technical_specs_css_class') ?: '';
-$material_label = get_field('technical_specs_material_label');
-$intro = get_field('technical_specs_intro');
-$tabs = get_field('technical_specs_tabs') ?: [];
-$use_mono = get_field('technical_specs_use_mono_font');
-$hide_table_mobile = get_field('technical_specs_hide_table_mobile');
-$table_scrollable = get_field('technical_specs_table_scrollable');
+$classes = get_field($pfx . 'technical_specs_css_class') ?: '';
+$material_label = get_field($pfx . 'technical_specs_material_label');
+$intro = get_field($pfx . 'technical_specs_intro');
+$tabs = get_field($pfx . 'technical_specs_tabs') ?: [];
+$use_mono = get_field($pfx . 'technical_specs_use_mono_font');
+$hide_table_mobile = get_field($pfx . 'technical_specs_hide_table_mobile');
+$table_scrollable = get_field($pfx . 'technical_specs_table_scrollable');
 
 // 2. 数据校验
 if (empty($tabs)) {

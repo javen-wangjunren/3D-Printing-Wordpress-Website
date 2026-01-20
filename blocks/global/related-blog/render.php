@@ -1,20 +1,23 @@
 <?php
-$title            = get_field( 'blog_title' ) ?: '';
-$title_highlight  = get_field( 'blog_title_highlight' ) ?: '';
-$subtitle         = get_field( 'blog_subtitle' );
-$posts_mode       = get_field( 'posts_mode' ) ?: 'latest';
-$select_category  = get_field( 'select_category' );
-$manual_posts     = get_field( 'manual_posts' );
-$posts_count      = (int) get_field( 'posts_count' );
+
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+$title            = get_field($pfx . 'blog_title' ) ?: '';
+$title_highlight  = get_field($pfx . 'blog_title_highlight' ) ?: '';
+$subtitle         = get_field($pfx . 'blog_subtitle' );
+$posts_mode       = get_field($pfx . 'posts_mode' ) ?: 'latest';
+$select_category  = get_field($pfx . 'select_category' );
+$manual_posts     = get_field($pfx . 'manual_posts' );
+$posts_count      = (int) get_field($pfx . 'posts_count' );
 $posts_count      = $posts_count > 0 ? $posts_count : 3;
-$posts_per_row    = (int) get_field( 'posts_per_row' );
+$posts_per_row    = (int) get_field($pfx . 'posts_per_row' );
 $posts_per_row    = $posts_per_row > 0 ? $posts_per_row : 3;
-$show_excerpt     = (bool) get_field( 'show_excerpt' );
-$mobile_compact   = (bool) get_field( 'mobile_compact_mode' );
-$mobile_hide_sub  = (bool) get_field( 'mobile_hide_subtitle' );
-$button_text      = get_field( 'button_text' ) ?: '';
-$button_link      = get_field( 'button_link' ) ?: '';
-$custom_class     = get_field( 'related_blog_custom_class' );
+$show_excerpt     = (bool) get_field($pfx . 'show_excerpt' );
+$mobile_compact   = (bool) get_field($pfx . 'mobile_compact_mode' );
+$mobile_hide_sub  = (bool) get_field($pfx . 'mobile_hide_subtitle' );
+$button_text      = get_field($pfx . 'button_text' ) ?: '';
+$button_link      = get_field($pfx . 'button_link' ) ?: '';
+$custom_class     = get_field($pfx . 'related_blog_custom_class' );
 
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'related-blog' );

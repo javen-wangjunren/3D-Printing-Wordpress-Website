@@ -5,17 +5,20 @@
  * Industrial Tech Minimalist Design
  * 遵循 3dp-design-system.md 与 3dp-design-philosophy.md
  */
+// Prefix Support
+$pfx = isset($block['prefix']) ? $block['prefix'] : '';
+
 
 // Step 1: 确定数据作用域 (Data Scope)
-$title_main      = get_field( 'title_main' ) ?: 'Global Partner';
-$title_highlight = get_field( 'title_highlight' ) ?: 'Trust';
-$subtitle        = get_field( 'reviews_subtitle' );
-$reviews         = get_field( 'reviews_list' ) ?: array();
-$columns         = get_field( 'review_columns_count' ) ?: 3;
-$spacing         = get_field( 'review_spacing' ) ?: 'medium';
-$card_style      = get_field( 'review_card_style' ) ?: 'default';
-$mobile_compact  = get_field( 'mobile_compact_mode' );
-$mobile_hide_txt = get_field( 'mobile_hide_content' );
+$title_main      = get_field($pfx . 'title_main' ) ?: 'Global Partner';
+$title_highlight = get_field($pfx . 'title_highlight' ) ?: 'Trust';
+$subtitle        = get_field($pfx . 'reviews_subtitle' );
+$reviews         = get_field($pfx . 'reviews_list' ) ?: array();
+$columns         = get_field($pfx . 'review_columns_count' ) ?: 3;
+$spacing         = get_field($pfx . 'review_spacing' ) ?: 'medium';
+$card_style      = get_field($pfx . 'review_card_style' ) ?: 'default';
+$mobile_compact  = get_field($pfx . 'mobile_compact_mode' );
+$mobile_hide_txt = get_field($pfx . 'mobile_hide_content' );
 
 // 样式映射
 $spacing_map = array(
@@ -42,8 +45,8 @@ $class_name = 'review-grid-block py-section-y bg-bg-section/40 overflow-hidden';
 if ( ! empty( $block['className'] ) ) {
     $class_name .= ' ' . $block['className'];
 }
-if ( ! empty( get_field( 'review_grid_custom_class' ) ) ) {
-    $class_name .= ' ' . get_field( 'review_grid_custom_class' );
+if ( ! empty( get_field($pfx . 'review_grid_custom_class' ) ) ) {
+    $class_name .= ' ' . get_field($pfx . 'review_grid_custom_class' );
 }
 
 // 计算总数以便 JS 使用

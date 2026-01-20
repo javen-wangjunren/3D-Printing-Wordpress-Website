@@ -40,7 +40,7 @@ get_header(); ?>
                 // ==========================================
                 // 1. Hero Banner Module (Current CPT)
                 // ==========================================
-                _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview' ) );
+                _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview', 'prefix' => 'cap_hero_' ) );
 
                 // ==========================================
                 // 2. Trusted By Module (Global)
@@ -50,7 +50,7 @@ get_header(); ?>
                 // ==========================================
                 // 3. How It Works Module (Current CPT Fields)
                 // ==========================================
-                _3dp_render_block( 'blocks/global/how-it-works/render', array( 'id' => 'process' ) );
+                _3dp_render_block( 'blocks/global/how-it-works/render', array( 'id' => 'process', 'prefix' => 'cap_process_' ) );
 
                 // ==========================================
                 // 4. Industry Slider Module (Global Options)-第一阶段不放这个内容
@@ -60,17 +60,17 @@ get_header(); ?>
                 // ==========================================
                 // 5. Capability Design Guide Module (Current CPT Specs)
                 // ==========================================
-                _3dp_render_block( 'blocks/global/capability-design-guide/render', array( 'id' => 'design-guide' ) );
+                _3dp_render_block( 'blocks/global/capability-design-guide/render', array( 'id' => 'design-guide', 'prefix' => 'cap_design_guide_' ) );
 
                 // ==========================================
                 // 6. Material List Module (Current CPT)
                 // ==========================================
-                _3dp_render_block( 'blocks/global/material-list/render', array( 'id' => 'materials' ) );
+                _3dp_render_block( 'blocks/global/material-list/render', array( 'id' => 'materials', 'prefix' => 'cap_material_list_' ) );
 
                 // ==========================================
                 // 7. Comparison Table Module (Current CPT)
                 // ==========================================
-                _3dp_render_block( 'blocks/global/comparison-table/render', array( 'id' => 'comparison' ) );
+                _3dp_render_block( 'blocks/global/comparison-table/render', array( 'id' => 'comparison', 'prefix' => 'cap_comparison_' ) );
 
                 // ==========================================
                 // 8. Why Choose Us Module (Global Options)
@@ -93,6 +93,7 @@ get_header(); ?>
                 // 显式传递当前工艺信息
                 _3dp_render_block( 'blocks/global/related-blog/render', array( 
                     'id'                 => 'related-stories',
+                    'prefix'             => 'cap_related_blog_',
                     'current_capability' => $current_capability
                 ) );
 

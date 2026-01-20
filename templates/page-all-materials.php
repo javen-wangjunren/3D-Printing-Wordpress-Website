@@ -8,7 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 
 // 1. Hero Banner Module
-_3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'hero' ) );
+$hero_data = get_field( 'hero_section' );
+if ( ! $hero_data ) {
+    $hero_data = array();
+}
+$hero_data['id'] = 'hero';
+_3dp_render_block( 'blocks/global/hero-banner/render', $hero_data );
 
 // 2. Main Query for Material List
 $posts_per_page = (int) ( get_field( 'all_materials_posts_per_page' ) ?: 60 );

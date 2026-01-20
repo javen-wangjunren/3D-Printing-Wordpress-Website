@@ -18,7 +18,8 @@ get_header();
  * pull data from the current post object.
  */
 _3dp_render_block( 'blocks/global/hero-banner/render', array( 
-    'id' => 'contact-hero' 
+    'id' => 'contact-hero',
+    'prefix' => 'contact_hero_clone_'
 ) );
 
 /**
