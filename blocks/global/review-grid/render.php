@@ -10,15 +10,20 @@ $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
 
 // Step 1: 确定数据作用域 (Data Scope)
-$title_main      = get_field($pfx . 'title_main' ) ?: 'Global Partner';
-$title_highlight = get_field($pfx . 'title_highlight' ) ?: 'Trust';
-$subtitle        = get_field($pfx . 'reviews_subtitle' );
-$reviews         = get_field($pfx . 'reviews_list' ) ?: array();
-$columns         = get_field($pfx . 'review_columns_count' ) ?: 3;
-$spacing         = get_field($pfx . 'review_spacing' ) ?: 'medium';
-$card_style      = get_field($pfx . 'review_card_style' ) ?: 'default';
-$mobile_compact  = get_field($pfx . 'mobile_compact_mode' );
-$mobile_hide_txt = get_field($pfx . 'mobile_hide_content' );
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 使用万能取数逻辑获取字段值
+$title_main      = get_field_value('title_main', $block, $clone_name, $pfx, 'Global Partner');
+$title_highlight = get_field_value('title_highlight', $block, $clone_name, $pfx, 'Trust');
+$subtitle        = get_field_value('reviews_subtitle', $block, $clone_name, $pfx, '');
+$reviews         = get_field_value('reviews_list', $block, $clone_name, $pfx, array());
+$columns         = get_field_value('review_columns_count', $block, $clone_name, $pfx, 3);
+$spacing         = get_field_value('review_spacing', $block, $clone_name, $pfx, 'medium');
+$card_style      = get_field_value('review_card_style', $block, $clone_name, $pfx, 'default');
+$mobile_compact  = get_field_value('mobile_compact_mode', $block, $clone_name, $pfx, false);
+$mobile_hide_txt = get_field_value('mobile_hide_content', $block, $clone_name, $pfx, false);
 
 // 样式映射
 $spacing_map = array(
@@ -41,12 +46,13 @@ $card_class = $card_base_class . ' ' . ( isset( $card_style_map[ $card_style ] )
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'review-grid' );
 
-$class_name = 'review-grid-block py-section-y bg-bg-section/40 overflow-hidden';
+$class_name = 'review-grid-block py-section-y overflow-hidden';
 if ( ! empty( $block['className'] ) ) {
     $class_name .= ' ' . $block['className'];
 }
-if ( ! empty( get_field($pfx . 'review_grid_custom_class' ) ) ) {
-    $class_name .= ' ' . get_field($pfx . 'review_grid_custom_class' );
+$custom_class = get_field_value('review_grid_custom_class', $block, $clone_name, $pfx, '');
+if ( ! empty( $custom_class ) ) {
+    $class_name .= ' ' . $custom_class;
 }
 
 // 计算总数以便 JS 使用
@@ -103,14 +109,14 @@ $total_reviews = count( $reviews );
             <?php if ( $total_reviews > $columns ) : ?>
             <div class="hidden md:flex gap-3">
                 <button @click="prev" 
-                        class="w-12 h-12 rounded-lg border border-border flex items-center justify-center hover:bg-white hover:border-primary text-heading hover:text-primary transition-all group"
+                        class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
                         aria-label="Previous review">
-                    <svg class="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                    &lt;
                 </button>
                 <button @click="next" 
-                        class="w-12 h-12 rounded-lg border border-border flex items-center justify-center hover:bg-white hover:border-primary text-heading hover:text-primary transition-all group"
+                        class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
                         aria-label="Next review">
-                    <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    &gt;
                 </button>
             </div>
             <?php endif; ?>
@@ -170,7 +176,7 @@ $total_reviews = count( $reviews );
                                 <!-- Review Text -->
                                 <div class="flex-1 mb-10">
                                     <p class="text-body italic leading-relaxed text-[15px] <?php echo $mobile_compact ? 'max-md:text-sm max-md:line-clamp-4' : ''; ?>">
-                                        "<?php echo esc_html( $text ); ?>"
+                                        "<?php echo esc_html( strip_tags( $text ) ); ?>"
                                     </p>
                                 </div>
 

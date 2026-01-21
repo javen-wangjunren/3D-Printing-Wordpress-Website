@@ -1,8 +1,19 @@
 <?php
-
+/**
+ * Block: Why Choose Us
+ * Path: blocks/global/why-choose-us/render.php
+ * Description: Renders the Why Choose Us block with image slider and reasons list.
+ * 
+ * @package 3D_Printing
+ * @author Javen
+ */
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
+
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
 
 // Initialize variables with defaults
 $header_title = '';
@@ -38,18 +49,18 @@ if ( empty( $pfx ) ) {
         $reasons = isset($global_data['why_choose_us_reasons']) ? $global_data['why_choose_us_reasons'] : array();
     }
 } else {
-    // Local/Page Builder Mode
-    $header_title       = (string) ( get_field($pfx . 'wcu_header_title' ) ?: '' );
-    $header_description = (string) ( get_field($pfx . 'wcu_header_description' ) ?: '' );
-    $slides             = get_field($pfx . 'wcu_slides' ) ?: array();
-    $fallback_image_id  = (int) ( get_field($pfx . 'why_choose_us_left_image' ) ?: 0 );
-    $reasons            = get_field($pfx . 'why_choose_us_reasons' ) ?: array();
-    $cta_link           = get_field($pfx . 'wcu_cta_link' ) ?: array();
-    $layout_style       = (string) ( get_field($pfx . 'why_choose_us_layout_style' ) ?: 'image-left' );
-    $spacing            = (string) ( get_field($pfx . 'why_choose_us_spacing' ) ?: 'medium' );
-    $auto_rotate        = (bool) ( get_field($pfx . 'wcu_auto_rotate' ) !== false );
-    $rotate_interval    = (int) ( get_field($pfx . 'wcu_rotate_interval' ) ?: 5000 );
-    $custom_class       = (string) ( get_field($pfx . 'why_choose_us_custom_class' ) ?: '' );
+    // 使用万能取数逻辑获取字段值
+    $header_title       = (string) get_field_value('wcu_header_title', $block, $clone_name, $pfx, '');
+    $header_description = (string) get_field_value('wcu_header_description', $block, $clone_name, $pfx, '');
+    $slides             = get_field_value('wcu_slides', $block, $clone_name, $pfx, array());
+    $fallback_image_id  = (int) get_field_value('why_choose_us_left_image', $block, $clone_name, $pfx, 0);
+    $reasons            = get_field_value('why_choose_us_reasons', $block, $clone_name, $pfx, array());
+    $cta_link           = get_field_value('wcu_cta_link', $block, $clone_name, $pfx, array());
+    $layout_style       = (string) get_field_value('why_choose_us_layout_style', $block, $clone_name, $pfx, 'image-left');
+    $spacing            = (string) get_field_value('why_choose_us_spacing', $block, $clone_name, $pfx, 'medium');
+    $auto_rotate        = (bool) get_field_value('wcu_auto_rotate', $block, $clone_name, $pfx, true);
+    $rotate_interval    = (int) get_field_value('wcu_rotate_interval', $block, $clone_name, $pfx, 5000);
+    $custom_class       = (string) get_field_value('why_choose_us_custom_class', $block, $clone_name, $pfx, '');
 }
 
 $block_id           = _3dp_get_safe_block_id( $block, 'why-choose-us' );
@@ -79,7 +90,7 @@ if ( $layout_style === 'image-right' ) {
 }
 
 $section_id_attr = $block_id ? 'id="' . esc_attr( $block_id ) . '"' : '';
-$section_classes = trim( 'bg-white ' . $custom_class );
+$section_classes = trim( $custom_class );
 ?>
 
 <section <?php echo $section_id_attr; ?> class="<?php echo esc_attr( $section_classes ); ?> <?php echo esc_attr( $section_py ); ?>">

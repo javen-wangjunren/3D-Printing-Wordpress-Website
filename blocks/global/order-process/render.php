@@ -12,14 +12,19 @@ $block = isset( $block ) ? $block : array();
 
 $block_id = _3dp_get_safe_block_id( $block, 'order-process' );
 
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
 // Init variables
 $custom_class = '';
-$bg_style = 'bg-white';
 $title = '';
 $description = '';
 $steps = array();
 $cta_group = array();
 $active_step = 1;
+$bg_color = '';
+$anchor_id = '';
 
 if ( empty( $pfx ) ) {
     // Global Settings Mode
@@ -31,26 +36,27 @@ if ( empty( $pfx ) ) {
         
         $cta_group = isset($global_data['order_process_cta']) ? $global_data['order_process_cta'] : array();
         
-        $bg_style = isset($global_data['order_process_bg_style']) ? (string)$global_data['order_process_bg_style'] : 'bg-white';
+        $bg_color = isset($global_data['order_process_bg_style']) ? (string)$global_data['order_process_bg_style'] : '#ffffff';
         $active_step = isset($global_data['order_process_active_step']) ? (int)$global_data['order_process_active_step'] : 1;
         $anchor_id = isset($global_data['order_process_anchor_id']) ? (string)$global_data['order_process_anchor_id'] : '';
         $custom_class = isset($global_data['order_process_custom_class']) ? (string)$global_data['order_process_custom_class'] : '';
     }
 } else {
     // Local/Page Builder Mode
-    $custom_class = (string) get_field($pfx . 'order_process_custom_class' ) ?: '';
-    $bg_style     = (string) get_field($pfx . 'order_process_bg_style' ) ?: 'bg-white';
+    $custom_class = (string) get_field_value('order_process_custom_class', $block, $clone_name, $pfx, '');
+    $bg_color     = (string) get_field_value('order_process_bg_style', $block, $clone_name, $pfx, '#ffffff');
     
-    $title        = (string) get_field($pfx . 'order_process_title' ) ?: '';
-    $description  = (string) get_field($pfx . 'order_process_description' ) ?: '';
+    $title        = (string) get_field_value('order_process_title', $block, $clone_name, $pfx, '');
+    $description  = (string) get_field_value('order_process_description', $block, $clone_name, $pfx, '');
     
-    $steps        = get_field($pfx . 'order_process_steps' );
+    $steps        = get_field_value('order_process_steps', $block, $clone_name, $pfx, array());
     $steps        = is_array( $steps ) ? $steps : array();
     
-    $cta_group    = get_field($pfx . 'order_process_cta' );
+    $cta_group    = get_field_value('order_process_cta', $block, $clone_name, $pfx, array());
     $cta_group    = is_array( $cta_group ) ? $cta_group : array();
     
-    $active_step  = (int) get_field($pfx . 'order_process_active_step' );
+    $active_step  = (int) get_field_value('order_process_active_step', $block, $clone_name, $pfx, 1);
+    $anchor_id    = (string) get_field_value('order_process_anchor_id', $block, $clone_name, $pfx, '');
 }
 
 $cta_text     = isset( $cta_group['text'] ) ? (string) $cta_group['text'] : '';
@@ -64,14 +70,14 @@ if ( ! $steps ) {
 	return;
 }
 
-// 根容器样式：背景 + 垂直间距
-$root_classes = trim( implode( ' ', array_filter( array(
-	'order-process-block',
-	$bg_style,
-) ) ) );
+// 根容器样式：垂直间距，背景色使用动态样式
+$root_classes = 'order-process-block';
+
+// 动态背景样式
+$bg_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 ?>
 
-<div id="<?php echo $anchor_id ? esc_attr( $anchor_id ) : ''; ?>" class="<?php echo esc_attr( $root_classes ); ?>">
+<div id="<?php echo $anchor_id ? esc_attr( $anchor_id ) : ''; ?>" class="<?php echo esc_attr( $root_classes ); ?>"<?php echo $bg_style; ?>>
 	<div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y <?php echo esc_attr( $custom_class ); ?>">
 		<?php if ( $title || $description ) : ?>
 			<div class="text-center mb-10 lg:mb-16">

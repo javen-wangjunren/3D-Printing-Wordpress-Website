@@ -1,9 +1,20 @@
 <?php
-
+/**
+ * Block: CTA
+ * Path: blocks/global/cta/render.php
+ * Description: Renders the CTA block with title, description, buttons and image.
+ * 
+ * @package 3D_Printing
+ * @author Javen
+ */
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'cta' );
+
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
 
 // Init variables
 $cta_title = '';
@@ -34,15 +45,15 @@ if ( empty( $pfx ) ) {
     }
 } else {
     // Local/Page Builder Mode
-    $cta_title             = (string) ( get_field($pfx . 'cta_title' ) ?: '' );
-    $cta_title_highlight   = (string) ( get_field($pfx . 'cta_title_highlight' ) ?: '' );
-    $cta_description       = (string) ( get_field($pfx . 'cta_description' ) ?: '' );
-    $cta_highlight_metric  = (string) ( get_field($pfx . 'cta_highlight_metric' ) ?: '' );
-    $cta_image             = get_field($pfx . 'cta_image' );
-    $cta_button_group      = get_field($pfx . 'cta_button_group' ) ?: array();
-    $cta_secondary_button  = get_field($pfx . 'cta_secondary_button' ) ?: array();
-    $layout_reverse        = (bool) get_field($pfx . 'layout_reverse' );
-    $bg_color              = get_field($pfx . 'bg_color' );
+    $cta_title             = (string) get_field_value('cta_title', $block, $clone_name, $pfx, '');
+    $cta_title_highlight   = (string) get_field_value('cta_title_highlight', $block, $clone_name, $pfx, '');
+    $cta_description       = (string) get_field_value('cta_description', $block, $clone_name, $pfx, '');
+    $cta_highlight_metric  = (string) get_field_value('cta_highlight_metric', $block, $clone_name, $pfx, '');
+    $cta_image             = get_field_value('cta_image', $block, $clone_name, $pfx, null);
+    $cta_button_group      = get_field_value('cta_button_group', $block, $clone_name, $pfx, array());
+    $cta_secondary_button  = get_field_value('cta_secondary_button', $block, $clone_name, $pfx, array());
+    $layout_reverse        = (bool) get_field_value('layout_reverse', $block, $clone_name, $pfx, false);
+    $bg_color              = get_field_value('bg_color', $block, $clone_name, $pfx, '#ffffff');
 }
 
 $primary_text   = isset( $cta_button_group['button_text'] ) ? (string) $cta_button_group['button_text'] : '';
@@ -59,13 +70,9 @@ if ( ! $cta_title && ! $cta_description && ! $has_primary ) {
 }
 
 $section_classes = 'py-section-y-small lg:py-section-y';
-$section_bg      = 'bg-white';
-$section_style   = '';
 
-if ( is_string( $bg_color ) && $bg_color !== '' && strtolower( $bg_color ) !== 'rgba(255,255,255,1)' ) {
-    $section_bg    = '';
-    $section_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
-}
+// 总是使用动态背景样式
+$section_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 
 $text_order  = $layout_reverse ? 'order-2 lg:order-1' : 'order-1 lg:order-1';
 $image_order = $layout_reverse ? 'order-1 lg:order-2' : 'order-2 lg:order-2';
@@ -78,7 +85,7 @@ if ( is_array( $cta_image ) ) {
 }
 ?>
 
-<section class="<?php echo esc_attr( $section_bg . ' ' . $section_classes ); ?>" <?php echo $section_style; ?>>
+<section class="<?php echo esc_attr( $section_classes ); ?>" <?php echo $section_style; ?>>
     <div class="mx-auto max-w-container px-container">
         <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
             <div class="grid lg:grid-cols-2 items-center gap-10 lg:gap-12 p-8 lg:p-16">
@@ -93,7 +100,7 @@ if ( is_array( $cta_image ) ) {
                     <?php if ( $cta_description || $cta_highlight_metric ) : ?>
                         <p class="text-body text-small lg:text-body max-w-lg mb-10 mx-auto lg:mx-0">
                             <?php if ( $cta_description ) : ?>
-                                <?php echo esc_html( $cta_description ); ?>
+                                <?php echo nl2br( esc_html( $cta_description ) ); ?>
                             <?php endif; ?>
                             <?php if ( $cta_highlight_metric ) : ?>
                                 <?php if ( $cta_description ) : ?>&nbsp;<?php endif; ?>
@@ -134,7 +141,6 @@ if ( is_array( $cta_image ) ) {
 
                 <div class="hidden lg:block relative h-full <?php echo esc_attr( $image_order ); ?>">
                     <?php if ( $image_id ) : ?>
-                        <div class="absolute inset-0 bg-gradient-to-l from-bg-section to-transparent z-10 w-20"></div>
                         <?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'alt' => esc_attr( $image_alt ), 'class' => 'w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105' ) ); ?>
                     <?php endif; ?>
                 </div>

@@ -85,7 +85,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'placeholder' => '',
                     'maxlength' => '',
                     'rows' => 5,
-                    'new_lines' => 'wpautop',
+                    'new_lines' => '',
                 ),
                 array(
                     'key' => 'field_cta_highlight_metric',

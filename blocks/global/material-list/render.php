@@ -8,17 +8,22 @@ $block_id = _3dp_get_safe_block_id( $block, 'material-list' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 
-$raw_processes = get_field($pfx . 'material_list_processes' ) ?: array();
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 使用万能取数逻辑获取字段值
+$raw_processes = get_field_value('material_list_processes', $block, $clone_name, $pfx, array());
 
 if ( ! $raw_processes ) {
     return;
 }
 
-$display_single    = (bool) get_field($pfx . 'material_list_display_mode' );
-$mobile_layout     = get_field($pfx . 'material_list_mobile_layout' ) ?: 'accordion';
-$hide_image_mobile = (bool) get_field($pfx . 'material_list_hide_image_mobile' );
-$bg_style          = get_field($pfx . 'material_list_bg_style' ) ?: 'bg-page';
-$custom_class      = get_field($pfx . 'material_list_custom_class' ) ?: '';
+$display_single    = (bool) get_field_value('material_list_display_mode', $block, $clone_name, $pfx, false);
+$mobile_layout     = get_field_value('material_list_mobile_layout', $block, $clone_name, $pfx, 'accordion');
+$hide_image_mobile = (bool) get_field_value('material_list_hide_image_mobile', $block, $clone_name, $pfx, false);
+$bg_color          = get_field_value('material_list_bg_style', $block, $clone_name, $pfx, '#ffffff');
+$custom_class      = get_field_value('material_list_custom_class', $block, $clone_name, $pfx, '');
 
 if ( $display_single && $raw_processes ) {
     $raw_processes = array_slice( $raw_processes, 0, 1 );
@@ -63,7 +68,8 @@ if ( ! $processes ) {
     return;
 }
 
-$bg_classes = $bg_style === 'bg-section' ? 'bg-bg-section' : 'bg-bg-page';
+// 使用动态背景样式
+$bg_style_attr = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 
 $alpine_state = array(
     'activeProcess'   => $active_process,
@@ -74,7 +80,7 @@ $alpine_state = array(
 
 ?>
 
-<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="material-list-block <?php echo esc_attr( $bg_classes ); ?>" x-data='<?php echo json_encode( $alpine_state ); ?>'>
+<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="material-list-block" x-data='<?php echo json_encode( $alpine_state ); ?>'<?php echo $bg_style_attr; ?>>
     <div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y <?php echo esc_attr( $block_class ); ?> <?php echo esc_attr( $custom_class ); ?>">
         <div class="mb-8 lg:mb-12">
             <h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-3">

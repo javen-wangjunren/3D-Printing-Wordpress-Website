@@ -7,27 +7,32 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
-
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly.
 }
 
-// 1. 获取 ACF 字段数据
+// 1. 获取 Block 核心数据
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'manufacturing-capabilities' );
-$section_title  = get_field($pfx . 'manufacturing_capabilities_title' );
-$section_title  = $section_title ? $section_title : 'Manufacturing Capabilities';
-$section_intro  = get_field($pfx . 'manufacturing_capabilities_intro' );
+$is_preview = isset($is_preview) && $is_preview;
+
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
+$section_title  = get_field_value('manufacturing_capabilities_title', $block, $clone_name, $pfx, 'Manufacturing Capabilities' );
+$section_intro  = get_field_value('manufacturing_capabilities_intro', $block, $clone_name, $pfx );
 
 // 获取 Tab 数据
-$tabs_raw = get_field($pfx . 'manufacturing_capabilities_tabs' );
+$tabs_raw = get_field_value('manufacturing_capabilities_tabs', $block, $clone_name, $pfx, array() );
 $tabs_raw = is_array( $tabs_raw ) ? $tabs_raw : array();
 
 // 配置开关 (保留用于后续扩展，目前主要依赖 CSS 类)
-$mobile_compact = (bool) get_field($pfx . 'manufacturing_capabilities_mobile_compact_mode' );
-$use_mono       = (bool) get_field($pfx . 'manufacturing_capabilities_use_mono_font' );
-$anchor_id      = get_field($pfx . 'manufacturing_capabilities_anchor_id' );
-$extra_class    = get_field($pfx . 'manufacturing_capabilities_css_class' );
+$mobile_compact = (bool) get_field_value('manufacturing_capabilities_mobile_compact_mode', $block, $clone_name, $pfx );
+$use_mono       = (bool) get_field_value('manufacturing_capabilities_use_mono_font', $block, $clone_name, $pfx );
+$anchor_id      = get_field_value('manufacturing_capabilities_anchor_id', $block, $clone_name, $pfx );
+$extra_class    = get_field_value('manufacturing_capabilities_css_class', $block, $clone_name, $pfx );
 
 // 2. Data cleaning and structuring
 $tabs = array();
@@ -101,8 +106,11 @@ $config = array(
 $json_config = wp_json_encode( $config );
 
 // 4. 类名与 ID 处理
-$root_id = $anchor_id ? $anchor_id : 'manufacturing-capabilities-' . uniqid();
-$root_class = 'py-12 lg:py-20 bg-white'; // 基础内边距与背景
+// 使用 block_id 作为主要 ID，anchor_id 作为覆盖
+$final_id = $anchor_id ? $anchor_id : $block_id;
+
+// 构建类名
+$root_class = 'py-12 lg:py-20'; // 基础内边距
 if ( ! empty( $block['className'] ) ) {
     $root_class .= ' ' . $block['className'];
 }
@@ -112,7 +120,7 @@ if ( $extra_class ) {
 
 ?>
 
-<section id="<?php echo esc_attr( $root_id ); ?>" class="<?php echo esc_attr( $root_class ); ?>">
+<section id="<?php echo esc_attr( $final_id ); ?>" class="<?php echo esc_attr( $root_class ); ?>">
     <div class="max-w-[1280px] mx-auto px-5 lg:px-8" x-data='<?php echo $json_config; ?>'>
         
         <!-- Header & Tabs -->

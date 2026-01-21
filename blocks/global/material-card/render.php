@@ -6,6 +6,9 @@ $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $post_id = get_the_ID();
 $card_id = 'material-card-' . (string) $post_id;
 
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
 // Process
 $process_slugs = array();
 $process_terms = get_the_terms( $post_id, 'material_process' );
@@ -13,7 +16,7 @@ if ( $process_terms && ! is_wp_error( $process_terms ) ) {
     foreach ( $process_terms as $t ) $process_slugs[] = $t->slug;
 } else {
     // Fallback: ACF Field
-    $p_val = (string) get_field($pfx . 'material_process' );
+    $p_val = (string) get_field_value('material_process', isset($block) ? $block : array(), $clone_name, $pfx, '' );
     if ( $p_val ) $process_slugs[] = $p_val;
 }
 
@@ -24,7 +27,7 @@ if ( $type_terms && ! is_wp_error( $type_terms ) ) {
     foreach ( $type_terms as $t ) $type_slugs[] = $t->slug;
 } else {
     // Fallback: ACF Field
-    $t_val = (string) get_field($pfx . 'material_type' );
+    $t_val = (string) get_field_value('material_type', isset($block) ? $block : array(), $clone_name, $pfx, '' );
     if ( $t_val ) $type_slugs[] = $t_val;
 }
 
@@ -36,14 +39,14 @@ if ( $char_terms && ! is_wp_error( $char_terms ) ) {
 }
 
 // Basic Fields
-$cost_level = (string) ( get_field($pfx . 'material_cost_level' ) ?: '' );
-$lead_time  = (string) ( get_field($pfx . 'material_lead_time' ) ?: '' );
+$cost_level = (string) get_field_value('material_cost_level', isset($block) ? $block : array(), $clone_name, $pfx, '' );
+$lead_time  = (string) get_field_value('material_lead_time', isset($block) ? $block : array(), $clone_name, $pfx, '' );
 $title_raw  = get_the_title();
 $title_attr = function_exists( 'mb_strtolower' ) ? mb_strtolower( $title_raw ) : strtolower( $title_raw );
 
 // Display Labels
-$primary_process = ! empty( $process_slugs ) ? $process_terms[0]->name : ( get_field($pfx . 'material_process' ) ?: '' );
-$primary_type    = ! empty( $type_slugs ) ? $type_terms[0]->name : ( get_field($pfx . 'material_type' ) ?: '' );
+$primary_process = ! empty( $process_slugs ) ? $process_terms[0]->name : get_field_value('material_process', isset($block) ? $block : array(), $clone_name, $pfx, '' );
+$primary_type    = ! empty( $type_slugs ) ? $type_terms[0]->name : get_field_value('material_type', isset($block) ? $block : array(), $clone_name, $pfx, '' );
 
 ?>
 <article id="<?php echo esc_attr( $card_id ); ?>" 

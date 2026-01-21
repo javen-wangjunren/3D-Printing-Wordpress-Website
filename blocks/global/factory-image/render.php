@@ -6,14 +6,22 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
+// 1. 获取 Block 核心数据
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'factory-image' );
+$is_preview = isset($is_preview) && $is_preview;
 
-// 1. Get Fields
-$header_group   = get_field($pfx . 'header_group');
-$items          = get_field($pfx . 'gallery_items');
-$bg_style       = get_field($pfx . 'background_style') ?: 'industrial';
-$mobile_opts    = get_field($pfx . 'mobile_options') ?: array();
-$block_id       = get_field($pfx . 'block_id') ?: 'factory-image-' . $block['id'];
-$custom_class   = get_field($pfx . 'custom_class') ?: '';
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
+$header_group   = get_field_value('header_group', $block, $clone_name, $pfx);
+$items          = get_field_value('gallery_items', $block, $clone_name, $pfx, array());
+$bg_style       = get_field_value('background_style', $block, $clone_name, $pfx, 'industrial');
+$mobile_opts    = get_field_value('mobile_options', $block, $clone_name, $pfx, array());
+$custom_block_id = get_field_value('block_id', $block, $clone_name, $pfx);
+$custom_class   = get_field_value('custom_class', $block, $clone_name, $pfx, '');
 
 // 2. Process Header Data
 $title          = isset($header_group['title']) ? $header_group['title'] : '';
@@ -42,13 +50,16 @@ if ( $bg_style === 'industrial' ) {
     $section_classes .= ' bg-white';
 }
 
+// 确定最终ID：使用custom_block_id作为覆盖，否则使用block_id
+$final_id = $custom_block_id ? $custom_block_id : $block_id;
+
 // Mobile Options
 $is_compact_mobile = in_array('compact_grid', $mobile_opts);
 $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
 
 ?>
 
-<section id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr($section_classes); ?>" x-data="{ 
+<section id="<?php echo esc_attr($final_id); ?>" class="<?php echo esc_attr($section_classes); ?>" x-data="{ 
     showLightbox: false, 
     activeImg: '', 
     activeTitle: '',

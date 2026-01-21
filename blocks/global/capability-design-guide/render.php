@@ -8,18 +8,23 @@ $block_id = _3dp_get_safe_block_id( $block, 'capability-design-guide' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 
-$section_title = get_field($pfx . 'capability_design_guide_title' );
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
 
-$core_specs = get_field($pfx . 'capability_design_guide_core_specs' ) ?: array();
-$tech_list  = get_field($pfx . 'capability_design_guide_tech_list' ) ?: array();
-$advice     = get_field($pfx . 'capability_design_guide_advice_group' ) ?: array();
+// 使用万能取数逻辑获取字段值
+$section_title = get_field_value('capability_design_guide_title', $block, $clone_name, $pfx, '' );
+
+$core_specs = get_field_value('capability_design_guide_core_specs', $block, $clone_name, $pfx, array() );
+$tech_list  = get_field_value('capability_design_guide_tech_list', $block, $clone_name, $pfx, array() );
+$advice     = get_field_value('capability_design_guide_advice_group', $block, $clone_name, $pfx, array() );
 
 if ( ! $section_title && ! $core_specs && ! $tech_list && ! $advice ) {
     return;
 }
 
-$mb_mode        = get_field($pfx . 'capability_design_guide_mb_mode' ) ?: 'grid';
-$hide_advice_mb = (bool) get_field($pfx . 'capability_design_guide_hide_advice_mb' );
+$mb_mode        = get_field_value('capability_design_guide_mb_mode', $block, $clone_name, $pfx, 'grid' );
+$hide_advice_mb = (bool) get_field_value('capability_design_guide_hide_advice_mb', $block, $clone_name, $pfx, false );
 
 $grid_cols_class = 'grid-cols-2 lg:grid-cols-4';
 
@@ -32,7 +37,7 @@ $advice_text  = isset( $advice['text'] ) ? $advice['text'] : '';
 
 ?>
 
-<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="py-8 lg:py-16 bg-white">
+<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="py-8 lg:py-16">
     <div class="max-w-container mx-auto px-6 lg:px-[64px] <?php echo esc_attr( $block_class ); ?>">
         <?php if ( $section_title ) : ?>
             <div class="mb-8 lg:mb-12">

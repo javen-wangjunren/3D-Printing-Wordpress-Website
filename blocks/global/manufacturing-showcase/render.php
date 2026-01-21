@@ -4,22 +4,54 @@
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'manufacturing-showcase' );
-$custom_class = (string) get_field($pfx . 'manufacturing_showcase_css_class') ?: '';
-$title       = (string) get_field($pfx . 'manufacturing_showcase_title') ?: '';
-$subtitle    = (string) get_field($pfx . 'manufacturing_showcase_subtitle') ?: '';
-$layout_mode = (string) get_field($pfx . 'manufacturing_showcase_layout_mode') ?: 'slider';
-$items_per   = (int) get_field($pfx . 'manufacturing_showcase_items_per_view');
-if ( ! $items_per ) { $items_per = 3; }
-$show_nav    = (bool) get_field($pfx . 'manufacturing_showcase_show_nav');
-$compact     = (bool) get_field($pfx . 'manufacturing_showcase_mobile_compact_mode');
+
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 使用万能取数逻辑获取字段值
+$custom_class = (string) get_field_value('manufacturing_showcase_css_class', $block, $clone_name, $pfx, '' );
+$title       = (string) get_field_value('manufacturing_showcase_title', $block, $clone_name, $pfx, '' );
+$subtitle    = (string) get_field_value('manufacturing_showcase_subtitle', $block, $clone_name, $pfx, '' );
+$layout_mode = (string) get_field_value('manufacturing_showcase_layout_mode', $block, $clone_name, $pfx, 'slider' );
+$items_per   = (int) get_field_value('manufacturing_showcase_items_per_view', $block, $clone_name, $pfx, 3 );
+$items_per   = $items_per > 0 ? $items_per : 3;
+$show_nav    = (bool) get_field_value('manufacturing_showcase_show_nav', $block, $clone_name, $pfx, false );
+$compact     = (bool) get_field_value('manufacturing_showcase_mobile_compact_mode', $block, $clone_name, $pfx, false );
 
 $lg_card_w = $items_per === 2 ? 'lg:w-[calc(50%-16px)]' : ( $items_per === 4 ? 'lg:w-[calc(25%-16px)]' : 'lg:w-[calc(33.333%-16px)]' );
 $mb_card_w = $compact ? 'w-[85%]' : 'w-full';
 
-if ( ! have_rows('manufacturing_showcase_items') ) { return; }
+// 获取 items 数据，支持 Group 模式
+$showcase_items = array();
+
+// 优先级 A: Group 模式嵌套
+if (isset($block[$clone_name]) && isset($block[$clone_name]['manufacturing_showcase_items'])) {
+    $showcase_items = $block[$clone_name]['manufacturing_showcase_items'];
+} 
+// 优先级 B: 直接存在于 block 中
+elseif (isset($block['manufacturing_showcase_items'])) {
+    $showcase_items = $block['manufacturing_showcase_items'];
+} 
+// 优先级 C: 从数据库读取
+elseif (have_rows($pfx . 'manufacturing_showcase_items')) {
+    while (have_rows($pfx . 'manufacturing_showcase_items')) {
+        the_row();
+        $showcase_items[] = get_row();
+    }
+}
+
+// 动态背景样式
+$bg_color = '#ffffff';
+$bg_style_attr = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
+
+// 获取锚点ID
+$anchor_id = get_field_value('manufacturing_showcase_anchor_id', $block, $clone_name, $pfx, '' );
+
+if ( ! $showcase_items ) { return; }
 ?>
 
-<div id="<?php echo $anchor_id ? esc_attr($anchor_id) : ''; ?>" class="bg-white overflow-hidden">
+<div id="<?php echo $anchor_id ? esc_attr($anchor_id) : ''; ?>" class="overflow-hidden"<?php echo $bg_style_attr; ?>>
     <div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y <?php echo esc_attr($custom_class); ?>">
         <?php if ( $title || $subtitle ) : ?>
             <div class="text-center mb-10 lg:mb-14">
@@ -44,15 +76,15 @@ if ( ! have_rows('manufacturing_showcase_items') ) { return; }
                 <?php endif; ?>
 
                 <div x-ref="track" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-8">
-                    <?php while ( have_rows('manufacturing_showcase_items') ) : the_row(); ?>
+                    <?php foreach ( $showcase_items as $item ) : ?>
                         <?php
-                        $img_id   = (int) get_sub_field('item_image');
-                        $mob_id   = (int) get_sub_field('item_mobile_image');
-                        $title_i  = (string) get_sub_field('item_title') ?: '';
-                        $badge_i  = (string) get_sub_field('item_badge') ?: '';
-                        $sub_i    = (string) get_sub_field('item_subtitle') ?: '';
-                        $desc_i   = (string) get_sub_field('item_description') ?: '';
-                        $link_i   = get_sub_field('item_link');
+                        $img_id   = isset($item['item_image']) ? (int) $item['item_image'] : 0;
+                        $mob_id   = isset($item['item_mobile_image']) ? (int) $item['item_mobile_image'] : 0;
+                        $title_i  = isset($item['item_title']) ? (string) $item['item_title'] : '';
+                        $badge_i  = isset($item['item_badge']) ? (string) $item['item_badge'] : '';
+                        $sub_i    = isset($item['item_subtitle']) ? (string) $item['item_subtitle'] : '';
+                        $desc_i   = isset($item['item_description']) ? (string) $item['item_description'] : '';
+                        $link_i   = isset($item['item_link']) ? $item['item_link'] : array();
                         $link_i   = is_array($link_i) ? $link_i : array();
                         $src_id   = $img_id ?: $mob_id;
                         $src_url  = $src_id ? (string) wp_get_attachment_image_url( $src_id, 'large' ) : '';
@@ -86,19 +118,19 @@ if ( ! have_rows('manufacturing_showcase_items') ) { return; }
                                 <?php endif; ?>
                             </div>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         <?php else : ?>
             <div class="grid grid-cols-1 lg:grid-cols-<?php echo esc_attr((string) $items_per); ?> gap-6">
-                <?php while ( have_rows('manufacturing_showcase_items') ) : the_row(); ?>
+                <?php foreach ( $showcase_items as $item ) : ?>
                     <?php
-                    $img_id   = (int) get_sub_field('item_image');
-                    $title_i  = (string) get_sub_field('item_title') ?: '';
-                    $badge_i  = (string) get_sub_field('item_badge') ?: '';
-                    $sub_i    = (string) get_sub_field('item_subtitle') ?: '';
-                    $desc_i   = (string) get_sub_field('item_description') ?: '';
-                    $link_i   = get_sub_field('item_link');
+                    $img_id   = isset($item['item_image']) ? (int) $item['item_image'] : 0;
+                    $title_i  = isset($item['item_title']) ? (string) $item['item_title'] : '';
+                    $badge_i  = isset($item['item_badge']) ? (string) $item['item_badge'] : '';
+                    $sub_i    = isset($item['item_subtitle']) ? (string) $item['item_subtitle'] : '';
+                    $desc_i   = isset($item['item_description']) ? (string) $item['item_description'] : '';
+                    $link_i   = isset($item['item_link']) ? $item['item_link'] : array();
                     $link_i   = is_array($link_i) ? $link_i : array();
                     $src_url  = $img_id ? (string) wp_get_attachment_image_url( $img_id, 'large' ) : '';
                     $alt_text = $title_i;
@@ -131,7 +163,7 @@ if ( ! have_rows('manufacturing_showcase_items') ) { return; }
                             <?php endif; ?>
                         </div>
                     </div>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
             </div>
         <?php endif; ?>
     </div>

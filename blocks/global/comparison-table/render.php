@@ -11,14 +11,20 @@ $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 // 1. 获取数据作用域 (Data Scope)
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'comparison-table' );
-$title           = get_field($pfx . 'table_title' );
-$headers         = get_field($pfx . 'headers' ); // Group: h1..h5
-$rows            = get_field($pfx . 'comparison_rows' ); // Repeater: v1..v5
-$highlight_idx   = get_field($pfx . 'highlight_index' ) ?: 1;
-$use_mono        = get_field($pfx . 'use_mono' );
-$mobile_compact  = get_field($pfx . 'comparison_mobile_compact_mode' );
-$anchor_id       = get_field($pfx . 'anchor_id' );
-$custom_class    = get_field($pfx . 'comparison_table_custom_class' );
+
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 使用万能取数逻辑获取字段值
+$title           = get_field_value('table_title', $block, $clone_name, $pfx, '');
+$headers         = get_field_value('headers', $block, $clone_name, $pfx, array()); // Group: h1..h5
+$rows            = get_field_value('comparison_rows', $block, $clone_name, $pfx, array()); // Repeater: v1..v5
+$highlight_idx   = get_field_value('highlight_index', $block, $clone_name, $pfx, 1);
+$use_mono        = get_field_value('use_mono', $block, $clone_name, $pfx, false);
+$mobile_compact  = get_field_value('comparison_mobile_compact_mode', $block, $clone_name, $pfx, false);
+$anchor_id       = get_field_value('anchor_id', $block, $clone_name, $pfx, '');
+$custom_class    = get_field_value('comparison_table_custom_class', $block, $clone_name, $pfx, '');
 
 // 2. 数据预处理
 // 确定有效列（检查表头是否有内容）

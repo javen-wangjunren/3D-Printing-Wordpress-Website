@@ -55,30 +55,13 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'sub_fields' => array(
                         // 基础标识
                         array(
-                            'key' => 'field_cl_capability_id',
-                            'label' => 'Capability ID',
-                            'name' => 'capability_id',
-                            'type' => 'text',
-                            'instructions' => '用于标识工艺的唯一ID，如：sls, mjf, fdm',
-                            'required' => 1,
-                            'wrapper' => array('width' => '20'),
-                        ),
-                        array(
                             'key' => 'field_cl_capability_name',
                             'label' => 'Capability Name',
                             'name' => 'name',
                             'type' => 'text',
                             'required' => 1,
                             'instructions' => '工艺的完整名称，如：Selective Laser Sintering',
-                            'wrapper' => array('width' => '40'),
-                        ),
-                        array(
-                            'key' => 'field_cl_capability_short',
-                            'label' => 'Short Name',
-                            'name' => 'short_name',
-                            'type' => 'text',
-                            'instructions' => '工艺的简称，用于标签显示，如：SLS',
-                            'wrapper' => array('width' => '20'),
+                            'wrapper' => array('width' => '100'),
                         ),
                         
                         // 工艺描述

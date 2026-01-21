@@ -10,13 +10,21 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
+// 1. 获取 Block 核心数据
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'team' );
+$is_preview = isset($is_preview) && $is_preview;
 
-// Retrieve fields
-$header     = get_field($pfx . 'team_header');
-$members    = get_field($pfx . 'team_members');
-$bg_style   = get_field($pfx . 'background_style');
-$section_id = get_field($pfx . 'section_id');
-$mobile_hide = get_field($pfx . 'mobile_hide_content');
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
+$header     = get_field_value('team_header', $block, $clone_name, $pfx);
+$members    = get_field_value('team_members', $block, $clone_name, $pfx, array());
+$bg_style   = get_field_value('background_style', $block, $clone_name, $pfx);
+$section_id = get_field_value('section_id', $block, $clone_name, $pfx);
+$mobile_hide = get_field_value('mobile_hide_content', $block, $clone_name, $pfx);
 
 // Defaults
 $title     = $header['title'] ?? 'Leadership';
@@ -31,15 +39,13 @@ if ( $mobile_hide ) {
 
 if ( $bg_style === 'industrial' ) {
     $section_classes .= ' industrial-grid-bg';
-} else {
-    $section_classes .= ' bg-white';
 }
 
-// ID Attribute
-$id_attr = $section_id ? 'id="' . esc_attr($section_id) . '"' : '';
+// ID Attribute: 使用block_id作为主要ID，section_id作为覆盖
+$final_id = $section_id ? 'id="' . esc_attr($section_id) . '"' : 'id="' . esc_attr($block_id) . '"';
 
 ?>
-<section <?php echo $id_attr; ?> class="<?php echo esc_attr($section_classes); ?>">
+<section <?php echo $final_id; ?> class="<?php echo esc_attr($section_classes); ?>">
     <div class="max-w-[1280px] mx-auto px-6">
         
         <!-- Header -->

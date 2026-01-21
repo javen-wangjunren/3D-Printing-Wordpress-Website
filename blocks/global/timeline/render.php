@@ -10,20 +10,31 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
+// 1. 获取 Block 核心数据
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'timeline' );
+$is_preview = isset($is_preview) && $is_preview;
 
-$header = get_field($pfx . 'timeline_header');
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
+$header = get_field_value('timeline_header', $block, $clone_name, $pfx);
 $prefix = $header['prefix'] ?? 'Evolution and';
 $highlight = $header['highlight'] ?? 'Milestones';
 $desc = $header['description'] ?? '';
 
-$bg_style = get_field($pfx . 'background_style') ?: 'grid';
+$bg_style = get_field_value('background_style', $block, $clone_name, $pfx, 'grid');
 $bg_class = ($bg_style === 'grid') ? 'industrial-grid-bg' : 'bg-white';
-$anchor = get_field($pfx . 'anchor_id') ? 'id="' . esc_attr(get_field($pfx . 'anchor_id')) . '"' : '';
+$anchor_id = get_field_value('anchor_id', $block, $clone_name, $pfx);
+$items = get_field_value('timeline_items', $block, $clone_name, $pfx, array()); // Get all items as array
 
-$items = get_field($pfx . 'timeline_items'); // Get all items as array
+// Anchor处理：使用block_id作为主要ID，anchor_id作为覆盖
+$final_id = $anchor_id ? 'id="' . esc_attr($anchor_id) . '"' : 'id="' . esc_attr($block_id) . '"';
 ?>
 
-<section <?php echo $anchor; ?> class="py-16 lg:py-24 <?php echo esc_attr($bg_class); ?> border-y border-border overflow-hidden" x-data="{ 
+<section <?php echo $final_id; ?> class="py-16 lg:py-24 <?php echo esc_attr($bg_class); ?> border-y border-border overflow-hidden" x-data="{ 
     scrollNext() { this.$refs.scrollContainer.scrollBy({ left: 340, behavior: 'smooth' }) },
     scrollPrev() { this.$refs.scrollContainer.scrollBy({ left: -340, behavior: 'smooth' }) }
 }">

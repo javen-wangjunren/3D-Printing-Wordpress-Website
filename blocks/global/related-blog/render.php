@@ -1,26 +1,38 @@
 <?php
-
+/**
+ * Block: Related Blog
+ * Path: blocks/global/related-blog/render.php
+ * Description: Renders the Related Blog block with post slider.
+ * 
+ * @package 3D_Printing
+ * @author Javen
+ */
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
-$title            = get_field($pfx . 'blog_title' ) ?: '';
-$title_highlight  = get_field($pfx . 'blog_title_highlight' ) ?: '';
-$subtitle         = get_field($pfx . 'blog_subtitle' );
-$posts_mode       = get_field($pfx . 'posts_mode' ) ?: 'latest';
-$select_category  = get_field($pfx . 'select_category' );
-$manual_posts     = get_field($pfx . 'manual_posts' );
-$posts_count      = (int) get_field($pfx . 'posts_count' );
-$posts_count      = $posts_count > 0 ? $posts_count : 3;
-$posts_per_row    = (int) get_field($pfx . 'posts_per_row' );
-$posts_per_row    = $posts_per_row > 0 ? $posts_per_row : 3;
-$show_excerpt     = (bool) get_field($pfx . 'show_excerpt' );
-$mobile_compact   = (bool) get_field($pfx . 'mobile_compact_mode' );
-$mobile_hide_sub  = (bool) get_field($pfx . 'mobile_hide_subtitle' );
-$button_text      = get_field($pfx . 'button_text' ) ?: '';
-$button_link      = get_field($pfx . 'button_link' ) ?: '';
-$custom_class     = get_field($pfx . 'related_blog_custom_class' );
-
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'related-blog' );
+
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 使用万能取数逻辑获取字段值
+$title            = get_field_value('blog_title', $block, $clone_name, $pfx, '');
+$title_highlight  = get_field_value('blog_title_highlight', $block, $clone_name, $pfx, '');
+$subtitle         = get_field_value('blog_subtitle', $block, $clone_name, $pfx, '');
+$posts_mode       = get_field_value('posts_mode', $block, $clone_name, $pfx, 'latest');
+$select_category  = get_field_value('select_category', $block, $clone_name, $pfx, '');
+$manual_posts     = get_field_value('manual_posts', $block, $clone_name, $pfx, '');
+$posts_count      = (int) get_field_value('posts_count', $block, $clone_name, $pfx, 3);
+$posts_count      = $posts_count > 0 ? $posts_count : 3;
+$posts_per_row    = (int) get_field_value('posts_per_row', $block, $clone_name, $pfx, 3);
+$posts_per_row    = $posts_per_row > 0 ? $posts_per_row : 3;
+$show_excerpt     = (bool) get_field_value('show_excerpt', $block, $clone_name, $pfx, false);
+$mobile_compact   = (bool) get_field_value('mobile_compact_mode', $block, $clone_name, $pfx, false);
+$mobile_hide_sub  = (bool) get_field_value('mobile_hide_subtitle', $block, $clone_name, $pfx, false);
+$button_text      = get_field_value('button_text', $block, $clone_name, $pfx, '');
+$button_link      = get_field_value('button_link', $block, $clone_name, $pfx, '');
+$custom_class     = get_field_value('related_blog_custom_class', $block, $clone_name, $pfx, '');
 
 // 1. 优先检查外部传入的“手动指定文章”
 if ( ! empty( $block['related_blog_posts'] ) && is_array( $block['related_blog_posts'] ) ) {
@@ -40,7 +52,7 @@ if ( ! empty( $block['anchor'] ) ) {
     $block_id = $block['anchor'];
 }
 
-$class_name = 'related-blog-block py-section-y bg-white overflow-hidden';
+$class_name = 'related-blog-block py-section-y overflow-hidden';
 if ( ! empty( $block['className'] ) ) {
     $class_name .= ' ' . $block['className'];
 }
@@ -105,11 +117,11 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
                 <?php endif; ?>
                 <?php if ( $cards_query->have_posts() ) : ?>
                     <div class="hidden md:flex gap-3">
-                        <button type="button" @click="scrollPrev" class="w-11 h-11 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all">
-                            <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        <button type="button" @click="scrollPrev" class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
+                            <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                         </button>
-                        <button type="button" @click="scrollNext" class="w-11 h-11 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all">
-                            <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                        <button type="button" @click="scrollNext" class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
+                            <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
                         </button>
                     </div>
                 <?php endif; ?>
@@ -122,10 +134,10 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
                     <?php while ( $cards_query->have_posts() ) : $cards_query->the_post(); ?>
                         <?php
                         $post_id    = get_the_ID();
-                        $categories = array();
-                        $tag_label  = '';
-                        $date_label = '';
-                        $read_label = '';
+                        $categories = get_the_category( $post_id );
+                        $tag_label  = ! empty( $categories ) ? $categories[0]->name : '';
+                        $date_label = get_the_date( 'M d, Y' );
+                        $read_label = $read_time( $post_id );
                         ?>
                         <div class="<?php echo esc_attr( $card_width ); ?> flex-shrink-0" style="scroll-snap-align: start;">
                             <a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
@@ -148,7 +160,9 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
                                         <?php the_title(); ?>
                                     </h3>
                                     <?php if ( $show_excerpt ) : ?>
-                                        <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3"></p>
+                                        <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3">
+                                            <?php echo get_the_excerpt( $post_id ); ?>
+                                        </p>
                                     <?php endif; ?>
                                     <div class="mt-auto pt-6 border-t border-border/60 flex justify-between items-center text-[12px] font-mono text-muted uppercase">
                                         <?php if ( $date_label ) : ?>

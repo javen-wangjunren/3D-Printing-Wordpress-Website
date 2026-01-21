@@ -10,35 +10,38 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
-
 // 1. 获取 Block 核心数据
 $block       = isset( $block ) ? $block : array();
 $block_id    = _3dp_get_safe_block_id( $block, 'hero' );
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 $is_preview  = isset($is_preview) && $is_preview;
 
-// 2. 获取 ACF 字段数据
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
 // Content
-$title       = isset($block['hero_title']) ? $block['hero_title'] : (get_field($pfx . 'hero_title') ?: 'Your Streamlined 3D Printing Service');
-$subtitle    = isset($block['hero_subtitle']) ? $block['hero_subtitle'] : (get_field($pfx . 'hero_subtitle') ?: 'Get Quality Parts at the Best Price');
-$description = isset($block['hero_description']) ? $block['hero_description'] : get_field($pfx . 'hero_description');
-$buttons     = isset($block['hero_buttons']) ? $block['hero_buttons'] : get_field($pfx . 'hero_buttons');
+$title       = get_field_value('hero_title', $block, $clone_name, $pfx, 'Your Streamlined 3D Printing Service');
+$subtitle    = get_field_value('hero_subtitle', $block, $clone_name, $pfx, 'Get Quality Parts at the Best Price');
+$description = get_field_value('hero_description', $block, $clone_name, $pfx);
+$buttons     = get_field_value('hero_buttons', $block, $clone_name, $pfx);
 
 // Design & Layout
-$layout          = isset($block['hero_layout']) ? $block['hero_layout'] : (get_field($pfx . 'hero_layout') ?: 'split');
-$mobile_compact  = isset($block['hero_mobile_compact']) ? $block['hero_mobile_compact'] : get_field($pfx . 'hero_mobile_compact');
-$desktop_img_id  = isset($block['hero_image']) ? $block['hero_image'] : get_field($pfx . 'hero_image');
-$mobile_img_id   = isset($block['hero_mobile_image']) ? $block['hero_mobile_image'] : (get_field($pfx . 'hero_mobile_image') ?: $desktop_img_id);
+$layout          = get_field_value('hero_layout', $block, $clone_name, $pfx, 'split');
+$mobile_compact  = get_field_value('hero_mobile_compact', $block, $clone_name, $pfx);
+$desktop_img_id  = get_field_value('hero_image', $block, $clone_name, $pfx);
+$mobile_img_id   = get_field_value('hero_mobile_image', $block, $clone_name, $pfx, $desktop_img_id);
 
 // Colors
-$bg_color    = isset($block['hero_background_color']) ? $block['hero_background_color'] : (get_field($pfx . 'hero_background_color') ?: '#ffffff');
-$text_color  = isset($block['hero_text_color']) ? $block['hero_text_color'] : (get_field($pfx . 'hero_text_color') ?: '#000000');
-$btn_p_color = isset($block['hero_primary_button_color']) ? $block['hero_primary_button_color'] : (get_field($pfx . 'hero_primary_button_color') ?: '#0073aa');
-$btn_s_color = isset($block['hero_secondary_button_color']) ? $block['hero_secondary_button_color'] : (get_field($pfx . 'hero_secondary_button_color') ?: '#ffffff');
+$bg_color    = get_field_value('hero_background_color', $block, $clone_name, $pfx, '#ffffff');
+$text_color  = get_field_value('hero_text_color', $block, $clone_name, $pfx, '#000000');
+$btn_p_color = get_field_value('hero_primary_button_color', $block, $clone_name, $pfx, '#0073aa');
+$btn_s_color = get_field_value('hero_secondary_button_color', $block, $clone_name, $pfx, '#ffffff');
 
 // Stats
-$show_stats = isset($block['hero_show_stats']) ? $block['hero_show_stats'] : get_field($pfx . 'hero_show_stats');
-$stats      = isset($block['hero_stats']) ? $block['hero_stats'] : get_field($pfx . 'hero_stats');
+$show_stats = get_field_value('hero_show_stats', $block, $clone_name, $pfx);
+$stats      = get_field_value('hero_stats', $block, $clone_name, $pfx);
 
 // 3. 预处理类名与样式
 // Base classes
@@ -50,7 +53,7 @@ if ($layout === 'centered') {
     $section_classes[] = 'min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-48 lg:pb-32';
 } else {
     // Split layout
-    $section_classes[] = 'bg-bg-section pt-20 pb-32 lg:pt-32 lg:pb-48';
+    $section_classes[] = 'pt-20 pb-32 lg:pt-32 lg:pb-48';
 }
 
 // Compact mode for mobile
@@ -58,12 +61,18 @@ if ($mobile_compact) {
     $section_classes[] = 'mobile-compact'; // Use this hook for specific CSS adjustments if needed
 }
 
-// Inline Styles for custom colors (mainly for text/bg overrides if not using Tailwind presets)
-// Note: We prioritize Tailwind classes from the design system, but custom colors need style tags or inline styles.
-// For this implementation, we'll rely on the structure mapping to the HTML templates provided.
+// Inline Styles for custom colors
+$inline_styles = [];
+if ($bg_color) {
+    $inline_styles[] = "background-color: {$bg_color}";
+}
+if ($text_color) {
+    $inline_styles[] = "color: {$text_color}";
+}
+$style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles) . '"' : '';
 ?>
 
-<section id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr(implode(' ', $section_classes)); ?>">
+<section id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr(implode(' ', $section_classes)); ?>"<?php echo $style_attr; ?>>
 
     <?php 
     // ==========================================

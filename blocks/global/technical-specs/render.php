@@ -10,17 +10,23 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
-
-// 1. 获取基础数据
+// 1. 获取 Block 核心数据
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'technical-specs' );
-$classes = get_field($pfx . 'technical_specs_css_class') ?: '';
-$material_label = get_field($pfx . 'technical_specs_material_label');
-$intro = get_field($pfx . 'technical_specs_intro');
-$tabs = get_field($pfx . 'technical_specs_tabs') ?: [];
-$use_mono = get_field($pfx . 'technical_specs_use_mono_font');
-$hide_table_mobile = get_field($pfx . 'technical_specs_hide_table_mobile');
-$table_scrollable = get_field($pfx . 'technical_specs_table_scrollable');
+$is_preview = isset($is_preview) && $is_preview;
+
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
+$classes = get_field_value('technical_specs_css_class', $block, $clone_name, $pfx, '');
+$material_label = get_field_value('technical_specs_material_label', $block, $clone_name, $pfx);
+$intro = get_field_value('technical_specs_intro', $block, $clone_name, $pfx);
+$tabs = get_field_value('technical_specs_tabs', $block, $clone_name, $pfx, []);
+$use_mono = get_field_value('technical_specs_use_mono_font', $block, $clone_name, $pfx);
+$hide_table_mobile = get_field_value('technical_specs_hide_table_mobile', $block, $clone_name, $pfx);
+$table_scrollable = get_field_value('technical_specs_table_scrollable', $block, $clone_name, $pfx);
 
 // 2. 数据校验
 if (empty($tabs)) {
@@ -35,7 +41,7 @@ $first_tab_key = $tabs[0]['tab_key'] ?? 'tab-0';
 ?>
 
 <section 
-    id="<?php echo esc_attr($anchor); ?>" 
+    id="<?php echo esc_attr($block_id); ?>" 
     class="py-10 lg:py-16 <?php echo esc_attr($classes); ?>"
     x-data="{ activeTab: '<?php echo esc_attr($first_tab_key); ?>' }"
 >

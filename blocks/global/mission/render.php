@@ -8,12 +8,20 @@
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 
+// 1. 获取 Block 核心数据
+$block = isset( $block ) ? $block : array();
+$block_id = _3dp_get_safe_block_id( $block, 'mission' );
+$is_preview = isset($is_preview) && $is_preview;
 
-// 1. Data Retrieval
-$header         = get_field($pfx . 'mission_header');
-$bg_style       = get_field($pfx . 'background_style');
-$mobile_hide    = get_field($pfx . 'mobile_hide_content');
-$anchor_id      = get_field($pfx . 'anchor_id');
+// 2. 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 3. 获取 ACF 字段数据
+$header         = get_field_value('mission_header', $block, $clone_name, $pfx);
+$bg_style       = get_field_value('background_style', $block, $clone_name, $pfx);
+$mobile_hide    = get_field_value('mobile_hide_content', $block, $clone_name, $pfx);
+$anchor_id      = get_field_value('anchor_id', $block, $clone_name, $pfx);
 
 // 2. Class Logic
 $section_classes = 'py-[96px] border-y border-border relative';
@@ -32,8 +40,12 @@ if ( $mobile_hide ) {
     $section_classes .= ' hidden lg:block';
 }
 
-// Anchor ID
-$id_attr = $anchor_id ? 'id="' . esc_attr($anchor_id) . '"' : '';
+// 获取mission items数据
+$mission_items = get_field_value('mission_items', $block, $clone_name, $pfx, array());
+
+// Anchor ID: 使用block_id作为主要ID，anchor_id作为覆盖
+$final_id = $anchor_id ? $anchor_id : $block_id;
+$id_attr = 'id="' . esc_attr($final_id) . '"';
 
 ?>
 
@@ -57,15 +69,15 @@ $id_attr = $anchor_id ? 'id="' . esc_attr($anchor_id) . '"' : '';
         <div class="space-y-24">
             
             <?php 
-            if ( have_rows('mission_items') ) : 
+            if ( !empty($mission_items) && is_array($mission_items) ) : 
                 $i = 0;
-                while ( have_rows('mission_items') ) : the_row(); 
-                    $icon           = get_sub_field('icon');
-                    $label          = get_sub_field('label');
-                    $title          = get_sub_field('title');
-                    $desc           = get_sub_field('description');
-                    $image          = get_sub_field('image');
-                    $mobile_image   = get_sub_field('mobile_image'); // Optional usage logic if needed
+                foreach ( $mission_items as $mission_item ) : 
+                    $icon           = $mission_item['icon'];
+                    $label          = $mission_item['label'];
+                    $title          = $mission_item['title'];
+                    $desc           = $mission_item['description'];
+                    $image          = $mission_item['image'];
+                    $mobile_image   = $mission_item['mobile_image']; // Optional usage logic if needed
                     
                     // Layout Logic: Even = Image Left; Odd = Image Right
                     $is_odd = ($i % 2 !== 0);
@@ -121,12 +133,12 @@ $id_attr = $anchor_id ? 'id="' . esc_attr($anchor_id) . '"' : '';
                     </p>
                     
                     <!-- Data Points (Stats) -->
-                    <?php if ( have_rows('stats') ) : ?>
+                    <?php if ( !empty($mission_item['stats']) && is_array($mission_item['stats']) ) : ?>
                     <div class="bg-white border-l-2 border-primary pl-6 py-4 grid grid-cols-2 gap-8">
-                        <?php while ( have_rows('stats') ) : the_row(); 
-                            $stat_label = get_sub_field('label');
-                            $stat_value = get_sub_field('value');
-                            $stat_style = get_sub_field('style');
+                        <?php foreach ( $mission_item['stats'] as $stat ) : 
+                            $stat_label = $stat['label'];
+                            $stat_value = $stat['value'];
+                            $stat_style = $stat['style'];
                         ?>
                         <div>
                             <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">
@@ -143,7 +155,7 @@ $id_attr = $anchor_id ? 'id="' . esc_attr($anchor_id) . '"' : '';
                                 </p>
                             <?php endif; ?>
                         </div>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
 
@@ -151,7 +163,7 @@ $id_attr = $anchor_id ? 'id="' . esc_attr($anchor_id) . '"' : '';
             </div>
 
             <?php 
-                endwhile; 
+                endforeach; 
             endif; 
             ?>
 

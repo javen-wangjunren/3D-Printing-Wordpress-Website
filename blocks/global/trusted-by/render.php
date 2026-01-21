@@ -1,12 +1,23 @@
 <?php
-
+/**
+ * Block: Trusted By
+ * Path: blocks/global/trusted-by/render.php
+ * Description: Renders the Trusted By block with logo slider.
+ * 
+ * @package 3D_Printing
+ * @author Javen
+ */
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
 $block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'trusted-by' );
 $block_class = isset($block['className']) ? $block['className'] : '';
 
-// Init variables with defaults
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
+
+// 初始化变量
 $title = '';
 $description = '';
 $logos = array();
@@ -16,23 +27,27 @@ $enable_animation = false;
 $animation_speed = 'normal';
 $pause_on_hover = false;
 
+// 处理全局设置模式
 if ( empty( $pfx ) ) {
     // Global Settings Mode
     $global_data = get_field('global_trusted_by', 'option');
     
     if ( $global_data ) {
-        $title = isset($global_data['trusted_by_title']) ? $global_data['trusted_by_title'] : '';
-        $description = isset($global_data['trusted_by_description']) ? $global_data['trusted_by_description'] : '';
+        // Get the cloned fields from tb_clone subarray
+        $tb_data = isset($global_data['tb_clone']) ? $global_data['tb_clone'] : $global_data;
         
-        $bg_color = isset($global_data['trusted_by_background_color']) ? $global_data['trusted_by_background_color'] : '#ffffff';
-        $title_color = isset($global_data['trusted_by_title_color']) ? $global_data['trusted_by_title_color'] : '#1D2938';
+        $title = isset($tb_data['trusted_by_title']) ? $tb_data['trusted_by_title'] : '';
+        $description = isset($tb_data['trusted_by_description']) ? $tb_data['trusted_by_description'] : '';
         
-        $enable_animation = isset($global_data['trusted_by_enable_animation']) ? $global_data['trusted_by_enable_animation'] : true;
-        $animation_speed = isset($global_data['trusted_by_animation_speed']) ? $global_data['trusted_by_animation_speed'] : 'normal';
-        $pause_on_hover = isset($global_data['trusted_by_pause_on_hover']) ? $global_data['trusted_by_pause_on_hover'] : true;
+        $bg_color = isset($tb_data['trusted_by_background_color']) ? $tb_data['trusted_by_background_color'] : '#ffffff';
+        $title_color = isset($tb_data['trusted_by_title_color']) ? $tb_data['trusted_by_title_color'] : '#1D2938';
+        
+        $enable_animation = isset($tb_data['trusted_by_enable_animation']) ? $tb_data['trusted_by_enable_animation'] : true;
+        $animation_speed = isset($tb_data['trusted_by_animation_speed']) ? $tb_data['trusted_by_animation_speed'] : 'normal';
+        $pause_on_hover = isset($tb_data['trusted_by_pause_on_hover']) ? $tb_data['trusted_by_pause_on_hover'] : true;
         
         // Map global logos to render format
-        $raw_logos = isset($global_data['trusted_by_logos']) ? $global_data['trusted_by_logos'] : array();
+        $raw_logos = isset($tb_data['trusted_by_logos']) ? $tb_data['trusted_by_logos'] : array();
         if ( is_array($raw_logos) ) {
             foreach ($raw_logos as $logo) {
                 $logos[] = array(
@@ -44,17 +59,17 @@ if ( empty( $pfx ) ) {
         }
     }
 } else {
-    // Local/Page Builder Mode
-    $title = get_field($pfx . 'trusted_by_title') ?: '';
-    $description = get_field($pfx . 'trusted_by_description') ?: '';
-    $logos = get_field($pfx . 'trusted_by_logos') ?: array();
+    // 使用万能取数逻辑获取字段值
+    $title = get_field_value('trusted_by_title', $block, $clone_name, $pfx, '');
+    $description = get_field_value('trusted_by_description', $block, $clone_name, $pfx, '');
+    $logos = get_field_value('trusted_by_logos', $block, $clone_name, $pfx, array());
     
-    $bg_color = get_field($pfx . 'trusted_by_background_color') ?: '#ffffff';
-    $title_color = get_field($pfx . 'trusted_by_title_color') ?: '#1D2938';
+    $bg_color = get_field_value('trusted_by_background_color', $block, $clone_name, $pfx, '#ffffff');
+    $title_color = get_field_value('trusted_by_title_color', $block, $clone_name, $pfx, '#1D2938');
     
-    $enable_animation = get_field($pfx . 'trusted_by_enable_animation');
-    $animation_speed = get_field($pfx . 'trusted_by_animation_speed') ?: 'normal';
-    $pause_on_hover = get_field($pfx . 'trusted_by_pause_on_hover');
+    $enable_animation = get_field_value('trusted_by_enable_animation', $block, $clone_name, $pfx, false);
+    $animation_speed = get_field_value('trusted_by_animation_speed', $block, $clone_name, $pfx, 'normal');
+    $pause_on_hover = get_field_value('trusted_by_pause_on_hover', $block, $clone_name, $pfx, false);
 }
 
 if (empty($logos)) {
@@ -66,7 +81,6 @@ $section_classes = array(
     'border-b',
     'border-border',
     'overflow-hidden',
-    'bg-white',
     $block_class,
 );
 

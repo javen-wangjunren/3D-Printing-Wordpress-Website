@@ -7,15 +7,20 @@ global $wpdb;
 
     $material_count = (int) get_query_var( 'material_count', 0 );
 
-    $include_empty_terms = (bool) get_field($pfx . 'all_materials_include_empty_terms' );
+    // 万能取数逻辑
+    // 确定克隆名
+    $clone_name = rtrim($pfx, '_');
 
-    $show_process = (bool) get_field($pfx . 'filter_sidebar_show_process' );
-    $show_type = (bool) get_field($pfx . 'filter_sidebar_show_type' );
-    $show_cost = (bool) get_field($pfx . 'filter_sidebar_show_cost' );
+    // 定义万能取数字段函数的调用
+    $include_empty_terms = (bool) get_field_value('all_materials_include_empty_terms', $block, $clone_name, $pfx, false);
 
-    $sidebar_title = (string) ( get_field($pfx . 'filter_sidebar_title' ) ?: '' );
-    $sidebar_subtitle_template = (string) ( get_field($pfx . 'filter_sidebar_subtitle' ) ?: '' );
-    $search_placeholder = (string) ( get_field($pfx . 'filter_sidebar_search_placeholder' ) ?: '' );
+    $show_process = (bool) get_field_value('filter_sidebar_show_process', $block, $clone_name, $pfx, true);
+    $show_type = (bool) get_field_value('filter_sidebar_show_type', $block, $clone_name, $pfx, true);
+    $show_cost = (bool) get_field_value('filter_sidebar_show_cost', $block, $clone_name, $pfx, true);
+
+    $sidebar_title = (string) get_field_value('filter_sidebar_title', $block, $clone_name, $pfx, '');
+    $sidebar_subtitle_template = (string) get_field_value('filter_sidebar_subtitle', $block, $clone_name, $pfx, '');
+    $search_placeholder = (string) get_field_value('filter_sidebar_search_placeholder', $block, $clone_name, $pfx, '');
     $sidebar_subtitle = $sidebar_subtitle_template ? str_replace( '{count}', (string) $material_count, $sidebar_subtitle_template ) : '';
 
     $terms_hide_empty = $include_empty_terms ? false : true;
@@ -45,10 +50,10 @@ global $wpdb;
         $cost_levels = array_values( array_unique( array_filter( array_map( 'strval', (array) $cost_levels ) ) ) );
     }
 
-    $default_process_ids   = (array) ( get_field($pfx . 'all_materials_default_processes' ) ?: array() );
-    $default_type_ids      = (array) ( get_field($pfx . 'all_materials_default_types' ) ?: array() );
-    $default_cost_levels   = (array) ( get_field($pfx . 'all_materials_default_cost_levels' ) ?: array() );
-    $default_lead_times    = (array) ( get_field($pfx . 'all_materials_default_lead_times' ) ?: array() );
+    $default_process_ids   = (array) get_field_value('all_materials_default_processes', $block, $clone_name, $pfx, array());
+    $default_type_ids      = (array) get_field_value('all_materials_default_types', $block, $clone_name, $pfx, array());
+    $default_cost_levels   = (array) get_field_value('all_materials_default_cost_levels', $block, $clone_name, $pfx, array());
+    $default_lead_times    = (array) get_field_value('all_materials_default_lead_times', $block, $clone_name, $pfx, array());
 
     $default_process_slugs = array();
     if ( ! empty( $default_process_ids ) ) {
@@ -78,14 +83,17 @@ global $wpdb;
         }
     }
 
-    $sidebar_bg_style     = (string) ( get_field($pfx . 'filter_sidebar_bg_style' ) ?: 'bg-page' );
-    $mobile_compact_mode  = (bool) get_field($pfx . 'filter_sidebar_mobile_compact_mode' );
-    $mobile_hide_subtitle = (bool) get_field($pfx . 'filter_sidebar_mobile_hide_subtitle' );
+    $sidebar_bg_color     = (string) get_field_value('filter_sidebar_bg_style', $block, $clone_name, $pfx, '#ffffff');
+    $mobile_compact_mode  = (bool) get_field_value('filter_sidebar_mobile_compact_mode', $block, $clone_name, $pfx, false);
+    $mobile_hide_subtitle = (bool) get_field_value('filter_sidebar_mobile_hide_subtitle', $block, $clone_name, $pfx, false);
 
-    $anchor       = (string) ( get_field($pfx . 'filter_sidebar_anchor_id' ) ?: '' );
-    $custom_class = (string) ( get_field($pfx . 'filter_sidebar_custom_class' ) ?: '' );
+    $anchor       = (string) get_field_value('filter_sidebar_anchor_id', $block, $clone_name, $pfx, '');
+    $custom_class = (string) get_field_value('filter_sidebar_custom_class', $block, $clone_name, $pfx, '');
 
-    $extra_filters = (array) ( get_field($pfx . 'filter_sidebar_extra_filters' ) ?: array() );
+    $extra_filters = (array) get_field_value('filter_sidebar_extra_filters', $block, $clone_name, $pfx, array());
+
+    // 使用动态背景样式
+    $bg_style_attr = 'style="background-color: ' . esc_attr( $sidebar_bg_color ) . '"';
 
     $class_names = trim( implode( ' ', array(
         'materials-filter-sidebar',
@@ -96,8 +104,6 @@ global $wpdb;
         'py-6',
         'lg:px-6',
         'lg:py-8',
-        'bg-white',
-        $sidebar_bg_style,
         $custom_class,
     ) ) );
 
@@ -108,6 +114,7 @@ global $wpdb;
     ?>
     id="<?php echo esc_attr( $anchor ); ?>"
     class="<?php echo esc_attr( $class_names ); ?>"
+    <?php echo $bg_style_attr; ?>
     data-filter-sidebar
     data-mobile-compact-mode="<?php echo esc_attr( $mobile_compact_mode ? '1' : '0' ); ?>"
     data-default-process="<?php echo esc_attr( $default_process_str ); ?>"
@@ -145,7 +152,7 @@ global $wpdb;
         <?php if ( $show_process && ! is_wp_error( $process_terms ) && ! empty( $process_terms ) ) : ?>
             <div class="space-y-3" data-filter-group="process">
                 <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
-                    <?php echo esc_html( (string) ( get_field($pfx . 'filter_sidebar_process_label' ) ?: 'Process' ) ); ?>
+                    <?php echo esc_html( (string) get_field_value('filter_sidebar_process_label', $block, $clone_name, $pfx, 'Process' ) ); ?>
                 </h4>
                 <div class="space-y-2">
                     <?php foreach ( $process_terms as $term ) : ?>
@@ -166,7 +173,7 @@ global $wpdb;
         <?php if ( $show_type && ! is_wp_error( $type_terms ) && ! empty( $type_terms ) ) : ?>
             <div class="space-y-3" data-filter-group="type">
                 <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
-                    <?php echo esc_html( (string) ( get_field($pfx . 'filter_sidebar_type_label' ) ?: 'Type' ) ); ?>
+                    <?php echo esc_html( (string) get_field_value('filter_sidebar_type_label', $block, $clone_name, $pfx, 'Type' ) ); ?>
                 </h4>
                 <div class="space-y-2">
                     <?php foreach ( $type_terms as $term ) : ?>
@@ -187,7 +194,7 @@ global $wpdb;
         <?php if ( $show_cost && ! empty( $cost_levels ) ) : ?>
             <div class="space-y-3" data-filter-group="cost">
                 <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
-                    <?php echo esc_html( (string) ( get_field($pfx . 'filter_sidebar_cost_label' ) ?: 'Cost' ) ); ?>
+                    <?php echo esc_html( (string) get_field_value('filter_sidebar_cost_label', $block, $clone_name, $pfx, 'Cost' ) ); ?>
                 </h4>
                 <div class="space-y-2">
                     <?php foreach ( $cost_levels as $cost ) : ?>

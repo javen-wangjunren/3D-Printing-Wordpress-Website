@@ -93,6 +93,35 @@ function _3dp_get_safe_block_id( $block = null, $prefix = 'block', $fixed_id = '
 }
 
 /**
+ * 万能取数字段函数
+ * 
+ * 按照以下优先级获取字段值：
+ * 优先级 A: Group 模式嵌套 - $block[$clone_name]['field_name']
+ * 优先级 B: 直接存在于 block 中 - $block['field_name']
+ * 优先级 C: 从数据库读取 - get_field( $pfx . 'field_name' )
+ * 
+ * @param string $field_name 字段名
+ * @param array  $block      Block 数据
+ * @param string $clone_name 克隆名
+ * @param string $pfx        字段前缀
+ * @param mixed  $default    默认值
+ * @return mixed 字段值
+ */
+function get_field_value($field_name, $block, $clone_name, $pfx, $default = null) {
+    // 优先级 A: Group 模式嵌套
+    if (isset($block[$clone_name]) && isset($block[$clone_name][$field_name])) {
+        return $block[$clone_name][$field_name];
+    }
+    // 优先级 B: 直接存在于 block 中
+    if (isset($block[$field_name])) {
+        return $block[$field_name];
+    }
+    // 优先级 C: 从数据库读取
+    $acf_value = get_field($pfx . $field_name);
+    return $acf_value !== null ? $acf_value : $default;
+}
+
+/**
  * 模板专用模块渲染函数 (View Renderer)
  * 
  * 作用：

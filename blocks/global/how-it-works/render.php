@@ -8,20 +8,25 @@ $block_id = _3dp_get_safe_block_id( $block, 'how-it-works' );
 
 $block_class = isset( $block['className'] ) ? $block['className'] : '';
 
-$section_title = get_field($pfx . 'title' ) ?: '';
-$section_desc  = get_field($pfx . 'desc' ) ?: '';
+// 万能取数逻辑
+// 确定克隆名
+$clone_name = rtrim($pfx, '_');
 
-$steps_field = get_field($pfx . 'steps' );
+// 使用万能取数逻辑获取字段值
+$section_title = get_field_value('title', $block, $clone_name, $pfx, '' );
+$section_desc  = get_field_value('desc', $block, $clone_name, $pfx, '' );
+
+$steps_field = get_field_value('steps', $block, $clone_name, $pfx, array() );
 
 if ( ! $steps_field || ! is_array( $steps_field ) || ! count( $steps_field ) ) {
     return;
 }
 
-$mb_hide_tip = (bool) get_field($pfx . 'mb_hide_tip' );
-$mb_compact  = (bool) get_field($pfx . 'mb_compact_mode' );
+$mb_hide_tip = (bool) get_field_value('mb_hide_tip', $block, $clone_name, $pfx, false );
+$mb_compact  = (bool) get_field_value('mb_compact_mode', $block, $clone_name, $pfx, false );
 
-$cta_label = get_field($pfx . 'cta_label' );
-$cta_url   = get_field($pfx . 'cta_url' );
+$cta_label = get_field_value('cta_label', $block, $clone_name, $pfx, '' );
+$cta_url   = get_field_value('cta_url', $block, $clone_name, $pfx, '' );
 
 if ( ! $cta_label ) {
     $cta_label = 'Get Quote';
@@ -160,7 +165,7 @@ $state = array(
                     <div class="mb-6 lg:mb-8">
                         <div
                             class="inline-flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-[0.16em] mb-3 px-2 py-0.5 bg-primary/5 rounded-md"
-                            x-show="steps[current].qc_label"
+                            :class="steps[current].qc_label ? 'inline-flex' : 'hidden'"
                         >
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-width="3" d="M5 13l4 4L19 7" />
@@ -180,9 +185,8 @@ $state = array(
                     </div>
 
                     <div
-                        class="grid grid-cols-2 gap-4 p-4 bg-bg-section border border-border rounded-card mb-6"
-                        :class="mbCompact ? 'hidden lg:grid' : ''"
-                        x-show="steps[current].specs && steps[current].specs.length"
+                        class="grid-cols-2 gap-4 p-4 bg-bg-section border border-border rounded-card mb-6"
+                        :class="(mbCompact ? 'hidden lg:grid' : 'grid') + (steps[current].specs && steps[current].specs.length ? '' : ' hidden')"
                     >
                         <template x-for="(spec, index) in steps[current].specs" :key="index">
                             <div class="border-l-2 border-primary/20 pl-3">
@@ -199,9 +203,8 @@ $state = array(
                     </div>
 
                     <div
-                        class="flex gap-3 p-4 bg-primary/[0.03] border-l-4 border-primary rounded-r-md mb-6"
-                        :class="(mbHideTip || mbCompact) ? 'hidden lg:flex' : 'flex'"
-                        x-show="steps[current].tip"
+                        class="gap-3 p-4 bg-primary/[0.03] border-l-4 border-primary rounded-r-md mb-6"
+                        :class="((mbHideTip || mbCompact) ? 'hidden lg:flex' : 'flex') + (steps[current].tip ? '' : ' hidden')"
                     >
                         <svg class="w-4 h-4 text-primary shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
