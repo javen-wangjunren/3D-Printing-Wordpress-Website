@@ -34,9 +34,10 @@ add_action( 'wp_enqueue_scripts', function() {
 
     // 3. Tailwind CSS (Compiled)
     // 加载本地编译后的 Tailwind CSS，使用 filemtime 自动清除缓存
+    // 开发阶段优先加载未压缩的 style.css 以便于调试
     $tailwind_css_files = array(
-        'assets/css/style.min.css',
         'assets/css/style.css',
+        'assets/css/style.min.css',
     );
 
     foreach ( $tailwind_css_files as $tailwind_css_file ) {
