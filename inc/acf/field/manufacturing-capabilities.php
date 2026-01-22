@@ -190,6 +190,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'placement' => 'top',
                 ),
                 array(
+                    'key' => 'field_mcap_bg_color',
+                    'label' => 'Background Color',
+                    'name' => 'manufacturing_capabilities_background_color',
+                    'type' => 'color_picker',
+                    'wrapper' => array('width' => '50'),
+                    'default_value' => '#ffffff',
+                ),
+                array(
                     'key' => 'field_mcap_mobile_compact',
                     'label' => 'Mobile Compact Mode',
                     'name' => 'manufacturing_capabilities_mobile_compact_mode',

@@ -92,8 +92,15 @@ add_action( 'current_screen', function( $screen ) {
 
 // 1. 强制全局 "无侧边栏" (No Sidebar)
 // 我们使用 Tailwind Grid/Flex 自己控制布局，不需要 GP 的侧边栏逻辑
+// 确保 404 和 搜索结果页 也遵循此规则
 add_filter( 'generate_sidebar_layout', function( $layout ) {
     return 'no-sidebar';
+}, 999 );
+
+// 强制 404 和 搜索页 使用全宽容器
+// 配合 generate_container_width 过滤器，确保这些页面没有 max-width 限制
+add_filter( 'generate_container_width', function( $width ) {
+    return '2000'; // 足够大的值，实际上配合 CSS 的 max-w-full
 } );
 
 // 2. 禁用 GP 默认的 H1 标题输出
@@ -108,4 +115,63 @@ add_filter( 'generate_container_width', function( $width ) {
 
 // 4. 清理 WindPress 旧配置 (已废弃，改用本地编译)
 // (原 WindPress 配置代码已移除)
+
+/**
+ * 🛠️ 自定义模板加载逻辑 (Template Loader)
+ * 
+ * 强制将 CPT (Capability, Material) 的单页模板指向 templates/ 目录
+ * 避免文件散落在根目录，保持结构整洁
+ */
+add_filter( 'template_include', function( $template ) {
+    // 1. Single Capability
+    if ( is_singular( 'capability' ) ) {
+        $custom_template = locate_template( 'templates/single-capability.php' );
+        if ( $custom_template ) {
+            return $custom_template;
+        }
+    }
+
+    // 2. Single Material
+    if ( is_singular( 'material' ) ) {
+        $custom_template = locate_template( 'templates/single-material.php' );
+        if ( $custom_template ) {
+            return $custom_template;
+        }
+    }
+
+    return $template;
+} );
+
+/**
+ * 🚀 性能优化：按需加载 Gutenberg 样式 (Block Library CSS)
+ * 
+ * 逻辑：
+ * 1. 全定制模板 (templates/ 目录下的页面) -> 彻底移除 wp-block-library，实现 0 CSS 冗余
+ * 2. 普通文章 (Single Post) -> 保留，确保兼容性
+ */
+add_action( 'wp_enqueue_scripts', function() {
+    // 1. 定义全定制页面模板列表 (相对于主题根目录)
+    $custom_templates = array(
+        'templates/page-home.php',
+        'templates/page-about.php',
+        'templates/page-contact.php',
+        'templates/page-all-capabilities.php',
+        'templates/page-all-materials.php',
+    );
+
+    // 2. 检查条件
+    // A: 是否使用了上述 Page Templates
+    $is_custom_page = is_page_template( $custom_templates );
+
+    // B: 是否为全定制 CPT (Capability / Material)
+    // 这些 CPT 在上方 template_include 中已被强制指向 templates/ 目录
+    $is_custom_cpt = is_singular( array( 'capability', 'material' ) );
+
+    // 3. 执行移除
+    if ( $is_custom_page || $is_custom_cpt ) {
+        wp_dequeue_style( 'wp-block-library' );
+        wp_dequeue_style( 'wp-block-library-theme' );
+        wp_dequeue_style( 'global-styles' ); // 移除 theme.json 生成的内联样式 (SVG 预设等)
+    }
+}, 100 );
 

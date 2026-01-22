@@ -39,21 +39,17 @@ $text_color  = get_field_value('hero_text_color', $block, $clone_name, $pfx, '#0
 $btn_p_color = get_field_value('hero_primary_button_color', $block, $clone_name, $pfx, '#0073aa');
 $btn_s_color = get_field_value('hero_secondary_button_color', $block, $clone_name, $pfx, '#ffffff');
 
-// Stats
-$show_stats = get_field_value('hero_show_stats', $block, $clone_name, $pfx);
-$stats      = get_field_value('hero_stats', $block, $clone_name, $pfx);
-
 // 3. 预处理类名与样式
 // Base classes
-$section_classes = ['relative', 'overflow-visible']; // overflow-visible for stats bar
+$section_classes = ['relative'];
 $section_classes[] = $block_class;
 
 // Layout specific classes
 if ($layout === 'centered') {
-    $section_classes[] = 'min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-48 lg:pb-32';
+    $section_classes[] = 'min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-32 lg:pb-24'; // Reduced bottom padding
 } else {
     // Split layout
-    $section_classes[] = 'pt-20 pb-32 lg:pt-32 lg:pb-48';
+    $section_classes[] = 'pt-20 pb-20 lg:pt-32 lg:pb-24'; // Reduced bottom padding to prevent huge gap
 }
 
 // Compact mode for mobile
@@ -70,6 +66,26 @@ if ($text_color) {
     $inline_styles[] = "color: {$text_color}";
 }
 $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles) . '"' : '';
+
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+// Determine current bg for comparison. Hero usually has its own bg. 
+// If bg_color is set, use it. If not, maybe it's an image?
+// If it's an image, we probably shouldn't collapse padding unless the previous one was also that image (unlikely).
+// But we should Set the global state for the NEXT block.
+$current_bg_for_state = $bg_color ? $bg_color : 'hero-image-bg'; 
+
+// Apply dynamic padding logic only if not centered (Centered has specific padding)
+// But user said "Default vertical spacing...". Hero is special. 
+// I will keep Hero's specific padding but add the top-padding removal if applicable.
+// Logic: If previous block has same BG color, remove top padding.
+$pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
+
+if ($pt_remove) {
+    // Remove existing pt classes and add pt-0
+    $section_classes = array_diff($section_classes, ['pt-20', 'lg:pt-32', 'pt-32']);
+    $section_classes[] = 'pt-0';
+}
 ?>
 
 <section id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr(implode(' ', $section_classes)); ?>"<?php echo $style_attr; ?>>
@@ -78,14 +94,17 @@ $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles
     // ==========================================
     // LAYOUT: CENTERED (Style 2)
     // ==========================================
-    if ($layout === 'centered'): 
+    if ($layout === 'centered') {
     ?>
         <!-- Background Image Layer -->
         <div class="absolute inset-0 z-0">
             <picture>
-                <?php if ($mobile_img_id): ?>
-                    <source media="(max-width: 767px)" srcset="<?php echo esc_url(wp_get_attachment_image_url($mobile_img_id, 'large')); ?>">
-                <?php endif; ?>
+                <?php if ($mobile_img_id): 
+                    $m_img = wp_get_attachment_image_src($mobile_img_id, 'large');
+                    if ($m_img): ?>
+                    <source media="(max-width: 767px)" srcset="<?php echo esc_url($m_img[0]); ?>" width="<?php echo esc_attr($m_img[1]); ?>" height="<?php echo esc_attr($m_img[2]); ?>">
+                    <?php endif; 
+                endif; ?>
                 <?php echo wp_get_attachment_image($desktop_img_id, 'full', false, ['class' => 'w-full h-full object-cover']); ?>
             </picture>
             <!-- Overlay -->
@@ -93,7 +112,7 @@ $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles
         </div>
 
         <!-- Content Layer -->
-        <div class="relative z-10 max-w-container mx-auto px-6 lg:px-[64px] text-center">
+        <div class="relative z-10 max-w-container mx-auto px-6 lg:px-8 text-center">
             
             <?php if ($subtitle): ?>
             <span class="inline-block mb-6 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-[12px] font-mono font-bold text-white uppercase tracking-wider backdrop-blur-md">
@@ -102,7 +121,7 @@ $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles
             <?php endif; ?>
             
             <?php if ($title): ?>
-            <h1 class="text-h1 text-white tracking-[-1px] mb-6 drop-shadow-sm">
+            <h1 class="text-h1 text-white tracking-tight mb-6 drop-shadow-sm">
                 <?php echo esc_html($title); ?>
             </h1>
             <?php endif; ?>
@@ -136,24 +155,25 @@ $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles
         </div>
 
     <?php 
+    } 
     // ==========================================
     // LAYOUT: SPLIT (Style 1)
     // ==========================================
-    else: 
+    else { 
     ?>
-        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+        <div class="max-w-container mx-auto px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-stretch">
                 
                 <!-- Left: Text Content -->
                 <div class="z-10 flex flex-col justify-center py-6">
                     <?php if ($title): ?>
-                    <h1 class="text-h1 text-heading tracking-[-1px] mb-6">
+                    <h1 class="text-h1 text-heading tracking-tight mb-6">
                         <?php echo esc_html($title); ?>
                     </h1>
                     <?php endif; ?>
 
                     <?php if ($subtitle): ?>
-                    <h2 class="text-[20px] font-semibold text-primary mb-4 uppercase tracking-wide">
+                    <h2 class="text-[20px] font-semibold text-primary mb-4 uppercase tracking-tight">
                         <?php echo esc_html($subtitle); ?>
                     </h2>
                     <?php endif; ?>
@@ -173,7 +193,7 @@ $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles
                             
                             $btn_classes = $style === 'primary' 
                                 ? 'bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/10' 
-                                : 'bg-white border border-border text-heading hover:border-primary';
+                                : 'bg-white border-[3px] border-border text-heading hover:border-primary';
                         ?>
                             <a href="<?php echo esc_url($b_url); ?>" class="<?php echo esc_attr($btn_classes); ?> px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all">
                                 <?php if ($style === 'primary'): ?>
@@ -190,46 +210,25 @@ $style_attr = !empty($inline_styles) ? ' style="' . implode('; ', $inline_styles
                 <div class="relative min-h-[360px] lg:min-h-0">
                     <div class="h-full rounded-card overflow-hidden bg-white border border-border shadow-sm relative">
                         <picture>
-                            <?php if ($mobile_img_id): ?>
-                                <source media="(max-width: 767px)" srcset="<?php echo esc_url(wp_get_attachment_image_url($mobile_img_id, 'large')); ?>">
-                            <?php endif; ?>
-                            <?php echo wp_get_attachment_image($desktop_img_id, 'full', false, ['class' => 'w-full h-full object-cover opacity-95 absolute inset-0']); ?>
+                            <?php if ($mobile_img_id): 
+                                $m_img_split = wp_get_attachment_image_src($mobile_img_id, 'large');
+                                if ($m_img_split): ?>
+                                <source media="(max-width: 767px)" srcset="<?php echo esc_url($m_img_split[0]); ?>" width="<?php echo esc_attr($m_img_split[1]); ?>" height="<?php echo esc_attr($m_img_split[2]); ?>">
+                                <?php endif; 
+                            endif; ?>
+                            <?php echo wp_get_attachment_image($desktop_img_id, 'full', false, ['class' => 'w-full h-full object-cover opacity-95 absolute inset-0', 'loading' => 'eager']); ?>
                         </picture>
                     </div>
                 </div>
             </div>
         </div>
-    <?php endif; ?>
-
-
     <?php 
-    // ==========================================
-    // SHARED: STATS BAR
-    // ==========================================
-    if ($show_stats && (is_array($stats) || is_object($stats))): 
-        // 动态计算列数逻辑：
-        // Desktop: 如果是 5 个数据就分 5 列，默认 4 个分 4 列。为了安全起见，我们使用 flex 布局自动分配，或者 grid。
-        // 根据 Design Demo，使用 Flex wrap 且 justify-center，min-w-[140px]
+    } 
     ?>
-    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
-        <div class="bg-white border border-border rounded-card shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] py-8 px-6 lg:px-10">
-            
-            <!-- Mobile: Grid 2 cols, Desktop: Flex Row -->
-            <div class="grid grid-cols-2 gap-y-8 gap-x-4 lg:flex lg:flex-wrap lg:justify-center lg:items-center lg:gap-x-16">
-                <?php foreach ($stats as $stat): ?>
-                <div class="text-center min-w-[100px] lg:min-w-[140px]">
-                    <strong class="block font-mono text-[24px] lg:text-[28px] text-heading font-bold mb-1 tracking-tight">
-                        <?php echo esc_html($stat['stat_number']); ?>
-                    </strong> 
-                    <span class="text-[10px] lg:text-[11px] text-muted font-bold uppercase tracking-wider">
-                        <?php echo esc_html($stat['stat_description']); ?>
-                    </span>
-                </div>
-                <?php endforeach; ?>
-            </div>
-
-        </div>
-    </div>
-    <?php endif; ?>
 
 </section>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $current_bg_for_state;
+?>

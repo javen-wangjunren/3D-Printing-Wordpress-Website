@@ -52,13 +52,26 @@ if ( ! empty( $block['anchor'] ) ) {
     $block_id = $block['anchor'];
 }
 
-$class_name = 'related-blog-block py-section-y overflow-hidden';
+$class_name = 'related-blog-block w-full overflow-hidden';
 if ( ! empty( $block['className'] ) ) {
     $class_name .= ' ' . $block['className'];
 }
 if ( ! empty( $custom_class ) ) {
     $class_name .= ' ' . $custom_class;
 }
+
+// --- Dynamic Spacing Logic ---
+$bg_color = get_field_value('background_color', $block, $clone_name, $pfx, '#ffffff');
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$current_bg_for_state = $bg_color; 
+$pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
+
+$pt_class = $pt_remove ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $current_bg_for_state;
 
 $query_args = array(
     'post_type'           => 'post',
@@ -93,12 +106,12 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
 
 ?>
 
-<div id="<?php echo esc_attr( $block_id ); ?>" class="<?php echo esc_attr( $class_name ); ?>">
-    <div x-data="{ scrollNext(){ const el = $refs.slider; if(el){ el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' }); } }, scrollPrev(){ const el = $refs.slider; if(el){ el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' }); } } }" class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+<section id="<?php echo esc_attr( $block_id ); ?>" class="<?php echo esc_attr( $class_name ); ?> <?php echo esc_attr($section_spacing); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
+    <div x-data="{ scrollNext(){ const el = $refs.slider; if(el){ el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' }); } }, scrollPrev(){ const el = $refs.slider; if(el){ el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' }); } } }" class="max-w-container mx-auto px-container">
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div class="max-w-xl text-left">
                 <?php if ( $title || $title_highlight ) : ?>
-                    <h2 class="text-h2 font-bold text-heading tracking-[-0.04em] mb-4">
+                    <h2 class="text-h2 font-bold text-heading tracking-tight mb-4">
                         <?php echo esc_html( $title ); ?><?php if ( $title_highlight ) : ?> <span class="text-primary"><?php echo esc_html( $title_highlight ); ?></span><?php endif; ?>
                     </h2>
                 <?php endif; ?>
@@ -110,17 +123,17 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
             </div>
             <div class="flex flex-col items-end gap-3 pb-2 md:flex-row md:items-center">
                 <?php if ( $button_text && $button_link ) : ?>
-                    <a href="<?php echo esc_url( $button_link ); ?>" class="inline-flex items-center justify-center px-4 py-2 rounded-button border border-border text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors">
+                    <a href="<?php echo esc_url( $button_link ); ?>" class="inline-flex items-center justify-center px-4 py-2 rounded-button border-[3px] border-border text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors">
                         <span><?php echo esc_html( $button_text ); ?></span>
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                     </a>
                 <?php endif; ?>
                 <?php if ( $cards_query->have_posts() ) : ?>
                     <div class="hidden md:flex gap-3">
-                        <button type="button" @click="scrollPrev" class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
+                        <button type="button" @click="scrollPrev" class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
                             <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                         </button>
-                        <button type="button" @click="scrollNext" class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
+                        <button type="button" @click="scrollNext" class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
                             <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
                         </button>
                     </div>
@@ -183,4 +196,4 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
             </div>
         </div>
     </div>
-</div>
+</section>

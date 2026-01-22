@@ -185,12 +185,18 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 ),
                 // Colors - Grouped for compactness
                 array(
-                    'key'               => 'field_hero_bg_color',
-                    'label'             => __( 'Background', '3d-printing' ),
+                    'key'               => 'field_hero_background_color',
+                    'label'             => __( 'Background Color', '3d-printing' ),
                     'name'              => 'hero_background_color',
                     'type'              => 'color_picker',
-                    'default_value'     => '#ffffff',
-                    'wrapper'           => array( 'width' => '25' ),
+                    'instructions'      => __( 'Set a custom background color for the section. (Default: #f3f4f7)', '3d-printing' ),
+                    'required'          => 0,
+                    'default_value'     => '#f3f4f7', // Updated default to match theme
+                    'enable_opacity'    => 1,
+                    'return_format'     => 'string',
+                    'wrapper'           => array(
+                        'width' => '50',
+                    ),
                 ),
                 array(
                     'key'               => 'field_hero_text_color',
@@ -215,66 +221,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type'              => 'color_picker',
                     'default_value'     => '#ffffff',
                     'wrapper'           => array( 'width' => '25' ),
-                ),
-
-                // ======================================================
-                // TAB 3: SETTINGS & STATS
-                // ======================================================
-                array(
-                    'key'               => 'field_hero_tab_settings',
-                    'label'             => __( 'Settings', '3d-printing' ),
-                    'type'              => 'tab',
-                    'placement'         => 'top',
-                ),
-                array(
-                    'key'               => 'field_hero_show_stats',
-                    'label'             => __( 'Show Stats Bar', '3d-printing' ),
-                    'name'              => 'hero_show_stats',
-                    'type'              => 'true_false',
-                    'ui'                => 1,
-                    'default_value'     => 1,
-                    'message'           => __( 'Display the statistics bar at the bottom?', '3d-printing' ),
-                ),
-                array(
-                    'key'               => 'field_hero_stats',
-                    'label'             => __( 'Statistics', '3d-printing' ),
-                    'name'              => 'hero_stats',
-                    'type'              => 'repeater',
-                    'instructions'      => __( 'Add up to 4 stats. Desktop: 4 cols. Mobile: 2 cols.', '3d-printing' ),
-                    'collapsed'         => 'field_stat_number',
-                    'min'               => 0,
-                    'max'               => 4,
-                    'layout'            => 'table', // Table is cleaner for simple key-value pairs
-                    'button_label'      => __( 'Add Stat', '3d-printing' ),
-                    'conditional_logic' => array(
-                        array(
-                            array(
-                                'field'    => 'field_hero_show_stats',
-                                'operator' => '==',
-                                'value'    => '1',
-                            ),
-                        ),
-                    ),
-                    'sub_fields'        => array(
-                        array(
-                            'key'           => 'field_stat_number',
-                            'label'         => __( 'Number / Value', '3d-printing' ),
-                            'name'          => 'stat_number',
-                            'type'          => 'text',
-                            'placeholder'   => 'e.g. 500+',
-                            'required'      => 1,
-                            'wrapper'       => array( 'width' => '40' ),
-                        ),
-                        array(
-                            'key'           => 'field_stat_description',
-                            'label'         => __( 'Label / Description', '3d-printing' ),
-                            'name'          => 'stat_description',
-                            'type'          => 'text',
-                            'placeholder'   => 'e.g. Materials',
-                            'required'      => 1,
-                            'wrapper'       => array( 'width' => '60' ),
-                        ),
-                    ),
                 ),
             ),
         ) );

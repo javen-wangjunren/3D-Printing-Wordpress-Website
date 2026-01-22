@@ -39,10 +39,33 @@ $classes = [
 $classes = array_filter($classes);
 $class_string = implode(' ', $classes);
 
+// --- Dynamic Spacing Logic ---
+$clone_name = isset($clone_name) ? $clone_name : '';
+$bg_color = get_field_value('material_comparison_background_color', $block, $clone_name, $pfx, '#ffffff');
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$current_bg_for_state = $bg_color; 
+$pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
+
+$pt_class = $pt_remove ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $current_bg_for_state;
+
 // 渲染模块
 ?>
-<div id="<?php echo esc_attr($anchor); ?>" class="<?php echo esc_attr($class_string); ?>">
-    <!-- Material Comparison 模块渲染内容 -->
-    <!-- 由前端开发人员根据设计稿实现具体的HTML结构和样式 -->
-    <!-- 数据已通过ACF字段获取，可直接使用 -->
-</div>
+<section id="<?php echo esc_attr($anchor); ?>" class="w-full <?php echo esc_attr($section_spacing); ?> <?php echo esc_attr($class_string); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
+    <div class="max-w-container mx-auto px-container">
+        <?php if ($title): ?>
+            <h2 class="text-h2 font-semibold text-heading tracking-tight mb-8"><?php echo esc_html($title); ?></h2>
+        <?php endif; ?>
+        
+        <!-- Material Comparison 模块渲染内容 -->
+        <!-- 由前端开发人员根据设计稿实现具体的HTML结构和样式 -->
+        <!-- 数据已通过ACF字段获取，可直接使用 -->
+        <?php if ($intro): ?>
+            <div class="mb-8 text-body"><?php echo wp_kses_post($intro); ?></div>
+        <?php endif; ?>
+    </div>
+</section>

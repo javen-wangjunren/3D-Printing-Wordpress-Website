@@ -49,7 +49,10 @@ foreach ( $steps_field as $step ) {
     $step_desc = isset( $step['desc'] ) ? sanitize_textarea_field( $step['desc'] ) : '';
 
     $image_id   = isset( $step['image'] ) ? intval( $step['image'] ) : 0;
-    $image_url  = $image_id ? esc_url_raw( wp_get_attachment_image_url( $image_id, 'large' ) ) : '';
+    $image_data = $image_id ? wp_get_attachment_image_src( $image_id, 'large' ) : null;
+    $image_url  = $image_data ? esc_url_raw( $image_data[0] ) : '';
+    $image_width = $image_data ? $image_data[1] : '';
+    $image_height = $image_data ? $image_data[2] : '';
     $image_alt  = $image_id ? get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '';
     $image_alt  = $image_alt ? sanitize_text_field( $image_alt ) : '';
 
@@ -79,6 +82,8 @@ foreach ( $steps_field as $step ) {
         'title'    => $step_title,
         'desc'     => $step_desc,
         'image'    => $image_url,
+        'width'    => $image_width,
+        'height'   => $image_height,
         'image_alt'=> $image_alt,
         'specs'    => $specs,
         'tip'      => $tip,
@@ -101,9 +106,17 @@ $state = array(
     'mbCompact' => $mb_compact,
 );
 
+// --- Dynamic Spacing Logic ---
+$bg_color = get_field_value('background_color', $block, $clone_name, $pfx, '#ffffff');
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$section_spacing = ($bg_color === $prev_bg) ? 'pt-0 pb-16 lg:pb-24' : 'py-16 lg:py-24';
+
+// Update Global State
+$GLOBALS['3dp_last_bg'] = $bg_color;
+
 ?>
 
-<section id="<?php echo esc_attr( $block_id ); ?>" class="py-16 lg:py-24 bg-bg-section/50">
+<section id="<?php echo esc_attr( $block_id ); ?>" class="<?php echo esc_attr($section_spacing); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
     <div class="max-w-container mx-auto px-6 lg:px-[64px]">
         <div class="text-center mb-8 lg:mb-12">
             <?php if ( $section_title ) : ?>
@@ -127,8 +140,11 @@ $state = array(
                 <template x-if="steps[current].image">
                     <img
                         :src="steps[current].image"
+                        :width="steps[current].width"
+                        :height="steps[current].height"
                         :alt="steps[current].image_alt"
                         class="w-full h-full object-cover opacity-90 transition-opacity duration-700"
+                        loading="lazy"
                     />
                 </template>
 
@@ -219,7 +235,7 @@ $state = array(
                 <div class="flex gap-3 pt-6 border-t border-border/50">
                     <button
                         type="button"
-                        class="flex-1 h-12 border border-border text-heading rounded-button font-bold text-[12px] uppercase tracking-[0.16em] hover:bg-bg-section transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        class="flex-1 h-12 border-[3px] border-border text-heading rounded-button font-bold text-[12px] uppercase tracking-[0.16em] hover:bg-bg-section transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                         :disabled="current === 0"
                         @click="if (current > 0) current--"
                     >
@@ -243,3 +259,7 @@ $state = array(
         </div>
     </div>
 </section>
+
+<?php
+// End of file
+?>

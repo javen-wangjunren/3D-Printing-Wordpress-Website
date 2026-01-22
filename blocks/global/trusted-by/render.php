@@ -76,8 +76,14 @@ if (empty($logos)) {
     return;
 }
 
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+
 $section_classes = array(
-    'py-[96px]',
+    $pt_class,
+    $pb_class,
     'border-b',
     'border-border',
     'overflow-hidden',
@@ -120,10 +126,10 @@ if ($animation_speed === 'slow') {
 </style>
 
 <div id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr($section_class_attr); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
-    <div class="max-w-[1280px] mx-auto px-6 lg:px-[24px]">
-        <div class="text-center mb-16">
+    <div class="max-w-container mx-auto px-6 lg:px-[24px]">
+        <div class="text-center mb-12">
             <?php if ($title) : ?>
-                <h3 class="text-[28px] font-bold text-heading tracking-[-0.5px] mb-4" style="color: <?php echo esc_attr($title_color); ?>;">
+                <h3 class="text-[28px] font-bold text-heading tracking-tight mb-4" style="color: <?php echo esc_attr($title_color); ?>;">
                     <?php echo esc_html($title); ?>
                 </h3>
             <?php endif; ?>
@@ -155,6 +161,7 @@ if ($animation_speed === 'slow') {
                             <?php echo wp_get_attachment_image($logo_id, 'medium', false, array(
                                 'class' => 'h-8 lg:h-10 w-auto object-contain opacity-40 hover:opacity-100 transition-opacity',
                                 'alt'   => esc_attr($logo_alt),
+                                'loading' => 'lazy',
                             )); ?>
                         </div>
                     <?php endforeach; ?>
@@ -182,3 +189,8 @@ if ($animation_speed === 'slow') {
         </div>
     </div>
 </div>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $bg_color;
+?>

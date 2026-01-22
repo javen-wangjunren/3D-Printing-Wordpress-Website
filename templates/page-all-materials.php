@@ -35,40 +35,42 @@ $mobile_compact_mode = (bool) get_field( 'filter_sidebar_mobile_compact_mode' );
 
 ?>
 
-<section class="all-materials-page" data-material-library>
-    <div class="all-materials-shell" data-mobile-compact-mode="<?php echo esc_attr( $mobile_compact_mode ? '1' : '0' ); ?>">
+<main id="main" class="site-main page-all-materials">
+    <section class="all-materials-page" data-material-library>
+        <div class="all-materials-shell" data-mobile-compact-mode="<?php echo esc_attr( $mobile_compact_mode ? '1' : '0' ); ?>">
 
-        <?php if ( $seo_copy ) : ?>
-            <div class="all-materials-seo" data-seo-copy>
-                <?php echo wp_kses_post( $seo_copy ); ?>
+            <?php if ( $seo_copy ) : ?>
+                <div class="all-materials-seo" data-seo-copy>
+                    <?php echo wp_kses_post( $seo_copy ); ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="all-materials-layout">
+
+                <!-- 3. Filter Sidebar Module -->
+                <?php
+                set_query_var( 'material_count', $material_count );
+                get_template_part( 'blocks/global/filter-sidebar/render' );
+                ?>
+
+                <div class="materials-grid-area" data-materials-grid>
+                    <?php if ( $material_query->have_posts() ) : ?>
+                        <div class="materials-grid">
+                            <?php while ( $material_query->have_posts() ) : $material_query->the_post(); ?>
+
+                                <!-- 4. Material Card Module -->
+                                <?php get_template_part( 'blocks/global/material-card/render' ); ?>
+
+                            <?php endwhile; ?>
+                        </div>
+                    <?php else : ?>
+                        <p class="materials-empty">No materials found.</p>
+                    <?php endif; ?>
+                </div>
             </div>
-        <?php endif; ?>
-
-        <div class="all-materials-layout">
-
-            <!-- 3. Filter Sidebar Module -->
-            <?php
-            set_query_var( 'material_count', $material_count );
-            get_template_part( 'blocks/global/filter-sidebar/render' );
-            ?>
-
-            <main class="materials-grid-area" data-materials-grid>
-                <?php if ( $material_query->have_posts() ) : ?>
-                    <div class="materials-grid">
-                        <?php while ( $material_query->have_posts() ) : $material_query->the_post(); ?>
-
-                            <!-- 4. Material Card Module -->
-                            <?php get_template_part( 'blocks/global/material-card/render' ); ?>
-
-                        <?php endwhile; ?>
-                    </div>
-                <?php else : ?>
-                    <p class="materials-empty">No materials found.</p>
-                <?php endif; ?>
-            </main>
         </div>
-    </div>
-</section>
+    </section>
+</main>
 
 <?php
 wp_reset_postdata();

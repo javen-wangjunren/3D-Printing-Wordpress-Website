@@ -58,4 +58,15 @@ add_action( 'wp_enqueue_scripts', function() {
     // 4. 自定义 JS (如果有)
     // wp_enqueue_script( 'tdp-main', get_stylesheet_directory_uri() . '/assets/js/main.js', array('alpine-js'), TDP_VERSION, true );
 
+    // 5. 资源瘦身：禁用未使用的原生脚本
+    // 我们使用 Alpine.js 处理导航，不需要 GP 的 menu.js
+    // 我们禁用了评论，不需要 comment-reply
+    wp_dequeue_script( 'generate-menu' );
+    wp_dequeue_script( 'generate-navigation' );
+    wp_dequeue_script( 'comment-reply' );
+    
+    // 禁用 Emoji 脚本 (除非你需要)
+    remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+    remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
 } );

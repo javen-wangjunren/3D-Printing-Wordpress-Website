@@ -76,7 +76,7 @@ $primary_type    = ! empty( $type_slugs ) ? $type_terms[0]->name : get_field_val
         <?php endif; ?>
 
         <?php if ( has_post_thumbnail() ) : ?>
-            <?php echo get_the_post_thumbnail( null, 'medium_large', array( 'class' => 'material-card-image h-full w-full object-contain mix-blend-multiply' ) ); ?>
+            <?php echo get_the_post_thumbnail( null, 'medium_large', array( 'class' => 'material-card-image h-full w-full object-contain mix-blend-multiply', 'loading' => 'lazy' ) ); ?>
         <?php endif; ?>
     </div>
 

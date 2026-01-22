@@ -75,8 +75,14 @@ foreach ( $tabs_raw as $tab ) {
     // 处理图片
     $image_id        = isset( $tab['image'] ) ? (int) $tab['image'] : 0;
     $mobile_image_id = isset( $tab['mobile_image'] ) ? (int) $tab['mobile_image'] : 0;
-    $image_url       = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : '';
-    $mobile_url      = $mobile_image_id ? wp_get_attachment_image_url( $mobile_image_id, 'large' ) : '';
+    
+    $image_data = $image_id ? wp_get_attachment_image_src( $image_id, 'large' ) : null;
+    $image_url  = $image_data ? $image_data[0] : '';
+    $image_w    = $image_data ? $image_data[1] : '';
+    $image_h    = $image_data ? $image_data[2] : '';
+
+    $mobile_data = $mobile_image_id ? wp_get_attachment_image_src( $mobile_image_id, 'large' ) : null;
+    $mobile_url  = $mobile_data ? $mobile_data[0] : '';
 
     // 构建 Tab 数据单元
     $tabs[] = array(
@@ -92,6 +98,8 @@ foreach ( $tabs_raw as $tab ) {
         'image'          => array(
             'desktop' => $image_url ? $image_url : '',
             'mobile'  => $mobile_url ? $mobile_url : $image_url,
+            'width'   => $image_w,
+            'height'  => $image_h,
         ),
     );
 }
@@ -110,7 +118,15 @@ $json_config = wp_json_encode( $config );
 $final_id = $anchor_id ? $anchor_id : $block_id;
 
 // 构建类名
-$root_class = 'py-12 lg:py-20'; // 基础内边距
+$bg_color = get_field_value('manufacturing_capabilities_background_color', $block, $clone_name, $pfx, '#ffffff');
+
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+
+$root_class = $pt_class . ' ' . $pb_class; // 基础内边距
+
 if ( ! empty( $block['className'] ) ) {
     $root_class .= ' ' . $block['className'];
 }
@@ -118,10 +134,13 @@ if ( $extra_class ) {
     $root_class .= ' ' . $extra_class;
 }
 
+// Update Global State
+$GLOBALS['3dp_last_bg'] = $bg_color;
+
 ?>
 
-<section id="<?php echo esc_attr( $final_id ); ?>" class="<?php echo esc_attr( $root_class ); ?>">
-    <div class="max-w-[1280px] mx-auto px-5 lg:px-8" x-data='<?php echo $json_config; ?>'>
+<section id="<?php echo esc_attr( $final_id ); ?>" class="<?php echo esc_attr( $root_class ); ?> w-full" style="background-color: <?php echo esc_attr($bg_color); ?>;">
+    <div class="max-w-container mx-auto px-6 lg:px-8" x-data='<?php echo $json_config; ?>'>
         
         <!-- Header & Tabs -->
         <header class="text-center mb-10 lg:mb-16">
@@ -136,7 +155,7 @@ if ( $extra_class ) {
                 <template x-for="(tab, index) in tabs" :key="index">
                     <button 
                         @click="active = index"
-                        class="px-6 py-2.5 rounded-[8px] border text-[13px] font-bold transition-all shadow-sm"
+                        class="px-6 py-2.5 rounded-[8px] border-[3px] text-[13px] font-bold transition-all shadow-sm"
                         :class="active === index 
                             ? 'bg-primary text-white border-primary shadow-md' 
                             : 'bg-white text-body border-border hover:border-primary/50'"
@@ -194,7 +213,7 @@ if ( $extra_class ) {
             <!-- Image Column (Order 1 on mobile, 2 on desktop) -->
             <div class="aspect-[4/3] lg:aspect-auto lg:h-auto order-1 lg:order-2">
                 <div class="h-full relative rounded-[12px] overflow-hidden border border-border bg-[#F8F9FB] group shadow-sm">
-                    <img :src="tabs[active].image.desktop || tabs[active].image.mobile" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System">
+                    <img :src="tabs[active].image.desktop || tabs[active].image.mobile" :width="tabs[active].image.width" :height="tabs[active].image.height" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System" loading="lazy">
                     <div class="absolute bottom-0 right-0 bg-primary/90 backdrop-blur-sm px-3 py-1.5 lg:px-4 lg:py-2 text-[9px] lg:text-[10px] font-mono font-bold text-white tracking-widest uppercase rounded-tl-[12px]" x-text="tabs[active].machine"></div>
                 </div>
             </div>
@@ -202,3 +221,8 @@ if ( $extra_class ) {
         </div>
     </div>
 </section>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $bg_color;
+?>

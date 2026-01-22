@@ -71,6 +71,18 @@ if ( ! $processes ) {
 // 使用动态背景样式
 $bg_style_attr = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$current_bg_for_state = $bg_color; 
+$pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
+
+$pt_class = $pt_remove ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $current_bg_for_state;
+
 $alpine_state = array(
     'activeProcess'   => $active_process,
     'openMaterial'    => $first_material_id,
@@ -80,10 +92,10 @@ $alpine_state = array(
 
 ?>
 
-<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="material-list-block" x-data='<?php echo json_encode( $alpine_state ); ?>'<?php echo $bg_style_attr; ?>>
-    <div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y <?php echo esc_attr( $block_class ); ?> <?php echo esc_attr( $custom_class ); ?>">
+<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="material-list-block w-full <?php echo esc_attr($section_spacing); ?>" x-data='<?php echo json_encode( $alpine_state ); ?>'<?php echo $bg_style_attr; ?>>
+    <div class="mx-auto max-w-container px-container <?php echo esc_attr( $block_class ); ?> <?php echo esc_attr( $custom_class ); ?>">
         <div class="mb-8 lg:mb-12">
-            <h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-3">
+            <h2 class="text-h2 font-semibold text-heading tracking-tight mb-3">
                 <?php echo esc_html( 'Explore ' ); ?><span class="text-primary"><?php echo esc_html( 'Manufacturing Materials' ); ?></span>
             </h2>
             <p class="text-body max-w-2xl text-small opacity-90 leading-snug">
@@ -103,7 +115,7 @@ $alpine_state = array(
                             type="button"
                             @click='activeProcess = <?php echo json_encode( $proc_name ); ?>; openMaterial = <?php echo json_encode( $first_mat ); ?>'
                             :class='activeProcess === <?php echo json_encode( $proc_name ); ?> ? "bg-primary text-inverse shadow-md border-primary" : "bg-white text-body border-border hover:border-primary/50"'
-                            class="whitespace-nowrap px-4 py-2.5 lg:w-full lg:text-left rounded-button border font-bold text-[11px] uppercase tracking-[0.14em] transition-all snap-start flex-shrink-0"
+                            class="whitespace-nowrap px-4 py-2.5 lg:w-full lg:text-left rounded-button border-[3px] font-bold text-[11px] uppercase tracking-[0.14em] transition-all snap-start flex-shrink-0"
                         >
                             <?php echo esc_html( $proc_name ); ?>
                         </button>
@@ -231,7 +243,7 @@ $alpine_state = array(
                                                         <?php if ( $specs_url && $specs_title ) : ?>
                                                             <a
                                                                 href="<?php echo esc_url( $specs_url ); ?>"
-                                                                class="inline-flex items-center justify-center border border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-[0.18em] hover:bg-primary/5 transition-all"
+                                                                class="inline-flex items-center justify-center border-[3px] border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-[0.18em] hover:bg-primary/5 transition-all"
                                                                 <?php echo $specs_target ? 'target="' . esc_attr( $specs_target ) . '" rel="noopener noreferrer"' : ''; ?>
                                                             >
                                                                 <?php echo esc_html( $specs_title ); ?>
@@ -243,13 +255,13 @@ $alpine_state = array(
                                                 <?php if ( $mat_image_id ) : ?>
                                                     <div class="hidden lg:block shrink-0 h-full">
                                                         <div class="aspect-square w-[320px] bg-bg-section rounded-card border border-border overflow-hidden relative group">
-                                                            <?php echo wp_get_attachment_image( $mat_image_id, 'large', false, array( 'class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' ) ); ?>
+                                                            <?php echo wp_get_attachment_image( $mat_image_id, 'large', false, array( 'class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', 'loading' => 'lazy' ) ); ?>
                                                         </div>
                                                     </div>
 
                                                     <?php if ( ! $hide_image_mobile ) : ?>
                                                         <div class="lg:hidden w-full aspect-video rounded-card overflow-hidden border border-border mt-3">
-                                                            <?php echo wp_get_attachment_image( $mat_image_id, 'large', false, array( 'class' => 'w-full h-full object-cover' ) ); ?>
+                                                            <?php echo wp_get_attachment_image( $mat_image_id, 'large', false, array( 'class' => 'w-full h-full object-cover', 'loading' => 'lazy' ) ); ?>
                                                         </div>
                                                     <?php endif; ?>
                                                 <?php endif; ?>

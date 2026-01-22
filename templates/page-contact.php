@@ -9,8 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-/**
- * 1. Render Hero Banner
+?>
+
+<main id="main" class="site-main page-contact">
+
+    <?php
+    /**
+     * 1. Render Hero Banner
  * 
  * We use the global _3dp_render_block helper.
  * Since the fields are registered on this page (via ACF Clone),
@@ -91,6 +96,8 @@ if ( ! $form_shortcode ) {
         </div>
     </div>
 </section>
+
+</main>
 
 <?php
 get_footer();

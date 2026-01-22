@@ -44,10 +44,13 @@ if ( $title && $highlight ) {
 $section_classes = 'py-16 lg:py-24 relative ' . $custom_class;
 
 // Background Logic
+$bg_color_class = 'bg-white'; // Default
 if ( $bg_style === 'industrial' ) {
     $section_classes .= ' industrial-grid-bg';
+    $bg_color_class = 'industrial-grid-bg';
 } elseif ( $bg_style === 'white' ) {
     $section_classes .= ' bg-white';
+    $bg_color_class = 'bg-white';
 }
 
 // 确定最终ID：使用custom_block_id作为覆盖，否则使用block_id
@@ -63,9 +66,13 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
     showLightbox: false, 
     activeImg: '', 
     activeTitle: '',
-    openImg(url, title) {
+    activeWidth: '',
+    activeHeight: '',
+    openImg(url, title, w, h) {
         this.activeImg = url;
         this.activeTitle = title;
+        this.activeWidth = w;
+        this.activeHeight = h;
         this.showLightbox = true;
     }
 }">
@@ -116,7 +123,11 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                     // Let's use the Desktop image URL for the lightbox and main display for simplicity, 
                     // unless we want to do a <picture> tag. 
                     // Given the constraint "Pixel-Perfect", let's stick to simple <img> but use the main image.
-                    $img_url = wp_get_attachment_image_url($img_id, 'full'); 
+                    $img_data = wp_get_attachment_image_src($img_id, 'full'); 
+                    $img_url = $img_data ? $img_data[0] : '';
+                    $img_w = $img_data ? $img_data[1] : '';
+                    $img_h = $img_data ? $img_data[2] : '';
+
                     $img_alt = get_post_meta($img_id, '_wp_attachment_image_alt', true) ?: $item_title;
 
                     // Layout Logic
@@ -134,7 +145,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                     }
                 ?>
                     <div class="<?php echo esc_attr($card_classes); ?>"
-                         @click="openImg('<?php echo esc_url($img_url); ?>', '<?php echo esc_js($item_title); ?>')">
+                         @click="openImg('<?php echo esc_url($img_url); ?>', '<?php echo esc_js($item_title); ?>', '<?php echo esc_attr($img_w); ?>', '<?php echo esc_attr($img_h); ?>')">
                         
                         <?php if ( $tag_text ) : ?>
                             <span class="mono-tag <?php echo $is_hero ? '' : 'text-[9px] lg:text-[11px]'; ?>">
@@ -175,6 +186,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
     <!-- Lightbox (Alpine.js) -->
     <template x-teleport="body">
         <div x-show="showLightbox" 
+             x-cloak
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -191,10 +203,15 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
             </button>
 
             <div class="max-w-6xl w-full flex flex-col items-center relative z-10 pointer-events-none">
-                <img :src="activeImg" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl pointer-events-auto border border-white/10">
+                <img :src="activeImg" :width="activeWidth" :height="activeHeight" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl pointer-events-auto border border-white/10" loading="lazy">
                 <h5 class="text-white mt-6 text-xl font-bold font-mono tracking-tight pointer-events-auto" x-text="activeTitle"></h5>
             </div>
         </div>
     </template>
 
 </section>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $bg_color_class;
+?>

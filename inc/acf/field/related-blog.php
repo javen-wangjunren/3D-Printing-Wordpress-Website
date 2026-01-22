@@ -205,6 +205,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'endpoint'  => 0,
                 ),
                 array(
+                    'key' => 'field_related_blog_bg_color',
+                    'label' => 'Background Color',
+                    'name' => 'background_color',
+                    'type' => 'color_picker',
+                    'wrapper' => array('width' => '50'),
+                    'default_value' => '#ffffff',
+                ),
+                array(
                     'key'           => 'field_66e3b0c0f0c8b79',
                     'label'         => 'Posts Per Row',
                     'name'          => 'posts_per_row',

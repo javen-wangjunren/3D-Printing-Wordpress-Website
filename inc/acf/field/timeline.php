@@ -131,15 +131,11 @@ if ( function_exists('acf_add_local_field_group') ) :
                 'type' => 'tab',
             ),
             array(
-                'key' => 'field_timeline_bg_style',
-                'label' => 'Background Style',
-                'name' => 'background_style',
-                'type' => 'select',
-                'choices' => array(
-                    'grid' => 'Industrial Grid (Blue)',
-                    'white' => 'Clean White',
-                ),
-                'default_value' => 'grid',
+                'key' => 'field_timeline_background_color',
+                'label' => 'Background Color',
+                'name' => 'background_color',
+                'type' => 'color_picker',
+                'default_value' => '#ffffff',
             ),
 
             /* -------------------------------------------------------------------------- */

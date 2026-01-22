@@ -13,9 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
+?>
 
-// Hero Banner
-_3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview', 'prefix' => 'all_caps_hero_' ) );
+<main id="main" class="site-main page-all-capabilities">
+    <?php
+
+    // Hero Banner
+    _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'overview', 'prefix' => 'all_caps_hero_' ) );
 
 // Capability List
 _3dp_render_block( 'blocks/global/capability-list/render', array( 'id' => 'list', 'prefix' => 'allcaps_capability_list_' ) );
@@ -54,5 +58,7 @@ _3dp_render_block( 'blocks/global/related-blog/render', array(
     'id'     => 'related-stories',
     'prefix' => 'allcaps_related_blog_' 
 ) );
-
+?>
+</main>
+<?php
 get_footer();

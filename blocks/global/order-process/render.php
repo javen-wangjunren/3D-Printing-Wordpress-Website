@@ -75,10 +75,19 @@ $root_classes = 'order-process-block';
 
 // 动态背景样式
 $bg_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
+
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+
+// Update Global State
+$GLOBALS['3dp_last_bg'] = $bg_color;
 ?>
 
 <div id="<?php echo $anchor_id ? esc_attr( $anchor_id ) : ''; ?>" class="<?php echo esc_attr( $root_classes ); ?>"<?php echo $bg_style; ?>>
-	<div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y <?php echo esc_attr( $custom_class ); ?>">
+	<div class="mx-auto max-w-container px-container <?php echo esc_attr( $section_spacing ); ?> <?php echo esc_attr( $custom_class ); ?>">
 		<?php if ( $title || $description ) : ?>
 			<div class="text-center mb-10 lg:mb-16">
 				<?php if ( $title ) : ?>
@@ -165,3 +174,8 @@ $bg_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 		<?php endif; ?>
 	</div>
 </div>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $bg_color;
+?>

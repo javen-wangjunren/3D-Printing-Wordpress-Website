@@ -7,11 +7,9 @@
  */
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
+$block = isset( $block ) ? $block : array();
 
-
-// Step 1: 确定数据作用域 (Data Scope)
 // 万能取数逻辑
-// 确定克隆名
 $clone_name = rtrim($pfx, '_');
 
 // 使用万能取数逻辑获取字段值
@@ -24,6 +22,7 @@ $spacing         = get_field_value('review_spacing', $block, $clone_name, $pfx, 
 $card_style      = get_field_value('review_card_style', $block, $clone_name, $pfx, 'default');
 $mobile_compact  = get_field_value('mobile_compact_mode', $block, $clone_name, $pfx, false);
 $mobile_hide_txt = get_field_value('mobile_hide_content', $block, $clone_name, $pfx, false);
+$bg_color        = get_field_value('bg_color', $block, $clone_name, $pfx, '#ffffff');
 
 // 样式映射
 $spacing_map = array(
@@ -43,26 +42,20 @@ $card_style_map = array(
 $card_class = $card_base_class . ' ' . ( isset( $card_style_map[ $card_style ] ) ? $card_style_map[ $card_style ] : $card_style_map['default'] );
 
 // Block ID & Classes
-$block = isset( $block ) ? $block : array();
 $block_id = _3dp_get_safe_block_id( $block, 'review-grid' );
 
-$class_name = 'review-grid-block py-section-y overflow-hidden';
-if ( ! empty( $block['className'] ) ) {
-    $class_name .= ' ' . $block['className'];
-}
 $custom_class = get_field_value('review_grid_custom_class', $block, $clone_name, $pfx, '');
-if ( ! empty( $custom_class ) ) {
-    $class_name .= ' ' . $custom_class;
-}
 
 // 计算总数以便 JS 使用
 $total_reviews = count( $reviews );
 
-// 移动端/桌面端断点逻辑
-// 桌面端显示 $columns 列，移动端强制 1 列
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
 ?>
 
-<div id="<?php echo esc_attr( $block_id ); ?>" class="<?php echo esc_attr( $class_name ); ?>">
+<section id="<?php echo esc_attr( $block_id ); ?>" class="review-grid-block w-full relative overflow-hidden <?php echo esc_attr( $pt_class . ' ' . $pb_class . ' ' . $custom_class ); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>">
     
     <!-- Step 3: 埋入交互钩子 (Logic Hooks) - Alpine.js State -->
     <div x-data="{ 
@@ -88,13 +81,13 @@ $total_reviews = count( $reviews );
             }
          }"
          @resize.window="active = Math.min(active, maxIndex)"
-         class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+         class="max-w-container mx-auto px-6 lg:px-[64px]">
 
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div class="max-w-xl">
                 <!-- Step 2: 注入视觉规范 - Heading & Subtitle -->
-                <h2 class="text-h2 font-bold text-heading tracking-[-1px] mb-4">
+                <h2 class="text-h2 font-bold text-heading tracking-tight mb-4">
                     <?php echo esc_html( $title_main ); ?> 
                     <span class="text-primary"><?php echo esc_html( $title_highlight ); ?></span>
                 </h2>
@@ -109,12 +102,12 @@ $total_reviews = count( $reviews );
             <?php if ( $total_reviews > $columns ) : ?>
             <div class="hidden md:flex gap-3">
                 <button @click="prev" 
-                        class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
+                        class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
                         aria-label="Previous review">
                     &lt;
                 </button>
                 <button @click="next" 
-                        class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
+                        class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
                         aria-label="Next review">
                     &gt;
                 </button>
@@ -130,19 +123,12 @@ $total_reviews = count( $reviews );
                 <?php 
                 if ( ! empty( $reviews ) ) : 
                     foreach ( $reviews as $index => $review ) :
-                        $photo     = $review['user_photo'];
-                        $name      = $review['user_name'];
-                        $title     = $review['user_title'];
-                        $stars     = intval( $review['stars_count'] );
-                        $verified  = $review['verified'];
-                        $text      = $review['review_text'];
-                        
-                        // 计算宽度类名：在 Alpine 中我们用百分比控制，这里只需设为 w-full md:w-1/N
-                        // 注意：为了配合 flex transform 逻辑，这里的宽度必须是精确的百分比，
-                        // 但在 Tailwind 中动态类名较难，我们直接用内联 style 或标准类配合 Alpine 计算的逻辑。
-                        // 实际上，flex 容器内的 items 宽度应该是 100% / visible_count。
-                        // 为了简化，我们使用 flex-shrink-0 和基于父容器宽度的计算。
-                        // 在 demo 中： w-full md:w-1/2 lg:w-1/3
+                        $photo     = isset($review['user_photo']) ? $review['user_photo'] : '';
+                        $name      = isset($review['user_name']) ? $review['user_name'] : '';
+                        $title     = isset($review['user_title']) ? $review['user_title'] : '';
+                        $stars     = isset($review['stars_count']) ? intval( $review['stars_count'] ) : 5;
+                        $verified  = isset($review['verified']) ? $review['verified'] : false;
+                        $text      = isset($review['review_text']) ? $review['review_text'] : '';
                         
                         // 动态列宽类
                         $col_class_map = array(
@@ -169,7 +155,7 @@ $total_reviews = count( $reviews );
                                     </div>
                                     
                                     <?php if ( $verified ) : ?>
-                                        <span class="bg-green-50 text-green-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-green-100 uppercase tracking-wider">Verified</span>
+                                        <span class="bg-green-50 text-green-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-green-100 uppercase tracking-wider"><?php esc_html_e( 'Verified', '3d-printing' ); ?></span>
                                     <?php endif; ?>
                                 </div>
 
@@ -185,7 +171,7 @@ $total_reviews = count( $reviews );
                                     <!-- Photo -->
                                     <?php if ( ! empty( $photo ) ) : ?>
                                         <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
-                                            <?php echo wp_get_attachment_image( $photo['id'], 'thumbnail', false, array( 'class' => 'w-full h-full object-cover' ) ); ?>
+                                            <?php echo wp_get_attachment_image( $photo['id'], 'thumbnail', false, array( 'class' => 'w-full h-full object-cover', 'loading' => 'lazy' ) ); ?>
                                         </div>
                                     <?php else : ?>
                                         <!-- Fallback Initial -->
@@ -196,36 +182,20 @@ $total_reviews = count( $reviews );
                                     
                                     <!-- Meta -->
                                     <div class="overflow-hidden">
-                                        <span class="block text-[14px] font-bold text-heading truncate">
-                                            <?php echo esc_html( $name ); ?>
-                                        </span>
-                                        <span class="block text-[12px] text-muted truncate font-medium">
-                                            <?php echo esc_html( $title ); ?>
-                                        </span>
+                                        <span class="block text-[14px] font-bold text-heading truncate"><?php echo esc_html( $name ); ?></span>
+                                        <span class="block text-[12px] text-body truncate"><?php echo esc_html( $title ); ?></span>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     <?php endforeach; ?>
-                <?php else : ?>
-                    <div class="w-full text-center text-muted py-8">Please add reviews in the editor.</div>
                 <?php endif; ?>
-                
             </div>
         </div>
-
-        <!-- Mobile Dots Navigation -->
-        <?php if ( $total_reviews > 1 ) : ?>
-        <div class="mt-12 flex justify-center gap-2 md:hidden">
-            <?php for ( $i = 0; $i < $total_reviews; $i++ ) : ?>
-                <button @click="active = <?php echo $i; ?>" 
-                        :class="active === <?php echo $i; ?> ? 'bg-primary w-8' : 'bg-border w-2'"
-                        class="h-1.5 rounded-full transition-all duration-300"
-                        aria-label="Go to slide <?php echo $i + 1; ?>"></button>
-            <?php endfor; ?>
-        </div>
-        <?php endif; ?>
-
     </div>
-</div>
+</section>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $bg_color;
+?>

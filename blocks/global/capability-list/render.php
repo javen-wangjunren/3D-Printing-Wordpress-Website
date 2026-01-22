@@ -35,7 +35,10 @@ foreach ( $raw_capabilities as $cap ) {
 
     // 处理图片
     $img_id  = isset( $cap['image'] ) ? $cap['image'] : 0;
-    $img_url = $img_id ? wp_get_attachment_image_url( $img_id, 'large' ) : '';
+    $img_data = $img_id ? wp_get_attachment_image_src( $img_id, 'large' ) : null;
+    $img_url = $img_data ? $img_data[0] : '';
+    $img_width = $img_data ? $img_data[1] : '';
+    $img_height = $img_data ? $img_data[2] : '';
 
     // 处理规格参数 (转为 kv 数组方便 x-for 遍历)
     $specs_raw = isset( $cap['specs'] ) ? $cap['specs'] : array();
@@ -73,6 +76,8 @@ foreach ( $raw_capabilities as $cap ) {
         'description' => isset( $cap['description'] ) ? (string) $cap['description'] : '',
         'equipment'   => isset( $cap['equipment'] ) ? (string) $cap['equipment'] : '',
         'image'       => $img_url,
+        'width'       => $img_width,
+        'height'      => $img_height,
         'specs'       => $specs,
         'materials'   => $materials,
         'cta_quote'   => array(
@@ -97,6 +102,13 @@ $alpine_state = array(
 );
 
 $anchor_id = $anchor_raw ? 'id="' . esc_attr( $anchor_raw ) . '"' : '';
+
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+// Check if current block has same bg as previous
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+
 $bg_style  = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 
 ?>
@@ -105,13 +117,13 @@ $bg_style  = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
     [x-cloak] { display: none !important; }
 </style>
 
-<div <?php echo $anchor_id; ?> class="capability-list-block" <?php echo $bg_style; ?>
+<section <?php echo $anchor_id; ?> class="capability-list-block w-full transition-colors duration-300 <?php echo esc_attr( $pt_class . ' ' . $pb_class ); ?>" <?php echo $bg_style; ?>
      x-data="<?php echo esc_attr( wp_json_encode( $alpine_state ) ); ?>">
     
-    <div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y">
+    <div class="mx-auto max-w-container px-6 lg:px-8">
         <!-- 标题区域 -->
         <div class="text-center mb-10 lg:mb-16">
-            <h2 class="text-h2 text-heading tracking-[-0.02em] mb-4">
+            <h2 class="text-h2 text-heading tracking-tight mb-4">
                 <?php echo esc_html( $section_title ); ?>
             </h2>
             <?php if ( $section_description ) : ?>
@@ -153,11 +165,14 @@ $bg_style  = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
                         <template x-if="tabs[active].image">
                             <img 
                                 :src="tabs[active].image" 
+                                :width="tabs[active].width"
+                                :height="tabs[active].height"
                                 :alt="tabs[active].name"
                                 class="max-w-full max-h-full object-contain mix-blend-multiply mx-auto transition-opacity duration-300 opacity-100"
                                 x-transition:enter="transition ease-out duration-300"
                                 x-transition:enter-start="opacity-0 scale-95"
                                 x-transition:enter-end="opacity-100 scale-100"
+                                loading="lazy"
                             >
                         </template>
                         
@@ -231,4 +246,4 @@ $bg_style  = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 
         </div>
     </div>
-</div>
+</section>

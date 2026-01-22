@@ -42,8 +42,20 @@ elseif (have_rows($pfx . 'manufacturing_showcase_items')) {
 }
 
 // 动态背景样式
-$bg_color = '#ffffff';
+$bg_color = get_field_value('manufacturing_showcase_background_color', $block, $clone_name, $pfx, '#ffffff');
 $bg_style_attr = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
+
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$current_bg_for_state = $bg_color; 
+$pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
+
+$pt_class = $pt_remove ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $current_bg_for_state;
 
 // 获取锚点ID
 $anchor_id = get_field_value('manufacturing_showcase_anchor_id', $block, $clone_name, $pfx, '' );
@@ -51,12 +63,12 @@ $anchor_id = get_field_value('manufacturing_showcase_anchor_id', $block, $clone_
 if ( ! $showcase_items ) { return; }
 ?>
 
-<div id="<?php echo $anchor_id ? esc_attr($anchor_id) : ''; ?>" class="overflow-hidden"<?php echo $bg_style_attr; ?>>
-    <div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y <?php echo esc_attr($custom_class); ?>">
+<div id="<?php echo $anchor_id ? esc_attr($anchor_id) : ''; ?>" class="overflow-hidden <?php echo esc_attr($section_spacing); ?>"<?php echo $bg_style_attr; ?>>
+    <div class="mx-auto max-w-container px-container <?php echo esc_attr($custom_class); ?>">
         <?php if ( $title || $subtitle ) : ?>
             <div class="text-center mb-10 lg:mb-14">
                 <?php if ( $title ) : ?>
-                    <h2 class="text-h2 font-semibold text-heading tracking-[-0.5px] mb-3"><?php echo esc_html($title); ?></h2>
+                    <h2 class="text-h2 font-semibold text-heading tracking-tight mb-3"><?php echo esc_html($title); ?></h2>
                 <?php endif; ?>
                 <?php if ( $subtitle ) : ?>
                     <p class="text-body max-w-2xl mx-auto text-small opacity-90 leading-snug"><?php echo esc_html($subtitle); ?></p>
@@ -67,10 +79,10 @@ if ( ! $showcase_items ) { return; }
         <?php if ( $layout_mode === 'slider' ) : ?>
             <div x-data="{scrollSlider(dir){const t=this.$refs.track;const amt=t.offsetWidth*0.8;t.scrollBy({left:dir*amt,behavior:'smooth'});}}" class="relative">
                 <?php if ( $show_nav ) : ?>
-                    <button @click="scrollSlider(-1)" class="hidden lg:flex absolute left-[-24px] top-1/3 z-20 w-12 h-12 bg-white border border-border rounded-full items-center justify-center text-heading hover:bg-primary hover:text-inverse transition-colors">
+                    <button @click="scrollSlider(-1)" class="hidden lg:flex absolute left-[-24px] top-1/3 z-20 w-12 h-12 bg-white border-[3px] border-border rounded-full items-center justify-center text-heading hover:bg-primary hover:text-inverse transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 18l-6-6 6-6"/></svg>
                     </button>
-                    <button @click="scrollSlider(1)" class="hidden lg:flex absolute right-[-24px] top-1/3 z-20 w-12 h-12 bg-white border border-border rounded-full items-center justify-center text-heading hover:bg-primary hover:text-inverse transition-colors">
+                    <button @click="scrollSlider(1)" class="hidden lg:flex absolute right-[-24px] top-1/3 z-20 w-12 h-12 bg-white border-[3px] border-border rounded-full items-center justify-center text-heading hover:bg-primary hover:text-inverse transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 18l6-6-6-6"/></svg>
                     </button>
                 <?php endif; ?>
@@ -87,13 +99,19 @@ if ( ! $showcase_items ) { return; }
                         $link_i   = isset($item['item_link']) ? $item['item_link'] : array();
                         $link_i   = is_array($link_i) ? $link_i : array();
                         $src_id   = $img_id ?: $mob_id;
-                        $src_url  = $src_id ? (string) wp_get_attachment_image_url( $src_id, 'large' ) : '';
+                        
+                        // Get image data with dimensions
+                        $img_data = $src_id ? wp_get_attachment_image_src( $src_id, 'large' ) : null;
+                        $src_url  = $img_data ? $img_data[0] : '';
+                        $width    = $img_data ? $img_data[1] : '';
+                        $height   = $img_data ? $img_data[2] : '';
+                        
                         $alt_text = $title_i;
                         ?>
                         <div class="flex-none <?php echo esc_attr($mb_card_w); ?> <?php echo esc_attr($lg_card_w); ?> snap-start">
                             <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-section">
                                 <?php if ( $src_url ) : ?>
-                                    <img src="<?php echo esc_attr($src_url); ?>" alt="<?php echo esc_attr($alt_text ?: $title_i); ?>" class="w-full h-full object-cover" />
+                                    <img src="<?php echo esc_attr($src_url); ?>" width="<?php echo esc_attr($width); ?>" height="<?php echo esc_attr($height); ?>" alt="<?php echo esc_attr($alt_text ?: $title_i); ?>" class="w-full h-full object-cover" loading="lazy" />
                                 <?php endif; ?>
                                 <?php if ( $badge_i ) : ?>
                                     <div class="absolute top-4 left-4">
@@ -103,7 +121,7 @@ if ( ! $showcase_items ) { return; }
                             </div>
                             <div class="mt-6 text-center lg:text-left">
                                 <?php if ( $title_i ) : ?>
-                                    <h4 class="text-[18px] lg:text-[20px] font-semibold text-heading mb-1 tracking-[-0.02em]"><?php echo esc_html($title_i); ?></h4>
+                                    <h4 class="text-[18px] lg:text-[20px] font-semibold text-heading mb-1 tracking-tight"><?php echo esc_html($title_i); ?></h4>
                                 <?php endif; ?>
                                 <?php if ( $sub_i ) : ?>
                                     <div class="text-[12px] text-body opacity-80 mb-1"><?php echo esc_html($sub_i); ?></div>
@@ -132,13 +150,19 @@ if ( ! $showcase_items ) { return; }
                     $desc_i   = isset($item['item_description']) ? (string) $item['item_description'] : '';
                     $link_i   = isset($item['item_link']) ? $item['item_link'] : array();
                     $link_i   = is_array($link_i) ? $link_i : array();
-                    $src_url  = $img_id ? (string) wp_get_attachment_image_url( $img_id, 'large' ) : '';
+                    
+                    // Get image data with dimensions
+                    $img_data = $img_id ? wp_get_attachment_image_src( $img_id, 'large' ) : null;
+                    $src_url  = $img_data ? $img_data[0] : '';
+                    $width    = $img_data ? $img_data[1] : '';
+                    $height   = $img_data ? $img_data[2] : '';
+                    
                     $alt_text = $title_i;
                     ?>
                     <div>
                         <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-section">
                             <?php if ( $src_url ) : ?>
-                                <img src="<?php echo esc_attr($src_url); ?>" alt="<?php echo esc_attr($alt_text ?: $title_i); ?>" class="w-full h-full object-cover" />
+                                <img src="<?php echo esc_attr($src_url); ?>" width="<?php echo esc_attr($width); ?>" height="<?php echo esc_attr($height); ?>" alt="<?php echo esc_attr($alt_text ?: $title_i); ?>" class="w-full h-full object-cover" loading="lazy" />
                             <?php endif; ?>
                             <?php if ( $badge_i ) : ?>
                                 <div class="absolute top-4 left-4">
@@ -148,7 +172,7 @@ if ( ! $showcase_items ) { return; }
                         </div>
                         <div class="mt-6 text-center lg:text-left">
                             <?php if ( $title_i ) : ?>
-                                <h4 class="text-[18px] lg:text-[20px] font-semibold text-heading mb-1 tracking-[-0.02em]"><?php echo esc_html($title_i); ?></h4>
+                                <h4 class="text-[18px] lg:text-[20px] font-semibold text-heading mb-1 tracking-tight"><?php echo esc_html($title_i); ?></h4>
                             <?php endif; ?>
                             <?php if ( $sub_i ) : ?>
                                 <div class="text-[12px] text-body opacity-80 mb-1"><?php echo esc_html($sub_i); ?></div>

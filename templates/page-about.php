@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main class="page-about">
+<main id="main" class="site-main page-about">
     <?php _3dp_render_block( 'blocks/global/hero-banner/render', array( 'id' => 'about-hero', 'prefix' => 'about_hero_' ) ); ?>
     <?php _3dp_render_block( 'blocks/global/mission/render', array( 'id' => 'about-mission', 'prefix' => 'about_mission_' ) ); ?>
     <?php _3dp_render_block( 'blocks/global/timeline/render', array( 'id' => 'about-timeline', 'prefix' => 'about_timeline_' ) ); ?>

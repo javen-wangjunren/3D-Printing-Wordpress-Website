@@ -3,6 +3,33 @@
 @tailwind utilities;
 
 @layer base {
+  /* Alpine.js Cloak */
+  [x-cloak] { 
+    display: none !important; 
+  }
+
+  /* 彻底摧毁侧边栏的占位可能 */
+  #primary {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+  }
+
+  #right-sidebar, .sidebar {
+    display: none !important;
+    width: 0 !important;
+  }
+
+  /* 解锁 GP 的固定宽度容器 */
+  .grid-container {
+    max-width: 100% !important;
+  }
+
+  /* 强制主内容区域为 Block 布局，防止 Flex Row 导致子元素并排 */
+  .site-content {
+    display: block !important;
+  }
+
   a {
     /* 彻底取消全局链接下划线 */
     text-decoration: none !important;
@@ -11,5 +38,134 @@
   /* 如果你希望鼠标悬停时也不要有下划线 */
   a:hover {
     text-decoration: none !important;
+  }
+}
+
+@layer components {
+  /* --- Fluent Forms Custom Styling --- */
+
+  /* 1. 基础输入框样式 (Global Input Styles) */
+  .fluentform .ff-el-form-control {
+    @apply border border-[#E4E7EC] rounded-md px-4 py-3 bg-white text-heading text-[15px] transition-all duration-150 ease-out;
+  }
+
+  /* 物理锁定感：Focus 时边框变粗且无模糊阴影 */
+  .fluentform .ff-el-form-control:focus {
+    @apply border-primary outline-none ring-2 ring-primary/10;
+  }
+
+  /* Labels */
+  .fluentform .ff-el-input--label {
+    @apply font-semibold text-heading mb-2 tracking-[-0.01em] text-sm;
+  }
+
+  /* Required Asterisk */
+  .fluentform .ff-el-input--label.ff-el-is-required:after {
+    content: '*';
+    @apply text-[#D92D20] ml-1;
+  }
+
+  /* 2. Container 间距优化 (Class: form-row-gap-md) */
+  .fluentform .form-row-gap-md {
+    @apply mb-6;
+  }
+
+  /* 3. 文件上传区域美化 (Class: form-upload-zone) */
+  .fluentform .form-upload-zone .ff-upload-btn-wrapper {
+    @apply border border-dashed border-[#D0D5DD] rounded-lg bg-[#F9FAFB] py-8 px-5 text-center cursor-pointer transition-all duration-200;
+  }
+
+  .fluentform .form-upload-zone .ff-upload-btn-wrapper:hover {
+    @apply border-primary bg-[#F0F5FF];
+  }
+
+  /* 4. 提交按钮 (Global Submit Button) */
+  .fluentform .ff-btn-submit {
+    @apply w-full justify-center px-6 py-3.5 font-semibold text-[15px] rounded-md bg-primary text-white tracking-wide transition-colors duration-200;
+  }
+
+  .fluentform .ff-btn-submit:hover {
+    @apply bg-primary-hover;
+  }
+
+  /* 5. 移动端优化 */
+  @media (max-width: 768px) {
+    .fluentform .ff-t-cell {
+      @apply block w-full pr-0 mb-4;
+    }
+    .fluentform .ff-t-container {
+      @apply block;
+    }
+  }
+
+  /* --- Mission Module Styles --- */
+
+  /* 工业网格背景微纹理 */
+  .industrial-grid-bg {
+    background-color: #F2F4F7;
+    background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* 图片上的技术遮罩层 */
+  .tech-overlay::after {
+    content: '';
+    @apply absolute inset-0 border border-white/10 pointer-events-none;
+    background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
+  }
+
+  /* 模拟屏幕扫描线 */
+  .scanline {
+    @apply absolute top-0 left-0 right-0 h-[2px] opacity-0 pointer-events-none;
+    background: rgba(0, 71, 171, 0.3);
+    animation: scan 4s linear infinite;
+  }
+  .group:hover .scanline { 
+    @apply opacity-100; 
+  }
+  @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+
+  /* --- Team Module Styles (Leadership) --- */
+
+  /* Title Typography */
+  .industrial-h2 { 
+    letter-spacing: -0.5px; 
+  }
+
+  /* Card Styling (Static, Clean) */
+  .team-card { 
+    @apply relative border border-[#E4E7EC] bg-white overflow-hidden rounded-xl;
+  }
+
+  /* Mono Tag Styling */
+  .mono-stat {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.05em;
+  }
+
+  /* --- Header Styles (Custom Overrides) --- */
+
+  /* Alpine.js Cloak */
+  [x-cloak] { 
+    display: none !important; 
+  }
+
+  /* Header Material Column Title Border */
+  header .border-b,
+  .material-column-heading {
+    border-bottom-width: 1px !important;
+    border-bottom-style: solid !important;
+    border-bottom-color: #E4E7EC !important;
+  }
+
+  /* Nav Link Hover Effect */
+  .nav-link-hover::after {
+    content: ''; 
+    @apply absolute bottom-[-2px] left-0 w-0 h-[2px] bg-primary transition-[width] duration-200 ease-out;
+  }
+
+  .nav-link-hover:hover::after { 
+    @apply w-full; 
   }
 }

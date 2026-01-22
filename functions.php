@@ -79,13 +79,18 @@ add_action( 'wp_enqueue_scripts', function () {
         wp_get_theme()->parent()->get( 'Version' )
     );
 
+    // 子主题样式 (已在 inc/assets.php 中通过 Tailwind 加载，此处不再重复加载以避免冲突)
     // 子主题样式
+    // ⚠️ 注意：所有样式已迁移至 Tailwind (src/input.css -> assets/css/style.css)
+    // 根目录 style.css 仅保留头部信息供 WordPress 识别，不再作为样式表加载
+    /*
     wp_enqueue_style(
         'tdp-child-style',
         get_stylesheet_uri(),
         [ 'generatepress-style' ],
         TDP_VERSION
     );
+    */
 
 }, 10 );
 

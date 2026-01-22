@@ -24,16 +24,31 @@ $mobile_hide    = get_field_value('mobile_hide_content', $block, $clone_name, $p
 $anchor_id      = get_field_value('anchor_id', $block, $clone_name, $pfx);
 
 // 2. Class Logic
-$section_classes = 'py-[96px] border-y border-border relative';
+$section_classes = 'border-y border-border relative';
 
 // Background
+$bg_color_hex = '#ffffff'; // Default
 if ( $bg_style === 'grid' ) {
     $section_classes .= ' industrial-grid-bg';
+    $bg_color_hex = '#ffffff'; // Assuming grid is on white
 } elseif ( $bg_style === 'white' ) {
-    $section_classes .= ' bg-white';
+    $bg_color_hex = '#ffffff';
 } elseif ( $bg_style === 'gray' ) {
-    $section_classes .= ' bg-[#F2F4F7]';
+    $bg_color_hex = '#F2F4F7';
 }
+
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$current_bg_for_state = $bg_color_hex; 
+$pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
+
+$pt_class = $pt_remove ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+$section_classes .= ' ' . $section_spacing;
+
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $current_bg_for_state;
 
 // Mobile Visibility
 if ( $mobile_hide ) {
@@ -49,12 +64,12 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
 
 ?>
 
-<section <?php echo $id_attr; ?> class="<?php echo esc_attr($section_classes); ?>">
-    <div class="max-w-[1280px] mx-auto px-6">
+<section <?php echo $id_attr; ?> class="<?php echo esc_attr($section_classes); ?>" style="background-color: <?php echo esc_attr($bg_color_hex); ?>;">
+    <div class="max-w-container mx-auto px-container">
         
         <?php if ( $header ) : ?>
         <div class="mb-20 text-center">
-            <h2 class="text-[36px] font-bold text-heading tracking-[-0.5px] mb-4 inline-block relative">
+            <h2 class="text-[36px] font-bold text-heading tracking-tight mb-4 inline-block relative">
                 <?php echo esc_html( $header['prefix'] ); ?> <span class="text-primary"><?php echo esc_html( $header['highlight'] ); ?></span>
                 <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary"></span>
             </h2>
@@ -93,8 +108,11 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
                     
                     <?php if ( $image ) : ?>
                         <img src="<?php echo esc_url($image['url']); ?>" 
+                             width="<?php echo esc_attr($image['width']); ?>"
+                             height="<?php echo esc_attr($image['height']); ?>"
                              alt="<?php echo esc_attr($image['alt']); ?>" 
-                             class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale hover:grayscale-0">
+                             class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale hover:grayscale-0"
+                             loading="lazy">
                     <?php endif; ?>
 
                     <!-- Corner Accents -->
@@ -114,7 +132,7 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-12 h-12 rounded-[8px] bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
                             <?php if ( $icon ) : ?>
-                                <img src="<?php echo esc_url($icon['url']); ?>" alt="<?php echo esc_attr($icon['alt']); ?>" class="w-6 h-6">
+                                <img src="<?php echo esc_url($icon['url']); ?>" width="<?php echo esc_attr($icon['width']); ?>" height="<?php echo esc_attr($icon['height']); ?>" alt="<?php echo esc_attr($icon['alt']); ?>" class="w-6 h-6">
                             <?php endif; ?>
                         </div>
                         <span class="font-mono text-[12px] font-bold text-primary uppercase tracking-widest">

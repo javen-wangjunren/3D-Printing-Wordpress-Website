@@ -132,6 +132,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'tab',
                 ),
                 array(
+                    'key' => 'field_hiw_bg_color',
+                    'label' => 'Background Color',
+                    'name' => 'background_color',
+                    'type' => 'color_picker',
+                    'wrapper' => array('width' => '50'),
+                    'default_value' => '#ffffff',
+                ),
+                array(
                     'key' => 'field_hiw_mb_hide_tip',
                     'label' => 'Mobile Content Optimization',
                     'name' => 'mb_hide_tip',

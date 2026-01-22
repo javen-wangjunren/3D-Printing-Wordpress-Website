@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 	</div><!-- #content -->
-</div><!-- #page -->
+	</div><!-- #page -->
 
 <!-- 
     Site Footer 

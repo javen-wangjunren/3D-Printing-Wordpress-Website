@@ -145,6 +145,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'placement' => 'top',
                 ),
                 array(
+                    'key' => 'field_mfs_bg_color',
+                    'label' => 'Background Color',
+                    'name' => 'manufacturing_showcase_background_color',
+                    'type' => 'color_picker',
+                    'wrapper' => array('width' => '50'),
+                    'default_value' => '#ffffff',
+                ),
+                array(
                     'key' => 'field_mfs_layout_mode',
                     'label' => 'Layout Mode',
                     'name' => 'manufacturing_showcase_layout_mode',

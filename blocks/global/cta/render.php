@@ -25,7 +25,7 @@ $cta_image = null;
 $cta_button_group = array();
 $cta_secondary_button = array();
 $layout_reverse = false;
-$bg_color = '';
+$bg_color = '#ffffff';
 
 if ( empty( $pfx ) ) {
     // Global Settings Mode
@@ -41,7 +41,7 @@ if ( empty( $pfx ) ) {
         $cta_secondary_button = isset($global_data['cta_secondary_button']) ? $global_data['cta_secondary_button'] : array();
         
         $layout_reverse = isset($global_data['layout_reverse']) ? (bool)$global_data['layout_reverse'] : false;
-        $bg_color = isset($global_data['bg_color']) ? $global_data['bg_color'] : '';
+        $bg_color = isset($global_data['bg_color']) ? $global_data['bg_color'] : '#ffffff';
     }
 } else {
     // Local/Page Builder Mode
@@ -69,10 +69,10 @@ if ( ! $cta_title && ! $cta_description && ! $has_primary ) {
     return;
 }
 
-$section_classes = 'py-section-y-small lg:py-section-y';
-
-// 总是使用动态背景样式
-$section_style = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
+// --- Dynamic Spacing Logic ---
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
 
 $text_order  = $layout_reverse ? 'order-2 lg:order-1' : 'order-1 lg:order-1';
 $image_order = $layout_reverse ? 'order-1 lg:order-2' : 'order-2 lg:order-2';
@@ -85,13 +85,13 @@ if ( is_array( $cta_image ) ) {
 }
 ?>
 
-<section class="<?php echo esc_attr( $section_classes ); ?>" <?php echo $section_style; ?>>
-    <div class="mx-auto max-w-container px-container">
+<section id="<?php echo esc_attr( $block_id ); ?>" class="cta-block w-full relative <?php echo esc_attr( $pt_class . ' ' . $pb_class ); ?>" style="background-color: <?php echo esc_attr( $bg_color ); ?>">
+    <div class="mx-auto max-w-container px-6 lg:px-[64px]">
         <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
             <div class="grid lg:grid-cols-2 items-center gap-10 lg:gap-12 p-8 lg:p-16">
                 <div class="z-10 text-center lg:text-left <?php echo esc_attr( $text_order ); ?>">
                     <?php if ( $cta_title || $cta_title_highlight ) : ?>
-                        <h2 class="text-h2 text-heading tracking-[-0.04em] mb-6 leading-tight">
+                        <h2 class="text-h2 font-bold text-heading tracking-tight mb-6 leading-tight">
                             <?php echo esc_html( $cta_title ); ?>
                             <?php if ( $cta_title_highlight ) : ?><br><span class="text-primary"><?php echo esc_html( $cta_title_highlight ); ?></span><?php endif; ?>
                         </h2>
@@ -131,7 +131,7 @@ if ( is_array( $cta_image ) ) {
                             <?php endif; ?>
 
                             <?php if ( $has_secondary ) : ?>
-                                <a href="<?php echo esc_url( $secondary_url ); ?>" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-small hover:border-primary transition-all">
+                                <a href="<?php echo esc_url( $secondary_url ); ?>" class="bg-white border-[3px] border-border text-heading px-8 py-4 rounded-button font-bold text-small hover:border-primary transition-all">
                                     <?php echo esc_html( $secondary_text ); ?>
                                 </a>
                             <?php endif; ?>
@@ -141,10 +141,15 @@ if ( is_array( $cta_image ) ) {
 
                 <div class="hidden lg:block relative h-full <?php echo esc_attr( $image_order ); ?>">
                     <?php if ( $image_id ) : ?>
-                        <?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'alt' => esc_attr( $image_alt ), 'class' => 'w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105' ) ); ?>
+                        <?php echo wp_get_attachment_image( $image_id, 'large', false, array( 'alt' => esc_attr( $image_alt ), 'class' => 'w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105', 'loading' => 'lazy' ) ); ?>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<?php
+// Set global state for next block
+$GLOBALS['3dp_last_bg'] = $bg_color;
+?>

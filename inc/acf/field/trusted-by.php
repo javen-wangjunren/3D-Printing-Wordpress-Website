@@ -176,7 +176,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
 						'class'         => '',
 						'id'            => '',
 					),
-					'default_value'     => '#ffffff',
+					'default_value'     => '#f3f4f7',
 					'enable_opacity'    => 1,
 					'return_format'     => 'string',
 				),

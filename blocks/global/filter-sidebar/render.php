@@ -125,9 +125,9 @@ global $wpdb;
 
     <header class="mb-6 space-y-1">
         <?php if ( $sidebar_title ) : ?>
-            <h2 class="text-h2 text-heading font-semibold tracking-tight">
+            <h3 class="text-h2 text-heading font-semibold tracking-tight mb-0">
                 <?php echo esc_html( $sidebar_title ); ?>
-            </h2>
+            </h3>
         <?php endif; ?>
 
         <?php if ( $sidebar_subtitle && ! $mobile_hide_subtitle ) : ?>
@@ -151,7 +151,7 @@ global $wpdb;
     <div class="space-y-6">
         <?php if ( $show_process && ! is_wp_error( $process_terms ) && ! empty( $process_terms ) ) : ?>
             <div class="space-y-3" data-filter-group="process">
-                <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+                <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted mb-0">
                     <?php echo esc_html( (string) get_field_value('filter_sidebar_process_label', $block, $clone_name, $pfx, 'Process' ) ); ?>
                 </h4>
                 <div class="space-y-2">
@@ -172,7 +172,7 @@ global $wpdb;
 
         <?php if ( $show_type && ! is_wp_error( $type_terms ) && ! empty( $type_terms ) ) : ?>
             <div class="space-y-3" data-filter-group="type">
-                <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+                <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted mb-0">
                     <?php echo esc_html( (string) get_field_value('filter_sidebar_type_label', $block, $clone_name, $pfx, 'Type' ) ); ?>
                 </h4>
                 <div class="space-y-2">
@@ -193,7 +193,7 @@ global $wpdb;
 
         <?php if ( $show_cost && ! empty( $cost_levels ) ) : ?>
             <div class="space-y-3" data-filter-group="cost">
-                <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+                <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted mb-0">
                     <?php echo esc_html( (string) get_field_value('filter_sidebar_cost_label', $block, $clone_name, $pfx, 'Cost' ) ); ?>
                 </h4>
                 <div class="space-y-2">
@@ -222,7 +222,7 @@ global $wpdb;
                 }
                 ?>
                 <div class="space-y-3" data-filter-group="<?php echo esc_attr( $extra_key ); ?>">
-                    <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
+                    <h4 class="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted mb-0">
                         <?php echo esc_html( $extra_label ); ?>
                     </h4>
                 </div>

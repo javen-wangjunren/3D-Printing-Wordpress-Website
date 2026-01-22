@@ -28,6 +28,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'text',
                     'instructions' => '如：SLS Materials Mechanical Properties Comparison',
                 ),
+                array(
+                    'key' => 'field_ct_desc',
+                    'label' => 'Table Description',
+                    'name' => 'table_description',
+                    'type' => 'text',
+                    'instructions' => '表格标题下方的补充说明文字。',
+                    'placeholder' => 'Precision Display: Uniform borders and dual-tone matrix.',
+                ),
                 // --- 第一层：定义表头标签 (动态表头核心) ---
                 array(
                     'key' => 'field_ct_header_group',
@@ -70,6 +78,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'key' => 'field_ct_tab_design',
                     'label' => 'Design',
                     'type' => 'tab',
+                ),
+                array(
+                    'key' => 'field_ct_bg_color',
+                    'label' => 'Background Color',
+                    'name' => 'comparison_table_background_color',
+                    'type' => 'color_picker',
+                    'wrapper' => array('width' => '50'),
+                    'default_value' => '#ffffff',
                 ),
                 array(
                     'key' => 'field_ct_highlight',

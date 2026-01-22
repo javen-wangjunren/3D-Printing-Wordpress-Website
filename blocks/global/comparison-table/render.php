@@ -47,7 +47,18 @@ if ( empty( $valid_cols ) || empty( $rows ) ) {
 
 // ID与Class
 $id_attr = $anchor_id ? 'id="' . esc_attr( $anchor_id ) . '"' : '';
-$classes = 'py-[96px] ' . ( $custom_class ? esc_attr( $custom_class ) : '' );
+
+// --- Dynamic Spacing Logic ---
+$bg_color = get_field_value('comparison_table_background_color', $block, $clone_name, $pfx, '#ffffff');
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+$section_spacing = $pt_class . ' ' . $pb_class;
+
+// Update Global State
+$GLOBALS['3dp_last_bg'] = $bg_color;
+
+$classes = $section_spacing . ( $custom_class ? ' ' . esc_attr( $custom_class ) : '' );
 
 // 字体配置
 $font_mono_class = $use_mono ? 'font-mono' : '';
@@ -61,7 +72,7 @@ $alpine_data = sprintf( '{ activeIndex: %d }', esc_attr( $highlight_idx ) );
 
 ?>
 
-<section <?php echo $id_attr; ?> class="<?php echo esc_attr( $classes ); ?>" x-data="<?php echo esc_attr( $alpine_data ); ?>">
+<section <?php echo $id_attr; ?> class="<?php echo esc_attr( $classes ); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;" x-data="<?php echo esc_attr( $alpine_data ); ?>">
     <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
         
         <?php if ( $title ) : ?>
@@ -70,10 +81,12 @@ $alpine_data = sprintf( '{ activeIndex: %d }', esc_attr( $highlight_idx ) );
                 <h2 class="text-[36px] font-bold text-heading tracking-[-1.5px] mb-2 uppercase">
                     <?php echo esc_html( $title ); ?>
                 </h2>
-                <p class="text-body text-sm font-medium opacity-80">物理级锁定展示：四周等厚边框及双色背景矩阵。</p>
+                <p class="text-body text-sm font-medium opacity-80">
+                    <?php echo esc_html( $description ? $description : __( 'Precision Display: Uniform borders and dual-tone matrix.', '3d-printing' ) ); ?>
+                </p>
             </div>
             <div class="hidden md:block border-2 border-primary/20 rounded-md px-3 py-1 rotate-12">
-                <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest">NOW3DP Verified</span>
+                <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest"><?php esc_html_e( 'NOW3DP Verified', '3d-printing' ); ?></span>
             </div>
         </div>
         <?php endif; ?>
@@ -185,3 +198,7 @@ $alpine_data = sprintf( '{ activeIndex: %d }', esc_attr( $highlight_idx ) );
         </div>
     </div>
 </section>
+
+<?php
+// End of file
+?>

@@ -1,5 +1,13 @@
 <?php
+/**
+ * Capability Design Guide Block Template
+ *
+ * @package 3D_Printing
+ */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Prefix Support
 $pfx = isset($block['prefix']) ? $block['prefix'] : '';
@@ -35,13 +43,23 @@ if ( $mb_mode === 'stack' ) {
 $advice_title = isset( $advice['title'] ) ? $advice['title'] : '';
 $advice_text  = isset( $advice['text'] ) ? $advice['text'] : '';
 
+// Visual Mapping & Layout Logic
+$bg_color = get_field_value('background_color', $block, $clone_name, $pfx, '#ffffff');
+
+// Dynamic Spacing Logic
+$prev_bg  = isset( $GLOBALS['3dp_last_bg'] ) ? $GLOBALS['3dp_last_bg'] : '';
+$section_spacing = ( $bg_color === $prev_bg ) ? 'pt-0 pb-16 lg:pb-24' : 'py-16 lg:py-24';
+
+// Update Global State
+$GLOBALS['3dp_last_bg'] = $bg_color;
+
 ?>
 
-<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="py-8 lg:py-16">
-    <div class="max-w-container mx-auto px-6 lg:px-[64px] <?php echo esc_attr( $block_class ); ?>">
+<section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="w-full <?php echo esc_attr( $section_spacing ); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
+    <div class="max-w-container mx-auto px-5 lg:px-8 <?php echo esc_attr( $block_class ); ?>">
         <?php if ( $section_title ) : ?>
             <div class="mb-8 lg:mb-12">
-                <h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-3">
+                <h2 class="text-h2 font-semibold text-heading tracking-tight mb-3">
                     <?php echo esc_html( $section_title ); ?>
                 </h2>
                 <div class="h-1 w-12 bg-primary rounded-full"></div>
@@ -97,10 +115,10 @@ $advice_text  = isset( $advice['text'] ) ? $advice['text'] : '';
                     ?>
                     <div class="border-b border-border last:border-b-0 <?php echo esc_attr( $row_bg ); ?>">
                         <div class="flex md:grid md:grid-cols-[minmax(0,220px)_1fr]">
-                            <div class="px-4 py-3 md:p-5 flex items-center text-[12px] font-bold text-heading uppercase tracking-[0.12em]">
+                            <div class="px-4 py-3 md:p-5 flex items-center text-[12px] font-bold text-heading uppercase tracking-[0.12em] border-r border-border min-w-[140px] md:min-w-0">
                                 <?php echo esc_html( $label ); ?>
                             </div>
-                            <div class="px-4 py-3 md:p-5 flex items-center justify-end md:justify-start text-[13px] md:text-[14px] text-body md:font-mono">
+                            <div class="px-4 py-3 md:p-5 flex items-center text-sm text-body leading-relaxed">
                                 <?php echo esc_html( $value ); ?>
                             </div>
                         </div>
@@ -110,25 +128,20 @@ $advice_text  = isset( $advice['text'] ) ? $advice['text'] : '';
         <?php endif; ?>
 
         <?php if ( $advice_title || $advice_text ) : ?>
-            <?php
-            $advice_classes = 'flex flex-col gap-3 p-4 lg:p-6 bg-primary/[0.03] border-l-4 border-primary rounded-r-card';
-
-            if ( $hide_advice_mb ) {
-                $advice_classes = 'hidden md:flex flex-col gap-3 p-4 lg:p-6 bg-primary/[0.03] border-l-4 border-primary rounded-r-card';
-            }
-            ?>
-            <div class="<?php echo esc_attr( $advice_classes ); ?>">
-                <?php if ( $advice_title ) : ?>
-                    <h4 class="text-[15px] lg:text-[16px] font-semibold text-heading">
-                        <?php echo esc_html( $advice_title ); ?>
-                    </h4>
-                <?php endif; ?>
-                <?php if ( $advice_text ) : ?>
-                    <div class="text-[13px] lg:text-[14px] text-body leading-relaxed">
-                        <?php echo wp_kses_post( $advice_text ); ?>
-                    </div>
-                <?php endif; ?>
+            <div class="<?php echo $hide_advice_mb ? 'hidden lg:flex' : 'flex'; ?> bg-blue-50/50 border border-blue-100 rounded-card p-4 lg:p-6 gap-4 items-start">
+                <div class="shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-primary">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                    <?php if ( $advice_title ) : ?>
+                        <h4 class="font-bold text-heading text-sm mb-1"><?php echo esc_html( $advice_title ); ?></h4>
+                    <?php endif; ?>
+                    <?php if ( $advice_text ) : ?>
+                        <p class="text-sm text-body/80 leading-relaxed"><?php echo esc_html( $advice_text ); ?></p>
+                    <?php endif; ?>
+                </div>
             </div>
         <?php endif; ?>
+
     </div>
 </section>

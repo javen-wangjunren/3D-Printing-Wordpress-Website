@@ -554,6 +554,33 @@ video {
   display: none;
 }
 
+/* Alpine.js Cloak */
+
+[x-cloak] {
+  display: none !important;
+}
+
+/* 彻底摧毁侧边栏的占位可能 */
+
+#primary {
+  width: 100% !important;
+  float: none !important;
+  margin: 0 !important;
+}
+
+#right-sidebar, .sidebar {
+  display: none !important;
+  width: 0 !important;
+}
+
+/* 解锁 GP 的固定宽度容器 */
+
+/* 强制主内容区域为 Block 布局，防止 Flex Row 导致子元素并排 */
+
+.site-content {
+  display: block !important;
+}
+
 a {
   /* 彻底取消全局链接下划线 */
   text-decoration: none !important;
@@ -599,6 +626,241 @@ a:hover {
   }
 }
 
+/* --- Fluent Forms Custom Styling --- */
+
+/* 1. 基础输入框样式 (Global Input Styles) */
+
+.fluentform .ff-el-form-control {
+  border-radius: 0.375rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(228 231 236 / var(--tw-border-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 15px;
+  --tw-text-opacity: 1;
+  color: rgb(29 41 56 / var(--tw-text-opacity, 1));
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* 物理锁定感：Focus 时边框变粗且无模糊阴影 */
+
+.fluentform .ff-el-form-control:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 71 171 / var(--tw-border-opacity, 1));
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: rgb(0 71 171 / 0.1);
+}
+
+/* Labels */
+
+.fluentform .ff-el-input--label {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  --tw-text-opacity: 1;
+  color: rgb(29 41 56 / var(--tw-text-opacity, 1));
+}
+
+/* Required Asterisk */
+
+.fluentform .ff-el-input--label.ff-el-is-required:after {
+  content: '*';
+  margin-left: 0.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(217 45 32 / var(--tw-text-opacity, 1));
+}
+
+/* 2. Container 间距优化 (Class: form-row-gap-md) */
+
+.fluentform .form-row-gap-md {
+  margin-bottom: 1.5rem;
+}
+
+/* 3. 文件上传区域美化 (Class: form-upload-zone) */
+
+.fluentform .form-upload-zone .ff-upload-btn-wrapper {
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-style: dashed;
+  --tw-border-opacity: 1;
+  border-color: rgb(208 213 221 / var(--tw-border-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  text-align: center;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+.fluentform .form-upload-zone .ff-upload-btn-wrapper:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 71 171 / var(--tw-border-opacity, 1));
+  --tw-bg-opacity: 1;
+  background-color: rgb(240 245 255 / var(--tw-bg-opacity, 1));
+}
+
+/* 4. 提交按钮 (Global Submit Button) */
+
+.fluentform .ff-btn-submit {
+  width: 100%;
+  justify-content: center;
+  border-radius: 0.375rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 71 171 / var(--tw-bg-opacity, 1));
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+.fluentform .ff-btn-submit:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 58 140 / var(--tw-bg-opacity, 1));
+}
+
+/* 5. 移动端优化 */
+
+@media (max-width: 768px) {
+  .fluentform .ff-t-cell {
+    margin-bottom: 1rem;
+    display: block;
+    width: 100%;
+    padding-right: 0px;
+  }
+
+  .fluentform .ff-t-container {
+    display: block;
+  }
+}
+
+/* --- Mission Module Styles --- */
+
+/* 工业网格背景微纹理 */
+
+.industrial-grid-bg {
+  background-color: #F2F4F7;
+  background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* 图片上的技术遮罩层 */
+
+.tech-overlay::after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset: 0px;
+  border-width: 1px;
+  border-color: rgb(255 255 255 / 0.1);
+  background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
+}
+
+/* 模拟屏幕扫描线 */
+
+.scanline {
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 2px;
+  opacity: 0;
+  background: rgba(0, 71, 171, 0.3);
+  animation: scan 4s linear infinite;
+}
+
+.group:hover .scanline {
+  opacity: 1;
+}
+
+@keyframes scan {
+  0% {
+    top: 0%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}
+
+/* --- Team Module Styles (Leadership) --- */
+
+/* Title Typography */
+
+.industrial-h2 {
+  letter-spacing: -0.5px;
+}
+
+/* Card Styling (Static, Clean) */
+
+/* Mono Tag Styling */
+
+/* --- Header Styles (Custom Overrides) --- */
+
+/* Alpine.js Cloak */
+
+[x-cloak] {
+  display: none !important;
+}
+
+/* Header Material Column Title Border */
+
+header .border-b,
+  .material-column-heading {
+  border-bottom-width: 1px !important;
+  border-bottom-style: solid !important;
+  border-bottom-color: #E4E7EC !important;
+}
+
+/* Nav Link Hover Effect */
+
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0px;
+  height: 2px;
+  width: 0px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 71 171 / var(--tw-bg-opacity, 1));
+  transition-property: width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
 .pointer-events-none {
   pointer-events: none !important;
 }
@@ -609,6 +871,10 @@ a:hover {
 
 .visible {
   visibility: visible !important;
+}
+
+.collapse {
+  visibility: collapse !important;
 }
 
 .fixed {
@@ -631,16 +897,8 @@ a:hover {
   bottom: -1rem !important;
 }
 
-.-left-\[39px\] {
-  left: -39px !important;
-}
-
 .bottom-0 {
   bottom: 0px !important;
-}
-
-.bottom-2 {
-  bottom: 0.5rem !important;
 }
 
 .bottom-4 {
@@ -675,10 +933,6 @@ a:hover {
   right: 0px !important;
 }
 
-.right-2 {
-  right: 0.5rem !important;
-}
-
 .right-4 {
   right: 1rem !important;
 }
@@ -699,10 +953,6 @@ a:hover {
   top: 0px !important;
 }
 
-.top-1\.5 {
-  top: 0.375rem !important;
-}
-
 .top-1\/3 {
   top: 33.333333% !important;
 }
@@ -719,8 +969,8 @@ a:hover {
   top: 1.75rem !important;
 }
 
-.top-\[148px\] {
-  top: 148px !important;
+.top-\[23px\] {
+  top: 23px !important;
 }
 
 .top-full {
@@ -900,6 +1150,10 @@ a:hover {
   margin-top: auto !important;
 }
 
+.-mt-12 {
+  margin-top: -3rem !important;
+}
+
 .line-clamp-2 {
   overflow: hidden !important;
   display: -webkit-box !important;
@@ -938,10 +1192,6 @@ a:hover {
   display: grid !important;
 }
 
-.contents {
-  display: contents !important;
-}
-
 .hidden {
   display: none !important;
 }
@@ -952,10 +1202,6 @@ a:hover {
 
 .aspect-\[4\/3\] {
   aspect-ratio: 4/3 !important;
-}
-
-.aspect-\[4\/5\] {
-  aspect-ratio: 4/5 !important;
 }
 
 .aspect-square {
@@ -990,6 +1236,10 @@ a:hover {
   height: 3.5rem !important;
 }
 
+.h-16 {
+  height: 4rem !important;
+}
+
 .h-20 {
   height: 5rem !important;
 }
@@ -1022,10 +1272,6 @@ a:hover {
   height: 180px !important;
 }
 
-.h-\[2\.5em\] {
-  height: 2.5em !important;
-}
-
 .h-\[280px\] {
   height: 280px !important;
 }
@@ -1036,6 +1282,10 @@ a:hover {
 
 .h-\[400px\] {
   height: 400px !important;
+}
+
+.h-\[48px\] {
+  height: 48px !important;
 }
 
 .h-auto {
@@ -1050,6 +1300,10 @@ a:hover {
   height: 1px !important;
 }
 
+.h-48 {
+  height: 12rem !important;
+}
+
 .max-h-\[80vh\] {
   max-height: 80vh !important;
 }
@@ -1062,10 +1316,6 @@ a:hover {
   max-height: 100% !important;
 }
 
-.min-h-\[220px\] {
-  min-height: 220px !important;
-}
-
 .min-h-\[320px\] {
   min-height: 320px !important;
 }
@@ -1074,8 +1324,16 @@ a:hover {
   min-height: 360px !important;
 }
 
+.min-h-\[400px\] {
+  min-height: 400px !important;
+}
+
 .min-h-\[600px\] {
   min-height: 600px !important;
+}
+
+.min-h-\[60vh\] {
+  min-height: 60vh !important;
 }
 
 .w-0 {
@@ -1102,8 +1360,8 @@ a:hover {
   width: 3.5rem !important;
 }
 
-.w-2 {
-  width: 0.5rem !important;
+.w-16 {
+  width: 4rem !important;
 }
 
 .w-3 {
@@ -1134,16 +1392,12 @@ a:hover {
   width: 250px !important;
 }
 
-.w-\[2px\] {
-  width: 2px !important;
-}
-
 .w-\[320px\] {
   width: 320px !important;
 }
 
-.w-\[340px\] {
-  width: 340px !important;
+.w-\[48px\] {
+  width: 48px !important;
 }
 
 .w-\[85\%\] {
@@ -1167,24 +1421,24 @@ a:hover {
   width: 1px !important;
 }
 
-.min-w-0 {
-  min-width: 0px !important;
-}
-
 .min-w-\[1000px\] {
   min-width: 1000px !important;
 }
 
-.min-w-\[100px\] {
-  min-width: 100px !important;
+.min-w-\[140px\] {
+  min-width: 140px !important;
 }
 
-.min-w-full {
-  min-width: 100% !important;
+.min-w-\[280px\] {
+  min-width: 280px !important;
 }
 
 .max-w-2xl {
   max-width: 42rem !important;
+}
+
+.max-w-3xl {
+  max-width: 48rem !important;
 }
 
 .max-w-6xl {
@@ -1223,12 +1477,12 @@ a:hover {
   max-width: 20rem !important;
 }
 
-.flex-1 {
-  flex: 1 1 0% !important;
+.max-w-md {
+  max-width: 28rem !important;
 }
 
-.flex-\[0_0_40\%\] {
-  flex: 0 0 40% !important;
+.flex-1 {
+  flex: 1 1 0% !important;
 }
 
 .flex-\[1\.5\] {
@@ -1249,10 +1503,6 @@ a:hover {
 
 .flex-grow {
   flex-grow: 1 !important;
-}
-
-.border-collapse {
-  border-collapse: collapse !important;
 }
 
 .border-separate {
@@ -1280,13 +1530,13 @@ a:hover {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
-.translate-y-1\/2 {
-  --tw-translate-y: 50% !important;
+.translate-y-2 {
+  --tw-translate-y: 0.5rem !important;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
-.translate-y-2 {
-  --tw-translate-y: 0.5rem !important;
+.translate-y-4 {
+  --tw-translate-y: 1rem !important;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
@@ -1330,6 +1580,12 @@ a:hover {
   cursor: zoom-in !important;
 }
 
+.select-none {
+  -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+          user-select: none !important;
+}
+
 .snap-x {
   scroll-snap-type: x var(--tw-scroll-snap-strictness) !important;
 }
@@ -1370,10 +1626,6 @@ a:hover {
   flex-wrap: wrap !important;
 }
 
-.flex-nowrap {
-  flex-wrap: nowrap !important;
-}
-
 .items-start {
   align-items: flex-start !important;
 }
@@ -1396,10 +1648,6 @@ a:hover {
 
 .justify-start {
   justify-content: flex-start !important;
-}
-
-.justify-end {
-  justify-content: flex-end !important;
 }
 
 .justify-center {
@@ -1455,22 +1703,17 @@ a:hover {
        column-gap: 3rem !important;
 }
 
-.gap-x-4 {
-  -moz-column-gap: 1rem !important;
-       column-gap: 1rem !important;
-}
-
 .gap-x-6 {
   -moz-column-gap: 1.5rem !important;
        column-gap: 1.5rem !important;
 }
 
-.gap-y-6 {
-  row-gap: 1.5rem !important;
+.gap-y-0 {
+  row-gap: 0px !important;
 }
 
-.gap-y-8 {
-  row-gap: 2rem !important;
+.gap-y-6 {
+  row-gap: 1.5rem !important;
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -1519,10 +1762,6 @@ a:hover {
   overflow: hidden !important;
 }
 
-.overflow-visible {
-  overflow: visible !important;
-}
-
 .overflow-x-auto {
   overflow-x: auto !important;
 }
@@ -1539,10 +1778,6 @@ a:hover {
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
-}
-
-.text-ellipsis {
-  text-overflow: ellipsis !important;
 }
 
 .whitespace-nowrap {
@@ -1590,11 +1825,6 @@ a:hover {
   border-bottom-left-radius: 0.75rem !important;
 }
 
-.rounded-r-card {
-  border-top-right-radius: 12px !important;
-  border-bottom-right-radius: 12px !important;
-}
-
 .rounded-r-md {
   border-top-right-radius: 0.375rem !important;
   border-bottom-right-radius: 0.375rem !important;
@@ -1617,10 +1847,6 @@ a:hover {
   border-top-right-radius: 0.5rem !important;
 }
 
-.\!border-\[3px\] {
-  border-width: 3px !important;
-}
-
 .border {
   border-width: 1px !important;
 }
@@ -1629,8 +1855,8 @@ a:hover {
   border-width: 2px !important;
 }
 
-.border-4 {
-  border-width: 4px !important;
+.border-\[3px\] {
+  border-width: 3px !important;
 }
 
 .border-y {
@@ -1640,10 +1866,6 @@ a:hover {
 
 .border-b {
   border-bottom-width: 1px !important;
-}
-
-.border-b-2 {
-  border-bottom-width: 2px !important;
 }
 
 .border-l {
@@ -1674,14 +1896,14 @@ a:hover {
   border-style: none !important;
 }
 
-.\!border-primary {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(0 71 171 / var(--tw-border-opacity, 1)) !important;
-}
-
 .border-\[\#E4E7EC\] {
   --tw-border-opacity: 1 !important;
   border-color: rgb(228 231 236 / var(--tw-border-opacity, 1)) !important;
+}
+
+.border-blue-100 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(219 234 254 / var(--tw-border-opacity, 1)) !important;
 }
 
 .border-border {
@@ -1730,11 +1952,6 @@ a:hover {
 
 .border-transparent {
   border-color: transparent !important;
-}
-
-.border-white {
-  --tw-border-opacity: 1 !important;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1)) !important;
 }
 
 .border-white\/10 {
@@ -1796,6 +2013,15 @@ a:hover {
   background-color: rgb(242 244 247 / 0.5) !important;
 }
 
+.bg-blue-100 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1)) !important;
+}
+
+.bg-blue-50\/50 {
+  background-color: rgb(239 246 255 / 0.5) !important;
+}
+
 .bg-border {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(228 231 236 / var(--tw-bg-opacity, 1)) !important;
@@ -1806,9 +2032,9 @@ a:hover {
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1)) !important;
 }
 
-.bg-gray-200 {
+.bg-gray-50 {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1)) !important;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .bg-green-50 {
@@ -1879,6 +2105,11 @@ a:hover {
   background-color: rgb(255 255 255 / 0.95) !important;
 }
 
+.bg-bg-page {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1)) !important;
+}
+
 .bg-gradient-to-t {
   background-image: linear-gradient(to top, var(--tw-gradient-stops)) !important;
 }
@@ -1946,6 +2177,10 @@ a:hover {
   padding: 3px !important;
 }
 
+.p-12 {
+  padding: 3rem !important;
+}
+
 .px-1 {
   padding-left: 0.25rem !important;
   padding-right: 0.25rem !important;
@@ -2011,16 +2246,6 @@ a:hover {
   padding-bottom: 0.375rem !important;
 }
 
-.py-10 {
-  padding-top: 2.5rem !important;
-  padding-bottom: 2.5rem !important;
-}
-
-.py-12 {
-  padding-top: 3rem !important;
-  padding-bottom: 3rem !important;
-}
-
 .py-16 {
   padding-top: 4rem !important;
   padding-bottom: 4rem !important;
@@ -2071,14 +2296,14 @@ a:hover {
   padding-bottom: 96px !important;
 }
 
-.py-section-y {
-  padding-top: 96px !important;
-  padding-bottom: 96px !important;
-}
-
 .py-section-y-small {
   padding-top: 64px !important;
   padding-bottom: 64px !important;
+}
+
+.py-20 {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
 }
 
 .pb-1 {
@@ -2093,8 +2318,16 @@ a:hover {
   padding-bottom: 3rem !important;
 }
 
+.pb-16 {
+  padding-bottom: 4rem !important;
+}
+
 .pb-2 {
   padding-bottom: 0.5rem !important;
+}
+
+.pb-20 {
+  padding-bottom: 5rem !important;
 }
 
 .pb-32 {
@@ -2105,8 +2338,8 @@ a:hover {
   padding-bottom: 1rem !important;
 }
 
-.pb-48 {
-  padding-bottom: 12rem !important;
+.pb-6 {
+  padding-bottom: 1.5rem !important;
 }
 
 .pb-8 {
@@ -2125,28 +2358,24 @@ a:hover {
   padding-left: 1.5rem !important;
 }
 
-.pl-8 {
-  padding-left: 2rem !important;
-}
-
 .pr-0 {
   padding-right: 0px !important;
 }
 
-.pr-2 {
-  padding-right: 0.5rem !important;
+.pt-0 {
+  padding-top: 0px !important;
 }
 
 .pt-1 {
   padding-top: 0.25rem !important;
 }
 
-.pt-20 {
-  padding-top: 5rem !important;
+.pt-16 {
+  padding-top: 4rem !important;
 }
 
-.pt-3 {
-  padding-top: 0.75rem !important;
+.pt-20 {
+  padding-top: 5rem !important;
 }
 
 .pt-32 {
@@ -2165,6 +2394,14 @@ a:hover {
   padding-top: 2rem !important;
 }
 
+.pb-\[96px\] {
+  padding-bottom: 96px !important;
+}
+
+.pt-\[96px\] {
+  padding-top: 96px !important;
+}
+
 .text-left {
   text-align: left !important;
 }
@@ -2173,12 +2410,26 @@ a:hover {
   text-align: center !important;
 }
 
+.text-right {
+  text-align: right !important;
+}
+
 .font-mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 }
 
 .font-sans {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif !important;
+}
+
+.text-3xl {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+.text-4xl {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
 }
 
 .text-\[10px\] {
@@ -2225,10 +2476,6 @@ a:hover {
   font-size: 24px !important;
 }
 
-.text-\[26px\] {
-  font-size: 26px !important;
-}
-
 .text-\[28px\] {
   font-size: 28px !important;
 }
@@ -2243,10 +2490,6 @@ a:hover {
 
 .text-\[36px\] {
   font-size: 36px !important;
-}
-
-.text-\[56px\] {
-  font-size: 56px !important;
 }
 
 .text-\[8px\] {
@@ -2318,6 +2561,10 @@ a:hover {
   line-height: 1rem !important;
 }
 
+.text-\[120px\] {
+  font-size: 120px !important;
+}
+
 .font-bold {
   font-weight: 700 !important;
 }
@@ -2374,16 +2621,8 @@ a:hover {
   letter-spacing: -0.04em !important;
 }
 
-.tracking-\[-0\.5px\] {
-  letter-spacing: -0.5px !important;
-}
-
 .tracking-\[-1\.5px\] {
   letter-spacing: -1.5px !important;
-}
-
-.tracking-\[-1px\] {
-  letter-spacing: -1px !important;
 }
 
 .tracking-\[0\.08em\] {
@@ -2430,10 +2669,6 @@ a:hover {
   letter-spacing: -0.05em !important;
 }
 
-.tracking-wide {
-  letter-spacing: 0.025em !important;
-}
-
 .tracking-wider {
   letter-spacing: 0.05em !important;
 }
@@ -2451,8 +2686,17 @@ a:hover {
   color: rgb(102 112 133 / 0.6) !important;
 }
 
+.text-body\/70 {
+  color: rgb(102 112 133 / 0.7) !important;
+}
+
 .text-body\/80 {
   color: rgb(102 112 133 / 0.8) !important;
+}
+
+.text-gray-300 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1)) !important;
 }
 
 .text-gray-400 {
@@ -2473,6 +2717,10 @@ a:hover {
 .text-heading {
   --tw-text-opacity: 1 !important;
   color: rgb(29 41 56 / var(--tw-text-opacity, 1)) !important;
+}
+
+.text-heading\/20 {
+  color: rgb(29 41 56 / 0.2) !important;
 }
 
 .text-inverse {
@@ -2511,12 +2759,12 @@ a:hover {
   color: rgb(255 255 255 / 0.8) !important;
 }
 
-.opacity-0 {
-  opacity: 0 !important;
+.text-primary\/10 {
+  color: rgb(0 71 171 / 0.1) !important;
 }
 
-.opacity-10 {
-  opacity: 0.1 !important;
+.opacity-0 {
+  opacity: 0 !important;
 }
 
 .opacity-100 {
@@ -2529,10 +2777,6 @@ a:hover {
 
 .opacity-50 {
   opacity: 0.5 !important;
-}
-
-.opacity-60 {
-  opacity: 0.6 !important;
 }
 
 .opacity-80 {
@@ -2564,24 +2808,6 @@ a:hover {
 .shadow-2xl {
   --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25) !important;
   --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color) !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
-}
-
-.shadow-\[0_0_0_1px_\#0047AB\] {
-  --tw-shadow: 0 0 0 1px #0047AB !important;
-  --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color) !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
-}
-
-.shadow-\[0_0_0_1px_\#E4E7EC\] {
-  --tw-shadow: 0 0 0 1px #E4E7EC !important;
-  --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color) !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
-}
-
-.shadow-\[0_20px_40px_-15px_rgba\(0\2c 0\2c 0\2c 0\.1\)\] {
-  --tw-shadow: 0 20px 40px -15px rgba(0,0,0,0.1) !important;
-  --tw-shadow-colored: 0 20px 40px -15px var(--tw-shadow-color) !important;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
 }
 
@@ -2723,14 +2949,6 @@ a:hover {
   will-change: transform !important;
 }
 
-.\[-ms-overflow-style\:\'none\'\] {
-  -ms-overflow-style: 'none' !important;
-}
-
-.\[scrollbar-width\:\'none\'\] {
-  scrollbar-width: 'none' !important;
-}
-
 .placeholder\:text-muted::-moz-placeholder {
   --tw-text-opacity: 1 !important;
   color: rgb(152 162 179 / var(--tw-text-opacity, 1)) !important;
@@ -2787,10 +3005,6 @@ a:hover {
 .after\:content-\[\\\'\\\'\]::after {
   --tw-content: \'\' !important;
   content: var(--tw-content) !important;
-}
-
-.last\:border-0:last-child {
-  border-width: 0px !important;
 }
 
 .last\:border-b-0:last-child {
@@ -2893,14 +3107,14 @@ a:hover {
   color: rgb(0 71 171 / var(--tw-text-opacity, 1)) !important;
 }
 
-.hover\:text-primary-hover:hover {
-  --tw-text-opacity: 1 !important;
-  color: rgb(0 58 140 / var(--tw-text-opacity, 1)) !important;
-}
-
 .hover\:text-white:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important;
+}
+
+.hover\:text-primary-hover:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(0 58 140 / var(--tw-text-opacity, 1)) !important;
 }
 
 .hover\:underline:hover {
@@ -2957,6 +3171,11 @@ a:hover {
   opacity: 0.3 !important;
 }
 
+.group\/link:hover .group-hover\/link\:translate-x-1 {
+  --tw-translate-x: 0.25rem !important;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+}
+
 .group:hover .group-hover\:translate-x-1 {
   --tw-translate-x: 0.25rem !important;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
@@ -2976,6 +3195,12 @@ a:hover {
 .group:hover .group-hover\:scale-105 {
   --tw-scale-x: 1.05 !important;
   --tw-scale-y: 1.05 !important;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+}
+
+.group:hover .group-hover\:scale-110 {
+  --tw-scale-x: 1.1 !important;
+  --tw-scale-y: 1.1 !important;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
@@ -3003,6 +3228,10 @@ a:hover {
   color: rgb(0 71 171 / var(--tw-text-opacity, 1)) !important;
 }
 
+.group:hover .group-hover\:text-primary\/20 {
+  color: rgb(0 71 171 / 0.2) !important;
+}
+
 .group:hover .group-hover\:text-white {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important;
@@ -3010,12 +3239,6 @@ a:hover {
 
 .group:hover .group-hover\:opacity-100 {
   opacity: 1 !important;
-}
-
-.group:hover .group-hover\:shadow-\[0_0_0_1px_\#0047AB\] {
-  --tw-shadow: 0 0 0 1px #0047AB !important;
-  --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color) !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
 }
 
 @media not all and (min-width: 768px) {
@@ -3047,20 +3270,8 @@ a:hover {
 }
 
 @media (min-width: 768px) {
-  .md\:bottom-4 {
-    bottom: 1rem !important;
-  }
-
-  .md\:right-4 {
-    right: 1rem !important;
-  }
-
   .md\:mt-0 {
     margin-top: 0px !important;
-  }
-
-  .md\:mt-2 {
-    margin-top: 0.5rem !important;
   }
 
   .md\:block {
@@ -3071,44 +3282,20 @@ a:hover {
     display: flex !important;
   }
 
-  .md\:table-cell {
-    display: table-cell !important;
-  }
-
   .md\:grid {
     display: grid !important;
-  }
-
-  .md\:hidden {
-    display: none !important;
-  }
-
-  .md\:h-5 {
-    height: 1.25rem !important;
-  }
-
-  .md\:w-1\/2 {
-    width: 50% !important;
-  }
-
-  .md\:w-5 {
-    width: 1.25rem !important;
   }
 
   .md\:w-\[45\%\] {
     width: 45% !important;
   }
 
-  .md\:flex-auto {
-    flex: 1 1 auto !important;
+  .md\:min-w-0 {
+    min-width: 0px !important;
   }
 
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 
   .md\:grid-cols-4 {
@@ -3127,66 +3314,12 @@ a:hover {
     align-items: center !important;
   }
 
-  .md\:justify-start {
-    justify-content: flex-start !important;
-  }
-
-  .md\:gap-5 {
-    gap: 1.25rem !important;
-  }
-
-  .md\:gap-6 {
-    gap: 1.5rem !important;
-  }
-
   .md\:gap-8 {
     gap: 2rem !important;
   }
 
   .md\:p-5 {
     padding: 1.25rem !important;
-  }
-
-  .md\:px-3 {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
-  }
-
-  .md\:py-1\.5 {
-    padding-top: 0.375rem !important;
-    padding-bottom: 0.375rem !important;
-  }
-
-  .md\:pb-0 {
-    padding-bottom: 0px !important;
-  }
-
-  .md\:font-mono {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-  }
-
-  .md\:text-\[10px\] {
-    font-size: 10px !important;
-  }
-
-  .md\:text-\[11px\] {
-    font-size: 11px !important;
-  }
-
-  .md\:text-\[14px\] {
-    font-size: 14px !important;
-  }
-
-  .md\:text-\[16px\] {
-    font-size: 16px !important;
-  }
-
-  .md\:text-\[20px\] {
-    font-size: 20px !important;
-  }
-
-  .md\:text-\[9px\] {
-    font-size: 9px !important;
   }
 }
 
@@ -3259,10 +3392,6 @@ a:hover {
 
   .lg\:mb-2 {
     margin-bottom: 0.5rem !important;
-  }
-
-  .lg\:mb-20 {
-    margin-bottom: 5rem !important;
   }
 
   .lg\:mb-3 {
@@ -3393,8 +3522,8 @@ a:hover {
     width: 100% !important;
   }
 
-  .lg\:min-w-\[140px\] {
-    min-width: 140px !important;
+  .lg\:min-w-\[320px\] {
+    min-width: 320px !important;
   }
 
   .lg\:max-w-\[220px\] {
@@ -3454,10 +3583,6 @@ a:hover {
     flex-direction: column !important;
   }
 
-  .lg\:flex-wrap {
-    flex-wrap: wrap !important;
-  }
-
   .lg\:items-end {
     align-items: flex-end !important;
   }
@@ -3501,11 +3626,6 @@ a:hover {
   .lg\:gap-x-12 {
     -moz-column-gap: 3rem !important;
          column-gap: 3rem !important;
-  }
-
-  .lg\:gap-x-16 {
-    -moz-column-gap: 4rem !important;
-         column-gap: 4rem !important;
   }
 
   .lg\:gap-y-8 {
@@ -3587,19 +3707,9 @@ a:hover {
     padding-bottom: 2.5rem !important;
   }
 
-  .lg\:py-16 {
-    padding-top: 4rem !important;
-    padding-bottom: 4rem !important;
-  }
-
   .lg\:py-2 {
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
-  }
-
-  .lg\:py-20 {
-    padding-top: 5rem !important;
-    padding-bottom: 5rem !important;
   }
 
   .lg\:py-24 {
@@ -3632,12 +3742,18 @@ a:hover {
     padding-bottom: 96px !important;
   }
 
-  .lg\:pb-32 {
+  .lg\:py-3 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  .lg\:py-32 {
+    padding-top: 8rem !important;
     padding-bottom: 8rem !important;
   }
 
-  .lg\:pb-48 {
-    padding-bottom: 12rem !important;
+  .lg\:pb-24 {
+    padding-bottom: 6rem !important;
   }
 
   .lg\:pl-8 {
@@ -3660,6 +3776,10 @@ a:hover {
     padding-top: 0px !important;
   }
 
+  .lg\:pt-24 {
+    padding-top: 6rem !important;
+  }
+
   .lg\:pt-32 {
     padding-top: 8rem !important;
   }
@@ -3670,6 +3790,11 @@ a:hover {
 
   .lg\:text-center {
     text-align: center !important;
+  }
+
+  .lg\:text-4xl {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
   }
 
   .lg\:text-\[10px\] {
@@ -3696,10 +3821,6 @@ a:hover {
     font-size: 15px !important;
   }
 
-  .lg\:text-\[16px\] {
-    font-size: 16px !important;
-  }
-
   .lg\:text-\[17px\] {
     font-size: 17px !important;
   }
@@ -3724,24 +3845,12 @@ a:hover {
     font-size: 24px !important;
   }
 
-  .lg\:text-\[28px\] {
-    font-size: 28px !important;
-  }
-
-  .lg\:text-\[32px\] {
-    font-size: 32px !important;
-  }
-
   .lg\:text-\[36px\] {
     font-size: 36px !important;
   }
 
   .lg\:text-\[40px\] {
     font-size: 40px !important;
-  }
-
-  .lg\:text-\[9px\] {
-    font-size: 9px !important;
   }
 
   .lg\:text-base {
@@ -3764,6 +3873,15 @@ a:hover {
   .lg\:text-sm {
     font-size: 0.875rem !important;
     line-height: 1.25rem !important;
+  }
+
+  .lg\:text-xs {
+    font-size: 0.75rem !important;
+    line-height: 1rem !important;
+  }
+
+  .lg\:text-\[180px\] {
+    font-size: 180px !important;
   }
 
   .lg\:text-body {
@@ -3798,6 +3916,17 @@ a:hover {
   }
 }
 
-.\[\&\:\:-webkit-scrollbar\]\:hidden::-webkit-scrollbar {
-  display: none !important;
+.\[\&_\.sep\]\:px-2 .sep {
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.\[\&_a\:hover\]\:text-primary a:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(0 71 171 / var(--tw-text-opacity, 1)) !important;
+}
+
+.\[\&_a\]\:text-muted a {
+  --tw-text-opacity: 1 !important;
+  color: rgb(152 162 179 / var(--tw-text-opacity, 1)) !important;
 }

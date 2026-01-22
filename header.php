@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<!-- Preconnect & Preload -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<!-- Future CDN: <link rel="preconnect" href="https://cdn.yourdomain.com"> -->
+
 	<?php wp_head(); ?>
 </head>
 
@@ -38,6 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			.site-logo-img {
 				width: <?php echo $header_logo_width_mobile > 0 ? $header_logo_width_mobile : 'auto'; ?>px;
 				height: auto;
+				max-width: 100%; /* Prevent overflow on small screens */
 			}
 			@media (min-width: 1024px) {
 				.site-logo-img {
@@ -113,11 +121,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="hidden lg:block">
 					<?php if ( is_array( $header_cta ) && ! empty( $header_cta['url'] ) ) : ?>
 						<?php
-							$cta_url = esc_url( $header_cta['url'] );
+							$cta_url = $header_cta['url'];
 							$cta_title = isset( $header_cta['title'] ) ? esc_html( $header_cta['title'] ) : '';
 							$cta_target = isset( $header_cta['target'] ) && $header_cta['target'] ? esc_attr( $header_cta['target'] ) : '_self';
 						?>
-						<a href="<?php echo $cta_url; ?>" target="<?php echo $cta_target; ?>" class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white border border-[#E4E7EC] transition hover:bg-primary-hover">
+						<a href="<?php echo esc_url( $cta_url ); ?>" target="<?php echo $cta_target; ?>" class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white border border-[#E4E7EC] transition hover:bg-primary-hover">
 							<span><?php echo $cta_title ? $cta_title : esc_html__( 'Get Instant Quote', 'generatepress' ); ?></span>
 							<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 								<path d="M17 8l4 4m0 0-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -155,9 +163,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php
 									$tech_name = isset( $item['tech_name'] ) ? $item['tech_name'] : '';
 									$link = isset( $item['link'] ) ? $item['link'] : null;
-									$link_url = is_array( $link ) && ! empty( $link['url'] ) ? esc_url( $link['url'] ) : '#';
+									$link_url = is_array( $link ) && ! empty( $link['url'] ) ? $link['url'] : '#';
 								?>
-								<a href="<?php echo $link_url; ?>" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">
+								<a href="<?php echo esc_url( $link_url ); ?>" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary">
 									<?php echo esc_html( $tech_name ); ?>
 								</a>
 							<?php endforeach; ?>
@@ -204,9 +212,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php
 									$title = isset( $item['title'] ) ? $item['title'] : '';
 									$link = isset( $item['link'] ) ? $item['link'] : null;
-									$link_url = is_array( $link ) && ! empty( $link['url'] ) ? esc_url( $link['url'] ) : '#';
+									$link_url = is_array( $link ) && ! empty( $link['url'] ) ? $link['url'] : '#';
 								?>
-								<a href="<?php echo $link_url; ?>" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary"><?php echo esc_html( $title ); ?></a>
+								<a href="<?php echo esc_url( $link_url ); ?>" class="block rounded-lg px-3 py-2 text-sm font-semibold text-heading hover:bg-gray-50 hover:text-primary"><?php echo esc_html( $title ); ?></a>
 							<?php endforeach; ?>
 						<?php endif; ?>
 					</div>
@@ -216,10 +224,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php if ( is_array( $header_cta ) && ! empty( $header_cta['url'] ) ) : ?>
 					<div class="pt-4 border-t border-gray-100">
 						<?php
-							$cta_url = esc_url( $header_cta['url'] );
+							$cta_url = $header_cta['url'];
 							$cta_title = isset( $header_cta['title'] ) ? esc_html( $header_cta['title'] ) : '';
 						?>
-						<a href="<?php echo $cta_url; ?>" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-hover">
+						<a href="<?php echo esc_url( $cta_url ); ?>" class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white transition hover:bg-primary-hover">
 							<span><?php echo $cta_title ? $cta_title : esc_html__( 'Get Instant Quote', 'generatepress' ); ?></span>
 						</a>
 					</div>
@@ -247,9 +255,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$subtitle = isset( $item['subtitle'] ) ? $item['subtitle'] : '';
 								$tag = isset( $item['tag'] ) ? $item['tag'] : '';
 								$link = isset( $item['link'] ) ? $item['link'] : null;
-								$link_url = is_array( $link ) && ! empty( $link['url'] ) ? esc_url( $link['url'] ) : '#';
+								$link_url = is_array( $link ) && ! empty( $link['url'] ) ? $link['url'] : '#';
 							?>
-							<a href="<?php echo $link_url; ?>" class="group flex flex-col gap-1 rounded-xl p-4 transition duration-200 hover:bg-gray-50 border border-transparent hover:border-gray-100">
+							<a href="<?php echo esc_url( $link_url ); ?>" class="group flex flex-col gap-1 rounded-xl p-4 transition duration-200 hover:bg-gray-50 border border-transparent hover:border-gray-100">
 								<div class="flex items-center gap-3">
 									<span class="text-sm font-bold text-heading group-hover:text-primary transition-colors"><?php echo esc_html( $tech_name ); ?></span>
 								<?php if ( $tag ) : ?>
@@ -339,9 +347,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 							$title = isset( $item['title'] ) ? $item['title'] : '';
 							$desc = isset( $item['description'] ) ? $item['description'] : '';
 							$link = isset( $item['link'] ) ? $item['link'] : null;
-							$link_url = is_array( $link ) && ! empty( $link['url'] ) ? esc_url( $link['url'] ) : '#';
+							$link_url = is_array( $link ) && ! empty( $link['url'] ) ? $link['url'] : '#';
 						?>
-						<a href="<?php echo $link_url; ?>" class="group flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
+						<a href="<?php echo esc_url( $link_url ); ?>" class="group flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
 							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition">
 								<?php if ( stripos( $title, 'Contact' ) !== false ) : ?>
 									<!-- Envelope Icon for Contact Us -->
@@ -374,7 +382,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 */
 		do_action( 'generate_inside_site_container' );
 		?>
-		<div <?php generate_do_attr( 'site-content' ); ?>>
+		<div id="content" class="site-content">
 			<?php
 			/**
 			 * generate_inside_container hook.
