@@ -18,6 +18,7 @@ $clone_name = rtrim($pfx, '_');
 
 // 使用万能取数逻辑获取字段值
 $title           = get_field_value('table_title', $block, $clone_name, $pfx, '');
+$description     = get_field_value('table_description', $block, $clone_name, $pfx, '');
 $headers         = get_field_value('headers', $block, $clone_name, $pfx, array()); // Group: h1..h5
 $rows            = get_field_value('comparison_rows', $block, $clone_name, $pfx, array()); // Repeater: v1..v5
 $highlight_idx   = get_field_value('highlight_index', $block, $clone_name, $pfx, 1);
@@ -73,27 +74,25 @@ $alpine_data = sprintf( '{ activeIndex: %d }', esc_attr( $highlight_idx ) );
 ?>
 
 <section <?php echo $id_attr; ?> class="<?php echo esc_attr( $classes ); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;" x-data="<?php echo esc_attr( $alpine_data ); ?>">
-    <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+    <div class="max-w-container mx-auto px-6 lg:px-8">
         
         <?php if ( $title ) : ?>
         <div class="mb-12 flex justify-between items-end">
             <div>
-                <h2 class="text-[36px] font-bold text-heading tracking-[-1.5px] mb-2 uppercase">
+                <h2 class="text-[36px] font-bold text-heading tracking-tight mb-2">
                     <?php echo esc_html( $title ); ?>
                 </h2>
-                <p class="text-body text-sm font-medium opacity-80">
+                <p class="text-body text-lg max-w-2xl">
                     <?php echo esc_html( $description ? $description : __( 'Precision Display: Uniform borders and dual-tone matrix.', '3d-printing' ) ); ?>
                 </p>
-            </div>
-            <div class="hidden md:block border-2 border-primary/20 rounded-md px-3 py-1 rotate-12">
-                <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest"><?php esc_html_e( 'NOW3DP Verified', '3d-printing' ); ?></span>
             </div>
         </div>
         <?php endif; ?>
 
-        <div class="bg-white rounded-xl border border-border shadow-sm p-[3px] overflow-hidden">
+        <!-- Table Container -->
+        <div class="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
             <div class="overflow-x-auto no-scrollbar">
-                <table class="w-full text-left border-separate border-spacing-0 min-w-[1000px]">
+                <table class="w-full text-left border-separate border-spacing-0 min-w-[1000px] mb-0">
                     <thead>
                         <tr class="bg-bg-table text-heading uppercase tracking-[2px] text-[11px] font-bold">
                             <?php 
@@ -140,9 +139,17 @@ $alpine_data = sprintf( '{ activeIndex: %d }', esc_attr( $highlight_idx ) );
                                     $is_first_col = $col_idx === 0;
                                     $is_last_col  = $col_idx === ( $col_count - 1 );
                                     $is_even_col  = ( $col_idx + 1 ) % 2 === 0;
+                                    $is_last_row  = ( $row_idx === count( $rows ) - 1 );
+                                    
+                                    // Corner Logic for Last Row
+                                    $corner_class = '';
+                                    if ( $is_last_row ) {
+                                        if ( $is_first_col ) $corner_class = ' rounded-bl-lg';
+                                        if ( $is_last_col )  $corner_class = ' rounded-br-lg';
+                                    }
                                     
                                     // Cell Base Classes
-                                    $td_base = $td_padding . ' border-b border-border transition-colors ' . ( $use_mono && ! $is_first_col ? 'font-mono' : '' );
+                                    $td_base = $td_padding . ' border-b border-border transition-colors ' . ( $use_mono && ! $is_first_col ? 'font-mono' : '' ) . $corner_class;
                                     
                                     // Dynamic Classes for Active State
                                     // Need to construct the :class string for Alpine

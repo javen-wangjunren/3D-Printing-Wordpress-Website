@@ -32,6 +32,22 @@ add_action( 'wp_enqueue_scripts', function() {
         array( 'strategy' => 'defer' ) 
     );
 
+    // 2.5 Swiper JS & CSS (用于轮播模块)
+    wp_enqueue_style( 
+        'swiper-css', 
+        'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', 
+        array(), 
+        '11.0.0' 
+    );
+    
+    wp_enqueue_script( 
+        'swiper-js', 
+        'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', 
+        array(), 
+        '11.0.0', 
+        true 
+    );
+
     // 3. Tailwind CSS (Compiled)
     // 加载本地编译后的 Tailwind CSS，使用 filemtime 自动清除缓存
     // 开发阶段优先加载未压缩的 style.css 以便于调试

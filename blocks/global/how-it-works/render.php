@@ -75,7 +75,8 @@ foreach ( $steps_field as $step ) {
     }
 
     $tip_raw = isset( $step['pro_tip'] ) ? $step['pro_tip'] : '';
-    $tip     = $tip_raw ? wp_kses_post( $tip_raw ) : '';
+    // Strip block-level tags but keep inline formatting tags
+    $tip     = $tip_raw ? wp_kses( $tip_raw, array( 'strong' => array(), 'em' => array(), 'span' => array() ) ) : '';
 
     $steps_state[] = array(
         'qc_label' => $qc_label,
@@ -120,7 +121,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
     <div class="max-w-container mx-auto px-6 lg:px-[64px]">
         <div class="text-center mb-8 lg:mb-12">
             <?php if ( $section_title ) : ?>
-                <h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-2 uppercase">
+                <h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-2">
                     <?php echo esc_html( $section_title ); ?>
                 </h2>
             <?php endif; ?>
@@ -235,7 +236,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                 <div class="flex gap-3 pt-6 border-t border-border/50">
                     <button
                         type="button"
-                        class="flex-1 h-12 border-[3px] border-border text-heading rounded-button font-bold text-[12px] uppercase tracking-[0.16em] hover:bg-bg-section transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                        class="flex-1 h-12 border border-border bg-white text-heading rounded-button font-bold text-[12px] uppercase tracking-widest hover:bg-bg-section transition-all disabled:opacity-30"
                         :disabled="current === 0"
                         @click="if (current > 0) current--"
                     >
@@ -244,7 +245,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
 
                     <button
                         type="button"
-                        class="flex-[1.5] h-12 bg-primary text-white rounded-button font-bold text-[12px] uppercase tracking-[0.16em] hover:bg-primary-hover transition-all flex items-center justify-center gap-2 group"
+                        class="flex-[1.5] h-12 bg-primary text-white rounded-button font-bold text-[12px] uppercase tracking-widest hover:bg-primary-hover transition-all flex items-center justify-center gap-2 group"
                         @click="if (current < total - 1) { current++; } else if (ctaUrl) { window.location.href = ctaUrl; }"
                     >
                         <span

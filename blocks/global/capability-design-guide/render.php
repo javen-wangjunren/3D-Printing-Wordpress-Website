@@ -137,7 +137,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                         <h4 class="font-bold text-heading text-sm mb-1"><?php echo esc_html( $advice_title ); ?></h4>
                     <?php endif; ?>
                     <?php if ( $advice_text ) : ?>
-                        <p class="text-sm text-body/80 leading-relaxed"><?php echo esc_html( $advice_text ); ?></p>
+                        <p class="text-sm text-body/80 leading-relaxed"><?php echo esc_html( wp_strip_all_tags( $advice_text ) ); ?></p>
                     <?php endif; ?>
                 </div>
             </div>

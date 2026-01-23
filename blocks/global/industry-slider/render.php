@@ -12,9 +12,14 @@ $block_id = _3dp_get_safe_block_id( $block, 'industry-slider' );
 $clone_name = rtrim($pfx, '_');
 
 // --- 1. Data Scope ---
-// Fallback logic for global modules
-$heading = get_field_value('heading', $block, $clone_name, $pfx, get_field('global_industry_heading', 'option') ?: 'Industries We Serve');
-$description = get_field_value('description', $block, $clone_name, $pfx, get_field('global_industry_description', 'option'));
+// Fetch Global Options Data
+$global_data = get_field('global_industry_slider', 'option');
+
+// Priority: Local Block Data > Global Options Data
+$heading = get_field('title') ?: ($global_data['title'] ?? 'Industries We Serve');
+$description = get_field('desc') ?: ($global_data['desc'] ?? '');
+$items = get_field('items') ?: ($global_data['items'] ?? []);
+
 $bg_color = get_field_value('bg_color', $block, $clone_name, $pfx, '#ffffff');
 
 // --- 2. Dynamic Spacing Logic ---
@@ -23,14 +28,6 @@ $prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
 $pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
 $pb_class = 'pb-16 lg:pb-24';
 $section_spacing = $pt_class . ' ' . $pb_class;
-
-// --- 3. Query Logic ---
-$args = [
-    'post_type'      => 'industry',
-    'posts_per_page' => -1,
-    'post_status'    => 'publish',
-];
-$industry_query = new WP_Query($args);
 
 // Update Global State
 $GLOBALS['3dp_last_bg'] = $bg_color;
@@ -54,58 +51,125 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
             
             <!-- Navigation Controls -->
             <div class="flex gap-4 mt-6 md:mt-0">
-                <button class="industry-prev w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php esc_attr_e( 'Previous', '3d-printing' ); ?>">
-                    &larr;
+                <button class="industry-prev w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php echo esc_attr( __( 'Previous', '3d-printing' ) ); ?>">
+                    ←
                 </button>
-                <button class="industry-next w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php esc_attr_e( 'Next', '3d-printing' ); ?>">
-                    &rarr;
+                <button class="industry-next w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php echo esc_attr( __( 'Next', '3d-printing' ) ); ?>">
+                    →
                 </button>
             </div>
         </div>
 
         <!-- Slider -->
-        <?php if ($industry_query->have_posts()) : ?>
-            <div class="swiper industry-swiper overflow-hidden">
+        <?php if (!empty($items)) : ?>
+            <div class="swiper industry-swiper overflow-visible">
                 <div class="swiper-wrapper">
-                    <?php while ($industry_query->have_posts()) : $industry_query->the_post(); 
-                        $icon = get_field('icon'); 
-                        $intro = get_field('intro_text');
+                    <?php foreach ($items as $item) : 
+                        $name = $item['name'];
+                        $image_id = $item['image'];
+                        $teaser = $item['teaser'];
+                        $link = $item['link'];
+                        $tags = $item['tags'];
+                        
+                        $link_url = is_array($link) ? $link['url'] : '';
+                        $link_target = (is_array($link) && $link['target']) ? $link['target'] : '_self';
+                        $link_title = (is_array($link) && $link['title']) ? $link['title'] : 'View Solution';
+                        
+                        // Tag Colors Map (Matches Design System)
+                        // Usage (Blue): bg-[#E0EAFF] text-[#0047AB]
+                        // Feature (Green): bg-[#ECFDF3] text-[#027A48]
+                        $tag_colors = [
+                            'blue' => 'bg-[#E0EAFF] text-[#0047AB]',
+                            'green' => 'bg-[#ECFDF3] text-[#027A48]',
+                        ];
                     ?>
-                        <div class="swiper-slide h-auto">
-                            <a href="<?php the_permalink(); ?>" class="group block h-full bg-white rounded-xl border border-border p-8 hover:border-primary transition-all duration-300 flex flex-col">
-                                <?php if ($icon) : ?>
-                                    <div class="w-12 h-12 mb-4 text-primary relative z-10">
-                                        <?php echo wp_get_attachment_image($icon, 'thumbnail', false, ['class' => 'w-full h-full object-contain', 'loading' => 'lazy']); ?>
-                                    </div>
-                                <?php endif; ?>
+                        <div class="swiper-slide !h-full">
+                            <a href="<?php echo esc_url($link_url); ?>" target="<?php echo esc_attr($link_target); ?>" class="group/card block h-full bg-white rounded-xl border border-border hover:border-primary hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden">
                                 
-                                <h3 class="text-xl font-bold text-heading mb-3 group-hover:text-primary transition-colors">
-                                    <?php the_title(); ?>
-                                </h3>
-                                
-                                <?php if ($intro) : ?>
-                                    <p class="text-body text-sm line-clamp-3 mb-6 flex-grow">
-                                        <?php echo esc_html($intro); ?>
-                                    </p>
-                                <?php endif; ?>
-                                
-                                <span class="text-primary font-bold text-sm flex items-center mt-auto">
-                                    <?php esc_html_e( 'View Application', '3d-printing' ); ?> 
-                                    <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                                </span>
+                                <!-- Visual Area (Fixed Height) -->
+                                <div class="h-[260px] bg-gray-50 overflow-hidden relative border-b border-gray-100">
+                                    <?php if ($image_id) : ?>
+                                        <?php echo wp_get_attachment_image($image_id, 'large', false, ['class' => 'w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105']); ?>
+                                    <?php else: ?>
+                                        <div class="w-full h-full flex items-center justify-center text-gray-300 bg-gray-50">
+                                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+
+                                <!-- Body Area -->
+                                <div class="p-6 lg:p-8 flex flex-col flex-grow">
+                                    
+                                    <!-- Tags (Top of Body) -->
+                                    <?php if (!empty($tags)) : ?>
+                                        <div class="flex flex-wrap gap-2 mb-4">
+                                            <?php foreach ($tags as $tag) : 
+                                                $color_class = isset($tag_colors[$tag['type']]) ? $tag_colors[$tag['type']] : 'bg-gray-100 text-gray-800';
+                                            ?>
+                                                <span class="inline-block px-2.5 py-1 text-[11px] uppercase font-bold tracking-wider rounded <?php echo $color_class; ?>">
+                                                    <?php echo esc_html($tag['text']); ?>
+                                                </span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+
+                                    <!-- Title -->
+                                    <h3 class="text-xl font-bold text-heading mb-0 group-hover/card:text-primary transition-colors">
+                                        <?php echo esc_html($name); ?>
+                                    </h3>
+                                    
+                                    <!-- Description -->
+                                    <?php if ($teaser) : ?>
+                                        <p class="text-body text-[15px] leading-relaxed line-clamp-3 mt-[15px] mb-6">
+                                            <?php echo esc_html($teaser); ?>
+                                        </p>
+                                    <?php endif; ?>
+                                    
+                                    <!-- CTA -->
+                                    <span class="text-primary font-bold text-sm flex items-center mt-auto group-hover/card:underline decoration-2 underline-offset-4">
+                                        <?php echo esc_html($link_title); ?> 
+                                        <svg class="w-4 h-4 ml-2 transform group-hover/card:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                    </span>
+                                </div>
                             </a>
                         </div>
-                    <?php endwhile; wp_reset_postdata(); ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
-        <?php else : ?>
-            <div class="bg-gray-50 rounded-xl border border-border p-8 text-center text-body">
-                <?php esc_html_e( 'No industry applications found.', '3d-printing' ); ?>
+        <?php else: ?>
+             <div class="py-12 text-center border border-dashed border-border rounded-xl bg-gray-50">
+                <p class="text-gray-500 font-mono text-sm">No industry applications configured in Global Options or Local Block.</p>
             </div>
         <?php endif; ?>
 
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Swiper !== 'undefined') {
+        new Swiper('#<?php echo $block_id; ?> .industry-swiper', {
+            slidesPerView: 1.2,
+            spaceBetween: 16,
+            loop: false,
+            navigation: {
+                nextEl: '#<?php echo $block_id; ?> .industry-next',
+                prevEl: '#<?php echo $block_id; ?> .industry-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 24,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 32,
+                },
+            }
+        });
+    }
+});
+</script>
 
 <?php
 // Set global state for next block

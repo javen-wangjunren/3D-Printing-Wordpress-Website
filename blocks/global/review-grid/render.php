@@ -102,14 +102,14 @@ $pb_class = 'pb-16 lg:pb-24';
             <?php if ( $total_reviews > $columns ) : ?>
             <div class="hidden md:flex gap-3">
                 <button @click="prev" 
-                        class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
-                        aria-label="Previous review">
-                    &lt;
+                        class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors"
+                        aria-label="<?php esc_attr_e( 'Previous review', '3d-printing' ); ?>">
+                    &larr;
                 </button>
                 <button @click="next" 
-                        class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary text-heading transition-all text-xl font-bold"
-                        aria-label="Next review">
-                    &gt;
+                        class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors"
+                        aria-label="<?php esc_attr_e( 'Next review', '3d-printing' ); ?>">
+                    &rarr;
                 </button>
             </div>
             <?php endif; ?>

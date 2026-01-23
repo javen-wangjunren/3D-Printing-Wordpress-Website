@@ -40,18 +40,24 @@ if ( $title && $highlight ) {
     $title_html = esc_html($title);
 }
 
-// 3. Determine Classes
-$section_classes = 'py-16 lg:py-24 relative ' . $custom_class;
-
 // Background Logic
-$bg_color_class = 'bg-white'; // Default
+$bg_color_class = 'bg-white';
+$bg_class_to_add = 'bg-white';
 if ( $bg_style === 'industrial' ) {
-    $section_classes .= ' industrial-grid-bg';
+    $bg_class_to_add = 'industrial-grid-bg';
     $bg_color_class = 'industrial-grid-bg';
 } elseif ( $bg_style === 'white' ) {
-    $section_classes .= ' bg-white';
+    $bg_class_to_add = 'bg-white';
     $bg_color_class = 'bg-white';
 }
+
+// Dynamic Spacing
+$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
+$pt_class = ($prev_bg && $prev_bg === $bg_color_class) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pb_class = 'pb-16 lg:pb-24';
+
+// 3. Determine Classes
+$section_classes = "$pt_class $pb_class relative $custom_class $bg_class_to_add";
 
 // 确定最终ID：使用custom_block_id作为覆盖，否则使用block_id
 $final_id = $custom_block_id ? $custom_block_id : $block_id;
@@ -63,7 +69,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
 ?>
 
 <section id="<?php echo esc_attr($final_id); ?>" class="<?php echo esc_attr($section_classes); ?>" x-data="{ 
-    showLightbox: false, 
+    showFactoryLightbox: false, 
     activeImg: '', 
     activeTitle: '',
     activeWidth: '',
@@ -73,10 +79,10 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
         this.activeTitle = title;
         this.activeWidth = w;
         this.activeHeight = h;
-        this.showLightbox = true;
+        this.showFactoryLightbox = true;
     }
 }">
-    <div class="max-w-[1280px] mx-auto px-6">
+    <div class="max-w-container mx-auto px-6 lg:px-8">
         
         <!-- Header -->
         <div class="mb-12 lg:mb-16 flex flex-col lg:flex-row justify-between items-end gap-6">
@@ -185,7 +191,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
 
     <!-- Lightbox (Alpine.js) -->
     <template x-teleport="body">
-        <div x-show="showLightbox" 
+        <div x-show="showFactoryLightbox" 
              x-cloak
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0"
@@ -193,12 +199,13 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
-             class="fixed inset-0 z-[9999] bg-[#1D2938]/95 backdrop-blur-sm flex items-center justify-center p-4" 
+             :class="{ 'flex': showFactoryLightbox }"
+             class="fixed inset-0 z-[9999] bg-[#1D2938]/95 backdrop-blur-sm items-center justify-center p-4"
              style="display: none;">
             
-            <div class="absolute inset-0" @click="showLightbox = false"></div>
+            <div class="absolute inset-0" @click="showFactoryLightbox = false"></div>
 
-            <button @click="showLightbox = false" class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-50">
+            <button @click="showFactoryLightbox = false" class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-50">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
 

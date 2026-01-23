@@ -34,11 +34,8 @@ elseif (isset($block['manufacturing_showcase_items'])) {
     $showcase_items = $block['manufacturing_showcase_items'];
 } 
 // 优先级 C: 从数据库读取
-elseif (have_rows($pfx . 'manufacturing_showcase_items')) {
-    while (have_rows($pfx . 'manufacturing_showcase_items')) {
-        the_row();
-        $showcase_items[] = get_row();
-    }
+elseif ( $db_items = get_field($pfx . 'manufacturing_showcase_items') ) {
+    $showcase_items = $db_items;
 }
 
 // 动态背景样式
@@ -101,7 +98,7 @@ if ( ! $showcase_items ) { return; }
                         $src_id   = $img_id ?: $mob_id;
                         
                         // Get image data with dimensions
-                        $img_data = $src_id ? wp_get_attachment_image_src( $src_id, 'large' ) : null;
+                        $img_data = ($src_id && function_exists('wp_get_attachment_image_src')) ? wp_get_attachment_image_src( $src_id, 'large' ) : null;
                         $src_url  = $img_data ? $img_data[0] : '';
                         $width    = $img_data ? $img_data[1] : '';
                         $height   = $img_data ? $img_data[2] : '';
@@ -152,7 +149,7 @@ if ( ! $showcase_items ) { return; }
                     $link_i   = is_array($link_i) ? $link_i : array();
                     
                     // Get image data with dimensions
-                    $img_data = $img_id ? wp_get_attachment_image_src( $img_id, 'large' ) : null;
+                    $img_data = ($img_id && function_exists('wp_get_attachment_image_src')) ? wp_get_attachment_image_src( $img_id, 'large' ) : null;
                     $src_url  = $img_data ? $img_data[0] : '';
                     $width    = $img_data ? $img_data[1] : '';
                     $height   = $img_data ? $img_data[2] : '';

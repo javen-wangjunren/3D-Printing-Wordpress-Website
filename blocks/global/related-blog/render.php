@@ -130,11 +130,11 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
                 <?php endif; ?>
                 <?php if ( $cards_query->have_posts() ) : ?>
                     <div class="hidden md:flex gap-3">
-                        <button type="button" @click="scrollPrev" class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
-                            <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+                        <button type="button" @click="scrollPrev" class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php esc_attr_e( 'Previous', '3d-printing' ); ?>">
+                            &larr;
                         </button>
-                        <button type="button" @click="scrollNext" class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:bg-bg-section transition-all group">
-                            <svg class="w-6 h-6 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+                        <button type="button" @click="scrollNext" class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php esc_attr_e( 'Next', '3d-printing' ); ?>">
+                            &rarr;
                         </button>
                     </div>
                 <?php endif; ?>

@@ -37,29 +37,31 @@ $mobile_compact_mode = (bool) get_field( 'filter_sidebar_mobile_compact_mode' );
 
 <main id="main" class="site-main page-all-materials">
     <section class="all-materials-page" data-material-library>
-        <div class="all-materials-shell" data-mobile-compact-mode="<?php echo esc_attr( $mobile_compact_mode ? '1' : '0' ); ?>">
+        <div class="all-materials-shell container mx-auto px-4 py-8" data-mobile-compact-mode="<?php echo esc_attr( $mobile_compact_mode ? '1' : '0' ); ?>">
 
             <?php if ( $seo_copy ) : ?>
-                <div class="all-materials-seo" data-seo-copy>
+                <div class="all-materials-seo mb-8" data-seo-copy>
                     <?php echo wp_kses_post( $seo_copy ); ?>
                 </div>
             <?php endif; ?>
 
-            <div class="all-materials-layout">
+            <div class="all-materials-layout lg:grid lg:grid-cols-12 lg:gap-8 items-start">
 
                 <!-- 3. Filter Sidebar Module -->
-                <?php
-                set_query_var( 'material_count', $material_count );
-                get_template_part( 'blocks/global/filter-sidebar/render' );
-                ?>
+                <div class="lg:col-span-3">
+                    <?php
+                    set_query_var( 'material_count', $material_count );
+                    _3dp_render_block( 'blocks/global/filter-sidebar/render', array() );
+                    ?>
+                </div>
 
-                <div class="materials-grid-area" data-materials-grid>
+                <div class="materials-grid-area lg:col-span-9" data-materials-grid>
                     <?php if ( $material_query->have_posts() ) : ?>
-                        <div class="materials-grid">
+                        <div class="materials-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <?php while ( $material_query->have_posts() ) : $material_query->the_post(); ?>
 
                                 <!-- 4. Material Card Module -->
-                                <?php get_template_part( 'blocks/global/material-card/render' ); ?>
+                                <?php _3dp_render_block( 'blocks/global/material-card/render', array() ); ?>
 
                             <?php endwhile; ?>
                         </div>

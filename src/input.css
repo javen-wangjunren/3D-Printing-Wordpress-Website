@@ -3,6 +3,25 @@
 @tailwind utilities;
 
 @layer base {
+  /* ========== 全局兜底 Reset ========== */
+  html, body { 
+    @apply bg-bg-page text-body font-sans; 
+  } 
+
+  /* ✅ 推荐：只针对你的“受控区域”进行重置 */ 
+  /**
+ * Controlled Blocks Typography
+ * ----------------------------
+ * In custom Tailwind blocks, spacing is explicit.
+ * We disable GP's default paragraph rhythm (1.5em)
+ * to avoid invisible layout gaps.
+ */
+
+  .site-content section p, 
+  .site-content .max-w-container p { 
+      margin-bottom: 0 !important; 
+  }
+
   /* Alpine.js Cloak */
   [x-cloak] { 
     display: none !important; 

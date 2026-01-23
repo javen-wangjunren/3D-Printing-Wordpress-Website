@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     基于 design-preview/footer.html 重构
     Tailwind 类保持原样，逻辑部分替换为 WordPress 动态数据
 -->
-<footer class="bg-white border-t border-border mt-20 tdp-site-footer">
+<footer class="bg-white border-t border-border tdp-site-footer">
 	<div class="mx-auto max-w-container px-container py-section-y-small lg:py-section-y">
         
         <div class="xl:grid xl:grid-cols-3 xl:gap-8">

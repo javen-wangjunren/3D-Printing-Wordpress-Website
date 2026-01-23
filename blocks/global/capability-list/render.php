@@ -236,7 +236,7 @@ $bg_style  = 'style="background-color: ' . esc_attr( $bg_color ) . '"';
 
                     <template x-if="tabs[active].cta_detail && tabs[active].cta_detail.url">
                         <a :href="tabs[active].cta_detail.url"
-                           class="border border-border text-heading hover:border-primary px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-[0.14em] text-center transition-all"
+                           class="border-[3px] border-border text-heading hover:border-primary px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-[0.14em] text-center transition-all"
                            :target="tabs[active].cta_detail.target"
                            x-text="tabs[active].cta_detail.title">
                         </a>
