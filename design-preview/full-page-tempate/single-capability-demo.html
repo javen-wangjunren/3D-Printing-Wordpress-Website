@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Capability Demo - Integrated</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7',
+                        'bg-table': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' },
+                    maxWidth: { container: '1280px' },
+                    fontSize: {
+                        h1: ['48px', { lineHeight: '1.2', fontWeight: '700' }],
+                        h2: ['36px', { lineHeight: '1.2', fontWeight: '700' }],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Trusted By - Infinite Scroll */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 5)); }
+        }
+        .animate-logo-cloud { animation: scroll 30s linear infinite; }
+        .slider-container:hover .animate-logo-cloud { animation-play-state: paused; }
+        .mask-fade {
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+
+        /* Industry Slider Custom Styles */
+        .slider-track {
+            display: flex; gap: 24px; overflow-x: auto; padding: 10px 12px 40px 12px;
+            scroll-behavior: smooth; scrollbar-width: none; scroll-snap-type: x mandatory;
+        }
+        .slider-track::-webkit-scrollbar { display: none; }
+        .app-card {
+            flex: 0 0 calc(25% - 18px); min-width: 300px; scroll-snap-align: start;
+            background: #fff; border: 1px solid #E4E7EC; border-radius: 12px;
+            text-decoration: none; color: inherit; display: flex; flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .app-card:hover {
+            transform: translateY(-8px); box-shadow: 0 12px 24px rgba(16, 24, 40, 0.08);
+            border-color: #0047AB;
+        }
+        .app-visual { 
+            height: 220px; background-color: #F2F4F7; overflow: hidden;
+            border-top-left-radius: 12px; border-top-right-radius: 12px;
+        }
+        .app-visual img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .app-card:hover .app-visual img { transform: scale(1.05); }
+        .app-body { padding: 32px; flex-grow: 1; display: flex; flex-direction: column; }
+        .tag-row { display: flex; gap: 8px; margin-bottom: 16px; }
+        .tag { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
+        .tag-usage { background: #E0EAFF; color: #0047AB; }
+        .tag-feature { background: #ECFDF3; color: #027A48; }
+        .app-link { font-size: 14px; font-weight: 600; color: #0047AB; display: inline-flex; align-items: center; }
+        .app-link::after { content: ' →'; margin-left: 4px; transition: margin 0.2s; }
+        .app-card:hover .app-link::after { margin-left: 8px; }
+
+        /* Comparison Table - Lock Row */
+        .lock-row { position: relative; z-index: 10; }
+        .lock-row::after {
+            content: ''; position: absolute; inset: 0;
+            border: 3px solid #0047AB; border-radius: 12px;
+            pointer-events: none; z-index: 30;
+            box-shadow: 0 12px 30px -10px rgba(0, 71, 171, 0.3);
+        }
+        .lock-row td { border-bottom-color: transparent !important; }
+
+        /* Blog Slider */
+        .slider-mask { mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+        .scroll-smooth { scroll-behavior: smooth; }
+        
+        /* Progress Bar Transition */
+        .progress-fill { transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+    <!-- 1. Hero Banner Style 1 (Gray Background) -->
+    <section class="relative bg-bg-section pt-20 pb-32 lg:pt-32 lg:pb-48 overflow-visible">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+                <div class="z-10 flex flex-col justify-center py-6">
+                    <h1 class="text-h1 text-heading tracking-[-1px] mb-6">
+                        Your Streamlined<br>3D Printing Service
+                    </h1>
+                    <h2 class="text-[20px] font-semibold text-primary mb-4 uppercase tracking-wide">
+                        Get Quality Parts at the Best Price
+                    </h2>
+                    <p class="text-body text-body max-w-lg mb-10 leading-relaxed">
+                        Compare manufacturers around the world in real time. Order industrial-quality parts at the most competitive price. 我们致力于提供像素级的制造精度。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                            Get instant quotes
+                        </a>
+                        <a href="/explore" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">
+                            Try it out
+                        </a>
+                    </div>
+                </div>
+                <div class="relative min-h-[360px] lg:min-h-0">
+                    <div class="h-full rounded-card overflow-hidden bg-white border border-border shadow-sm">
+                        <img src="https://eu-central-1.graphassets.com/AW2dIPbpOQJCl5mn4yGf3z/resize=fit:max,height:720,width:1540/output=format:webp/cm9legb211x4207tbfrz5j7ff" 
+                             alt="Manufacturing Facility" class="w-full h-full object-cover opacity-95">
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
+                <div class="bg-white border border-border rounded-card shadow-xl py-8 px-10 grid grid-cols-2 md:grid-cols-5 gap-8">
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">8 Million+</strong> 
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Parts Produced</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">140,000+</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Businesses Served</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">200+</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Materials</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">31</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Technologies</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">95</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Countries</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Trusted By (White Background) -->
+    <section class="py-[96px] pt-[140px] bg-white border-b border-border overflow-hidden">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[24px]">
+            <div class="text-center mb-16">
+                <h3 class="text-[28px] font-bold text-heading tracking-[-0.5px] mb-4">Trusted by Global Industry Leaders</h3>
+                <p class="text-[16px] text-body max-w-2xl mx-auto">We empower <span class="font-mono text-primary font-bold">140,000+</span> engineering teams across 95 countries with precision-grade manufacturing.</p>
+            </div>
+            <div class="slider-container relative mask-fade">
+                <div class="flex items-center gap-12 animate-logo-cloud w-[max-content]">
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Partner 1" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Partner 2" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Tesla_Motors_logo.svg" alt="Partner 3" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="Partner 4" class="h-12 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Partner 5" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <!-- Duplicate for loop -->
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Partner 1" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Partner 2" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Tesla_Motors_logo.svg" alt="Partner 3" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="Partner 4" class="h-12 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Partner 5" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. How It Works (Gray Background, Alpine.js Refactored) -->
+    <section class="py-12 lg:py-20 bg-bg-section" x-data="{
+        currentStep: 0,
+        steps: [
+            {
+                title: 'Powder Coating & Heating',
+                desc: 'A precision roller spreads a microscopic layer of polymer powder across the build platform, heated just below melting point.',
+                qc: 'Automated Distribution',
+                specs: [{label:'Layer Thickness', val:'100 μm'}, {label:'Chamber Temp', val:'~175°C'}],
+                tip: '<strong>Engineering Tip:</strong> Thermal stability prevents warping. We monitor temp 50x per second.',
+                img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000'
+            },
+            {
+                title: 'CO2 Laser Sintering',
+                desc: 'High-powered lasers selectively fuse powder particles based on the 3D CAD data. Unfused powder acts as support.',
+                qc: 'Path Verification',
+                specs: [{label:'Laser Power', val:'60 Watt'}, {label:'Scan Speed', val:'12m/s'}],
+                tip: '<strong>Process Tip:</strong> Support-free sintering allows for complex internal cooling channels.',
+                img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=1000'
+            },
+            {
+                title: 'Phase Cooling Cycle',
+                desc: 'The build chamber undergoes a controlled cooling cycle to prevent thermal stress and ensure stability.',
+                qc: 'Stress Relief',
+                specs: [{label:'Cooling Cycle', val:'12-24 Hrs'}, {label:'Precision Control', val:'±0.5°C'}],
+                tip: '<strong>QC Tip:</strong> Controlled cooling ensures the material achieves its full tensile strength.',
+                img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1000'
+            },
+            {
+                title: 'Extraction & Finishing',
+                desc: 'Finished parts are excavated, bead blasted, and receive final surface post-processing.',
+                qc: 'Final Inspection',
+                specs: [{label:'Surface Finish', val:'Ra 6.3-10'}, {label:'Material Yield', val:'~98%'}],
+                tip: '<strong>Final Tip:</strong> Ask about our Vapor Smoothing for an injection-molded surface finish.',
+                img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1000'
+            }
+        ],
+        nextStep() { if(this.currentStep < this.steps.length - 1) this.currentStep++; else window.location.href='/quote'; },
+        prevStep() { if(this.currentStep > 0) this.currentStep--; }
+    }">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            <div class="text-center mb-8 lg:mb-12">
+                <h2 class="text-[28px] lg:text-[36px] font-bold text-heading tracking-[-1px] mb-2 uppercase">
+                    Manufacturing <span class="text-primary">Process</span>
+                </h2>
+                <p class="text-body text-sm lg:text-base max-w-2xl mx-auto italic opacity-80">Precision engineering at every stage.</p>
+            </div>
+            <div class="bg-white rounded-card border border-border shadow-lg shadow-gray-200/30 overflow-hidden grid lg:grid-cols-[1fr_1.1fr] items-stretch">
+                <div class="relative bg-gray-900 aspect-video lg:aspect-auto lg:min-h-0 overflow-hidden">
+                    <img :src="steps[currentStep].img" class="w-full h-full object-cover transition-opacity duration-700" alt="Process View">
+                    <div class="absolute top-4 left-4 bg-primary text-white px-3 py-1.5 rounded-md shadow-lg z-10 scale-90 lg:scale-100">
+                        <span class="text-[11px] font-mono font-bold uppercase tracking-widest" x-text="'Step 0' + (currentStep + 1)"></span>
+                    </div>
+                </div>
+                <div class="p-6 lg:p-10 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <span class="text-[10px] font-mono font-bold text-muted uppercase tracking-tighter" x-text="'Step ' + (currentStep + 1) + ' of ' + steps.length"></span>
+                        </div>
+                        <div class="flex gap-1.5 mb-8 lg:mb-10">
+                            <template x-for="(step, index) in steps" :key="index">
+                                <div class="h-1 flex-1 bg-border rounded-full overflow-hidden">
+                                    <div class="progress-fill h-full bg-primary" :style="'width: ' + (index <= currentStep ? '100%' : '0%')"></div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="mb-6 lg:mb-8">
+                            <span class="inline-flex items-center gap-2 text-[10px] font-bold text-primary uppercase tracking-wider mb-3 px-2 py-0.5 bg-primary/5 rounded-md">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                <span x-text="steps[currentStep].qc"></span>
+                            </span>
+                            <h3 class="text-[22px] lg:text-[28px] font-bold text-heading leading-tight mb-4" x-text="steps[currentStep].title"></h3>
+                            <p class="text-body text-[14px] lg:text-[15px] leading-relaxed mb-6" x-text="steps[currentStep].desc"></p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 p-4 bg-bg-section border border-border rounded-card mb-6">
+                            <template x-for="spec in steps[currentStep].specs">
+                                <div class="border-l-2 border-primary/20 pl-3">
+                                    <span class="block text-[9px] font-bold text-muted uppercase tracking-tighter mb-1" x-text="spec.label"></span>
+                                    <span class="font-mono text-[16px] font-bold text-heading" x-text="spec.val"></span>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="flex gap-3 p-4 bg-primary/[0.03] border-l-4 border-primary rounded-r-md mb-6">
+                            <svg class="w-4 h-4 text-primary shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <p class="text-[13px] text-heading leading-snug" x-html="steps[currentStep].tip"></p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 pt-6 border-t border-border/50">
+                        <button @click="prevStep" :disabled="currentStep === 0" class="flex-1 h-12 border border-border text-heading rounded-button font-bold text-[12px] uppercase tracking-widest hover:bg-bg-section transition-all disabled:opacity-30">Prev</button>
+                        <button @click="nextStep" class="flex-[1.5] h-12 bg-primary text-white rounded-button font-bold text-[12px] uppercase tracking-widest hover:bg-primary-hover transition-all flex items-center justify-center gap-2 group">
+                            <span x-text="currentStep === steps.length - 1 ? 'Get Quote' : 'Next Step'"></span>
+                            <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Industry Slider (White Background) -->
+    <section class="py-[96px] bg-white">
+        <div class="max-w-container mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div class="max-w-[720px]">
+                    <h2 class="text-h2 text-heading font-semibold mb-4">SLS Applications Across Industries</h2>
+                    <p class="text-[18px] text-body">Discover how top-tier manufacturers utilize Selective Laser Sintering for high-performance, functional applications.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="w-12 h-12 rounded-full border border-border bg-white text-heading hover:border-primary hover:text-primary hover:bg-gray-50 flex items-center justify-center transition-all" onclick="document.getElementById('industry-track').scrollBy({left: -320, behavior: 'smooth'})">❮</button>
+                    <button class="w-12 h-12 rounded-full border border-border bg-white text-heading hover:border-primary hover:text-primary hover:bg-gray-50 flex items-center justify-center transition-all" onclick="document.getElementById('industry-track').scrollBy({left: 320, behavior: 'smooth'})">❯</button>
+                </div>
+            </div>
+            <div class="slider-wrapper mx-[-12px] overflow-hidden">
+                <div id="industry-track" class="slider-track">
+                    <a href="/solutions/aerospace" class="app-card">
+                        <div class="app-visual"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Aerospace+Ducting" alt="Aerospace"></div>
+                        <div class="app-body">
+                            <div class="tag-row"><span class="tag tag-usage">End-use Parts</span><span class="tag tag-feature">Lightweight</span></div>
+                            <h4 class="text-[20px] font-semibold text-heading mb-3">Aerospace Components</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">Production of complex internal ducting and UAV structural parts that require optimized strength-to-weight ratios.</p>
+                            <span class="app-link">View Solution</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/medical" class="app-card">
+                        <div class="app-visual"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Medical+Orthotics" alt="Medical"></div>
+                        <div class="app-body">
+                            <div class="tag-row"><span class="tag tag-usage">Custom Devices</span><span class="tag tag-feature">Biocompatible</span></div>
+                            <h4 class="text-[20px] font-semibold text-heading mb-3">Medical & Healthcare</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">Biocompatible Nylon (PA12) solutions for customized prosthetics, surgical guides, and wearable orthotics.</p>
+                            <span class="app-link">View Solution</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/automotive" class="app-card">
+                        <div class="app-visual"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Automotive+Testing" alt="Automotive"></div>
+                        <div class="app-body">
+                            <div class="tag-row"><span class="tag tag-usage">Functional Protos</span><span class="tag tag-feature">Heat Resist</span></div>
+                            <h4 class="text-[20px] font-semibold text-heading mb-3">Automotive Engineering</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">High-impact functional testing prototypes and customized interior components with high thermal stability.</p>
+                            <span class="app-link">View Solution</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/tooling" class="app-card">
+                        <div class="app-visual"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Industrial+Jigs" alt="Industrial"></div>
+                        <div class="app-body">
+                            <div class="tag-row"><span class="tag tag-usage">Production Tooling</span><span class="tag tag-feature">Durable</span></div>
+                            <h4 class="text-[20px] font-semibold text-heading mb-3">Industrial Tooling</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">On-demand production of jigs, fixtures, and end-of-arm tooling with integrated internal cooling channels.</p>
+                            <span class="app-link">View Solution</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/consumer" class="app-card">
+                        <div class="app-visual"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Consumer+Goods" alt="Consumer"></div>
+                        <div class="app-body">
+                            <div class="tag-row"><span class="tag tag-usage">Batch Production</span><span class="tag tag-feature">Complex Geometry</span></div>
+                            <h4 class="text-[20px] font-semibold text-heading mb-3">Consumer Goods</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">Mass customization for eyewear, sports equipment, and high-end lifestyle products with unique textures.</p>
+                            <span class="app-link">View Solution</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Capability Design Guide (Gray Background) -->
+    <div class="bg-bg-section border-t border-border">
+        <div class="max-w-[1200px] mx-auto px-6 py-16 lg:py-24">
+            <div class="mb-12">
+                <h2 class="text-[32px] lg:text-[40px] font-bold text-heading tracking-[-1px] mb-4">Technical <span class="text-primary">Specifications</span></h2>
+                <div class="h-1 w-12 bg-primary rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
+                <div class="bg-white border border-border p-6 rounded-card transition-all hover:border-primary/50 relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/20 group-hover:bg-primary transition-colors"></div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-3">Max Dimensions</div>
+                    <div class="font-mono text-[20px] font-bold text-heading flex items-baseline gap-1">600×600×800<span class="text-[13px] font-medium text-muted">mm</span></div>
+                </div>
+                <div class="bg-white border border-border p-6 rounded-card transition-all hover:border-primary/50 relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/20 group-hover:bg-primary transition-colors"></div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-3">Layer Height</div>
+                    <div class="font-mono text-[20px] font-bold text-heading flex items-baseline gap-1">0.15<span class="text-[13px] font-medium text-muted">mm</span></div>
+                </div>
+                <div class="bg-white border border-border p-6 rounded-card transition-all hover:border-primary/50 relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/20 group-hover:bg-primary transition-colors"></div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-3">Tolerance</div>
+                    <div class="font-mono text-[20px] font-bold text-heading flex items-baseline gap-1">2768-C<span class="text-[13px] font-medium text-muted">ISO</span></div>
+                </div>
+                <div class="bg-white border border-border p-6 rounded-card transition-all hover:border-primary/50 relative overflow-hidden group">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-primary/20 group-hover:bg-primary transition-colors"></div>
+                    <div class="text-[11px] font-bold text-muted uppercase tracking-widest mb-3">Lead Time</div>
+                    <div class="font-mono text-[20px] font-bold text-heading flex items-baseline gap-1">5-7<span class="text-[13px] font-medium text-muted">Days</span></div>
+                </div>
+            </div>
+            <div class="border border-border rounded-card overflow-hidden mb-12 shadow-sm">
+                <div class="grid md:grid-cols-[280px_1fr] border-b border-border bg-white">
+                    <div class="p-5 bg-bg-section text-[13px] font-bold text-heading uppercase tracking-wider flex items-center">Min. Wall Thickness</div>
+                    <div class="p-5 font-mono text-[14px] text-body flex items-center">0.5 mm</div>
+                </div>
+                <div class="grid md:grid-cols-[280px_1fr] border-b border-border bg-white">
+                    <div class="p-5 bg-white text-[13px] font-bold text-heading uppercase tracking-wider flex items-center">Min. Feature Size</div>
+                    <div class="p-5 font-mono text-[14px] text-body flex items-center">0.5 mm (Standard) / 0.8 mm (Rubber-like)</div>
+                </div>
+                <div class="grid md:grid-cols-[280px_1fr] border-b border-border bg-white">
+                    <div class="p-5 bg-bg-section text-[13px] font-bold text-heading uppercase tracking-wider flex items-center">Surface Options</div>
+                    <div class="p-5 text-[14px] text-body flex items-center">Bead Blast, Vibro-polish, Dyeing, Painting, Electroplating</div>
+                </div>
+                <div class="grid md:grid-cols-[280px_1fr] bg-white">
+                    <div class="p-5 bg-white text-[13px] font-bold text-heading uppercase tracking-wider flex items-center">Post-processing</div>
+                    <div class="p-5 font-mono text-[14px] text-body flex items-center">+10-12 Days based on complexity</div>
+                </div>
+            </div>
+            <div class="flex gap-5 p-8 bg-primary/[0.03] border-l-4 border-primary rounded-r-card bg-white">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-[16px] font-bold text-heading mb-2">Engineer's Advice for Dimensional Stability</h4>
+                    <p class="text-[14px] text-body leading-relaxed">
+                        To prevent warping in large SLS components, we recommend <span class="text-primary font-semibold">increasing wall thickness</span> or adding <span class="text-primary font-semibold">internal structural ribs</span>. This is critical for maintaining tolerances during the industrial cooling phase.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Material List (White Background) -->
+    <section class="py-10 lg:py-20 bg-white" x-data="{ 
+        activeProcess: 'SLS', openMaterial: 'PA12', processes: ['DMLS', 'SLS', 'SLA'],
+        materials: {
+            'DMLS': [{ id: '316L', title: 'Stainless Steel 316L', tag: 'Medical Grade', cost: '$$$$', lead: '5-7D', tol: '±0.10', heat: '600°C', desc: 'Superior corrosion resistance combined with high mechanical strength.' }],
+            'SLS': [{ id: 'PA12', title: 'Nylon PA12', tag: 'Functional Parts', cost: '$ (Low)', lead: '2-3D', tol: '±0.30', heat: '95°C', desc: 'Nylon PA12 is the most versatile industrial 3D printing material. It offers perfectly balanced mechanical properties.' }],
+            'SLA': [{ id: 'CLEAR', title: 'Clear Resin', tag: 'Visual Master', cost: '$$', lead: '3-4D', tol: '±0.15', heat: '50°C', desc: 'Our premium Clear Resin delivers exceptional optical clarity and an ultra-smooth surface finish.' }]
+        }
+    }">
+        <div class="max-w-[1280px] mx-auto px-5">
+            <div class="mb-8 lg:mb-12">
+                <h2 class="text-[26px] lg:text-[36px] font-bold text-heading tracking-[-1px] mb-3">Explore <span class="text-primary">Manufacturing Materials</span></h2>
+                <p class="text-body max-w-2xl text-[14px] lg:text-[15px] opacity-90 leading-snug">Compare engineering properties and lead times across our specialized catalog.</p>
+            </div>
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
+                <aside class="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 lg:w-[150px] shrink-0 lg:border-r lg:border-border lg:pr-5">
+                    <template x-for="proc in processes" :key="proc">
+                        <button @click="activeProcess = proc; openMaterial = materials[proc][0].id" 
+                                :class="activeProcess === proc ? 'bg-primary text-white shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                                class="whitespace-nowrap px-4 py-2.5 lg:w-full lg:text-left rounded-button border font-bold text-[11px] uppercase tracking-wider transition-all"
+                                x-text="proc"></button>
+                    </template>
+                </aside>
+                <main class="flex-1 w-full">
+                    <div class="space-y-3">
+                        <template x-for="mat in materials[activeProcess]" :key="mat.id">
+                            <div class="border border-border rounded-card bg-white overflow-hidden shadow-sm">
+                                <button @click="openMaterial = (openMaterial === mat.id ? '' : mat.id)" class="w-full flex justify-between items-center p-4 lg:px-6 lg:py-5 bg-white hover:bg-bg-section/40 transition-colors text-left">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-[15px] lg:text-[17px] font-bold text-heading" x-text="mat.title"></span>
+                                        <span class="text-[8px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-widest" x-text="mat.tag"></span>
+                                    </div>
+                                    <svg class="w-4 h-4 text-muted transition-transform duration-300" :class="openMaterial === mat.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                                </button>
+                                <div x-show="openMaterial === mat.id" x-collapse x-cloak>
+                                    <div class="p-5 lg:p-10 border-t border-border">
+                                        <div class="grid lg:grid-cols-[1fr_320px] gap-8 lg:gap-12 items-stretch">
+                                            <div class="flex flex-col justify-center h-full">
+                                                <p class="text-[14px] leading-relaxed text-body mb-8 lg:max-w-[95%]" x-text="mat.desc"></p>
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-8">
+                                                    <div class="bg-bg-section p-3 rounded border border-border/50 text-center lg:text-left"><div class="text-[8px] text-muted uppercase font-bold mb-1">Tolerance</div><div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.tol"></div></div>
+                                                    <div class="bg-bg-section p-3 rounded border border-border/50 text-center lg:text-left"><div class="text-[8px] text-muted uppercase font-bold mb-1">Max Temp</div><div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.heat"></div></div>
+                                                    <div class="bg-bg-section p-3 rounded border border-border/50 text-center lg:text-left"><div class="text-[8px] text-muted uppercase font-bold mb-1">Lead Time</div><div class="font-mono text-[13px] lg:text-[14px] font-bold text-primary" x-text="mat.lead"></div></div>
+                                                    <div class="bg-bg-section p-3 rounded border border-border/50 text-center lg:text-left"><div class="text-[8px] text-muted uppercase font-bold mb-1">Cost</div><div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.cost"></div></div>
+                                                </div>
+                                                <div class="flex flex-wrap gap-3">
+                                                    <a href="/quote" class="inline-flex items-center justify-center bg-primary text-white px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-sm">🚀 Start Quote</a>
+                                                    <a href="#" class="inline-flex items-center justify-center border border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wider hover:bg-primary/5 transition-all">📄 Technical Specs</a>
+                                                </div>
+                                            </div>
+                                            <div class="hidden lg:block shrink-0 h-full">
+                                                <div class="aspect-square w-[320px] bg-gray-100 rounded-lg border border-border overflow-hidden relative group">
+                                                    <img :src="'https://placehold.co/600x600/eeeeee/666666?text=' + mat.id" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                                    <div class="absolute bottom-2 left-2 bg-white/80 backdrop-blur px-2 py-0.5 rounded text-[9px] font-mono text-muted uppercase tracking-tighter">Sample: <span x-text="mat.id"></span></div>
+                                                </div>
+                                            </div>
+                                            <div class="lg:hidden w-full aspect-video rounded-lg overflow-hidden border border-border mt-2">
+                                                <img :src="'https://placehold.co/600x600/eeeeee/666666?text=' + mat.id" class="w-full h-full object-cover">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Comparison Table (Gray Background) -->
+    <section class="py-[96px] bg-bg-section" x-data="{ highlighted: 'SLS' }">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            <div class="mb-12 flex justify-between items-end">
+                <div>
+                    <h2 class="text-[36px] font-bold text-heading tracking-[-1.5px] mb-2 uppercase">Comparative <span class="text-primary">Matrix</span></h2>
+                    <p class="text-body text-sm font-medium opacity-80">物理级锁定展示：四周等厚边框及双色背景矩阵。</p>
+                </div>
+                <div class="hidden md:block border-2 border-primary/20 rounded-md px-3 py-1 rotate-12">
+                    <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest">NOW3DP Verified</span>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl border border-border shadow-sm p-[3px] overflow-hidden">
+                <div class="overflow-x-auto no-scrollbar">
+                    <table class="w-full text-left border-separate border-spacing-0 min-w-[1000px]">
+                        <thead>
+                            <tr class="bg-bg-table text-heading uppercase tracking-[2px] text-[11px] font-bold">
+                                <th class="py-5 px-8 border-b border-border rounded-tl-lg">Technology</th>
+                                <th class="py-5 px-6 border-b border-border bg-bg-table/60">Dimensional Accuracy</th>
+                                <th class="py-5 px-8 border-b border-border">Key Strengths</th>
+                                <th class="py-5 px-6 border-b border-border bg-bg-table/60">Build Volume</th>
+                                <th class="py-5 px-8 border-b border-border rounded-tr-lg">Layer</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[14px]">
+                            <template x-for="tech in [
+                                { id: 'SLS', acc: '± 0.3%', strength: 'Support-free, High flexibility', vol: '395 × 500 × 395 mm', layer: '100μm' },
+                                { id: 'MJF', acc: '± 0.3%', strength: 'Isotropic, Rapid production', vol: '380 × 285 × 380 mm', layer: '80μm' },
+                                { id: 'SLA', acc: '± 0.2%', strength: 'Fine detail, Smooth finish', vol: '500 × 500 × 500 mm', layer: '50μm' },
+                                { id: 'DMLS', acc: '± 0.2%', strength: 'Complex metals, Engineering-grade', vol: '400 × 400 × 400 mm', layer: '40μm' }
+                            ]">
+                                <tr @click="highlighted = tech.id" :class="highlighted === tech.id ? 'lock-row' : 'hover:bg-bg-table/40 cursor-pointer'" class="transition-all duration-150 group">
+                                    <td class="py-6 px-8 font-bold border-b border-border transition-colors" :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-primary rounded-l-xl' : 'bg-white text-heading'"><span x-text="tech.id"></span></td>
+                                    <td class="py-6 px-6 font-mono border-b border-border transition-colors" :class="highlighted === tech.id ? 'bg-[#DEEAFF] text-primary' : 'bg-bg-table/40 text-body'"><div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full" :class="highlighted === tech.id ? 'bg-primary' : 'bg-primary/20'"></span><span x-text="tech.acc"></span></div></td>
+                                    <td class="py-6 px-8 border-b border-border transition-colors leading-relaxed" :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-body' : 'bg-white text-body'"><span x-text="tech.strength" class="opacity-90"></span></td>
+                                    <td class="py-6 px-6 font-mono border-b border-border transition-colors text-right pr-12" :class="highlighted === tech.id ? 'bg-[#DEEAFF] text-heading' : 'bg-bg-table/40 text-heading'"><span x-text="tech.vol"></span></td>
+                                    <td class="py-6 px-8 font-mono border-b border-border transition-colors" :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-heading rounded-r-xl' : 'bg-white text-heading'"><span x-text="tech.layer"></span></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Why Choose Us (White Background) -->
+    <section class="py-[80px] lg:py-[96px] bg-white" x-data="{ 
+        activeSlide: 0,
+        slides: [
+            'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000',
+            'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=1000',
+            'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1000'
+        ]
+    }" x-init="setInterval(() => { activeSlide = (activeSlide + 1) % slides.length }, 5000)">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-stretch">
+                <div class="relative rounded-card overflow-hidden border border-border h-full min-h-[320px] lg:min-h-0">
+                    <template x-for="(slide, index) in slides" :key="index">
+                        <div x-show="activeSlide === index" x-transition:enter="transition ease-out duration-1000" x-transition:enter-start="opacity-0 scale-105" x-transition:enter-end="opacity-100 scale-100" class="absolute inset-0">
+                            <img :src="slide" class="w-full h-full object-cover" alt="Factory View">
+                        </div>
+                    </template>
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <button @click="activeSlide = index" :class="activeSlide === index ? 'bg-white w-6' : 'bg-white/40 w-1.5'" class="h-1 rounded-full transition-all duration-300"></button>
+                        </template>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center py-1">
+                    <header class="mb-6 lg:mb-8">
+                        <h2 class="text-[32px] lg:text-[36px] font-bold text-heading tracking-[-1px] leading-tight mb-4">Your Trusted Industrial <br><span class="text-primary">Manufacturing Partner</span></h2>
+                        <p class="text-body text-sm leading-relaxed">依托 ISO 认证的数字化工厂和全球供应网络，我们通过 4 个核心维度确保您的零件交付万无一失。</p>
+                    </header>
+                    <div class="space-y-2 lg:space-y-3">
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+                            <div class="flex-1 flex items-center justify-between"><div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Instant AI Quoting</h4><p class="text-[12px] text-body opacity-80">数小时内完成精准 CAD 解析报价。</p></div><span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">3H RESPONSE</span></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                            <div class="flex-1 flex items-center justify-between"><div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Certified Quality</h4><p class="text-[12px] text-body opacity-80">严格执行 ISO 标准与 CMM 测量验收。</p></div><span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">ISO 9001:2015</span></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg></div>
+                            <div class="flex-1 flex items-center justify-between"><div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Massive Network</h4><p class="text-[12px] text-body opacity-80">全球 200+ 合作伙伴确保大批量订单准时交付。</p></div><span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">95 COUNTRIES</span></div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+                            <div class="flex-1 flex items-center justify-between"><div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Expert DfM Support</h4><p class="text-[12px] text-body opacity-80">资深工程师提供专业的可制造性分析建议。</p></div><span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">FREE CONSULT</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <a href="/quote" class="inline-flex items-center justify-center w-full bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm uppercase tracking-wider shadow-lg shadow-primary/20 transition-all group">
+                            Get an Instant Quote
+                            <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Order Process (Gray Background) -->
+    <section class="py-16 lg:py-24 bg-bg-section">
+        <div class="max-w-[1280px] mx-auto px-6">
+            <div class="text-center mb-16 lg:mb-24">
+                <h2 class="text-[28px] lg:text-[40px] font-bold text-heading mb-4 tracking-[-0.5px]">
+                    Prototypes and Parts Made <span class="text-primary">Easy</span>
+                </h2>
+                <p class="text-body max-w-2xl mx-auto text-[14px] lg:text-[16px] opacity-90">Streamline your engineering procurement from instant CAD analysis to worldwide delivery.</p>
+            </div>
+            <div class="relative max-w-[1100px] mx-auto">
+                <div class="absolute top-7 left-[12.5%] right-[12.5%] h-[1px] bg-border hidden lg:block"></div>
+                <div class="absolute left-7 top-0 bottom-0 w-[1px] bg-border lg:hidden"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-0 relative z-10">
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm">
+                            <svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            <span class="font-mono text-[9px] text-muted leading-none">01</span>
+                        </div>
+                        <div class="pt-1 lg:pt-0">
+                            <h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Upload CAD Files</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Securely drop STEP, STL, or IGES files for instant manufacturing analysis.</p>
+                        </div>
+                    </div>
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm">
+                            <svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <span class="font-mono text-[9px] text-muted leading-none">02</span>
+                        </div>
+                        <div class="pt-1 lg:pt-0">
+                            <h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Instant Quote</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Receive automated pricing and expert DFM feedback in seconds.</p>
+                        </div>
+                    </div>
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm">
+                            <svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            <span class="font-mono text-[9px] text-muted leading-none">03</span>
+                        </div>
+                        <div class="pt-1 lg:pt-0">
+                            <h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Smart Production</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Orders are routed to ISO-certified facilities with real-time status tracking.</p>
+                        </div>
+                    </div>
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm">
+                            <svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                            <span class="font-mono text-[9px] text-muted leading-none">04</span>
+                        </div>
+                        <div class="pt-1 lg:pt-0">
+                            <h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Fast Delivery</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Express global shipping with comprehensive physical inspection reports.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-20 lg:mt-24 text-center">
+                <a href="/quote" class="inline-flex items-center justify-center bg-primary text-white px-10 py-4 rounded-lg font-bold text-[14px] uppercase tracking-wider hover:bg-[#003A8C] transition-all shadow-xl shadow-primary/10 group">
+                    Start Your Instant Quote
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. CTA (White Background) -->
+    <section class="py-16 lg:py-24 bg-white">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
+                <div class="grid lg:grid-cols-2 items-center gap-12 p-8 lg:p-16">
+                    <div class="z-10 text-center lg:text-left">
+                        <h2 class="text-[32px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-6 leading-tight">You have the idea - we make it <span class="text-primary">a reality</span></h2>
+                        <p class="text-body text-[16px] lg:text-[18px] max-w-lg mb-10 mx-auto lg:mx-0">Upload your CAD design and get a professional engineering review with an instant quote in <span class="font-mono text-primary font-bold">5 minutes</span>.</p>
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                            <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20 group">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Get an Instant Quote
+                            </a>
+                            <a href="/contact" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">Contact Sales</a>
+                        </div>
+                    </div>
+                    <div class="hidden lg:block relative h-full">
+                        <div class="absolute inset-0 bg-gradient-to-l from-bg-section to-transparent z-10 w-20"></div>
+                        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800" alt="3D Engineering Illustration" class="w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. Related Blog (Gray Background) -->
+    <section class="py-[96px] bg-bg-section overflow-hidden" 
+             x-data="{ 
+                active: 0,
+                posts: [
+                    { tag: 'Metal AM', title: 'The Future of AlSi10Mg in Aerospace', excerpt: '探索铝合金 3D 打印如何通过拓扑优化减少 40% 的结构重量。', date: 'Dec 17, 2025', read: '6 min', img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Design Guide', title: 'Mastering Tolerances for SLS', excerpt: '深入了解 SLS 工艺中的公差控制，以及如何针对复杂的尼龙装配体进行 DfM 优化。', date: 'Dec 12, 2025', read: '8 min', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Case Study', title: 'Custom Medical Implants via SLA', excerpt: '案例研究：利用高精度 SLA 树脂在 48 小时内为医疗机构交付定制化手术导板。', date: 'Dec 04, 2025', read: '5 min', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'News', title: 'Global 3D Printing Trends 2026', excerpt: '分析即将到来的工业级增材制造趋势，包括可持续材料和全自动化云端工厂。', date: 'Nov 28, 2025', read: '10 min', img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Tech Deep Dive', title: 'Advanced Post-Processing Techniques', excerpt: '从化学抛光到喷砂，我们将详细解析不同表面处理对工业级零件性能的影响。', date: 'Nov 15, 2025', read: '7 min', img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800' }
+                ],
+                scrollNext() { const el = document.getElementById('blog-slider'); el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' }); },
+                scrollPrev() { const el = document.getElementById('blog-slider'); el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' }); }
+             }">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-xl text-left">
+                    <h2 class="text-[36px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-4">Latest Manufacturing <span class="text-primary">Insights</span></h2>
+                    <p class="text-body text-[16px]">获取全球制造网络的最新技术指南、材料突破与行业案例。</p>
+                </div>
+                <div class="hidden md:flex gap-3 pb-2">
+                    <button @click="scrollPrev" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-white transition-all group"><svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+                    <button @click="scrollNext" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-white transition-all group"><svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth lg:slider-mask" id="blog-slider" style="scroll-snap-type: x mandatory;">
+                    <template x-for="(post, index) in posts" :key="index">
+                        <div class="w-[85%] md:w-[45%] lg:w-[31%] flex-shrink-0" style="scroll-snap-align: start;">
+                            <a href="#" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
+                                <div class="aspect-[16/10] overflow-hidden relative">
+                                    <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Post Cover">
+                                    <div class="absolute top-4 left-4"><span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest" x-text="post.tag"></span></div>
+                                </div>
+                                <div class="p-6 lg:p-8 flex flex-col flex-1">
+                                    <h3 class="text-[18px] lg:text-[20px] font-bold text-heading mb-4 line-clamp-2 leading-tight group-hover:text-primary transition-colors" x-text="post.title"></h3>
+                                    <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3" x-text="post.excerpt"></p>
+                                    <div class="mt-auto pt-6 border-t border-border/60 flex justify-between items-center text-[12px] font-mono text-muted uppercase"><span x-text="post.date"></span><span x-text="post.read"></span></div>
+                                </div>
+                            </a>
+                        </div>
+                    </template>
+                </div>
+                <div class="flex justify-center mt-8 gap-2 md:hidden">
+                    <template x-for="(post, index) in posts">
+                        <div class="h-1 rounded-full transition-all duration-300" :class="index === 0 ? 'bg-primary w-8' : 'bg-border w-2'"></div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

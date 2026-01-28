@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Unified Industrial Homepage Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' },
+                    maxWidth: { container: '1280px' },
+                    fontSize: {
+                        h1: ['48px', { lineHeight: '1.2', fontWeight: '700' }],
+                        h2: ['36px', { lineHeight: '1.2', fontWeight: '700' }],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Trusted By Animation */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-250px * 5)); }
+        }
+        .animate-logo-cloud { animation: scroll 30s linear infinite; }
+        .slider-container:hover .animate-logo-cloud { animation-play-state: paused; }
+        .mask-fade {
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+
+        /* Industry Slider Scoped Styles */
+        .industry-track {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding: 10px 12px 40px 12px;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            scroll-snap-type: x mandatory;
+        }
+        .industry-track::-webkit-scrollbar { display: none; }
+        .industry-card {
+            flex: 0 0 calc(25% - 18px);
+            min-width: 300px;
+            scroll-snap-align: start;
+        }
+        @media (max-width: 1024px) {
+            .industry-card { flex: 0 0 85%; }
+        }
+
+        /* Blog Slider */
+        .slider-mask {
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+    <!-- 1. Hero Section -->
+    <section class="relative min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-48 lg:pb-32 overflow-visible">
+        <div class="absolute inset-0 z-0">
+            <img src="https://eu-central-1.graphassets.com/AW2dIPbpOQJCl5mn4yGf3z/resize=fit:max,height:1080,width:1920/output=format:webp/cm9legb211x4207tbfrz5j7ff" 
+                 alt="Industrial 3D Printing Facility" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-heading/70 mix-blend-multiply"></div>
+        </div>
+        <div class="relative z-10 max-w-container mx-auto px-6 lg:px-[64px] text-center">
+            <span class="inline-block mb-6 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-[12px] font-mono font-bold text-white uppercase tracking-wider backdrop-blur-md">
+                Industrial-Grade Production
+            </span>
+            <h1 class="text-h1 text-white tracking-[-1px] mb-6 drop-shadow-sm">
+                Scale Your Manufacturing<br>On Demand
+            </h1>
+            <p class="text-white/80 text-[18px] max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+                Access a global network of industrial 3D printing technologies. From rapid prototyping to end-use production parts, we deliver precision at speed.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Get Instant Quote
+                </a>
+                <a href="/capabilities" class="bg-transparent border-2 border-white/30 text-white px-8 py-4 rounded-button font-bold text-sm hover:bg-white/10 transition-all">
+                    Explore Capabilities
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
+            <div class="bg-white border border-border rounded-card shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] py-8 px-6 lg:px-10 flex flex-wrap justify-center items-center gap-x-12 lg:gap-x-16 gap-y-8">
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">8M+</strong> 
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Parts Produced</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">140k+</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Businesses</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">200+</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Materials</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">31</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Technologies</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Trusted By (White Background) -->
+    <!-- Increased top padding to account for Hero stats overlap (py-96px -> pt-[128px] pb-[96px]) -->
+    <section class="pt-[140px] pb-[96px] bg-white border-b border-border overflow-hidden">
+        <div class="max-w-container mx-auto px-6 lg:px-[24px]">
+            <div class="text-center mb-16">
+                <h3 class="text-[28px] font-bold text-heading tracking-[-0.5px] mb-4">Trusted by Global Industry Leaders</h3>
+                <p class="text-[16px] text-body max-w-2xl mx-auto">We empower <span class="font-mono text-primary font-bold">140,000+</span> engineering teams across 95 countries with precision-grade manufacturing.</p>
+            </div>
+            <div class="slider-container relative mask-fade">
+                <div class="flex items-center gap-12 animate-logo-cloud w-[max-content]">
+                    <!-- Logos duplicated for infinite scroll -->
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Tesla_Motors_logo.svg" alt="Tesla" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW" class="h-12 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Cisco" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <!-- Duplicates -->
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="h-8 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Tesla_Motors_logo.svg" alt="Tesla" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg" alt="BMW" class="h-12 opacity-40 hover:opacity-100 transition-opacity"></div>
+                    <div class="flex items-center justify-center w-[250px] grayscale hover:grayscale-0 transition-all duration-300"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Cisco_logo_blue_2016.svg" alt="Cisco" class="h-10 opacity-40 hover:opacity-100 transition-opacity"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Capability List (Gray Background) -->
+    <section x-data="{ 
+        activeTab: 'sls',
+        techs: {
+            sls: {
+                title: 'Selective Laser Sintering (SLS)',
+                desc: 'SLS 技术通过激光烧结尼龙粉末，制造出具备出色机械性能的功能性零件。无需支撑结构，适合复杂几何形状。',
+                specs: { 'Build Volume': '340 × 340 × 600 mm', 'Layer Height': '60 - 120 Microns', 'Tolerance': '±0.25%', 'Lead Time': '3 - 5 Days' },
+                tags: ['Nylon PA12', 'Glass Filled PA12', 'TPU 88A'],
+                img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Feos-p396-sls.webp&w=1920&q=75',
+                machine: 'EQUIPMENT: EOS P396'
+            },
+            mjf: {
+                title: 'Multi Jet Fusion (MJF)',
+                desc: '高产量的尼龙打印方案，具备出色的表面精细度。理想的批量生产与功能件装配选择。',
+                specs: { 'Build Volume': '380 × 284 × 380 mm', 'Layer Height': '80 Microns', 'Tolerance': '±0.3%', 'Lead Time': '2 - 4 Days' },
+                tags: ['HP Nylon PA12', 'PA12 Glass Beads', 'PA11 (Bio-based)'],
+                img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Fhp-5200-mjf.webp&w=1920&q=75',
+                machine: 'EQUIPMENT: HP MJF 5200'
+            },
+            slm: {
+                title: 'Selective Laser Melting (SLM)',
+                desc: '工业级金属 3D 打印。直接从 CAD 数据生产高密度、高强度的金属零部件。',
+                specs: { 'Build Volume': '250 × 250 × 325 mm', 'Layer Height': '20 - 40 Microns', 'Tolerance': '±0.1%', 'Lead Time': '5 - 8 Days' },
+                tags: ['Aluminum AlSi10Mg', 'Stainless Steel 316L', 'Titanium Ti64'],
+                img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Feos-m290-dmls.webp&w=1920&q=75',
+                machine: 'EQUIPMENT: EOS M290'
+            },
+            sla: {
+                title: 'Stereolithography (SLA)',
+                desc: '光固化技术，提供极高的尺寸精度和极其光滑的表面。是展示模型和高精度原型的最佳选择。',
+                specs: { 'Build Volume': '450 × 450 × 300 mm', 'Layer Height': '50 - 100 Microns', 'Tolerance': '±0.15%', 'Lead Time': '1 - 2 Days' },
+                tags: ['Standard Resin', 'Clear Resin', 'Tough Resin'],
+                img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2F3dsystems-prox800-sla.webp&w=1920&q=75',
+                machine: 'EQUIPMENT: PROX 800'
+            },
+            fdm: {
+                title: 'Fused Deposition Modeling (FDM)',
+                desc: '工业级熔融沉积造型。通过挤出工程塑料丝材，实现低成本、大尺寸的结构件制造。',
+                specs: { 'Build Volume': '914 × 610 × 914 mm', 'Layer Height': '127 - 330 Microns', 'Tolerance': '±0.2%', 'Lead Time': '2 - 3 Days' },
+                tags: ['ABS-M30', 'ASA (UV Resistant)', 'PC-10'],
+                img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2Fstratasys-f770-fdm.webp&w=1920&q=75',
+                machine: 'EQUIPMENT: FORTUS 900MC'
+            },
+            polyjet: {
+                title: 'PolyJet Technology',
+                desc: '多材料喷墨技术，可在同一零件中混合多种硬度与色彩。适合触感仿真与多材料验证。',
+                specs: { 'Build Volume': '490 × 390 × 200 mm', 'Layer Height': '16 - 32 Microns', 'Tolerance': '±0.1%', 'Lead Time': '3 - 4 Days' },
+                tags: ['Vero (Rigid)', 'Agilus (Rubber-like)', 'Digital ABS'],
+                img: 'https://www.forgelabs.com/_next/image?url=%2Fimages%2Fmachines%2F3dsystems-prox800-sla.webp&w=1920&q=75',
+                machine: 'EQUIPMENT: STRATASYS J850'
+            }
+        }
+    }" class="py-[64px] lg:py-[96px] bg-bg-section">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="text-center mb-10 lg:mb-16">
+                <h2 class="text-[32px] lg:text-[36px] font-bold text-heading tracking-[-0.5px] mb-4">Manufacturing <span class="text-primary">Capabilities</span></h2>
+                <p class="text-body max-w-2xl mx-auto">六大工业级 3D 打印工艺，专为原型验证与大规模生产优化。</p>
+            </div>
+            <div class="flex justify-start lg:justify-center gap-2 mb-10 lg:mb-16 overflow-x-auto no-scrollbar pb-4 -mx-6 px-6 lg:mx-0 lg:px-0 flex-nowrap">
+                <template x-for="(tech, key) in techs" :key="key">
+                    <button @click="activeTab = key"
+                            :class="activeTab === key ? 'bg-white text-primary border-primary shadow-sm' : 'bg-white text-body hover:bg-border border-transparent'"
+                            class="px-8 py-3 rounded-full text-[12px] font-bold transition-all duration-300 uppercase tracking-[2px] whitespace-nowrap border-[3px] shrink-0"
+                            x-text="key">
+                    </button>
+                </template>
+            </div>
+            <div class="grid lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-16 items-stretch">
+                <div class="order-1 lg:order-2 relative aspect-[4/3] lg:aspect-auto lg:min-h-0">
+                    <div class="h-full rounded-card bg-white border border-border overflow-hidden flex items-center justify-center p-8 lg:p-12 group transition-all duration-500">
+                        <img :src="techs[activeTab].img" :alt="techs[activeTab].title" class="max-w-full max-h-full object-contain mix-blend-multiply transition-all duration-500 transform group-hover:scale-105" x-transition.opacity.duration.400ms>
+                        <div class="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 bg-white/90 backdrop-blur shadow-xl border border-border px-3 py-1.5 lg:px-4 lg:py-2 rounded-md">
+                            <span class="text-[9px] lg:text-[11px] font-mono font-bold text-heading uppercase tracking-tight" x-text="techs[activeTab].machine"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-2 lg:order-1 flex flex-col">
+                    <div x-show="activeTab" x-transition.opacity.duration.400ms class="flex flex-col h-full pt-4 lg:pt-0">
+                        <div class="mb-8">
+                            <h3 class="text-[24px] lg:text-[28px] font-bold text-heading mb-4 leading-tight" x-text="techs[activeTab].title"></h3>
+                            <p class="text-body text-sm lg:text-base leading-relaxed mb-6" x-text="techs[activeTab].desc"></p>
+                            <a :href="'/capabilities/' + activeTab" class="group inline-flex items-center text-primary text-[13px] font-bold uppercase tracking-wider">
+                                Learn more about this technology
+                                <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7l5 5-5 5M6 7l5 5-5 5"/></svg>
+                            </a>
+                        </div>
+                        <div class="grid grid-cols-2 gap-y-6 lg:gap-y-8 gap-x-8 lg:gap-x-12 py-6 lg:py-8 border-y border-border mb-8">
+                            <template x-for="(val, label) in techs[activeTab].specs">
+                                <div class="border-l-2 border-primary/20 pl-4">
+                                    <span class="block text-[10px] font-bold text-muted uppercase tracking-[1.5px] mb-1.5" x-text="label"></span>
+                                    <span class="font-mono text-[14px] lg:text-[18px] font-bold text-heading leading-none" x-text="val"></span>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="mb-10">
+                            <h4 class="text-[11px] font-bold text-muted uppercase tracking-[1.5px] mb-4">Available Materials</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="tag in techs[activeTab].tags">
+                                    <span class="bg-white border border-border/50 px-3 py-1.5 rounded-md text-[11px] lg:text-[12px] font-semibold text-heading" x-text="tag"></span>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-4 flex flex-col sm:flex-row gap-4">
+                            <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-wider text-center transition-all shadow-md">Get Instant Quote</a>
+                            <a href="/contact" class="bg-white border border-border text-heading hover:border-primary px-8 py-4 rounded-button font-bold text-[13px] uppercase tracking-wider text-center transition-all">Consult an Engineer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Why Choose Us (White Background) -->
+    <section class="py-[80px] lg:py-[96px] bg-white" x-data="{ 
+        activeSlide: 0,
+        slides: [
+            'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1000',
+            'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=1000',
+            'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=1000'
+        ]
+    }" x-init="setInterval(() => { activeSlide = (activeSlide + 1) % slides.length }, 5000)">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-stretch">
+                <div class="relative rounded-card overflow-hidden border border-border h-full min-h-[320px] lg:min-h-0">
+                    <template x-for="(slide, index) in slides" :key="index">
+                        <div x-show="activeSlide === index" 
+                             x-transition:enter="transition ease-out duration-1000"
+                             x-transition:enter-start="opacity-0 scale-105"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             class="absolute inset-0">
+                            <img :src="slide" class="w-full h-full object-cover" alt="Factory View">
+                        </div>
+                    </template>
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                        <template x-for="(slide, index) in slides" :key="index">
+                            <button @click="activeSlide = index" :class="activeSlide === index ? 'bg-white w-6' : 'bg-white/40 w-1.5'" class="h-1 rounded-full transition-all duration-300"></button>
+                        </template>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center py-1">
+                    <header class="mb-6 lg:mb-8">
+                        <h2 class="text-[32px] lg:text-[36px] font-bold text-heading tracking-[-1px] leading-tight mb-4">Your Trusted Industrial <br><span class="text-primary">Manufacturing Partner</span></h2>
+                        <p class="text-body text-sm leading-relaxed">依托 ISO 认证的数字化工厂和全球供应网络，我们通过 4 个核心维度确保您的零件交付万无一失。</p>
+                    </header>
+                    <div class="space-y-2 lg:space-y-3">
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                            <div class="flex-1 flex items-center justify-between">
+                                <div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Instant AI Quoting</h4><p class="text-[12px] text-body opacity-80">数小时内完成精准 CAD 解析报价。</p></div>
+                                <span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">3H RESPONSE</span>
+                            </div>
+                        </div>
+                        <!-- More items... -->
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="flex-1 flex items-center justify-between">
+                                <div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Certified Quality</h4><p class="text-[12px] text-body opacity-80">严格执行 ISO 标准与 CMM 测量验收。</p></div>
+                                <span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">ISO 9001:2015</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
+                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                            </div>
+                            <div class="flex-1 flex items-center justify-between">
+                                <div><h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors">Massive Network</h4><p class="text-[12px] text-body opacity-80">全球 200+ 合作伙伴确保大批量订单准时交付。</p></div>
+                                <span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded">95 COUNTRIES</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <a href="/quote" class="inline-flex items-center justify-center w-full bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm uppercase tracking-wider shadow-lg shadow-primary/20 transition-all group">
+                            Get an Instant Quote
+                            <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Industry Slider (Gray Background) -->
+    <section class="py-[96px] bg-bg-section">
+        <div class="max-w-container mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div class="max-w-[720px]">
+                    <h2 class="text-[36px] font-bold text-heading mb-4">SLS Applications Across Industries</h2>
+                    <p class="text-[18px] text-body">Discover how top-tier manufacturers utilize Selective Laser Sintering for high-performance, functional applications.</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="w-12 h-12 rounded-full border border-border bg-white text-heading hover:border-primary hover:text-primary flex items-center justify-center transition-all" onclick="document.getElementById('industry-track').scrollBy({left: -320, behavior: 'smooth'})">❮</button>
+                    <button class="w-12 h-12 rounded-full border border-border bg-white text-heading hover:border-primary hover:text-primary flex items-center justify-center transition-all" onclick="document.getElementById('industry-track').scrollBy({left: 320, behavior: 'smooth'})">❯</button>
+                </div>
+            </div>
+            <div class="mx-[-12px] overflow-hidden">
+                <div id="industry-track" class="industry-track">
+                    <a href="/solutions/aerospace" class="industry-card bg-white border border-border rounded-card hover:-translate-y-2 hover:shadow-xl hover:border-primary transition-all duration-300 flex flex-col group">
+                        <div class="h-[220px] bg-gray-100 overflow-hidden rounded-t-card"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Aerospace+Ducting" alt="Aerospace" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <div class="flex gap-2 mb-4"><span class="bg-blue-100 text-blue-800 text-[11px] font-bold px-2.5 py-1 rounded uppercase">End-use Parts</span></div>
+                            <h4 class="text-[20px] font-bold text-heading mb-3">Aerospace Components</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">Production of complex internal ducting and UAV structural parts that require optimized strength-to-weight ratios.</p>
+                            <span class="text-[14px] font-bold text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">View Solution →</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/medical" class="industry-card bg-white border border-border rounded-card hover:-translate-y-2 hover:shadow-xl hover:border-primary transition-all duration-300 flex flex-col group">
+                        <div class="h-[220px] bg-gray-100 overflow-hidden rounded-t-card"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Medical+Orthotics" alt="Medical" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <div class="flex gap-2 mb-4"><span class="bg-green-100 text-green-800 text-[11px] font-bold px-2.5 py-1 rounded uppercase">Biocompatible</span></div>
+                            <h4 class="text-[20px] font-bold text-heading mb-3">Medical & Healthcare</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">Biocompatible Nylon (PA12) solutions for customized prosthetics, surgical guides, and wearable orthotics.</p>
+                            <span class="text-[14px] font-bold text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">View Solution →</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/automotive" class="industry-card bg-white border border-border rounded-card hover:-translate-y-2 hover:shadow-xl hover:border-primary transition-all duration-300 flex flex-col group">
+                        <div class="h-[220px] bg-gray-100 overflow-hidden rounded-t-card"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Automotive+Testing" alt="Automotive" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <div class="flex gap-2 mb-4"><span class="bg-orange-100 text-orange-800 text-[11px] font-bold px-2.5 py-1 rounded uppercase">Heat Resist</span></div>
+                            <h4 class="text-[20px] font-bold text-heading mb-3">Automotive Engineering</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">High-impact functional testing prototypes and customized interior components with high thermal stability.</p>
+                            <span class="text-[14px] font-bold text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">View Solution →</span>
+                        </div>
+                    </a>
+                    <a href="/solutions/tooling" class="industry-card bg-white border border-border rounded-card hover:-translate-y-2 hover:shadow-xl hover:border-primary transition-all duration-300 flex flex-col group">
+                        <div class="h-[220px] bg-gray-100 overflow-hidden rounded-t-card"><img src="https://placehold.co/600x400/F2F4F7/1D2939?text=Industrial+Jigs" alt="Tooling" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+                        <div class="p-8 flex-grow flex flex-col">
+                            <div class="flex gap-2 mb-4"><span class="bg-purple-100 text-purple-800 text-[11px] font-bold px-2.5 py-1 rounded uppercase">Production Tooling</span></div>
+                            <h4 class="text-[20px] font-bold text-heading mb-3">Industrial Tooling</h4>
+                            <p class="text-[15px] text-body leading-relaxed mb-6 flex-grow">On-demand production of jigs, fixtures, and end-of-arm tooling with integrated internal cooling channels.</p>
+                            <span class="text-[14px] font-bold text-primary inline-flex items-center group-hover:translate-x-1 transition-transform">View Solution →</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Review (White Background) -->
+    <section class="py-[96px] bg-white overflow-hidden" 
+         x-data="{ 
+            active: 0,
+            reviews: [
+                { name: 'Marcus Chen', role: 'CTO, AeroSpace Dynamic', text: 'PROTO_FAB 交付的 316L 金属零件精度超出了我们的预期，表面光洁度几乎达到了免处理级别。', initial: 'M' },
+                { name: 'Sarah Miller', role: 'Lead Designer, BioMed', text: '我们在医疗器械原型阶段使用了他们的 SLA 树脂工艺，响应速度极快，报价透明。', initial: 'S' },
+                { name: 'David Weber', role: 'Operations Manager', text: '大规模生产尼龙零件的稳定性非常好，是目前市场上性价比最高的工业打印服务。', initial: 'D' },
+                { name: 'Elena Rossi', role: 'Project Lead, AutoGen', text: '多材料打印技术帮我们解决了复杂的总成验证问题，交期缩短了 40%。', initial: 'E' }
+            ],
+            next() { this.active = (this.active + 1) % (this.reviews.length - 2) },
+            prev() { this.active = this.active === 0 ? this.reviews.length - 3 : this.active - 1 }
+         }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-xl">
+                    <h2 class="text-[36px] font-bold text-heading tracking-[-1px] mb-4">Global Partner <span class="text-primary">Trust</span></h2>
+                    <p class="text-body leading-relaxed">在 95 个国家/地区，数以万计的工程师正在通过我们的数字化平台将灵感转化为精密实体。</p>
+                </div>
+                <div class="hidden md:flex gap-3">
+                    <button @click="prev" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-bg-section hover:border-primary text-heading transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg></button>
+                    <button @click="next" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-bg-section hover:border-primary text-heading transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="flex transition-transform duration-500 ease-in-out" :style="`transform: translateX(-${active * (100 / (window.innerWidth >= 1024 ? 3 : 1))}%)`" class="w-full">
+                    <template x-for="(rev, index) in reviews" :key="index">
+                        <div class="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3">
+                            <div class="bg-bg-section border border-border p-8 rounded-card h-full flex flex-col shadow-sm hover:shadow-md transition-shadow">
+                                <div class="flex justify-between items-center mb-6">
+                                    <div class="flex gap-1 text-primary"><template x-for="s in 5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></template></div>
+                                    <span class="bg-green-50 text-green-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-green-100 uppercase">Verified</span>
+                                </div>
+                                <p class="text-[15px] leading-relaxed mb-10 flex-1 italic text-heading">"<span x-text="rev.text"></span>"</p>
+                                <div class="flex items-center gap-4 pt-6 border-t border-border/50">
+                                    <div class="w-10 h-10 bg-primary/10 rounded-md flex items-center justify-center font-bold text-primary shrink-0" x-text="rev.initial"></div>
+                                    <div class="overflow-hidden"><span class="block text-[14px] font-bold text-heading truncate" x-text="rev.name"></span><span class="block text-[12px] text-muted truncate" x-text="rev.role"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Order Process (Gray Background) -->
+    <section class="py-16 lg:py-24 bg-bg-section">
+        <div class="max-w-container mx-auto px-6">
+            <div class="text-center mb-16 lg:mb-24">
+                <h2 class="text-[28px] lg:text-[40px] font-bold text-heading mb-4 tracking-[-0.5px]">Prototypes and Parts Made <span class="text-primary">Easy</span></h2>
+                <p class="text-body max-w-2xl mx-auto text-[14px] lg:text-[16px] opacity-90">Streamline your engineering procurement from instant CAD analysis to worldwide delivery.</p>
+            </div>
+            <div class="relative max-w-[1100px] mx-auto">
+                <div class="absolute top-7 left-[12.5%] right-[12.5%] h-[1px] bg-border hidden lg:block"></div>
+                <div class="absolute left-7 top-0 bottom-0 w-[1px] bg-border lg:hidden"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-0 relative z-10">
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm"><svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg><span class="font-mono text-[9px] text-muted leading-none">01</span></div>
+                        <div class="pt-1 lg:pt-0"><h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Upload CAD Files</h4><p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Securely drop STEP, STL, or IGES files for instant manufacturing analysis.</p></div>
+                    </div>
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm"><svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="font-mono text-[9px] text-muted leading-none">02</span></div>
+                        <div class="pt-1 lg:pt-0"><h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Instant Quote</h4><p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Receive automated pricing and expert DFM feedback in seconds.</p></div>
+                    </div>
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm"><svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg><span class="font-mono text-[9px] text-muted leading-none">03</span></div>
+                        <div class="pt-1 lg:pt-0"><h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Smart Production</h4><p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Orders are routed to ISO-certified facilities with real-time status tracking.</p></div>
+                    </div>
+                    <div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center group">
+                        <div class="w-14 h-14 rounded-full border border-border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0 transition-all group-hover:border-primary shadow-sm"><svg class="w-5 h-5 text-primary mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg><span class="font-mono text-[9px] text-muted leading-none">04</span></div>
+                        <div class="pt-1 lg:pt-0"><h4 class="text-[17px] lg:text-[19px] font-bold text-heading mb-3 leading-tight">Fast Delivery</h4><p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">Express global shipping with comprehensive physical inspection reports.</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-20 lg:mt-24 text-center">
+                <a href="/quote" class="inline-flex items-center justify-center bg-primary text-white px-10 py-4 rounded-lg font-bold text-[14px] uppercase tracking-wider hover:bg-[#003A8C] transition-all shadow-xl shadow-primary/10 group">
+                    Start Your Instant Quote
+                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. CTA (White Background) -->
+    <section class="py-16 lg:py-24 bg-white">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
+                <div class="grid lg:grid-cols-2 items-center gap-12 p-8 lg:p-16">
+                    <div class="z-10 text-center lg:text-left">
+                        <h2 class="text-[32px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-6 leading-tight">You have the idea - we make it <span class="text-primary">a reality</span></h2>
+                        <p class="text-body text-[16px] lg:text-[18px] max-w-lg mb-10 mx-auto lg:mx-0">Upload your CAD design and get a professional engineering review with an instant quote in <span class="font-mono text-primary font-bold">5 minutes</span>.</p>
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                            <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20 group">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Get an Instant Quote
+                            </a>
+                            <a href="/contact" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">Contact Sales</a>
+                        </div>
+                    </div>
+                    <div class="hidden lg:block relative h-full">
+                        <div class="absolute inset-0 bg-gradient-to-l from-bg-section to-transparent z-10 w-20"></div>
+                        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800" alt="3D Engineering" class="w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Blog Slider (Gray Background) -->
+    <section class="py-[96px] bg-bg-section overflow-hidden" 
+         x-data="{ 
+            active: 0,
+            posts: [
+                { tag: 'Metal AM', title: 'The Future of AlSi10Mg in Aerospace', excerpt: '探索铝合金 3D 打印如何通过拓扑优化减少 40% 的结构重量。', date: 'Dec 17, 2025', read: '6 min', img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'Design Guide', title: 'Mastering Tolerances for SLS', excerpt: '深入了解 SLS 工艺中的公差控制，以及如何针对复杂的尼龙装配体进行 DfM 优化。', date: 'Dec 12, 2025', read: '8 min', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'Case Study', title: 'Custom Medical Implants via SLA', excerpt: '案例研究：利用高精度 SLA 树脂在 48 小时内为医疗机构交付定制化手术导板。', date: 'Dec 04, 2025', read: '5 min', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'News', title: 'Global 3D Printing Trends 2026', excerpt: '分析即将到来的工业级增材制造趋势，包括可持续材料和全自动化云端工厂。', date: 'Nov 28, 2025', read: '10 min', img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800' },
+                { tag: 'Tech Deep Dive', title: 'Advanced Post-Processing Techniques', excerpt: '从化学抛光到喷砂，我们将详细解析不同表面处理对工业级零件性能的影响。', date: 'Nov 15, 2025', read: '7 min', img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800' }
+            ],
+            scrollNext() {
+                const el = document.getElementById('blog-slider');
+                el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' });
+            },
+            scrollPrev() {
+                const el = document.getElementById('blog-slider');
+                el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' });
+            }
+         }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-xl text-left">
+                    <h2 class="text-[36px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-4">Latest Manufacturing <span class="text-primary">Insights</span></h2>
+                    <p class="text-body text-[16px]">获取全球制造网络的最新技术指南、材料突破与行业案例。</p>
+                </div>
+                <div class="hidden md:flex gap-3 pb-2">
+                    <button @click="scrollPrev" class="w-12 h-12 rounded-full border border-border flex items-center justify-center bg-white hover:bg-white hover:border-primary transition-all group"><svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+                    <button @click="scrollNext" class="w-12 h-12 rounded-full border border-border flex items-center justify-center bg-white hover:bg-white hover:border-primary transition-all group"><svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth lg:slider-mask" id="blog-slider" style="scroll-snap-type: x mandatory;">
+                    <template x-for="(post, index) in posts" :key="index">
+                        <div class="w-[85%] md:w-[45%] lg:w-[31%] flex-shrink-0" style="scroll-snap-align: start;">
+                            <a href="#" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
+                                <div class="aspect-[16/10] overflow-hidden relative">
+                                    <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Post Cover">
+                                    <div class="absolute top-4 left-4"><span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest" x-text="post.tag"></span></div>
+                                </div>
+                                <div class="p-6 lg:p-8 flex flex-col flex-1">
+                                    <h3 class="text-[18px] lg:text-[20px] font-bold text-heading mb-4 line-clamp-2 leading-tight group-hover:text-primary transition-colors" x-text="post.title"></h3>
+                                    <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3" x-text="post.excerpt"></p>
+                                    <div class="mt-auto pt-6 border-t border-border/60 flex justify-between items-center text-[12px] font-mono text-muted uppercase"><span x-text="post.date"></span><span x-text="post.read"></span></div>
+                                </div>
+                            </a>
+                        </div>
+                    </template>
+                </div>
+                <div class="flex justify-center mt-8 gap-2 md:hidden">
+                    <template x-for="(post, index) in posts">
+                        <div class="h-1 rounded-full transition-all duration-300" :class="index === 0 ? 'bg-primary w-8' : 'bg-border w-2'"></div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

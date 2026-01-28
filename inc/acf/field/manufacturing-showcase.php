@@ -102,16 +102,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             ),
                         ),
                         array(
-                            'key' => 'field_mfs_item_subtitle',
-                            'label' => 'Subtitle',
-                            'name' => 'item_subtitle',
-                            'type' => 'text',
-                            'instructions' => '如：SLS / Matte Finish / High Temp。',
-                            'wrapper' => array(
-                                'width' => '50',
-                            ),
-                        ),
-                        array(
                             'key' => 'field_mfs_item_description',
                             'label' => 'Description',
                             'name' => 'item_description',

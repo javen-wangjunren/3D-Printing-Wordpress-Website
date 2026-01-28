@@ -22,6 +22,12 @@
       margin-bottom: 0 !important; 
   }
 
+  /* Reset margin for block containers to avoid double spacing */
+   .site-main > div,
+   .site-main > section {
+       margin-bottom: 0 !important;
+   }
+
   /* Alpine.js Cloak */
   [x-cloak] { 
     display: none !important; 
@@ -130,20 +136,50 @@
   /* 图片上的技术遮罩层 */
   .tech-overlay::after {
     content: '';
-    @apply absolute inset-0 border border-white/10 pointer-events-none;
+    @apply absolute inset-0 border border-white/10 pointer-events-none z-[5];
     background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
   }
 
-  /* 模拟屏幕扫描线 */
-  .scanline {
-    @apply absolute top-0 left-0 right-0 h-[2px] opacity-0 pointer-events-none;
-    background: rgba(0, 71, 171, 0.3);
-    animation: scan 4s linear infinite;
+  /* --- Factory Image Module Styles --- */
+
+  /* 物理锁定框 (Hover State) */
+  .bento-card { 
+      @apply relative overflow-hidden rounded-card bg-[#F8F9FB] border border-[#E4E7EC] transition-all duration-300 ease-out cursor-zoom-in;
   }
-  .group:hover .scanline { 
-    @apply opacity-100; 
+  .bento-card:hover { 
+      @apply border-primary shadow-[0_0_0_3px_#0047AB,0_20px_40px_rgba(0,71,171,0.1)] z-10;
   }
-  @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+  
+  /* 图片交互 */
+  .bento-card img {
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .bento-card:hover img {
+      transform: scale(1.05);
+  }
+  
+  /* 数据化标签 */
+  .mono-tag { 
+      @apply absolute top-4 left-4 font-mono text-[11px] font-bold bg-white/95 backdrop-blur-[4px] px-2 py-1 rounded text-primary border border-primary/10 z-20 uppercase tracking-[-0.02em];
+  }
+  
+  /* 描述遮罩 */
+  .card-overlay {
+      @apply absolute inset-0 opacity-0 transition-opacity duration-300 z-[8];
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+  }
+  .bento-card:hover .card-overlay {
+      opacity: 1;
+  }
+
+  .card-info {
+      @apply absolute bottom-4 left-4 text-white translate-y-[10px] opacity-0 transition-all duration-300 ease-out delay-100 z-[9];
+  }
+  .bento-card:hover .card-info {
+      transform: translateY(0);
+      opacity: 1;
+  }
+
 
   /* --- Team Module Styles (Leadership) --- */
 

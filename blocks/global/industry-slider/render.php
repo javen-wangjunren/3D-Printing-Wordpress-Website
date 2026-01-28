@@ -126,7 +126,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                                     <?php endif; ?>
                                     
                                     <!-- CTA -->
-                                    <span class="text-primary font-bold text-sm flex items-center mt-auto group-hover/card:underline decoration-2 underline-offset-4">
+                                    <span class="text-primary font-bold text-sm flex items-center mt-auto pt-2 group-hover/card:underline decoration-2 underline-offset-4">
                                         <?php echo esc_html($link_title); ?> 
                                         <svg class="w-4 h-4 ml-2 transform group-hover/card:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                                     </span>

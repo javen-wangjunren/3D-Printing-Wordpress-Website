@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Balanced Material Matrix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+    <style>[x-cloak] { display: none !important; }</style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-10 lg:py-20" x-data="{ 
+    activeProcess: 'SLS', 
+    openMaterial: 'PA12', 
+    processes: ['DMLS', 'SLS', 'SLA'],
+    materials: {
+        'DMLS': [
+            { id: '316L', title: 'Stainless Steel 316L', tag: 'Medical Grade', cost: '$$$$', lead: '5-7D', tol: '±0.10', heat: '600°C', desc: 'Superior corrosion resistance combined with high mechanical strength makes 316L the standard for medical implants and chemical processing. This material maintains excellent performance under extreme thermal conditions.' }
+        ],
+        'SLS': [
+            { id: 'PA12', title: 'Nylon PA12', tag: 'Functional Parts', cost: '$ (Low)', lead: '2-3D', tol: '±0.30', heat: '95°C', desc: 'Nylon PA12 is the most versatile industrial 3D printing material. It offers perfectly balanced mechanical properties and high chemical resistance, making it ideal for both complex functional prototypes and durable end-use components.' }
+        ],
+        'SLA': [
+            { id: 'CLEAR', title: 'Clear Resin', tag: 'Visual Master', cost: '$$', lead: '3-4D', tol: '±0.15', heat: '50°C', desc: 'Our premium Clear Resin delivers exceptional optical clarity and an ultra-smooth surface finish. It is specifically engineered for fluid flow analysis, light-transmitting visual prototypes, and high-detail verified masters.' }
+        ]
+    }
+}">
+    <div class="max-w-[1280px] mx-auto px-5">
+        
+        <div class="mb-8 lg:mb-12">
+            <h2 class="text-[26px] lg:text-[36px] font-bold text-heading tracking-[-1px] mb-3">
+                Explore <span class="text-primary">Manufacturing Materials</span>
+            </h2>
+            <p class="text-body max-w-2xl text-[14px] lg:text-[15px] opacity-90 leading-snug">
+                Compare engineering properties and lead times across our specialized catalog to select the optimal solution for your industrial project.
+            </p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+            
+            <aside class="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 lg:w-[150px] shrink-0 lg:border-r lg:border-border lg:pr-5">
+                <template x-for="proc in processes" :key="proc">
+                    <button @click="activeProcess = proc; openMaterial = materials[proc][0].id" 
+                            :class="activeProcess === proc ? 'bg-primary text-white shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                            class="whitespace-nowrap px-4 py-2.5 lg:w-full lg:text-left rounded-button border font-bold text-[11px] uppercase tracking-wider transition-all"
+                            x-text="proc"></button>
+                </template>
+            </aside>
+
+            <main class="flex-1 w-full">
+                <div class="space-y-3">
+                    <template x-for="mat in materials[activeProcess]" :key="mat.id">
+                        <div class="border border-border rounded-card bg-white overflow-hidden shadow-sm">
+                            
+                            <button @click="openMaterial = (openMaterial === mat.id ? '' : mat.id)"
+                                    class="w-full flex justify-between items-center p-4 lg:px-6 lg:py-5 bg-white hover:bg-bg-subtle/40 transition-colors text-left">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-[15px] lg:text-[17px] font-bold text-heading" x-text="mat.title"></span>
+                                    <span class="text-[8px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-widest" x-text="mat.tag"></span>
+                                </div>
+                                <svg class="w-4 h-4 text-muted transition-transform duration-300" :class="openMaterial === mat.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+
+                            <div x-show="openMaterial === mat.id" x-collapse x-cloak>
+                                <div class="p-5 lg:p-10 border-t border-border">
+                                    <div class="grid lg:grid-cols-[1fr_320px] gap-8 lg:gap-12 items-stretch">
+                                        
+                                        <div class="flex flex-col justify-center h-full">
+                                            <p class="text-[14px] leading-relaxed text-body mb-8 lg:max-w-[95%]" x-text="mat.desc"></p>
+
+                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-8">
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Tolerance</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.tol"></div>
+                                                </div>
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Max Temp</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.heat"></div>
+                                                </div>
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Lead Time</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-primary" x-text="mat.lead"></div>
+                                                </div>
+                                                <div class="bg-bg-subtle p-3 rounded border border-border/50 text-center lg:text-left">
+                                                    <div class="text-[8px] text-muted uppercase font-bold mb-1">Cost</div>
+                                                    <div class="font-mono text-[13px] lg:text-[14px] font-bold text-heading" x-text="mat.cost"></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-wrap gap-3">
+                                                <a href="/quote" class="inline-flex items-center justify-center bg-primary text-white px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-sm">
+                                                    🚀 Start Quote
+                                                </a>
+                                                <a href="#" class="inline-flex items-center justify-center border border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wider hover:bg-primary/5 transition-all">
+                                                    📄 Technical Specs
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="hidden lg:block shrink-0 h-full">
+                                            <div class="aspect-square w-[320px] bg-gray-100 rounded-lg border border-border overflow-hidden relative group">
+                                                <img :src="'https://placehold.co/600x600/eeeeee/666666?text=' + mat.id" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                                <div class="absolute bottom-2 left-2 bg-white/80 backdrop-blur px-2 py-0.5 rounded text-[9px] font-mono text-muted uppercase tracking-tighter">Sample: <span x-text="mat.id"></span></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="lg:hidden w-full aspect-video rounded-lg overflow-hidden border border-border mt-2">
+                                            <img :src="'https://placehold.co/600x600/eeeeee/666666?text=' + mat.id" class="w-full h-full object-cover">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </main>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

@@ -16,14 +16,41 @@
 │   └── seo-structure.md          # SEO & 内链规则（后期补）
 │
 ├── 📂 design-preview/            # 🎨 设计预览HTML文件
+│   │
+│   ├── 📂 full-page-tempate/      # 全页模板演示 (Typo: tempate)
+│   │   ├── all-capabilities-demo.html
+│   │   ├── homepage-demo.html
+│   │   ├── single-capability-demo.html
+│   │   └── single-material-demo.html
+│   │
+│   ├── about-demo.html
 │   ├── capability-design-guide.html
-│   ├── capability-work-process.html
+│   ├── capability-list.html
+│   ├── capability-materia-list.html
+│   ├── comparison-table.html
+│   ├── cta.html
+│   ├── factory-image.html
+│   ├── footer.html
+│   ├── header.html
+│   ├── hero-banner-style1.html
+│   ├── hero-banner-style2.html
+│   ├── how-it-works.html
 │   ├── industry-slider.html
-│   ├── material-comparison.html
-│   ├── material-mobile.html
-│   ├── material-pc.html
+│   ├── manufacturing-capabilities.html
+│   ├── manufacturing-showcase.html
+│   ├── material-card.html
+│   ├── material-list.html
+│   ├── misson.html
 │   ├── order-process.html
-│   └── surface-finish.html
+│   ├── page-all-materials.html
+│   ├── related-blog.html
+│   ├── review.html
+│   ├── surface-finish.html
+│   ├── team.html
+│   ├── technical-specs.html
+│   ├── timeline.html
+│   ├── trusted-by.html
+│   └── why-choose-us.html
 │
 ├── 📂 inc/ 
 │   ├── 📂 acf                    # ACF 相关配置
@@ -32,18 +59,29 @@
 │   │   │   └── cpt-material.php
 │   │   ├── 📂 field              # Block相关ACF字段
 │   │   │   ├── capability-design-guide.php
+│   │   │   ├── capability-list.php
 │   │   │   ├── comparison-table.php
 │   │   │   ├── cta.php
+│   │   │   ├── factory-image.php
 │   │   │   ├── feature-grid.php
+│   │   │   ├── filter-sidebar.php
+│   │   │   ├── footer.php
+│   │   │   ├── header.php
 │   │   │   ├── hero-banner.php
 │   │   │   ├── how-it-works.php
 │   │   │   ├── industry-slider.php
-│   │   │   ├── material-comparison.php
+│   │   │   ├── manufacturing-capabilities.php
+│   │   │   ├── manufacturing-showcase.php
+│   │   │   ├── material-card.php
 │   │   │   ├── material-list.php
+│   │   │   ├── mission.php
 │   │   │   ├── order-process.php
 │   │   │   ├── related-blog.php
 │   │   │   ├── review-grid.php
 │   │   │   ├── surface-finish.php
+│   │   │   ├── team.php
+│   │   │   ├── technical-specs.php
+│   │   │   ├── timeline.php
 │   │   │   ├── trusted-by.php
 │   │   │   └── why-choose-us.php
 │   │   ├── acf-pro-stubs.php     # ACF Pro 类型定义
@@ -61,35 +99,31 @@
 ├── 📂 blocks/                    # 🧱 可复用 Block（原子 → 分子）
 │   ├── global/                   # 全局通用模块
 │   │   ├── capability-design-guide/
-│   │   │   └── render.php
+│   │   ├── capability-list/
 │   │   ├── comparison-table/
-│   │   │   └── render.php
 │   │   ├── cta/
-│   │   │   └── render.php
+│   │   ├── factory-image/
 │   │   ├── feature-grid/
-│   │   │   └── render.php
+│   │   ├── filter-sidebar/
 │   │   ├── hero-banner/
-│   │   │   └── render.php
 │   │   ├── how-it-works/
-│   │   │   └── render.php
 │   │   ├── industry-slider/
-│   │   │   └── render.php
+│   │   ├── manufacturing-capabilities/
+│   │   ├── manufacturing-showcase/
+│   │   ├── material-card/
 │   │   ├── material-comparison/
-│   │   │   └── render.php
 │   │   ├── material-list/
-│   │   │   └── render.php
+│   │   ├── mission/
 │   │   ├── order-process/
-│   │   │   └── render.php
 │   │   ├── related-blog/
-│   │   │   └── render.php
 │   │   ├── review-grid/
-│   │   │   └── render.php
 │   │   ├── surface-finish/
-│   │   │   └── render.php
+│   │   ├── team/
+│   │   ├── technical-specs/
+│   │   ├── timeline/
 │   │   ├── trusted-by/
-│   │   │   └── render.php
 │   │   └── why-choose-us/
-│   │       └── render.php
+│   │       └── render.php (每个目录下都有 render.php)
 │
 ├── 📂 templates/                 # 📄 页面结构模板
 │   ├── page-home.php

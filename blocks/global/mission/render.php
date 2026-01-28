@@ -111,7 +111,7 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
                              width="<?php echo esc_attr($image['width']); ?>"
                              height="<?php echo esc_attr($image['height']); ?>"
                              alt="<?php echo esc_attr($image['alt']); ?>" 
-                             class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale hover:grayscale-0"
+                             class="w-full h-full object-cover"
                              loading="lazy">
                     <?php endif; ?>
 

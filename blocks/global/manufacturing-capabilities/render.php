@@ -151,7 +151,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                 <p class="text-body mb-6 max-w-2xl mx-auto"><?php echo esc_html( $section_intro ); ?></p>
             <?php endif; ?>
             
-            <div class="flex gap-2 justify-center" x-show="tabs.length > 1">
+            <div class="flex gap-2 justify-center mt-4" x-show="tabs.length > 1">
                 <template x-for="(tab, index) in tabs" :key="index">
                     <button 
                         @click="active = index"
@@ -169,7 +169,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
         </header>
 
         <!-- Main Content Grid -->
-        <div class="grid lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-12 items-center" x-show="tabs.length" x-cloak>
+        <div class="grid lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-12 items-center mt-5" x-show="tabs.length" x-cloak>
             
             <!-- Text Column (Order 2 on mobile, 1 on desktop) -->
             <div class="flex flex-col justify-center order-2 lg:order-1 pr-0 lg:pr-4">
@@ -178,7 +178,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                     <p class="text-[13px] lg:text-[15px] leading-relaxed mb-6 lg:mb-8 max-w-xl text-body" x-text="tabs[active].hub_desc"></p>
 
                     <!-- Highlights Grid (3 cols on mobile) -->
-                    <div class="grid grid-cols-3 gap-2 lg:gap-4 mb-6 lg:mb-8">
+                    <div class="grid grid-cols-3 gap-2 lg:gap-4 mb-6 lg:mb-8 mt-5">
                         <template x-for="(item, idx) in tabs[active].highlights" :key="idx">
                             <div class="p-2 lg:p-6 border border-border rounded-[12px] bg-white hover:border-primary/50 transition-all text-center lg:text-left flex flex-col justify-center h-full">
                                 <span class="hidden lg:inline-block text-[8px] font-bold text-primary uppercase tracking-widest mb-1.5 opacity-80" x-text="item.tag || tabs[active].key"></span>
@@ -195,7 +195,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                         <span class="text-[9px] font-bold text-muted uppercase tracking-[1.5px] block mb-2 lg:mb-3">Available Finishing</span>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="(tag, t_idx) in tabs[active].finishing_tags" :key="t_idx">
-                                <span class="bg-[#F8F9FB] border border-border px-2.5 py-1 rounded text-[11px] font-medium text-body" x-text="tag"></span>
+                                <span class="bg-[#F8F9FB] border border-border px-2.5 py-1 rounded text-[13px] lg:text-[15px] font-bold text-body" x-text="tag"></span>
                             </template>
                         </div>
                     </div>

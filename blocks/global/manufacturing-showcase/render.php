@@ -76,12 +76,14 @@ if ( ! $showcase_items ) { return; }
         <?php if ( $layout_mode === 'slider' ) : ?>
             <div x-data="{scrollSlider(dir){const t=this.$refs.track;const amt=t.offsetWidth*0.8;t.scrollBy({left:dir*amt,behavior:'smooth'});}}" class="relative">
                 <?php if ( $show_nav ) : ?>
-                    <button @click="scrollSlider(-1)" class="hidden lg:flex absolute left-[-24px] top-1/3 z-20 w-12 h-12 bg-white border-[3px] border-border rounded-full items-center justify-center text-heading hover:bg-primary hover:text-inverse transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 18l-6-6 6-6"/></svg>
-                    </button>
-                    <button @click="scrollSlider(1)" class="hidden lg:flex absolute right-[-24px] top-1/3 z-20 w-12 h-12 bg-white border-[3px] border-border rounded-full items-center justify-center text-heading hover:bg-primary hover:text-inverse transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 18l6-6-6-6"/></svg>
-                    </button>
+                    <div class="hidden lg:flex gap-4 absolute -top-[84px] right-0 z-20">
+                        <button @click="scrollSlider(-1)" class="industry-prev w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php echo esc_attr( __( 'Previous', '3d-printing' ) ); ?>">
+                            ←
+                        </button>
+                        <button @click="scrollSlider(1)" class="industry-next w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors" aria-label="<?php echo esc_attr( __( 'Next', '3d-printing' ) ); ?>">
+                            →
+                        </button>
+                    </div>
                 <?php endif; ?>
 
                 <div x-ref="track" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-8">
@@ -91,7 +93,6 @@ if ( ! $showcase_items ) { return; }
                         $mob_id   = isset($item['item_mobile_image']) ? (int) $item['item_mobile_image'] : 0;
                         $title_i  = isset($item['item_title']) ? (string) $item['item_title'] : '';
                         $badge_i  = isset($item['item_badge']) ? (string) $item['item_badge'] : '';
-                        $sub_i    = isset($item['item_subtitle']) ? (string) $item['item_subtitle'] : '';
                         $desc_i   = isset($item['item_description']) ? (string) $item['item_description'] : '';
                         $link_i   = isset($item['item_link']) ? $item['item_link'] : array();
                         $link_i   = is_array($link_i) ? $link_i : array();
@@ -120,9 +121,6 @@ if ( ! $showcase_items ) { return; }
                                 <?php if ( $title_i ) : ?>
                                     <h4 class="text-[18px] lg:text-[20px] font-semibold text-heading mb-1 tracking-tight"><?php echo esc_html($title_i); ?></h4>
                                 <?php endif; ?>
-                                <?php if ( $sub_i ) : ?>
-                                    <div class="text-[12px] text-body opacity-80 mb-1"><?php echo esc_html($sub_i); ?></div>
-                                <?php endif; ?>
                                 <?php if ( $desc_i ) : ?>
                                     <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90"><?php echo esc_html( strip_tags( $desc_i ) ); ?></p>
                                 <?php endif; ?>
@@ -143,7 +141,6 @@ if ( ! $showcase_items ) { return; }
                     $img_id   = isset($item['item_image']) ? (int) $item['item_image'] : 0;
                     $title_i  = isset($item['item_title']) ? (string) $item['item_title'] : '';
                     $badge_i  = isset($item['item_badge']) ? (string) $item['item_badge'] : '';
-                    $sub_i    = isset($item['item_subtitle']) ? (string) $item['item_subtitle'] : '';
                     $desc_i   = isset($item['item_description']) ? (string) $item['item_description'] : '';
                     $link_i   = isset($item['item_link']) ? $item['item_link'] : array();
                     $link_i   = is_array($link_i) ? $link_i : array();
@@ -170,9 +167,6 @@ if ( ! $showcase_items ) { return; }
                         <div class="mt-6 text-center lg:text-left">
                             <?php if ( $title_i ) : ?>
                                 <h4 class="text-[18px] lg:text-[20px] font-semibold text-heading mb-1 tracking-tight"><?php echo esc_html($title_i); ?></h4>
-                            <?php endif; ?>
-                            <?php if ( $sub_i ) : ?>
-                                <div class="text-[12px] text-body opacity-80 mb-1"><?php echo esc_html($sub_i); ?></div>
                             <?php endif; ?>
                             <?php if ( $desc_i ) : ?>
                                 <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90"><?php echo esc_html( strip_tags( $desc_i ) ); ?></p>

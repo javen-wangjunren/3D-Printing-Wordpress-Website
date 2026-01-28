@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - About Us Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    fontSize: {
+                        h1: ['48px', { lineHeight: '1.2', fontWeight: '700' }],
+                        h2: ['36px', { lineHeight: '1.2', fontWeight: '700' }],
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px', 'tag': '4px' },
+                    maxWidth: { 'container': '1280px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .scroll-smooth { scroll-behavior: smooth; }
+
+        /* Industrial Grid Background */
+        .industrial-grid-bg {
+            background-color: #F2F4F7;
+            background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(228, 231, 236, 0.5) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Tech Overlay & Scanline */
+        .tech-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: rgba(0, 71, 171, 0.3);
+            animation: scan 4s linear infinite;
+            opacity: 0;
+            z-index: 6;
+        }
+        .group:hover .scanline { opacity: 1; }
+        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
+
+        /* Timeline & Other Specific Styles */
+        .industrial-h2 { letter-spacing: -0.5px; }
+        .card-locked { border: 3px solid #0047AB !important; }
+        
+        /* Bento Card Interactions */
+        .bento-card { 
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: #F8F9FB;
+            border: 1px solid #E4E7EC;
+            transition: all 0.3s ease-out;
+            cursor: zoom-in;
+        }
+        .bento-card:hover { 
+            border-color: #0047AB; 
+            box-shadow: 0 0 0 3px #0047AB, 0 20px 40px rgba(0,71,171,0.1);
+            z-index: 10;
+        }
+        .bento-card img { transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .bento-card:hover img { transform: scale(1.05); }
+        .mono-tag { 
+            position: absolute; top: 16px; left: 16px; 
+            font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; 
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(4px);
+            padding: 4px 8px; border-radius: 4px; color: #0047AB; 
+            border: 1px solid rgba(0, 71, 171, 0.1); z-index: 20; 
+            text-transform: uppercase; letter-spacing: -0.02em;
+        }
+        .card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
+            opacity: 0; transition: opacity 0.3s ease; z-index: 8;
+        }
+        .bento-card:hover .card-overlay { opacity: 1; }
+        .card-info {
+            position: absolute; bottom: 16px; left: 16px; color: white;
+            transform: translateY(10px); opacity: 0; transition: all 0.3s ease 0.1s; z-index: 9;
+        }
+        .bento-card:hover .card-info { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+    <!-- 1. Hero Banner Style 2 (Dark BG) -->
+    <section class="relative min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-48 lg:pb-32 overflow-visible">
+        <div class="absolute inset-0 z-0">
+            <img src="https://eu-central-1.graphassets.com/AW2dIPbpOQJCl5mn4yGf3z/resize=fit:max,height:1080,width:1920/output=format:webp/cm9legb211x4207tbfrz5j7ff" 
+                 alt="Industrial 3D Printing Facility" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-heading/70 mix-blend-multiply"></div>
+        </div>
+
+        <div class="relative z-10 max-w-container mx-auto px-6 lg:px-[64px] text-center">
+            <span class="inline-block mb-6 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-[12px] font-mono font-bold text-white uppercase tracking-wider backdrop-blur-md">
+                Industrial-Grade Production
+            </span>
+            <h1 class="text-h1 text-white tracking-[-1px] mb-6 drop-shadow-sm">
+                Scale Your Manufacturing<br>On Demand
+            </h1>
+            <p class="text-white/80 text-[18px] max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+                Access a global network of industrial 3D printing technologies. From rapid prototyping to end-use production parts, we deliver precision at speed.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Get Instant Quote
+                </a>
+                <a href="#mission" class="bg-transparent border-2 border-white/30 text-white px-8 py-4 rounded-button font-bold text-sm hover:bg-white/10 transition-all">
+                    Our Mission
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
+            <div class="bg-white border border-border rounded-card shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] py-8 px-6 lg:px-10 flex flex-wrap justify-center items-center gap-x-12 lg:gap-x-16 gap-y-8">
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">8M+</strong> 
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Parts Produced</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">140k+</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Businesses</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">200+</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Materials</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">31</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Technologies</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Mission (White BG) -->
+    <section id="mission" class="pt-48 pb-24 bg-white border-b border-border">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="mb-20 text-center">
+                <h2 class="text-h2 font-bold text-heading tracking-[-0.5px] mb-4 inline-block relative">
+                    Strategic <span class="text-primary">Alignment</span>
+                    <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary"></span>
+                </h2>
+                <p class="text-[18px] text-body max-w-2xl mx-auto mt-8 font-sans">
+                    Transforming industrial manufacturing capabilities into your competitive advantage. Our strategy is built on two core pillars: Accelerated Innovation and Global Reliability.
+                </p>
+            </div>
+
+            <div class="space-y-24">
+                <div class="grid lg:grid-cols-2 gap-12 items-center group">
+                    <div class="relative rounded-card overflow-hidden border border-border shadow-xl shadow-primary/5 tech-overlay h-[400px] lg:h-[480px]">
+                        <div class="scanline"></div>
+                        <img src="https://placehold.co/800x600/1D2939/FFFFFF?text=Industrial+Laser+Sintering+Process" alt="Accelerate Innovation" class="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale hover:grayscale-0">
+                        <div class="absolute top-4 left-4 w-4 h-4 border-t border-l border-primary/50"></div>
+                        <div class="absolute top-4 right-4 w-4 h-4 border-t border-r border-primary/50"></div>
+                    </div>
+
+                    <div class="lg:pl-8">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-[8px] bg-primary/10 flex items-center justify-center text-primary">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                            <span class="font-mono text-[12px] font-bold text-primary uppercase tracking-widest">Our Mission</span>
+                        </div>
+                        <h3 class="text-[30px] font-bold text-heading mb-6 leading-tight">Accelerate Global Innovation</h3>
+                        <p class="text-[16px] text-body leading-relaxed mb-10">
+                            Eliminating barriers from CAD to physical part by providing accessible, industrial-grade additive manufacturing solutions. We empower engineers to drastically reduce R&D cycles, ensuring prototypes are production-ready.
+                        </p>
+                        
+                        <div class="bg-white border-l-2 border-primary pl-6 py-4 grid grid-cols-2 gap-8">
+                            <div>
+                                <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">R&D Lead Time</p>
+                                <p class="font-mono text-[24px] font-bold text-heading">&lt; 48 HRS</p>
+                            </div>
+                            <div>
+                                <p class="font-mono text-[10px] text-body/60 uppercase font-bold mb-1">Iteration Cost</p>
+                                <p class="font-mono text-[24px] font-bold text-heading">- 60%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Timeline (Gray Industrial Grid BG) -->
+    <section class="py-24 industrial-grid-bg border-b border-border overflow-hidden" x-data="{ 
+        scrollNext() { this.$refs.scrollContainer.scrollBy({ left: 340, behavior: 'smooth' }) },
+        scrollPrev() { this.$refs.scrollContainer.scrollBy({ left: -340, behavior: 'smooth' }) }
+    }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="mb-16 lg:mb-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-h2 font-bold text-heading leading-tight mb-4">
+                        Evolution and <span class="text-primary">Milestones</span>
+                    </h2>
+                    <p class="text-[16px] lg:text-[18px] text-body opacity-90">
+                        A quantitative journey from a single production line to a global digital manufacturing hub.
+                    </p>
+                </div>
+                
+                <div class="hidden lg:flex gap-3 mb-2">
+                    <button @click="scrollPrev()" class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-heading hover:border-primary hover:text-primary transition-all bg-white shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button @click="scrollNext()" class="w-12 h-12 rounded-full border border-border flex items-center justify-center text-heading hover:border-primary hover:text-primary transition-all bg-white shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="hidden lg:block relative">
+                <div class="overflow-x-auto no-scrollbar pb-12" x-ref="scrollContainer">
+                    <div class="inline-flex min-w-full relative py-10">
+                        <div class="absolute top-[148px] left-0 right-0 h-[2px] bg-border z-0"></div>
+
+                        <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                            <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2019</span></div>
+                            <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                            <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between bg-white shadow-sm">
+                                <div>
+                                    <h4 class="text-[18px] font-bold text-heading mb-3">Founded and Setup</h4>
+                                    <p class="text-[14px] text-body leading-relaxed">Establish initial industrial-grade production line with precision delivery protocols.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-border/50">
+                                    <span class="font-mono text-[11px] font-bold text-primary uppercase">Metric: <span class="text-heading">1st Line Live</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                            <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2021</span></div>
+                            <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                            <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between bg-white shadow-sm">
+                                <div>
+                                    <h4 class="text-[18px] font-bold text-heading mb-3">Capacity Expansion</h4>
+                                    <p class="text-[14px] text-body leading-relaxed">Integrated 50+ industrial SLS/SLA printers, achieving 24/7 automated production capability.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-border/50">
+                                    <span class="font-mono text-[11px] font-bold text-primary uppercase">Metric: <span class="text-heading">500k+ Parts</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                            <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2023</span></div>
+                            <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                            <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between bg-white shadow-sm">
+                                <div>
+                                    <h4 class="text-[18px] font-bold text-heading mb-3">Global Platform</h4>
+                                    <p class="text-[14px] text-body leading-relaxed">Launched cloud-based instant quoting engine and expanded logistics to 30+ countries.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-border/50">
+                                    <span class="font-mono text-[11px] font-bold text-primary uppercase">Metric: <span class="text-heading">Global Logistics</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="w-[340px] flex-shrink-0 px-5 relative z-10 group">
+                            <div class="mb-12"><span class="font-mono text-[56px] font-bold text-heading leading-none opacity-10 group-hover:opacity-100 transition-opacity">2025</span></div>
+                            <div class="w-6 h-6 rounded-full border-4 border-white bg-border group-hover:bg-primary shadow-[0_0_0_1px_#E4E7EC] group-hover:shadow-[0_0_0_1px_#0047AB] mb-10 transition-all"></div>
+                            <div class="bg-bg-subtle p-8 rounded-card border border-border hover:border-primary/50 transition-all min-h-[220px] flex flex-col justify-between bg-white shadow-sm">
+                                <div>
+                                    <h4 class="text-[18px] font-bold text-heading mb-3">AI Integration</h4>
+                                    <p class="text-[14px] text-body leading-relaxed">Implementing AI-driven DfM analysis and automated production scheduling for maximum efficiency.</p>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-border/50">
+                                    <span class="font-mono text-[11px] font-bold text-primary uppercase">Metric: <span class="text-heading">AI Driven</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Vertical Timeline -->
+            <div class="lg:hidden relative pl-4 border-l-2 border-border space-y-12">
+                <div class="relative">
+                    <span class="absolute -left-[21px] top-0 w-4 h-4 rounded-full border-2 border-white bg-primary shadow-sm"></span>
+                    <span class="font-mono text-[24px] font-bold text-heading block mb-2">2019</span>
+                    <h4 class="text-[18px] font-bold text-heading mb-2">Founded and Setup</h4>
+                    <p class="text-[14px] text-body">Establish initial industrial-grade production line with precision delivery protocols.</p>
+                </div>
+                 <div class="relative">
+                    <span class="absolute -left-[21px] top-0 w-4 h-4 rounded-full border-2 border-white bg-primary shadow-sm"></span>
+                    <span class="font-mono text-[24px] font-bold text-heading block mb-2">2021</span>
+                    <h4 class="text-[18px] font-bold text-heading mb-2">Capacity Expansion</h4>
+                    <p class="text-[14px] text-body">Integrated 50+ industrial SLS/SLA printers, achieving 24/7 automated production capability.</p>
+                </div>
+                 <div class="relative">
+                    <span class="absolute -left-[21px] top-0 w-4 h-4 rounded-full border-2 border-white bg-primary shadow-sm"></span>
+                    <span class="font-mono text-[24px] font-bold text-heading block mb-2">2023</span>
+                    <h4 class="text-[18px] font-bold text-heading mb-2">Global Platform</h4>
+                    <p class="text-[14px] text-body">Launched cloud-based instant quoting engine and expanded logistics to 30+ countries.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Team (White BG) -->
+    <section class="py-24 bg-white border-b border-border">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="mb-16 flex flex-col lg:flex-row justify-between items-end gap-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-h2 font-bold text-heading mb-4 leading-tight">
+                        Leadership <span class="text-primary">Architects</span>
+                    </h2>
+                    <p class="text-[16px] lg:text-[18px] text-body opacity-90 leading-relaxed">
+                        Engineering intelligence defined by parametric transparency and global manufacturing excellence.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Card 1 -->
+                <div class="team-card group border border-border rounded-card overflow-hidden">
+                    <div class="relative aspect-[4/5] bg-bg-subtle overflow-hidden">
+                        <img src="https://placehold.co/600x800/F2F4F7/1D2939?text=CEO" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Mike Cannon-Brookes">
+                        <div class="absolute bottom-4 right-4 z-20 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-tag border border-border/50 flex items-center shadow-sm">
+                            <div class="font-mono text-[10px] font-bold text-heading leading-none">
+                                <span class="text-primary block text-[9px] mb-0.5 opacity-80">EXPERIENCE</span>
+                                <span class="text-[16px]">25.8</span><span class="text-[10px] opacity-60 ml-0.5">YRS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-[20px] font-bold text-heading leading-tight mb-1">Mike Cannon-Brookes</h3>
+                        <p class="text-[11px] font-mono text-body uppercase tracking-widest font-bold">CEO & Co-Founder</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="team-card group border border-border rounded-card overflow-hidden">
+                    <div class="relative aspect-[4/5] bg-bg-subtle overflow-hidden">
+                        <img src="https://placehold.co/600x800/F2F4F7/1D2939?text=CFO" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Joe Binz">
+                        <div class="absolute bottom-4 right-4 z-20 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-tag border border-border/50 flex items-center shadow-sm">
+                            <div class="font-mono text-[10px] font-bold text-heading leading-none">
+                                <span class="text-primary block text-[9px] mb-0.5 opacity-80">EXPERIENCE</span>
+                                <span class="text-[16px]">22.4</span><span class="text-[10px] opacity-60 ml-0.5">YRS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-[20px] font-bold text-heading leading-tight mb-1">Joe Binz</h3>
+                        <p class="text-[11px] font-mono text-body uppercase tracking-widest font-bold">Chief Financial Officer</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="team-card group border border-border rounded-card overflow-hidden">
+                    <div class="relative aspect-[4/5] bg-bg-subtle overflow-hidden">
+                        <img src="https://placehold.co/600x800/F2F4F7/1D2939?text=CRO" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" alt="Brian Duffy">
+                        <div class="absolute bottom-4 right-4 z-20 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-tag border border-border/50 flex items-center shadow-sm">
+                            <div class="font-mono text-[10px] font-bold text-heading leading-none">
+                                <span class="text-primary block text-[9px] mb-0.5 opacity-80">EXPERIENCE</span>
+                                <span class="text-[16px]">18.2</span><span class="text-[10px] opacity-60 ml-0.5">YRS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-[20px] font-bold text-heading leading-tight mb-1">Brian Duffy</h3>
+                        <p class="text-[11px] font-mono text-body uppercase tracking-widest font-bold">Chief Revenue Officer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Factory Image (Gray Industrial Grid BG) -->
+    <section class="py-24 industrial-grid-bg border-b border-border" x-data="{ 
+        showLightbox: false, 
+        activeImg: '', 
+        activeTitle: '',
+        openImg(url, title) {
+            this.activeImg = url;
+            this.activeTitle = title;
+            this.showLightbox = true;
+        }
+    }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="mb-16 flex flex-col lg:flex-row justify-between items-end gap-6">
+                <div class="max-w-2xl">
+                    <h2 class="text-h2 font-bold text-heading mb-4 leading-tight">
+                        Step Inside Our <span class="text-primary">Facility</span>
+                    </h2>
+                    <p class="text-body text-[16px] lg:text-[18px] opacity-90 leading-relaxed">
+                        Explore our 3,700m² intelligent manufacturing hub, where advanced SLM technology meets rigorous aerospace-grade quality standards.
+                    </p>
+                </div>
+                <a href="/quote" class="hidden lg:inline-flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-button font-bold text-[13px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-lg shadow-primary/10 group">
+                    Start a Quote
+                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 lg:gap-6 h-auto lg:h-[640px]">
+                <!-- Hero Shot -->
+                <div class="bento-card col-span-2 lg:col-span-2 lg:row-span-2 h-[280px] lg:h-auto group tech-overlay"
+                     @click="openImg('https://placehold.co/1200x1200/F2F4F7/1D2939?text=Workshop+Panorama', 'Main Production Floor')">
+                    <span class="mono-tag">Area: 3,700 SQM</span>
+                    <img src="https://placehold.co/1200x1200/F2F4F7/1D2939?text=Workshop+Panorama" class="w-full h-full object-cover" alt="Workshop Panorama">
+                    <div class="card-overlay opacity-100 lg:opacity-0"></div>
+                    <div class="card-info opacity-100 lg:opacity-0 lg:translate-y-2">
+                        <h4 class="text-lg font-bold">Main Production Floor</h4>
+                        <p class="text-sm opacity-90 font-mono mt-1">ISO 9001 Certified Environment</p>
+                    </div>
+                </div>
+
+                <!-- SLM Operation -->
+                <div class="bento-card col-span-1 h-[180px] lg:h-auto group tech-overlay"
+                     @click="openImg('https://placehold.co/600x600/F2F4F7/1D2939?text=SLM+Operation', 'Metal Additive Production')">
+                    <span class="mono-tag text-[9px] lg:text-[11px]">Tech: SLM</span>
+                    <img src="https://placehold.co/600x600/F2F4F7/1D2939?text=SLM+Operation" class="w-full h-full object-cover" alt="SLM Machine">
+                    <div class="card-overlay"></div>
+                    <div class="card-info">
+                        <h4 class="text-xs lg:text-md font-bold">Metal Additive</h4>
+                    </div>
+                </div>
+
+                <!-- Quality Control -->
+                <div class="bento-card col-span-1 h-[180px] lg:h-auto group tech-overlay"
+                     @click="openImg('https://placehold.co/600x600/F2F4F7/1D2939?text=CMM+QC', 'Quality Control')">
+                    <span class="mono-tag text-[9px] lg:text-[11px]">QC: Hexagon</span>
+                    <img src="https://placehold.co/600x600/F2F4F7/1D2939?text=CMM+QC" class="w-full h-full object-cover" alt="Quality Control">
+                    <div class="card-overlay"></div>
+                    <div class="card-info">
+                        <h4 class="text-xs lg:text-md font-bold">Metrology Room</h4>
+                    </div>
+                </div>
+
+                <!-- Packing -->
+                <div class="bento-card col-span-1 h-[180px] lg:h-auto group tech-overlay"
+                     @click="openImg('https://placehold.co/600x600/F2F4F7/1D2939?text=Packing+Area', 'Global Shipping')">
+                    <span class="mono-tag text-[9px] lg:text-[11px]">Ops: Shipping</span>
+                    <img src="https://placehold.co/600x600/F2F4F7/1D2939?text=Packing+Area" class="w-full h-full object-cover" alt="Packing Area">
+                    <div class="card-overlay"></div>
+                    <div class="card-info">
+                        <h4 class="text-xs lg:text-md font-bold">Logistics</h4>
+                    </div>
+                </div>
+
+                <!-- Office -->
+                <div class="bento-card col-span-1 h-[180px] lg:h-auto group tech-overlay"
+                     @click="openImg('https://placehold.co/600x600/F2F4F7/1D2939?text=Office+Space', 'Management Office')">
+                    <span class="mono-tag text-[9px] lg:text-[11px]">Mgmt: Control</span>
+                    <img src="https://placehold.co/600x600/F2F4F7/1D2939?text=Office+Space" class="w-full h-full object-cover" alt="Office">
+                    <div class="card-overlay"></div>
+                    <div class="card-info">
+                        <h4 class="text-xs lg:text-md font-bold">Ops Hub</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox -->
+        <div x-show="showLightbox" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 z-[100] bg-heading/95 backdrop-blur-sm flex items-center justify-center p-4" x-cloak>
+            <div class="absolute inset-0" @click="showLightbox = false"></div>
+            <button @click="showLightbox = false" class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-50">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="max-w-6xl w-full flex flex-col items-center relative z-10 pointer-events-none">
+                <img :src="activeImg" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl pointer-events-auto border border-white/10">
+                <h5 class="text-white mt-6 text-xl font-bold font-mono tracking-tight pointer-events-auto" x-text="activeTitle"></h5>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. CTA (White BG) -->
+    <section class="py-24 bg-white">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
+                <div class="grid lg:grid-cols-2 items-center gap-12 p-8 lg:p-16">
+                    <div class="z-10 text-center lg:text-left">
+                        <h2 class="text-[32px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-6 leading-tight">
+                            You have the idea - we make it <span class="text-primary">a reality</span>
+                        </h2>
+                        <p class="text-body text-[16px] lg:text-[18px] max-w-lg mb-10 mx-auto lg:mx-0">
+                            Upload your CAD design and get a professional engineering review with an instant quote in <span class="font-mono text-primary font-bold">5 minutes</span>.
+                        </p>
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                            <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20 group">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Get an Instant Quote
+                            </a>
+                            <a href="/contact" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">
+                                Contact Sales
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden lg:block relative h-full">
+                        <div class="absolute inset-0 bg-gradient-to-l from-bg-section to-transparent z-10 w-20"></div>
+                        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800" 
+                             alt="3D Engineering Illustration" 
+                             class="w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

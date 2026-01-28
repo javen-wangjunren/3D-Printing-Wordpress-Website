@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Material Demo - Integrated</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' },
+                    maxWidth: { container: '1280px' },
+                    fontSize: {
+                        h1: ['48px', { lineHeight: '1.2', fontWeight: '700' }],
+                        h2: ['36px', { lineHeight: '1.2', fontWeight: '700' }],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .industrial-h2 { letter-spacing: -0.5px; }
+        .scroll-smooth { scroll-behavior: smooth; }
+        
+        /* Trusted By / Blog Slider Mask */
+        .slider-mask {
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+
+        /* Mobile Snap Grid */
+        @media (max-width: 767px) {
+            .perf-grid-mobile {
+                display: flex; overflow-x: auto; gap: 8px; padding-bottom: 4px;
+                scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;
+            }
+            .perf-grid-mobile::-webkit-scrollbar { display: none; }
+            .perf-card-mobile { flex: 0 0 40%; min-width: 0; scroll-snap-align: start; }
+            
+            .cap-grid-mobile {
+                display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+    <!-- 1. Hero Banner Style 1 (Gray Background) -->
+    <section class="relative bg-bg-section pt-20 pb-32 lg:pt-32 lg:pb-48 overflow-visible">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+                
+                <div class="z-10 flex flex-col justify-center py-6">
+                    <h1 class="text-h1 text-heading tracking-[-1px] mb-6">
+                        Aluminum 6061<br>Precision Manufacturing
+                    </h1>
+                    <h2 class="text-[20px] font-semibold text-primary mb-4 uppercase tracking-wide">
+                        Aerospace-Grade Performance
+                    </h2>
+                    <p class="text-body text-body max-w-lg mb-10 leading-relaxed">
+                        A versatile alloy known for its exceptional strength-to-weight ratio and corrosion resistance. Ideal for aerospace, automotive, and structural applications.
+                    </p>
+    
+                    <div class="flex flex-wrap gap-4">
+                        <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/10">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                            Get Instant Quote
+                        </a>
+                        <a href="#specs" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">
+                            View Specs
+                        </a>
+                    </div>
+                </div>
+    
+                <div class="relative min-h-[360px] lg:min-h-0">
+                    <div class="h-full rounded-card overflow-hidden bg-white border border-border shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1612690669207-fed642192c40?auto=format&fit=crop&q=80&w=1600" 
+                             alt="Aluminum 6061 Part" class="w-full h-full object-cover opacity-95">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
+                <div class="bg-white border border-border rounded-card shadow-xl py-8 px-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">310 MPa</strong> 
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Tensile Strength</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">95 HB</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Hardness</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">2.70 g/cm³</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Density</span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <strong class="block font-mono text-[24px] text-heading font-bold mb-1">582°C</strong>
+                        <span class="text-[12px] text-muted font-bold uppercase tracking-wider">Melting Point</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Manufacturing Showcase (White Background) -->
+    <section class="py-24 lg:py-32 bg-white overflow-hidden" x-data="{ 
+        scrollSlider(dir) {
+            const track = this.$refs.track;
+            const amt = track.offsetWidth * 0.8;
+            track.scrollBy({ left: dir * amt, behavior: 'smooth' });
+        }
+    }">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            
+            <div class="mb-12 lg:mb-16 text-center pt-10"> <!-- Added pt-10 to account for Hero overlap -->
+                <h2 class="industrial-h2 text-[32px] lg:text-[40px] font-bold text-heading mb-4">
+                    Production <span class="text-primary">Examples</span>
+                </h2>
+                <p class="text-body max-w-2xl mx-auto text-[15px] lg:text-[16px]">
+                    Real-world applications of Aluminum 6061 in high-stress environments.
+                </p>
+            </div>
+
+            <div class="relative group">
+                <button @click="scrollSlider(-1)" 
+                        class="hidden lg:flex absolute left-[-24px] top-1/3 z-20 w-12 h-12 bg-white border border-border rounded-full items-center justify-center text-heading shadow-lg hover:bg-primary hover:text-white transition-all duration-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button @click="scrollSlider(1)" 
+                        class="hidden lg:flex absolute right-[-24px] top-1/3 z-20 w-12 h-12 bg-white border border-border rounded-full items-center justify-center text-heading shadow-lg hover:bg-primary hover:text-white transition-all duration-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 18l6-6-6-6"/></svg>
+                </button>
+
+                <div x-ref="track" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-8">
+                    
+                    <div class="flex-none w-[85%] lg:w-[calc(33.333%-16px)] snap-start group/card">
+                        <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-subtle transition-all duration-300 group-hover/card:border-primary/60 group-hover/card:shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1596525737635-7c0934d40026?auto=format&fit=crop&q=80&w=800" 
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" 
+                                 alt="Automotive Housing">
+                            <div class="absolute top-4 left-4">
+                                <span class="font-mono text-[10px] font-bold bg-white/95 backdrop-blur px-2.5 py-1 rounded text-primary border border-primary/20 tracking-tight">CNC MILLING</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center lg:text-left">
+                            <h4 class="text-[18px] lg:text-[20px] font-bold text-heading mb-2">Automotive Manifold</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90">High-performance intake manifold optimized for airflow and thermal management.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-[85%] lg:w-[calc(33.333%-16px)] snap-start group/card">
+                        <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-subtle transition-all duration-300 group-hover/card:border-primary/60 group-hover/card:shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&q=80&w=800" 
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" 
+                                 alt="Robotic Gripper">
+                            <div class="absolute top-4 left-4">
+                                <span class="font-mono text-[10px] font-bold bg-white/95 backdrop-blur px-2.5 py-1 rounded text-primary border border-primary/20 tracking-tight">DMLS PROCESS</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center lg:text-left">
+                            <h4 class="text-[18px] lg:text-[20px] font-bold text-heading mb-2">Aerospace Bracket</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90">Topologically optimized structural bracket reducing weight by 40%.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-none w-[85%] lg:w-[calc(33.333%-16px)] snap-start group/card">
+                        <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-subtle transition-all duration-300 group-hover/card:border-primary/60 group-hover/card:shadow-xl">
+                            <img src="https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800" 
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105" 
+                                 alt="Drone Frame">
+                            <div class="absolute top-4 left-4">
+                                <span class="font-mono text-[10px] font-bold bg-white/95 backdrop-blur px-2.5 py-1 rounded text-primary border border-primary/20 tracking-tight">CNC TURNING</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-center lg:text-left">
+                            <h4 class="text-[18px] lg:text-[20px] font-bold text-heading mb-2">Custom Enclosure</h4>
+                            <p class="text-[13px] lg:text-[14px] leading-relaxed text-body opacity-90">Ruggedized electronic enclosure for marine applications.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Technical Specs (Gray Background) - Refactored to Alpine -->
+    <section id="specs" class="py-16 lg:py-24 bg-bg-section" x-data="{
+        activeTab: 'mechanical',
+        data: {
+            mechanical: {
+                tag: 'Mechanical',
+                highlights: [
+                    { title: 'Tensile Strength', value: '310', unit: 'MPa' },
+                    { title: 'Yield Strength', value: '275', unit: 'MPa' },
+                    { title: 'Flexural Strength', value: '350', unit: 'MPa' }
+                ],
+                table: [
+                    { label: 'Elongation at Break', val: '12 %', std: 'ASTM D638' },
+                    { label: 'Hardness (Brinell)', val: '95 HB', std: '—' },
+                    { label: 'Modulus of Elasticity', val: '69 GPa', std: '—' },
+                    { label: 'Shear Strength', val: '205 MPa', std: '—' }
+                ]
+            },
+            physical: {
+                tag: 'Physical',
+                highlights: [
+                    { title: 'Density', value: '2.70', unit: 'g/cm³' },
+                    { title: 'Conductivity', value: '43', unit: '% IACS' },
+                    { title: 'Resistivity', value: '0.040', unit: 'Ω·mm²/m' }
+                ],
+                table: [
+                    { label: 'Specific Gravity', val: '2.70', std: '—' },
+                    { label: 'Magnetic Permeability', val: '1.0', std: 'Non-magnetic' }
+                ]
+            },
+            thermal: {
+                tag: 'Thermal',
+                highlights: [
+                    { title: 'Melting Point', value: '582', unit: '°C' },
+                    { title: 'Thermal Conductivity', value: '167', unit: 'W/m·K' },
+                    { title: 'Coeff. of Expansion', value: '23.6', unit: 'µm/m·°C' }
+                ],
+                table: [
+                    { label: 'Specific Heat Capacity', val: '0.896 J/g·°C', std: '—' },
+                    { label: 'Max Operating Temp', val: '150 °C', std: 'Continuous' }
+                ]
+            }
+        }
+    }">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            
+            <header class="mb-6 lg:mb-8">
+                <h2 class="industrial-h2 text-[26px] lg:text-[36px] font-bold text-heading mb-3">
+                    Technical Performance
+                </h2>
+                <p class="text-[14px] lg:text-[15px] max-w-2xl leading-relaxed opacity-90">
+                    Comprehensive material data for engineering validation.
+                </p>
+            </header>
+    
+            <div class="flex flex-nowrap gap-1 border-b border-border mb-6 lg:mb-8 overflow-x-auto no-scrollbar">
+                <template x-for="tab in ['mechanical', 'physical', 'thermal']">
+                    <button @click="activeTab = tab" 
+                            :class="activeTab === tab ? 'text-primary border-primary active border-b-2' : 'text-body hover:text-primary border-transparent'"
+                            class="whitespace-nowrap px-4 py-3 text-[13px] font-bold transition-colors capitalize"
+                            x-text="tab + ' Properties'">
+                    </button>
+                </template>
+            </div>
+    
+            <!-- Highlights Grid -->
+            <div class="perf-grid-mobile md:grid md:grid-cols-3 gap-5 mb-8 lg:mb-12">
+                <template x-for="item in data[activeTab].highlights">
+                    <div class="perf-card-mobile p-4 lg:p-8 border border-border rounded-card bg-white hover:border-primary/50 transition-all flex flex-col justify-between h-full shadow-sm">
+                        <span class="text-[8px] lg:text-[9px] font-bold text-primary uppercase tracking-widest opacity-80 truncate w-full block" x-text="data[activeTab].tag"></span>
+                        <h3 class="text-[12px] lg:text-[17px] font-bold text-heading mt-2 mb-2 lg:mb-3 leading-tight" x-text="item.title"></h3>
+                        <div class="font-mono text-[20px] lg:text-[32px] font-bold text-heading leading-none mt-auto">
+                            <span x-text="item.value"></span><span class="text-[10px] lg:text-[12px] font-medium text-muted ml-1" x-text="item.unit"></span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+    
+            <!-- Detailed Table -->
+            <div class="table-area">
+                <h3 class="text-[10px] font-bold text-muted uppercase tracking-[2px] mb-4">Full Property Data</h3>
+                <div class="border border-border rounded-card overflow-hidden shadow-sm bg-white">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-bg-subtle border-b border-border text-[11px] font-bold text-heading uppercase">
+                                <th class="px-5 lg:px-8 py-3.5">Measurement</th>
+                                <th class="px-5 lg:px-8 py-3.5">Value</th>
+                                <th class="px-5 lg:px-8 py-3.5 hidden md:table-cell">Standard</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[13px] lg:text-[14px]">
+                            <template x-for="row in data[activeTab].table">
+                                <tr class="border-b border-border/50 hover:bg-bg-subtle/50 transition-colors last:border-0">
+                                    <td class="px-5 lg:px-8 py-3 font-semibold text-heading" x-text="row.label"></td>
+                                    <td class="px-5 lg:px-8 py-3 font-mono text-primary font-bold" x-text="row.val"></td>
+                                    <td class="px-5 lg:px-8 py-3 text-muted hidden md:table-cell" x-text="row.std"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Manufacturing Capabilities (White Background) - Refactored to Alpine -->
+    <section class="py-16 lg:py-24 bg-white" x-data="{
+        activeSpec: 'dmls',
+        specs: {
+            dmls: {
+                title: 'Precision CNC Machining',
+                desc: 'High-speed 3-axis and 5-axis milling processes capable of achieving tight tolerances for complex geometries.',
+                tag: 'CNC',
+                highlights: [
+                    { title: 'Tolerance', value: '±0.01', unit: 'mm' },
+                    { title: 'Roughness', value: 'Ra 0.8', unit: 'µm' },
+                    { title: 'Max Size', value: '2000³', unit: 'mm' }
+                ],
+                machine: 'SYSTEM: HAAS VF-4SS',
+                tags: ['Anodizing', 'Bead Blasting', 'Powder Coating', 'Polishing'],
+                img: 'https://images.unsplash.com/photo-1565633443075-0b0c20a1c6a2?auto=format&fit=crop&q=80&w=1200'
+            },
+            sls: {
+                title: 'DMLS Metal 3D Printing',
+                desc: 'Direct Metal Laser Sintering for creating complex, dense metal parts directly from CAD data.',
+                tag: 'DMLS',
+                highlights: [
+                    { title: 'Layer', value: '30-60', unit: 'µm' },
+                    { title: 'Tolerance', value: '±0.2', unit: 'mm' },
+                    { title: 'Density', value: '99.8', unit: '%' }
+                ],
+                machine: 'SYSTEM: EOS M 290',
+                tags: ['Stress Relief', 'Support Removal', 'CNC Finish', 'Heat Treat'],
+                img: 'https://images.unsplash.com/photo-1618367588411-d9a90fefa881?auto=format&fit=crop&q=80&w=1200'
+            }
+        }
+    }">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            
+            <header class="text-center mb-10 lg:mb-16">
+                <h2 class="industrial-h2 text-[28px] lg:text-[36px] font-bold text-heading mb-6">Manufacturing Capabilities</h2>
+                <div class="flex gap-2 justify-center">
+                    <button @click="activeSpec = 'dmls'" 
+                            :class="activeSpec === 'dmls' ? 'bg-primary text-white border-primary shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                            class="px-6 py-2.5 rounded-full border text-[13px] font-bold transition-all">
+                        CNC Machining
+                    </button>
+                    <button @click="activeSpec = 'sls'" 
+                            :class="activeSpec === 'sls' ? 'bg-primary text-white border-primary shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                            class="px-6 py-2.5 rounded-full border text-[13px] font-bold transition-all">
+                        DMLS 3D Printing
+                    </button>
+                </div>
+            </header>
+    
+            <div class="grid lg:grid-cols-[1.1fr_1fr] gap-6 lg:gap-12 items-center">
+                
+                <div class="flex flex-col justify-center order-2 lg:order-1 pr-0 lg:pr-4">
+                    <div class="opacity-100 transition-opacity duration-300">
+                        <h3 class="text-[18px] lg:text-[24px] font-bold text-heading mb-2 tracking-tight" x-text="specs[activeSpec].title"></h3>
+                        <p class="text-[13px] lg:text-[15px] leading-relaxed mb-6 lg:mb-8 max-w-xl text-body" x-text="specs[activeSpec].desc"></p>
+    
+                        <div class="cap-grid-mobile grid grid-cols-3 gap-2 lg:gap-4 mb-6 lg:mb-8">
+                            <template x-for="item in specs[activeSpec].highlights">
+                                <div class="p-2 lg:p-6 border border-border rounded-card bg-white hover:border-primary/50 transition-all text-center lg:text-left flex flex-col justify-center h-full">
+                                    <span class="hidden lg:inline-block text-[8px] font-bold text-primary uppercase tracking-widest mb-1.5 opacity-80" x-text="specs[activeSpec].tag"></span>
+                                    <h3 class="text-[9px] lg:text-[14px] font-bold text-heading mb-0.5 lg:mb-2 truncate w-full" x-text="item.title"></h3>
+                                    <div class="font-mono text-[15px] lg:text-[22px] font-bold text-heading leading-tight">
+                                        <span x-text="item.value"></span><span class="text-[8px] lg:text-[11px] font-medium text-muted ml-0.5" x-text="item.unit"></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+    
+                        <div class="mb-6 lg:mb-8">
+                            <span class="text-[9px] font-bold text-muted uppercase tracking-[1.5px] block mb-2 lg:mb-3">Available Finishing</span>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="tag in specs[activeSpec].tags">
+                                    <span class="bg-bg-subtle border border-border px-2.5 py-1 rounded text-[11px] font-medium text-body" x-text="tag"></span>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div>
+                        <a href="/technical-services" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 lg:px-8 lg:py-3.5 rounded-button font-bold text-[11px] lg:text-[12px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-lg shadow-primary/10 group">
+                            <span>Technical Details</span>
+                            <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        </a>
+                    </div>
+                </div>
+    
+                <div class="aspect-[4/3] lg:aspect-auto lg:h-auto order-1 lg:order-2">
+                    <div class="h-full relative rounded-card overflow-hidden border border-border bg-bg-subtle group shadow-sm min-h-[300px]">
+                        <img :src="specs[activeSpec].img" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System">
+                        <div class="absolute bottom-0 right-0 bg-primary/90 backdrop-blur-sm px-3 py-1.5 lg:px-4 lg:py-2 text-[9px] lg:text-[10px] font-mono font-bold text-white tracking-widest uppercase border-tl-card" x-text="specs[activeSpec].machine"></div>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CTA (White wrapper, Gray card) -->
+    <section class="py-16 lg:py-24 bg-white">
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            <div class="relative bg-bg-section rounded-card overflow-hidden border border-border">
+                <div class="grid lg:grid-cols-2 items-center gap-12 p-8 lg:p-16">
+                    <div class="z-10 text-center lg:text-left">
+                        <h2 class="text-[32px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-6 leading-tight">
+                            Ready to manufacture with <span class="text-primary">Aluminum 6061</span>?
+                        </h2>
+                        <p class="text-body text-[16px] lg:text-[18px] max-w-lg mb-10 mx-auto lg:mx-0">
+                            Upload your CAD design and get a professional engineering review with an instant quote in <span class="font-mono text-primary font-bold">5 minutes</span>.
+                        </p>
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                            <a href="/quote" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20 group">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Get Instant Quote
+                            </a>
+                            <a href="/contact" class="bg-white border border-border text-heading px-8 py-4 rounded-button font-bold text-sm hover:border-primary transition-all">
+                                Contact Sales
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hidden lg:block relative h-full min-h-[300px]">
+                        <div class="absolute inset-0 bg-gradient-to-l from-bg-section to-transparent z-10 w-20"></div>
+                        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800" 
+                             alt="3D Engineering Illustration" 
+                             class="w-full h-full object-cover rounded-card opacity-80 mix-blend-multiply transition-transform duration-700 hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Related Blog (Gray Background) -->
+    <section class="py-[96px] bg-bg-section overflow-hidden" 
+             x-data="{ 
+                posts: [
+                    { tag: 'Material Guide', title: 'Aluminum 6061 vs 7075: Which to Choose?', excerpt: 'A detailed comparison of strength, corrosion resistance, and machinability for aerospace applications.', date: 'Dec 17, 2025', read: '6 min', img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Design Tips', title: 'Optimizing Wall Thickness for CNC', excerpt: 'How to design lightweight aluminum parts without compromising structural integrity.', date: 'Dec 12, 2025', read: '8 min', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Case Study', title: 'Custom Heat Sinks via DMLS', excerpt: 'Producing complex cooling channels impossible with traditional machining methods.', date: 'Dec 04, 2025', read: '5 min', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Finishing', title: 'Anodizing: Type II vs Type III', excerpt: 'Understanding the difference between decorative and hardcoat anodizing for aluminum parts.', date: 'Nov 28, 2025', read: '10 min', img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800' }
+                ],
+                scrollNext() {
+                    const el = document.getElementById('blog-slider');
+                    el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' });
+                },
+                scrollPrev() {
+                    const el = document.getElementById('blog-slider');
+                    el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' });
+                }
+             }">
+        
+        <div class="max-w-[1280px] mx-auto px-6 lg:px-[64px]">
+            
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div class="max-w-xl text-left">
+                    <h2 class="text-[36px] lg:text-[42px] font-bold text-heading tracking-[-1px] mb-4">
+                        Related <span class="text-primary">Resources</span>
+                    </h2>
+                    <p class="text-body text-[16px]">
+                        Technical guides and case studies for Aluminum 6061.
+                    </p>
+                </div>
+                
+                <div class="hidden md:flex gap-3 pb-2">
+                    <button @click="scrollPrev" class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary transition-all group">
+                        <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button @click="scrollNext" class="w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center hover:bg-white hover:border-primary transition-all group">
+                        <svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+    
+            <div class="relative">
+                <div class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth lg:slider-mask" 
+                     id="blog-slider"
+                     style="scroll-snap-type: x mandatory;">
+                    
+                    <template x-for="(post, index) in posts" :key="index">
+                        <div class="w-[85%] md:w-[45%] lg:w-[31%] flex-shrink-0" style="scroll-snap-align: start;">
+                            <a href="#" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
+                                
+                                <div class="aspect-[16/10] overflow-hidden relative">
+                                    <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Post Cover">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest" x-text="post.tag"></span>
+                                    </div>
+                                </div>
+    
+                                <div class="p-6 lg:p-8 flex flex-col flex-1">
+                                    <h3 class="text-[18px] lg:text-[20px] font-bold text-heading mb-4 line-clamp-2 leading-tight group-hover:text-primary transition-colors" x-text="post.title"></h3>
+                                    <p class="text-body text-sm leading-relaxed mb-8 line-clamp-3" x-text="post.excerpt"></p>
+                                    
+                                    <div class="mt-auto pt-6 border-t border-border/60 flex justify-between items-center text-[12px] font-mono text-muted uppercase">
+                                        <span x-text="post.date"></span>
+                                        <span x-text="post.read"></span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

@@ -160,28 +160,25 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                         <?php endif; ?>
 
                         <!-- Image -->
-                        <?php echo wp_get_attachment_image($img_id, 'full', false, array('class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105')); ?>
+                        <?php echo wp_get_attachment_image($img_id, 'full', false, array('class' => 'w-full h-full object-cover')); ?>
 
                         <!-- Overlay & Info -->
                         <?php if ( $is_hero ) : ?>
-                            <!-- Hero: Info always visible on mobile if needed, or follow style -->
-                            <div class="card-overlay opacity-100 lg:opacity-0 transition-opacity duration-300"></div>
-                            <div class="card-info opacity-100 lg:opacity-0 lg:translate-y-2 transition-all duration-300 delay-100 absolute bottom-4 left-4 z-20 text-white">
+                            <!-- Hero: Mobile visible, Desktop hover (handled by CSS) -->
+                            <div class="card-overlay opacity-100 lg:opacity-0"></div>
+                            <div class="card-info opacity-100 lg:opacity-0 lg:translate-y-2">
                                 <h4 class="text-lg font-bold leading-tight"><?php echo esc_html($item_title); ?></h4>
                                 <?php if ( $item_sub ) : ?>
                                     <p class="text-sm opacity-90 font-mono mt-1"><?php echo esc_html($item_sub); ?></p>
                                 <?php endif; ?>
                             </div>
                         <?php else : ?>
-                            <!-- Detail: Hover only -->
-                            <div class="card-overlay absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                            <div class="card-info absolute bottom-4 left-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100 z-20 text-white">
+                            <!-- Detail: Hover only (handled by CSS) -->
+                            <div class="card-overlay"></div>
+                            <div class="card-info">
                                 <h4 class="text-xs lg:text-md font-bold leading-tight"><?php echo esc_html($item_title); ?></h4>
                             </div>
                         <?php endif; ?>
-                        
-                        <!-- Scanline (Pure Decoration) -->
-                        <div class="scanline"></div>
                     </div>
                 <?php endforeach; ?>
                 

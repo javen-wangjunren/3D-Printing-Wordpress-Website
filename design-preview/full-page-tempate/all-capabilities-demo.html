@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - All Capabilities Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-section': '#F2F4F7',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    fontSize: {
+                        h1: ['48px', { lineHeight: '1.2', fontWeight: '700' }],
+                        h2: ['36px', { lineHeight: '1.2', fontWeight: '700' }],
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' },
+                    maxWidth: { 'container': '1280px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .scroll-smooth { scroll-behavior: smooth; }
+        
+        /* Industrial Lock Styles */
+        .lock-row { position: relative; z-index: 10; }
+        .lock-row::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 3px solid #0047AB; 
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 30;
+            box-shadow: 0 12px 30px -10px rgba(0, 71, 171, 0.3);
+        }
+        .lock-row td { border-bottom-color: transparent !important; }
+
+        /* Slider Mask */
+        .slider-mask {
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+    <!-- 1. Hero Banner Style 2 -->
+    <section class="relative min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-48 lg:pb-32 overflow-visible">
+        <div class="absolute inset-0 z-0">
+            <img src="https://eu-central-1.graphassets.com/AW2dIPbpOQJCl5mn4yGf3z/resize=fit:max,height:1080,width:1920/output=format:webp/cm9legb211x4207tbfrz5j7ff" 
+                 alt="Industrial 3D Printing Facility" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-heading/70 mix-blend-multiply"></div>
+        </div>
+
+        <div class="relative z-10 max-w-container mx-auto px-6 lg:px-[64px] text-center">
+            <span class="inline-block mb-6 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-[12px] font-mono font-bold text-white uppercase tracking-wider backdrop-blur-md">
+                Industrial-Grade Production
+            </span>
+            
+            <h1 class="text-h1 text-white tracking-[-1px] mb-6 drop-shadow-sm">
+                Scale Your Manufacturing<br>On Demand
+            </h1>
+            
+            <p class="text-white/80 text-[18px] max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+                Access a global network of industrial 3D printing technologies. From rapid prototyping to end-use production parts, we deliver precision at speed.
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#" class="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Get Instant Quote
+                </a>
+                <a href="#capabilities" class="bg-transparent border-2 border-white/30 text-white px-8 py-4 rounded-button font-bold text-sm hover:bg-white/10 transition-all">
+                    Explore Capabilities
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-full max-w-container px-6 lg:px-[64px] z-20">
+            <div class="bg-white border border-border rounded-card shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] py-8 px-6 lg:px-10 flex flex-wrap justify-center items-center gap-x-12 lg:gap-x-16 gap-y-8">
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">8M+</strong> 
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Parts Produced</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">140k+</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Businesses</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">200+</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Materials</span>
+                </div>
+                <div class="text-center min-w-[140px]">
+                    <strong class="block font-mono text-[28px] text-heading font-bold mb-1 tracking-tight">31</strong>
+                    <span class="text-[11px] text-muted font-bold uppercase tracking-wider">Technologies</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Manufacturing Capabilities (White Background, Alpine.js) -->
+    <section id="capabilities" class="pt-48 pb-24 bg-white" x-data="{
+        activeTab: 'dmls',
+        data: {
+            dmls: {
+                title: 'Precision DMLS Manufacturing',
+                desc: 'Advanced powder-bed fusion process producing industrial-grade metal parts with superior structural integrity.',
+                tag: 'DMLS',
+                highlights: [
+                    { title: 'Layer', value: '30-60', unit: 'µm' },
+                    { title: 'Tol.', value: '±0.3', unit: 'mm' },
+                    { title: 'Build', value: '400³', unit: 'mm' }
+                ],
+                machine: 'SYSTEM: EOS M 400-4',
+                tags: ['Support Removal', 'Heat Treatment', 'CNC Machining', 'Anodizing'],
+                img: 'https://placehold.co/1200x1200/F2F4F7/1D2939?text=DMLS+Metal+Production'
+            },
+            sls: {
+                title: 'Industrial SLS Production',
+                desc: 'The gold standard for functional polymer prototypes and end-use parts without the need for support structures.',
+                tag: 'SLS',
+                highlights: [
+                    { title: 'Layer', value: '60-120', unit: 'µm' },
+                    { title: 'Tol.', value: '±0.25', unit: 'mm' },
+                    { title: 'Build', value: '340²', unit: 'mm' }
+                ],
+                machine: 'SYSTEM: EOS P 396',
+                tags: ['Media Tumble', 'Dyeing', 'Vapor Smooth', 'Coating'],
+                img: 'https://placehold.co/1200x1200/F2F4F7/1D2939?text=SLS+Polymer+Production'
+            }
+        }
+    }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <header class="text-center mb-16">
+                <h2 class="text-h2 text-heading mb-6 tracking-tight">Manufacturing Capabilities</h2>
+                <div class="flex gap-2 justify-center">
+                    <button @click="activeTab = 'dmls'" 
+                            :class="activeTab === 'dmls' ? 'bg-primary text-white border-primary shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                            class="px-6 py-2.5 rounded-full border text-[13px] font-bold transition-all">DMLS (Metal)</button>
+                    <button @click="activeTab = 'sls'" 
+                            :class="activeTab === 'sls' ? 'bg-primary text-white border-primary shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                            class="px-6 py-2.5 rounded-full border text-[13px] font-bold transition-all">SLS (Polymer)</button>
+                </div>
+            </header>
+
+            <div class="grid lg:grid-cols-[1.1fr_1fr] gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <h3 class="text-[24px] font-bold text-heading mb-2 tracking-tight" x-text="data[activeTab].title"></h3>
+                    <p class="text-[15px] leading-relaxed mb-8 max-w-xl text-body" x-text="data[activeTab].desc"></p>
+
+                    <div class="grid grid-cols-3 gap-4 mb-8">
+                        <template x-for="item in data[activeTab].highlights">
+                            <div class="p-6 border border-border rounded-card bg-white hover:border-primary/50 transition-all text-center lg:text-left flex flex-col justify-center">
+                                <span class="text-[8px] font-bold text-primary uppercase tracking-widest mb-1.5 opacity-80" x-text="data[activeTab].tag"></span>
+                                <h3 class="text-[14px] font-bold text-heading mb-2 truncate" x-text="item.title"></h3>
+                                <div class="font-mono text-[22px] font-bold text-heading leading-tight">
+                                    <span x-text="item.value"></span><span class="text-[11px] font-medium text-muted ml-0.5" x-text="item.unit"></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="mb-8">
+                        <span class="text-[9px] font-bold text-muted uppercase tracking-[1.5px] block mb-3">Available Finishing</span>
+                        <div class="flex flex-wrap gap-2">
+                            <template x-for="tag in data[activeTab].tags">
+                                <span class="bg-bg-subtle border border-border px-2.5 py-1 rounded text-[11px] font-medium text-body" x-text="tag"></span>
+                            </template>
+                        </div>
+                    </div>
+
+                    <a href="#" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-button font-bold text-[12px] uppercase tracking-wider hover:bg-primary-hover transition-all shadow-lg shadow-primary/10 group">
+                        <span>Technical Details</span>
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    </a>
+                </div>
+
+                <div class="order-1 lg:order-2">
+                    <div class="relative rounded-card overflow-hidden border border-border bg-bg-subtle group shadow-sm aspect-[4/3] lg:aspect-auto lg:h-[480px]">
+                        <img :src="data[activeTab].img" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System">
+                        <div class="absolute bottom-0 right-0 bg-primary/90 backdrop-blur-sm px-4 py-2 text-[10px] font-mono font-bold text-white tracking-widest uppercase rounded-tl-xl" x-text="data[activeTab].machine"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Comparison Table (Gray Background) -->
+    <section class="py-24 bg-bg-section" x-data="{ highlighted: 'SLS' }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="mb-12 flex justify-between items-end">
+                <div>
+                    <h2 class="text-h2 font-bold text-heading tracking-[-1px] mb-2 uppercase">
+                        Comparative <span class="text-primary">Matrix</span>
+                    </h2>
+                    <p class="text-body text-sm font-medium opacity-80">Select a technology to lock specs.</p>
+                </div>
+                <div class="hidden md:block border-2 border-primary/20 rounded-md px-3 py-1 rotate-12">
+                    <span class="text-[10px] font-mono font-bold text-primary/40 uppercase tracking-widest">NOW3DP Verified</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl border border-border shadow-sm p-[3px] overflow-hidden">
+                <div class="overflow-x-auto no-scrollbar">
+                    <table class="w-full text-left border-separate border-spacing-0 min-w-[1000px]">
+                        <thead>
+                            <tr class="bg-bg-subtle text-heading uppercase tracking-[2px] text-[11px] font-bold">
+                                <th class="py-5 px-8 border-b border-border rounded-tl-lg">Technology</th>
+                                <th class="py-5 px-6 border-b border-border bg-bg-subtle/60">Dimensional Accuracy</th>
+                                <th class="py-5 px-8 border-b border-border">Key Strengths</th>
+                                <th class="py-5 px-6 border-b border-border bg-bg-subtle/60">Build Volume</th>
+                                <th class="py-5 px-8 border-b border-border rounded-tr-lg">Layer</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[14px]">
+                            <template x-for="tech in [
+                                { id: 'SLS', acc: '± 0.3%', strength: 'Support-free, High flexibility', vol: '395 × 500 × 395 mm', layer: '100μm' },
+                                { id: 'MJF', acc: '± 0.3%', strength: 'Isotropic, Rapid production', vol: '380 × 285 × 380 mm', layer: '80μm' },
+                                { id: 'SLA', acc: '± 0.2%', strength: 'Fine detail, Smooth finish', vol: '500 × 500 × 500 mm', layer: '50μm' },
+                                { id: 'DMLS', acc: '± 0.2%', strength: 'Complex metals, Engineering-grade', vol: '400 × 400 × 400 mm', layer: '40μm' }
+                            ]">
+                                <tr @click="highlighted = tech.id"
+                                    :class="highlighted === tech.id ? 'lock-row' : 'hover:bg-bg-subtle/40 cursor-pointer'"
+                                    class="transition-all duration-150 group">
+                                    <td class="py-6 px-8 font-bold border-b border-border transition-colors"
+                                        :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-primary rounded-l-xl' : 'bg-white text-heading'">
+                                        <span x-text="tech.id"></span>
+                                    </td>
+                                    <td class="py-6 px-6 font-mono border-b border-border transition-colors"
+                                        :class="highlighted === tech.id ? 'bg-[#DEEAFF] text-primary' : 'bg-bg-subtle/40 text-body'">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-1.5 h-1.5 rounded-full" :class="highlighted === tech.id ? 'bg-primary' : 'bg-primary/20'"></span>
+                                            <span x-text="tech.acc"></span>
+                                        </div>
+                                    </td>
+                                    <td class="py-6 px-8 border-b border-border transition-colors leading-relaxed"
+                                        :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-body' : 'bg-white text-body'">
+                                        <span x-text="tech.strength" class="opacity-90"></span>
+                                    </td>
+                                    <td class="py-6 px-6 font-mono border-b border-border transition-colors text-right pr-12"
+                                        :class="highlighted === tech.id ? 'bg-[#DEEAFF] text-heading' : 'bg-bg-subtle/40 text-heading'">
+                                        <span x-text="tech.vol"></span>
+                                    </td>
+                                    <td class="py-6 px-8 font-mono border-b border-border transition-colors"
+                                        :class="highlighted === tech.id ? 'bg-[#EBF2FF] text-heading rounded-r-xl' : 'bg-white text-heading'">
+                                        <span x-text="tech.layer"></span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Material List (White Background) -->
+    <section class="py-24 bg-white" x-data="{ 
+        activeProcess: 'SLS', 
+        openMaterial: 'PA12', 
+        processes: ['DMLS', 'SLS', 'SLA'],
+        materials: {
+            'DMLS': [
+                { id: '316L', title: 'Stainless Steel 316L', tag: 'Medical Grade', tol: '±0.10', heat: '600°C', desc: 'Superior corrosion resistance combined with high mechanical strength makes 316L the standard for medical implants and chemical processing.' }
+            ],
+            'SLS': [
+                { id: 'PA12', title: 'Nylon PA12', tag: 'Functional Parts', tol: '±0.30', heat: '95°C', desc: 'Nylon PA12 is the most versatile industrial 3D printing material. It offers perfectly balanced mechanical properties and high chemical resistance.' }
+            ],
+            'SLA': [
+                { id: 'CLEAR', title: 'Clear Resin', tag: 'Visual Master', tol: '±0.15', heat: '50°C', desc: 'Premium Clear Resin delivers exceptional optical clarity and an ultra-smooth surface finish. Engineered for fluid flow analysis.' }
+            ]
+        }
+    }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="mb-12">
+                <h2 class="text-h2 font-bold text-heading tracking-[-1px] mb-3">
+                    Explore <span class="text-primary">Materials</span>
+                </h2>
+                <p class="text-body max-w-2xl text-[15px] opacity-90 leading-snug">
+                    Compare engineering properties and lead times across our specialized catalog.
+                </p>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
+                <aside class="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 lg:w-[160px] shrink-0 lg:border-r lg:border-border lg:pr-6">
+                    <template x-for="proc in processes" :key="proc">
+                        <button @click="activeProcess = proc; openMaterial = materials[proc][0].id" 
+                                :class="activeProcess === proc ? 'bg-primary text-white shadow-md' : 'bg-white text-body border-border hover:border-primary/50'"
+                                class="whitespace-nowrap px-4 py-3 lg:w-full lg:text-left rounded-button border font-bold text-[12px] uppercase tracking-wider transition-all"
+                                x-text="proc"></button>
+                    </template>
+                </aside>
+
+                <main class="flex-1 w-full space-y-4">
+                    <template x-for="mat in materials[activeProcess]" :key="mat.id">
+                        <div class="border border-border rounded-card bg-white overflow-hidden shadow-sm hover:border-primary/40 transition-colors">
+                            <button @click="openMaterial = (openMaterial === mat.id ? '' : mat.id)"
+                                    class="w-full flex justify-between items-center p-5 lg:px-8 lg:py-6 bg-white text-left">
+                                <div class="flex items-center gap-4">
+                                    <span class="text-[18px] font-bold text-heading" x-text="mat.title"></span>
+                                    <span class="text-[9px] font-bold text-primary bg-primary/5 px-2.5 py-1 rounded uppercase tracking-widest" x-text="mat.tag"></span>
+                                </div>
+                                <svg class="w-5 h-5 text-muted transition-transform duration-300" :class="openMaterial === mat.id ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
+
+                            <div x-show="openMaterial === mat.id" x-collapse x-cloak>
+                                <div class="p-6 lg:p-10 border-t border-border">
+                                    <p class="text-[15px] leading-relaxed text-body mb-8 max-w-3xl" x-text="mat.desc"></p>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="bg-bg-subtle p-4 rounded border border-border/50">
+                                            <div class="text-[9px] text-muted uppercase font-bold mb-1.5">Tolerance</div>
+                                            <div class="font-mono text-[14px] font-bold text-heading" x-text="mat.tol"></div>
+                                        </div>
+                                        <div class="bg-bg-subtle p-4 rounded border border-border/50">
+                                            <div class="text-[9px] text-muted uppercase font-bold mb-1.5">Max Temp</div>
+                                            <div class="font-mono text-[14px] font-bold text-heading" x-text="mat.heat"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </main>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Surface Finish (Gray Background, Refactored Alpine.js) -->
+    <section class="py-24 bg-bg-section" x-data="{
+        activeFilter: 'All',
+        search: '',
+        finishes: [
+            { title: 'Optical Clear Polishing', cat: 'Enhanced', tech: 'SLA', desc: 'Manual polishing followed by UV-resistant clear coat.', img: 'https://placehold.co/600x400/FFFFFF/1D2939?text=Clear+Polish' },
+            { title: 'Type II Anodizing', cat: 'Protective', tech: 'DMLS', desc: 'Increases corrosion resistance and surface hardness.', img: 'https://placehold.co/600x400/FFFFFF/1D2939?text=Anodizing' },
+            { title: 'Vibratory Tumbling', cat: 'Standard', tech: 'SLS', desc: 'Batched mechanical smoothing for uniform matte texture.', img: 'https://placehold.co/600x400/FFFFFF/1D2939?text=Tumbling' }
+        ],
+        get filtered() {
+            return this.finishes.filter(f => 
+                (this.activeFilter === 'All' || f.tech.includes(this.activeFilter)) &&
+                (this.search === '' || f.title.toLowerCase().includes(this.search.toLowerCase()))
+            );
+        }
+    }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="text-center mb-16">
+                <h2 class="text-h2 text-heading mb-4 font-bold">Surface Finishing</h2>
+                <p class="text-body max-w-2xl mx-auto text-[16px]">Achieve the perfect look and performance with industrial-grade post-processing.</p>
+            </div>
+
+            <!-- Simple Filter Bar -->
+            <div class="bg-white p-2 rounded-lg border border-border shadow-sm mb-12 flex flex-col md:flex-row gap-4 max-w-4xl mx-auto">
+                <div class="flex gap-1 bg-bg-subtle p-1 rounded">
+                    <template x-for="filter in ['All', 'SLA', 'DMLS', 'SLS']">
+                        <button @click="activeFilter = filter"
+                                :class="activeFilter === filter ? 'bg-white text-primary shadow-sm' : 'text-body hover:text-heading'"
+                                class="px-6 py-2 rounded text-[13px] font-bold transition-all"
+                                x-text="filter"></button>
+                    </template>
+                </div>
+                <div class="flex-1 relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" x-model="search" placeholder="Search finishes..." class="w-full h-full pl-10 pr-4 text-[14px] bg-transparent outline-none placeholder:text-muted/70 text-heading">
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <template x-for="item in filtered" :key="item.title">
+                    <div class="bg-white rounded-card border border-border overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group">
+                        <div class="h-[220px] relative overflow-hidden bg-bg-subtle">
+                            <img :src="item.img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-2.5 py-1 rounded text-[10px] font-bold text-primary uppercase tracking-wider" x-text="item.tech"></span>
+                        </div>
+                        <div class="p-8">
+                            <div class="text-[11px] font-bold text-primary uppercase tracking-widest mb-2" x-text="item.cat"></div>
+                            <h3 class="text-[20px] font-bold text-heading mb-3" x-text="item.title"></h3>
+                            <p class="text-[14px] text-body leading-relaxed mb-6" x-text="item.desc"></p>
+                            <a href="#" class="inline-flex items-center text-[13px] font-bold text-heading hover:text-primary transition-colors">
+                                View Specs <svg class="w-3.5 h-3.5 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Related Blog (White Background) -->
+    <section class="py-24 bg-white overflow-hidden" 
+             x-data="{ 
+                posts: [
+                    { tag: 'Metal AM', title: 'The Future of AlSi10Mg in Aerospace', img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Design Guide', title: 'Mastering Tolerances for SLS', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Case Study', title: 'Custom Medical Implants via SLA', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'News', title: 'Global 3D Printing Trends 2026', img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Tech Deep Dive', title: 'Advanced Post-Processing Techniques', img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800' }
+                ],
+                scrollNext() { $refs.slider.scrollBy({ left: $refs.slider.offsetWidth * 0.8, behavior: 'smooth' }); },
+                scrollPrev() { $refs.slider.scrollBy({ left: -$refs.slider.offsetWidth * 0.8, behavior: 'smooth' }); }
+             }">
+        <div class="max-w-container mx-auto px-6 lg:px-[64px]">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div>
+                    <h2 class="text-h2 font-bold text-heading tracking-[-1px] mb-4">
+                        Latest Manufacturing <span class="text-primary">Insights</span>
+                    </h2>
+                    <p class="text-body text-[16px]">
+                        Expert guides, material breakthroughs, and industry case studies.
+                    </p>
+                </div>
+                <div class="hidden md:flex gap-3 pb-2">
+                    <button @click="scrollPrev" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all"><svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg></button>
+                    <button @click="scrollNext" class="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-bg-section transition-all"><svg class="w-5 h-5 text-heading" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+                </div>
+            </div>
+
+            <div class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth lg:slider-mask" 
+                 x-ref="slider" style="scroll-snap-type: x mandatory;">
+                <template x-for="(post, index) in posts" :key="index">
+                    <div class="w-[85%] md:w-[45%] lg:w-[31%] flex-shrink-0" style="scroll-snap-align: start;">
+                        <a href="#" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm">
+                            <div class="aspect-[16/10] overflow-hidden relative">
+                                <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Post Cover">
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold text-primary uppercase tracking-widest" x-text="post.tag"></span>
+                                </div>
+                            </div>
+                            <div class="p-8 flex-1 flex flex-col">
+                                <h3 class="text-[20px] font-bold text-heading mb-3 leading-snug group-hover:text-primary transition-colors" x-text="post.title"></h3>
+                                <span class="mt-auto text-[13px] font-bold text-muted flex items-center gap-2">
+                                    Read Article <span class="w-4 h-px bg-muted group-hover:bg-primary transition-colors"></span>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

@@ -98,7 +98,7 @@ if ( is_array( $cta_image ) ) {
                     <?php endif; ?>
 
                     <?php if ( $cta_description || $cta_highlight_metric ) : ?>
-                        <p class="text-body text-small lg:text-body max-w-lg mb-10 mx-auto lg:mx-0">
+                        <p class="text-body text-small lg:text-body max-w-lg mx-auto lg:mx-0">
                             <?php if ( $cta_description ) : ?>
                                 <?php echo nl2br( esc_html( $cta_description ) ); ?>
                             <?php endif; ?>
@@ -110,7 +110,7 @@ if ( is_array( $cta_image ) ) {
                     <?php endif; ?>
 
                     <?php if ( $has_primary || $has_secondary ) : ?>
-                        <div class="flex flex-wrap justify-center lg:justify-start gap-4">
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4 mt-5">
                             <?php if ( $has_primary ) : ?>
                                 <a href="<?php echo esc_url( $primary_url ); ?>" class="bg-primary hover:bg-primary-hover text-inverse px-8 py-4 rounded-button font-bold text-small inline-flex items-center gap-2 transition-all shadow-lg shadow-primary/20 group">
                                     <?php if ( $primary_icon !== 'none' ) : ?>
