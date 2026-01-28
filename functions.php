@@ -48,6 +48,8 @@ $tdp_inc_files = [
     'acf/fields.php',   // ACF 字段组
     'acf/blocks.php',   // ACF Blocks 注册
     'helpers.php',      // 通用工具函数
+    'duplicate.php',    // 文章复制功能
+    'admin-filters.php',// 后台筛选增强
     'seo.php',          // SEO 增强（开发阶段可为空）
 ];
 

@@ -26,7 +26,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'          => 'blog_title',
                     'type'          => 'text',
                     'instructions'  => '输入博客模块的大标题（如 "Latest Manufacturing"）',
-                    'required'      => 1,
+                    'required'      => 0,
                     'wrapper'       => array(
                         'width' => '66',
                         'class' => '',
@@ -71,7 +71,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'          => 'posts_mode',
                     'type'          => 'select',
                     'instructions'  => '选择博客文章的抓取模式',
-                    'required'      => 1,
+                    'required'      => 0,
                     'wrapper'       => array(
                         'width' => '100',
                         'class' => '',
@@ -155,7 +155,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'          => 'posts_count',
                     'type'          => 'number',
                     'instructions'  => '设置要显示的文章数量（latest/category 模式有效）',
-                    'required'      => 1,
+                    'required'      => 0,
                     'wrapper'       => array(
                         'width' => '50',
                         'class' => '',
@@ -193,7 +193,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         'class' => '',
                         'id'    => '',
                     ),
-                    'default_value' => '/blog',
+                    'default_value' => '',
                     'placeholder'   => '',
                 ),
                 array(
@@ -218,7 +218,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'          => 'posts_per_row',
                     'type'          => 'select',
                     'instructions'  => '选择桌面端每行显示的文章数量',
-                    'required'      => 1,
+                    'required'      => 0,
                     'wrapper'       => array(
                         'width' => '50',
                         'class' => '',

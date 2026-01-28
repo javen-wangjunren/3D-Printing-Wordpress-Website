@@ -44,7 +44,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'              => 'hero_title',
                     'type'              => 'text',
                     'instructions'      => __( 'The main headline of the banner.', '3d-printing' ),
-                    'required'          => 1,
+                    'required'          => 0,
                     'default_value'     => __( 'Your Streamlined 3D Printing Service', '3d-printing' ),
                     'wrapper'           => array(
                         'width' => '100',
@@ -56,7 +56,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'              => 'hero_subtitle',
                     'type'              => 'text',
                     'instructions'      => __( 'A supporting sub-headline.', '3d-printing' ),
-                    'required'          => 1,
+                    'required'          => 0,
                     'default_value'     => __( 'Get Quality Parts at the Best Price', '3d-printing' ),
                     'wrapper'           => array(
                         'width' => '100',
@@ -68,7 +68,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name'              => 'hero_description',
                     'type'              => 'textarea',
                     'instructions'      => __( 'The main body text description.', '3d-printing' ),
-                    'required'          => 1,
+                    'required'          => 0,
                     'rows'              => 4,
                     'new_lines'         => 'wpautop',
                     'default_value'     => __( "Compare manufacturers around the world in real time.\nOrder industrial-quality parts at the most competitive price.\nWe take care of everything, including your satisfaction.", '3d-printing' ),
@@ -88,7 +88,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label'         => __( 'Button Text', '3d-printing' ),
                             'name'          => 'button_text',
                             'type'          => 'text',
-                            'required'      => 1,
+                            'required'      => 0,
                             'wrapper'       => array(
                                 'width' => '33',
                             ),
@@ -98,7 +98,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label'         => __( 'Button URL', '3d-printing' ),
                             'name'          => 'button_url',
                             'type'          => 'url',
-                            'required'      => 1,
+                            'required'      => 0,
                             'wrapper'       => array(
                                 'width' => '50',
                             ),
@@ -113,7 +113,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                                 'secondary' => __( 'Secondary (Outline)', '3d-printing' ),
                             ),
                             'default_value' => 'primary',
-                            'required'      => 1,
+                            'required'      => 0,
                             'wrapper'       => array(
                                 'width' => '17',
                             ),
@@ -165,7 +165,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'return_format'     => 'id',
                     'preview_size'      => 'medium',
                     'library'           => 'all',
-                    'required'          => 1,
+                    'required'          => 0,
                     'wrapper'           => array(
                         'width' => '50',
                     ),

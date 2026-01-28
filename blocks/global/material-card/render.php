@@ -31,11 +31,11 @@ if ( $type_terms && ! is_wp_error( $type_terms ) ) {
     if ( $t_val ) $type_slugs[] = $t_val;
 }
 
-// Characteristic
-$char_slugs = array();
-$char_terms = get_the_terms( $post_id, 'material_characteristic' );
-if ( $char_terms && ! is_wp_error( $char_terms ) ) {
-    foreach ( $char_terms as $t ) $char_slugs[] = $t->slug;
+// Characteristic (Features)
+$feature_slugs = array();
+$feature_terms = get_the_terms( $post_id, 'material_feature' );
+if ( $feature_terms && ! is_wp_error( $feature_terms ) ) {
+    foreach ( $feature_terms as $t ) $feature_slugs[] = $t->slug;
 }
 
 // Basic Fields
@@ -58,7 +58,7 @@ $primary_type    = ! empty( $type_slugs ) ? $type_terms[0]->name : get_field_val
      data-type="<?php echo esc_attr( implode( ' ', array_unique( array_filter( $type_slugs ) ) ) ); ?>"
      data-cost="<?php echo esc_attr( $cost_level ); ?>"
      data-lead-time="<?php echo esc_attr( $lead_time ); ?>"
-     data-characteristic="<?php echo esc_attr( implode( ' ', array_unique( array_filter( $char_slugs ) ) ) ); ?>">
+     data-feature="<?php echo esc_attr( implode( ' ', array_unique( array_filter( $feature_slugs ) ) ) ); ?>">
 
     <a class="material-card-link absolute inset-0 z-10" href="<?php echo esc_url( get_permalink() ); ?>" aria-label="<?php echo esc_attr( $title_raw ); ?>"></a>
 
