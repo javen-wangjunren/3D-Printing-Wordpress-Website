@@ -18,10 +18,11 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'placement' => 'top',
                 ),
                 array(
-                    'key' => 'field_ts_material_label',
-                    'label' => 'Material Label',
-                    'name' => 'technical_specs_material_label',
+                    'key' => 'field_ts_title',
+                    'label' => 'Section Title',
+                    'name' => 'technical_specs_title',
                     'type' => 'text',
+                    'default_value' => 'Technical Specifications',
                     'wrapper' => array(
                         'width' => '50',
                     ),
@@ -54,7 +55,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'type' => 'text',
                             'instructions' => 'Full title (e.g. Mechanical Properties)',
                             'wrapper' => array(
-                                'width' => '30',
+                                'width' => '60',
                             ),
                         ),
                         array(
@@ -62,29 +63,9 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Mobile Short Title',
                             'name' => 'tab_short_title',
                             'type' => 'text',
-                            'instructions' => 'Optional. Shown on mobile (e.g. Mechanical)',
+                            'instructions' => 'Optional. Shown on mobile',
                             'wrapper' => array(
-                                'width' => '20',
-                            ),
-                        ),
-                        array(
-                            'key' => 'field_ts_tab_slug',
-                            'label' => 'Tab Key (Slug)',
-                            'name' => 'tab_key',
-                            'type' => 'text',
-                            'instructions' => 'Unique ID (e.g. mechanical)',
-                            'wrapper' => array(
-                                'width' => '25',
-                            ),
-                        ),
-                        array(
-                            'key' => 'field_ts_tab_tag',
-                            'label' => 'Card Tag',
-                            'name' => 'tab_tag',
-                            'type' => 'text',
-                            'instructions' => 'Label on cards (e.g. Mechanical)',
-                            'wrapper' => array(
-                                'width' => '25',
+                                'width' => '40',
                             ),
                         ),
                         array(

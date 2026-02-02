@@ -53,6 +53,11 @@ $tdp_inc_files = [
     'seo.php',          // SEO 增强（开发阶段可为空）
 ];
 
+// 自动加载 inc/acf/field/ 目录下的所有字段文件
+foreach ( glob( TDP_INC_DIR . '/acf/field/*.php' ) as $field_file ) {
+    require_once $field_file;
+}
+
 foreach ( $tdp_inc_files as $file ) {
     $path = TDP_INC_DIR . '/' . $file;
 

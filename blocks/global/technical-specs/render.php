@@ -16,7 +16,6 @@ $clone_name = rtrim($pfx, '_');
 
 // 1. Data Scope
 $title          = get_field_value( 'technical_specs_title', $block, $clone_name, $pfx, 'Technical Specifications' );
-$material_label = get_field_value( 'technical_specs_material_label', $block, $clone_name, $pfx );
 $intro          = get_field_value( 'technical_specs_intro', $block, $clone_name, $pfx );
 $specs_groups   = get_field_value( 'technical_specs_tabs', $block, $clone_name, $pfx ); // Repeater
 
@@ -72,7 +71,7 @@ if ( $specs_groups ) {
 		$tabs[] = array(
 			'id'         => 'tab-' . $index,
 			'label'      => isset($group['tab_title']) ? $group['tab_title'] : '',
-            'tag'        => isset($group['tab_tag']) ? $group['tab_tag'] : '',
+            'tag'        => isset($group['tab_short_title']) ? $group['tab_short_title'] : '',
             'highlights' => $mapped_highlights,
 			'data'       => $mapped_rows,
 		);
@@ -93,10 +92,7 @@ $first_tab_key = ! empty( $tabs ) ? $tabs[0]['id'] : '';
 		<!-- Header -->
 		<header class="mb-6 lg:mb-8">
 			<h2 class="text-[26px] lg:text-[36px] font-bold text-heading mb-3 tracking-tight">
-				<?php echo esc_html( $title ); ?>: 
-				<?php if ( $material_label ) : ?>
-					<span class="text-primary"><?php echo esc_html( $material_label ); ?></span>
-				<?php endif; ?>
+				<?php echo esc_html( $title ); ?>
 			</h2>
 			<p class="text-[14px] lg:text-[15px] max-w-2xl leading-relaxed opacity-90"><?php echo $intro ? esc_html($intro) : 'Standardized testing data (ISO/ASTM)'; ?></p>
 		</header>

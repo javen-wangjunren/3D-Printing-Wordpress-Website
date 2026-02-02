@@ -24,6 +24,24 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'tab',
                     'placement' => 'top',
                 ),
+                // --- 全局统一设置 (Global Settings) ---
+                array(
+                    'key' => 'field_ml_global_quote',
+                    'label' => 'Global Quote Link',
+                    'name' => 'global_quote_link',
+                    'type' => 'link',
+                    'instructions' => '整个模块统一的 Quote Link (通常指向 Contact 页面)。',
+                    'wrapper' => array('width' => '50'),
+                ),
+                array(
+                    'key' => 'field_ml_global_specs_text',
+                    'label' => 'Global Specs Link Text',
+                    'name' => 'global_specs_link_text',
+                    'type' => 'text',
+                    'default_value' => 'View More Technical Specs',
+                    'instructions' => '整个模块统一的详情页链接文案。',
+                    'wrapper' => array('width' => '50'),
+                ),
                 array(
                     'key' => 'field_ml_process_list',
                     'label' => 'Process List (工艺大类)',
@@ -47,35 +65,37 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Materials (材料列表)',
                             'name' => 'materials',
                             'type' => 'repeater',
-                            'collapsed' => 'field_ml_mat_name',
+                            'collapsed' => 'field_ml_mat_specs_link',
                             'layout' => 'block',
                             'button_label' => '＋ 添加材料项',
                             'sub_fields' => array(
-                                // --- 第一行：基础属性 ---
+                                // --- 第一行：核心数据源 & 基础信息 ---
                                 array(
-                                    'key' => 'field_ml_mat_name',
-                                    'label' => 'Material Name',
-                                    'name' => 'name',
-                                    'type' => 'text',
-                                    'wrapper' => array('width' => '33'),
+                                    'key' => 'field_ml_mat_specs_link',
+                                    'label' => 'Material Source',
+                                    'name' => 'specs_link',
+                                    'type' => 'post_object',
+                                    'instructions' => '选择关联的 Material 页面，将自动填充标题，图片和描述。',
+                                    'post_type' => array(
+                                        0 => 'material',
+                                    ),
+                                    'return_format' => 'id',
+                                    'ui' => 1,
+                                    'wrapper' => array('width' => '50'),
                                 ),
                                 array(
                                     'key' => 'field_ml_mat_badge',
                                     'label' => 'Badge',
                                     'name' => 'badge',
                                     'type' => 'text',
-                                    'wrapper' => array('width' => '33'),
-                                    'instructions' => '如 "AEROSPACE GRADE"',
+                                    'instructions' => '材料的特点。',
+                                    'wrapper' => array('width' => '50'),
                                 ),
-                                array(
-                                    'key' => 'field_ml_mat_image',
-                                    'label' => 'Image',
-                                    'name' => 'image',
-                                    'type' => 'image',
-                                    'wrapper' => array('width' => '34'),
-                                    'return_format' => 'id',
-                                    'preview_size' => 'thumbnail',
-                                ),
+                                // Image & Description 字段已隐藏，由 render.php 自动处理
+                                // 但为了数据结构兼容性，我们不删除它们，而是用 display: none 或者干脆移除字段定义
+                                // 根据需求“后台我们就不展示Image, Description”，直接移除字段定义是最干净的。
+                                // 如果 render.php 强依赖这些 key 存在，我们在 render.php 里处理 isset 即可（已处理）。
+                                
                                 // --- 第二行：参数键值对 ---
                                 array(
                                     'key' => 'field_ml_mat_specs',
@@ -99,31 +119,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                                             'type' => 'text',
                                         ),
                                     ),
-                                ),
-                                // --- 第三行：详情描述 ---
-                                array(
-                                    'key' => 'field_ml_mat_content',
-                                    'label' => 'Description',
-                                    'name' => 'description',
-                                    'type' => 'wysiwyg',
-                                    'tabs' => 'visual',
-                                    'media_upload' => 0,
-                                    'delay' => 1,
-                                ),
-                                // --- 第四行：转化链接 ---
-                                array(
-                                    'key' => 'field_ml_mat_quote',
-                                    'label' => 'Quote Link',
-                                    'name' => 'quote_link',
-                                    'type' => 'link',
-                                    'wrapper' => array('width' => '50'),
-                                ),
-                                array(
-                                    'key' => 'field_ml_mat_specs_link',
-                                    'label' => 'Specs Link',
-                                    'name' => 'specs_link',
-                                    'type' => 'link',
-                                    'wrapper' => array('width' => '50'),
                                 ),
                             ),
                         ),

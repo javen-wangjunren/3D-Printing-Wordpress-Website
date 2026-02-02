@@ -48,7 +48,6 @@ function _3dp_register_post_types() {
         'menu_position'      => 5,
         'menu_icon'          => 'dashicons-building',
         'supports'           => array( 'title', 'thumbnail', 'excerpt', 'custom-fields' ),
-        'taxonomies'         => array( 'category', 'post_tag' ),
     ) );
 
     // ==========================================

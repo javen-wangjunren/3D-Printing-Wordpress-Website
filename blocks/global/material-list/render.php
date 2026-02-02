@@ -15,6 +15,10 @@ $clone_name = rtrim($pfx, '_');
 // 使用万能取数逻辑获取字段值
 $raw_processes = get_field_value('material_list_processes', $block, $clone_name, $pfx, array());
 
+// Global Settings
+$global_quote_link = get_field_value('global_quote_link', $block, $clone_name, $pfx, array('url' => '/contact/', 'title' => 'Get A Quote'));
+$global_specs_text = get_field_value('global_specs_link_text', $block, $clone_name, $pfx, 'View More Technical Specs');
+
 if ( ! $raw_processes ) {
     return;
 }
@@ -138,12 +142,26 @@ $alpine_state = array(
                             <?php foreach ( $materials as $material ) : ?>
                                 <?php
                                 $mat_name        = isset( $material['name'] ) ? (string) $material['name'] : '';
+                                $specs_link      = isset( $material['specs_link'] ) ? $material['specs_link'] : array();
+
+                                // --- Auto-Resolve Name from Associated Post ---
+                                $assoc_post_id = 0;
+                                if ( is_numeric( $specs_link ) && $specs_link > 0 ) {
+                                    $assoc_post_id = $specs_link;
+                                } elseif ( is_object( $specs_link ) ) {
+                                    $assoc_post_id = $specs_link->ID;
+                                }
+
+                                if ( ! $mat_name && $assoc_post_id ) {
+                                    $mat_name = get_the_title( $assoc_post_id );
+                                }
+
                                 $mat_badge       = isset( $material['badge'] ) ? (string) $material['badge'] : '';
                                 $mat_image_id    = isset( $material['image'] ) ? $material['image'] : 0;
                                 $mat_desc        = isset( $material['description'] ) ? $material['description'] : '';
                                 $mat_specs       = isset( $material['spec_table'] ) && is_array( $material['spec_table'] ) ? $material['spec_table'] : array();
-                                $quote_link      = isset( $material['quote_link'] ) ? $material['quote_link'] : array();
-                                $specs_link      = isset( $material['specs_link'] ) ? $material['specs_link'] : array();
+                                // $quote_link and $specs_link_text are now global
+
                                 $material_id_key = '';
 
                                 if ( $mat_name ) {
@@ -154,13 +172,64 @@ $alpine_state = array(
                                     continue;
                                 }
 
-                                $quote_url   = isset( $quote_link['url'] ) ? (string) $quote_link['url'] : '';
-                                $quote_title = isset( $quote_link['title'] ) ? (string) $quote_link['title'] : '';
-                                $quote_target = isset( $quote_link['target'] ) ? (string) $quote_link['target'] : '';
+                                // Global Quote Link
+                                $quote_url    = isset( $global_quote_link['url'] ) ? (string) $global_quote_link['url'] : '';
+                                $quote_title  = isset( $global_quote_link['title'] ) ? (string) $global_quote_link['title'] : 'Get A Quote';
+                                $quote_target = isset( $global_quote_link['target'] ) ? (string) $global_quote_link['target'] : '';
 
-                                $specs_url   = isset( $specs_link['url'] ) ? (string) $specs_link['url'] : '';
-                                $specs_title = isset( $specs_link['title'] ) ? (string) $specs_link['title'] : '';
-                                $specs_target = isset( $specs_link['target'] ) ? (string) $specs_link['target'] : '';
+                                // Specs Link Logic (Supports both Legacy Link Array and New Post Object ID)
+                                $specs_source = isset( $material['specs_link'] ) ? $material['specs_link'] : '';
+                                
+                                $specs_url = '';
+                                $specs_title = $global_specs_text ? $global_specs_text : 'View More Technical Specs';
+                                $specs_target = '';
+
+                                if ( is_array( $specs_source ) ) {
+                                    // Legacy Link Field Support
+                                    $specs_url    = isset( $specs_source['url'] ) ? (string) $specs_source['url'] : '';
+                                    // Override title with global setting unless empty? No, user wants global consistency.
+                                    // But if it's a legacy link array, it might have its own title.
+                                    // User said "Specs Link Text 整个模块都是保持统一的", so we force global text.
+                                    $specs_target = isset( $specs_source['target'] ) ? (string) $specs_source['target'] : '';
+                                } elseif ( is_numeric( $specs_source ) && $specs_source > 0 ) {
+                                    // New Post Object (ID) Support
+                                    $specs_url   = get_permalink( $specs_source );
+                                } elseif ( is_object( $specs_source ) ) {
+                                     // Just in case it returns object
+                                     $specs_url = get_permalink( $specs_source->ID );
+                                }
+
+                                // --- Auto-Fill Logic from Associated Material Post ---
+                                $assoc_post_id = 0;
+                                if ( is_numeric( $specs_source ) && $specs_source > 0 ) {
+                                    $assoc_post_id = $specs_source;
+                                } elseif ( is_object( $specs_source ) ) {
+                                    $assoc_post_id = $specs_source->ID;
+                                }
+
+                                if ( $assoc_post_id ) {
+                                    // 1. Description Fallback
+                                    // If local description is empty, try to get from Material Post > Hero Banner > Description
+                                    if ( empty( $mat_desc ) ) {
+                                        // Field Name Structure: {prefix}_{clone_field_name}
+                                        // Prefix defined in cpt-material.php: 'prefix_name' => 1, 'name' => 'mat_hero'
+                                        // Clone Field Name in hero-banner.php: 'hero_description'
+                                        // Result: 'mat_hero_hero_description'
+                                        $hero_desc = get_field( 'mat_hero_hero_description', $assoc_post_id );
+                                        if ( $hero_desc ) {
+                                            $mat_desc = wpautop( $hero_desc ); // Convert textarea newlines to paragraphs
+                                        }
+                                    }
+
+                                    // 2. Image Fallback
+                                    // If local image is empty, try to get from Material Post > Hero Banner > Image
+                                    if ( empty( $mat_image_id ) ) {
+                                        $hero_img = get_field( 'mat_hero_hero_image', $assoc_post_id );
+                                        if ( $hero_img ) {
+                                            $mat_image_id = $hero_img;
+                                        }
+                                    }
+                                }
                                 ?>
 
                                 <div
@@ -176,7 +245,7 @@ $alpine_state = array(
                                         <div class="flex items-center gap-3">
                                             <span class="text-[15px] lg:text-[17px] font-semibold text-heading" ><?php echo esc_html( $mat_name ); ?></span>
                                             <?php if ( $mat_badge ) : ?>
-                                                <span class="text-[8px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded uppercase tracking-[0.22em]">
+                                                <span class="text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded tracking-wide">
                                                     <?php echo esc_html( $mat_badge ); ?>
                                                 </span>
                                             <?php endif; ?>
@@ -215,7 +284,7 @@ $alpine_state = array(
                                                                 ?>
                                                                 <div class="bg-bg-section p-3 rounded border border-border/60 text-center lg:text-left">
                                                                     <?php if ( $spec_label ) : ?>
-                                                                        <div class="text-[8px] text-muted uppercase font-bold mb-1 tracking-[0.22em]">
+                                                                        <div class="text-[11px] text-muted font-bold mb-1 tracking-wide">
                                                                             <?php echo esc_html( $spec_label ); ?>
                                                                         </div>
                                                                     <?php endif; ?>
@@ -233,7 +302,7 @@ $alpine_state = array(
                                                         <?php if ( $quote_url && $quote_title ) : ?>
                                                             <a
                                                                 href="<?php echo esc_url( $quote_url ); ?>"
-                                                                class="inline-flex items-center justify-center bg-primary text-inverse px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-[0.18em] hover:bg-primary-hover transition-all shadow-sm"
+                                                                class="inline-flex items-center justify-center bg-primary text-inverse px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wide hover:bg-primary-hover transition-all shadow-sm"
                                                                 <?php echo $quote_target ? 'target="' . esc_attr( $quote_target ) . '" rel="noopener noreferrer"' : ''; ?>
                                                             >
                                                                 <?php echo esc_html( $quote_title ); ?>
@@ -243,7 +312,7 @@ $alpine_state = array(
                                                         <?php if ( $specs_url && $specs_title ) : ?>
                                                             <a
                                                                 href="<?php echo esc_url( $specs_url ); ?>"
-                                                                class="inline-flex items-center justify-center border-[3px] border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-[0.18em] hover:bg-primary/5 transition-all"
+                                                                class="inline-flex items-center justify-center border-[3px] border-primary text-primary px-6 py-3 rounded-button font-bold text-[11px] uppercase tracking-wide hover:bg-primary/5 transition-all"
                                                                 <?php echo $specs_target ? 'target="' . esc_attr( $specs_target ) . '" rel="noopener noreferrer"' : ''; ?>
                                                             >
                                                                 <?php echo esc_html( $specs_title ); ?>
