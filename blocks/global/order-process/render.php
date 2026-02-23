@@ -21,9 +21,7 @@ $custom_class = '';
 $title = '';
 $description = '';
 $steps = array();
-$cta_group = array();
-$active_step = 1;
-$bg_color = '';
+$bg_color = '#ffffff'; // 固化为白色背景，移除字段依赖
 $anchor_id = '';
 
 if ( empty( $pfx ) ) {
@@ -34,17 +32,12 @@ if ( empty( $pfx ) ) {
         $description = isset($global_data['order_process_description']) ? (string)$global_data['order_process_description'] : '';
         $steps = isset($global_data['order_process_steps']) ? $global_data['order_process_steps'] : array();
         
-        $cta_group = isset($global_data['order_process_cta']) ? $global_data['order_process_cta'] : array();
-        
-        $bg_color = isset($global_data['order_process_bg_style']) ? (string)$global_data['order_process_bg_style'] : '#ffffff';
-        $active_step = isset($global_data['order_process_active_step']) ? (int)$global_data['order_process_active_step'] : 1;
         $anchor_id = isset($global_data['order_process_anchor_id']) ? (string)$global_data['order_process_anchor_id'] : '';
         $custom_class = isset($global_data['order_process_custom_class']) ? (string)$global_data['order_process_custom_class'] : '';
     }
 } else {
     // Local/Page Builder Mode
     $custom_class = (string) get_field_value('order_process_custom_class', $block, $clone_name, $pfx, '');
-    $bg_color     = (string) get_field_value('order_process_bg_style', $block, $clone_name, $pfx, '#ffffff');
     
     $title        = (string) get_field_value('order_process_title', $block, $clone_name, $pfx, '');
     $description  = (string) get_field_value('order_process_description', $block, $clone_name, $pfx, '');
@@ -52,18 +45,7 @@ if ( empty( $pfx ) ) {
     $steps        = get_field_value('order_process_steps', $block, $clone_name, $pfx, array());
     $steps        = is_array( $steps ) ? $steps : array();
     
-    $cta_group    = get_field_value('order_process_cta', $block, $clone_name, $pfx, array());
-    $cta_group    = is_array( $cta_group ) ? $cta_group : array();
-    
-    $active_step  = (int) get_field_value('order_process_active_step', $block, $clone_name, $pfx, 1);
     $anchor_id    = (string) get_field_value('order_process_anchor_id', $block, $clone_name, $pfx, '');
-}
-
-$cta_text     = isset( $cta_group['text'] ) ? (string) $cta_group['text'] : '';
-$cta_link     = isset( $cta_group['link'] ) && is_array( $cta_group['link'] ) ? $cta_group['link'] : array();
-
-if ( $active_step < 1 ) {
-	$active_step = 1;
 }
 
 if ( ! $steps ) {
@@ -91,7 +73,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
 		<?php if ( $title || $description ) : ?>
 			<div class="text-center mb-10 lg:mb-16">
 				<?php if ( $title ) : ?>
-					<h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-3">
+					<h2 class="text-heading">
 						<?php echo esc_html( $title ); ?>
 					</h2>
 				<?php endif; ?>
@@ -107,11 +89,8 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
 		$steps_count = count( $steps );
 		?>
 
-		<div class="relative max-w-[1100px] mx-auto">
-			<div class="absolute top-7 left-[12.5%] right-[12.5%] h-px bg-border hidden lg:block"></div>
-			<div class="absolute left-7 top-4 bottom-4 w-px bg-border lg:hidden"></div>
-
-			<div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-0 relative z-10">
+		<div class="relative max-w-[1200px] mx-auto">
+			<div class="grid grid-cols-1 lg:grid-cols-<?php echo $steps_count; ?> gap-12 lg:gap-0 relative z-10">
 				<?php foreach ( $steps as $index => $step ) : ?>
 					<?php
 					$step_title       = isset( $step['title'] ) ? (string) $step['title'] : '';
@@ -121,28 +100,31 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
 					if ( ! $step_title ) {
 						continue;
 					}
-
-					$is_active = ( $step_number === $active_step );
 					?>
 
-					<div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center gap-3 lg:gap-4">
-						<div class="w-14 h-14 rounded-full border bg-white flex flex-col items-center justify-center shrink-0 mb-0 lg:mb-6 mr-4 lg:mr-0 transition-all <?php echo $is_active ? 'border-primary' : 'border-border'; ?>">
-							<?php if ( $step_icon ) : ?>
-								<div class="w-5 h-5 text-primary mb-0.5">
-									<?php echo $step_icon; // SVG 原样输出以保持图标结构 ?>
-								</div>
-							<?php endif; ?>
-							<span class="font-mono text-[9px] text-muted leading-none">
-								<?php echo esc_html( sprintf( '%02d', $step_number ) ); ?>
-							</span>
-						</div>
+					<div class="flex lg:flex-col items-start lg:items-center text-left lg:text-center px-4">
+						<!-- Icon Only (Circle Removed) -->
+						<?php if ( $step_icon ) : ?>
+							<div class="w-12 h-12 lg:w-16 lg:h-16 text-primary flex items-center justify-center shrink-0 mb-0 lg:mb-8 mr-6 lg:mr-0">
+								<?php echo $step_icon; ?>
+							</div>
+						<?php endif; ?>
 
-						<div class="pt-1 lg:pt-0">
-							<h3 class="text-[17px] lg:text-[19px] font-semibold text-heading mb-2 lg:mb-3 leading-tight tracking-[-0.02em]">
+						<!-- Text Content -->
+						<div class="flex-1 pt-2 lg:pt-0">
+							<!-- Step Number -->
+							<div class="font-mono text-primary font-bold text-lg lg:text-xl mb-1 leading-none tracking-tight">
+								<?php echo esc_html( sprintf( '%02d', $step_number ) ); ?>
+							</div>
+
+							<!-- Title -->
+							<h3 class="text-[17px] lg:text-[19px] font-bold text-heading mb-2 lg:mb-3 leading-tight tracking-[-0.02em]">
 								<?php echo esc_html( $step_title ); ?>
 							</h3>
+
+							<!-- Description -->
 							<?php if ( $step_description ) : ?>
-								<p class="text-[13px] lg:text-[14px] leading-relaxed opacity-85 lg:max-w-[220px] lg:mx-auto">
+								<p class="text-[13px] lg:text-[14px] leading-relaxed text-slate-500 lg:max-w-[240px] lg:mx-auto">
 									<?php echo esc_html( $step_description ); ?>
 								</p>
 							<?php endif; ?>
@@ -151,30 +133,8 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
 				<?php endforeach; ?>
 			</div>
 		</div>
-
-		<?php
-		$cta_url   = isset( $cta_link['url'] ) ? (string) $cta_link['url'] : '';
-		$cta_title = isset( $cta_link['title'] ) ? (string) $cta_link['title'] : '';
-		$cta_target = isset( $cta_link['target'] ) ? (string) $cta_link['target'] : '';
-		?>
-
-		<?php if ( $cta_text && $cta_url ) : ?>
-			<div class="mt-12 lg:mt-16 text-center">
-				<a
-					class="inline-flex items-center justify-center bg-primary text-white px-8 py-3 lg:px-10 lg:py-3.5 rounded-[12px] font-semibold text-[13px] lg:text-[14px] tracking-[0.12em] uppercase hover:bg-[#003A8C] transition-colors"
-					href="<?php echo esc_url( $cta_url ); ?>"
-					<?php echo $cta_target ? 'target="' . esc_attr( $cta_target ) . '"' : ''; ?>
-				>
-					<?php echo esc_html( $cta_text ); ?>
-					<svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-						<path stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-					</svg>
-				</a>
-			</div>
-		<?php endif; ?>
 	</div>
 </div>
-
 <?php
 // Set global state for next block
 $GLOBALS['3dp_last_bg'] = $bg_color;

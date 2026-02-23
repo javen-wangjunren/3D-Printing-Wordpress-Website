@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Visual Transformation Fix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        industrial: '#1D2938',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 4px;
+            height: 100vh;
+            background: #0047AB;
+        }
+        /* 确保图片不被压缩 */
+        .comparison-img {
+            max-width: none !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="py-24 bg-white" x-data="{ 
+    position: 50,
+    containerWidth: 0,
+    updateWidth() { this.containerWidth = this.$refs.container.offsetWidth }
+}" x-init="updateWidth()" @resize.window="updateWidth()">
+    
+    <div class="w-[95%] lg:w-[80%] mx-auto">
+        
+        <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+            
+                <h3 class="text-[32px] lg:text-[42px] font-extrabold tracking-tighter leading-none">
+                    Surface <span class="text-primary italic">Transformation</span>
+                </h3>
+            </div>
+            
+            <div class="bg-panel border border-border px-6 py-3 rounded-xl flex items-center gap-8 shadow-sm">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-industrial/40 uppercase tracking-widest mb-1">Raw_Print</span>
+                    <span class="font-mono text-[14px] font-bold text-industrial">[ Ra: 6.3μm ]</span>
+                </div>
+                <div class="w-[1px] h-8 bg-border"></div>
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Finished</span>
+                    <span class="font-mono text-[14px] font-bold text-primary">[ Ra: 0.8μm ]</span>
+                </div>
+            </div>
+        </div>
+
+        <div x-ref="container" 
+             class="relative aspect-[16/9] lg:aspect-[21/9] w-full rounded-[32px] overflow-hidden bg-panel border border-border select-none shadow-2xl group">
+            
+            <div class="absolute inset-0 w-full h-full">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2000" 
+                     class="comparison-img grayscale-[10%]" alt="Finished">
+                <div class="absolute bottom-8 right-8">
+                    <span class="bg-primary text-white font-mono text-[12px] font-bold px-4 py-2 rounded-lg shadow-lg">
+                        [ STAGE_FINISHED ]
+                    </span>
+                </div>
+            </div>
+
+            <div class="absolute inset-0 h-full overflow-hidden border-r-[3px] border-primary z-10" 
+                 :style="'width: ' + position + '%'">
+                <div :style="'width: ' + containerWidth + 'px'" class="h-full relative">
+                    <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=2000" 
+                         class="comparison-img grayscale-[80%]" alt="Raw">
+                </div>
+                <div class="absolute bottom-8 left-8">
+                    <span class="bg-industrial text-white font-mono text-[12px] font-bold px-4 py-2 rounded-lg shadow-lg">
+                        [ STAGE_RAW_PRINT ]
+                    </span>
+                </div>
+            </div>
+
+            <div class="absolute top-0 bottom-0 z-20 pointer-events-none" :style="'left: ' + position + '%'">
+                <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-primary rounded-full shadow-2xl flex items-center justify-center border-4 border-white">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 7l-4 4m0 0l4 4m-4-4h16m0 0l-4-4m4 4l-4 4"></path>
+                    </svg>
+                </div>
+                <div class="absolute top-8 -translate-x-1/2 whitespace-nowrap bg-white/90 backdrop-blur px-3 py-1 rounded border border-primary/20 shadow-sm">
+                    <span class="font-mono text-[10px] font-bold text-primary" x-text="'SCAN_POS: ' + Math.round(position) + '%'"></span>
+                </div>
+            </div>
+
+            <input type="range" min="0" max="100" x-model="position" 
+                   class="absolute inset-0 w-full h-full opacity-0 cursor-col-resize z-30">
+        </div>
+
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-border pt-10">
+            <div class="flex gap-4">
+                <span class="font-mono text-primary font-bold text-[14px]">01 //</span>
+                <p class="text-[14px] text-industrial/60 leading-relaxed font-medium">
+                    The raw print exhibits characteristic stair-stepping effects and a high roughness index of <span class="text-industrial font-bold">Ra 6.3μm</span>.
+                </p>
+            </div>
+            <div class="flex gap-4">
+                <span class="font-mono text-primary font-bold text-[14px]">02 //</span>
+                <p class="text-[14px] text-industrial/60 leading-relaxed font-medium">
+                    Post-processing results in a semi-gloss, sealed surface with improved airtightness and a smooth <span class="text-industrial font-bold">Ra 0.8μm</span> finish.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

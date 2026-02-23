@@ -39,7 +39,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-border pb-8">
             <div class="max-w-2xl">
-                <h2 class="text-3xl lg:text-4xl font-bold text-heading tracking-tight mb-4">
+                <h2 class="text-heading">
                     <?php echo esc_html($heading); ?>
                 </h2>
                 <?php if ($description) : ?>

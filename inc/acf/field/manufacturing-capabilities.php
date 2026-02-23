@@ -26,14 +26,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'default_value' => 'Manufacturing Capabilities',
                     'wrapper' => array('width' => '50'),
                 ),
-                array(
-                    'key' => 'field_mcap_intro',
-                    'label' => 'Introduction',
-                    'name' => 'manufacturing_capabilities_intro',
-                    'type' => 'textarea',
-                    'rows' => 3,
-                    'wrapper' => array('width' => '50'),
-                ),
 
                 // Tabs (DMLS / SLS ...)
                 array(
@@ -52,40 +44,30 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Tab Title',
                             'name' => 'tab_title',
                             'type' => 'text',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Capability Title)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'wrapper' => array('width' => '40'),
-                        ),
-                        array(
-                            'key' => 'field_mcap_tab_key',
-                            'label' => 'Tab Key',
-                            'name' => 'tab_key',
-                            'type' => 'text',
-                            'instructions' => '机器可读key，如：dmls / sls',
-                            'wrapper' => array('width' => '30'),
-                        ),
-                        array(
-                            'key' => 'field_mcap_machine',
-                            'label' => 'Machine Model',
-                            'name' => 'machine_model',
-                            'type' => 'text',
-                            'default_value' => '',
-                            'wrapper' => array('width' => '30'),
                         ),
 
                         // 左侧信息区：标题/描述
                         array(
                             'key' => 'field_mcap_hub_title',
-                            'label' => 'Hub Title',
+                            'label' => 'Capability Title',
                             'name' => 'hub_title',
                             'type' => 'text',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Capability Title)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'wrapper' => array('width' => '50'),
                         ),
                         array(
                             'key' => 'field_mcap_hub_desc',
-                            'label' => 'Hub Description',
+                            'label' => 'Capability Description',
                             'name' => 'hub_desc',
                             'type' => 'textarea',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Hero Description)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'rows' => 3,
-                            'wrapper' => array('width' => '50'),
+                            'wrapper' => array('width' => '100'),
                         ),
 
                         // 高亮指标卡片（3个）
@@ -94,6 +76,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Highlight Cards',
                             'name' => 'highlights',
                             'type' => 'repeater',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Design Guide > Core Metrics)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'layout' => 'block',
                             'collapsed' => 'field_mcap_hl_title',
                             'min' => 1,
@@ -121,14 +105,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                                     'type' => 'text',
                                     'wrapper' => array('width' => '30'),
                                 ),
-                                array(
-                                    'key' => 'field_mcap_hl_tag',
-                                    'label' => 'Small Tag',
-                                    'name' => 'tag',
-                                    'type' => 'text',
-                                    'instructions' => '卡片左上角类别标签，如：DMLS / SLS',
-                                    'wrapper' => array('width' => '30'),
-                                ),
                             ),
                         ),
 
@@ -138,6 +114,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Available Finishing Tags',
                             'name' => 'finishing_tags',
                             'type' => 'repeater',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Reverse Query Surface Finish)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'layout' => 'table',
                             'collapsed' => 'field_mcap_tag_text',
                             'button_label' => '添加标签',
@@ -147,6 +125,18 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                                     'label' => 'Tag Text',
                                     'name' => 'text',
                                     'type' => 'text',
+                                    'instructions' => '可选：不填则自动使用所选 Surface Finish 的标题',
+                                    'wrapper' => array('width' => '50'),
+                                ),
+                                array(
+                                    'key' => 'field_mcap_tag_link',
+                                    'label' => 'Surface Finish Page',
+                                    'name' => 'link',
+                                    'type' => 'post_object',
+                                    'post_type' => array('surface-finish'),
+                                    'return_format' => 'id',
+                                    'ui' => 1,
+                                    'wrapper' => array('width' => '50'),
                                 ),
                             ),
                         ),
@@ -157,6 +147,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'CTA Link',
                             'name' => 'cta_link',
                             'type' => 'link',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Link to Capability)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'wrapper' => array('width' => '50'),
                         ),
 
@@ -166,6 +158,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'label' => 'Right Image',
                             'name' => 'image',
                             'type' => 'image',
+                            'instructions' => '数据优先从 Taxonomy 关联的 Capability 读取 (Hero Image)。如未关联则回退使用此手动字段。',
+                            'required' => 0,
                             'return_format' => 'id',
                             'preview_size' => 'medium',
                             'wrapper' => array('width' => '50'),
@@ -257,4 +251,3 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
         ) );
     } );
 }
-

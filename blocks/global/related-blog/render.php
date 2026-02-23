@@ -111,7 +111,7 @@ $card_width    = $width_mobile . ' ' . $width_tablet . ' ' . $width_desktop;
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div class="max-w-xl text-left">
                 <?php if ( $title || $title_highlight ) : ?>
-                    <h2 class="text-h2 font-bold text-heading tracking-tight mb-4">
+                    <h2 class="text-heading">
                         <?php echo esc_html( $title ); ?><?php if ( $title_highlight ) : ?> <span class="text-primary"><?php echo esc_html( $title_highlight ); ?></span><?php endif; ?>
                     </h2>
                 <?php endif; ?>

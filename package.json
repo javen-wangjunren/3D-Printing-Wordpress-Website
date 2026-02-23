@@ -1,11 +1,35 @@
 {
+  "//": [
+    "Package.json 配置文件",
+    "==========================================================================",
+    "文件作用:",
+    "定义项目的元数据、构建脚本和开发依赖。",
+    "",
+    "package.json 与 package-lock.json 的区别:",
+    "1. package.json: 项目的'愿望清单'。声明了项目依赖哪些包以及大致的版本范围（例如 ^1.0.0）。",
+    "2. package-lock.json: 项目的'实际快照'。记录了安装时具体下载的精确版本号和下载地址，确保在任何机器上安装结果完全一致。",
+    "",
+    "核心逻辑:",
+    "1. Scripts: 定义 npm run watch/build 等快捷指令。",
+    "2. DevDependencies: 声明 Tailwind CSS 及其插件的依赖版本。",
+    "",
+    "架构角色:",
+    "Node.js 环境的入口文件，负责驱动整个前端构建流程。",
+    "",
+    "🚨 避坑指南:",
+    "- 不要手动修改 dependencies 版本号，除非你清楚兼容性。",
+    "- scripts 中的 -i (输入) 和 -o (输出) 路径必须与项目结构一致。",
+    "=========================================================================="
+  ],
   "name": "generatepress-child-tailwind",
   "version": "1.0.0",
-  "description": "Tailwind CSS build for GeneratePress Child Theme",
+  "description": "Tailwind CSS build configuration for GeneratePress Child Theme. Handles CSS compilation, minification, and watching for changes.",
   "main": "index.js",
   "scripts": {
-    "build": "tailwindcss -i ./src/input.css -o ./assets/css/style.min.css --minify",
+    "//": "--- 构建指令 (Build Commands) ---",
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --minify",
     "build:dev": "tailwindcss -i ./src/input.css -o ./assets/css/style.css",
+    "//": "--- 开发指令 (Development Commands) ---",
     "watch": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --watch",
     "dev": "npm run watch"
   },
@@ -14,7 +38,7 @@
     "tailwind",
     "generatepress"
   ],
-  "author": "",
+  "author": "Javen",
   "license": "ISC",
   "devDependencies": {
     "autoprefixer": "^10.4.17",

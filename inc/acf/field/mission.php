@@ -71,14 +71,11 @@ if ( function_exists('acf_add_local_field_group') ) :
                     // Row 1: Identity
                     array(
                         'key' => 'field_mission_item_icon',
-                        'label' => 'Icon (SVG)',
+                        'label' => 'Icon (SVG Code)',
                         'name' => 'icon',
-                        'type' => 'image',
-                        'instructions' => 'Upload a small SVG icon (displayed inside the square box).',
-                        'return_format' => 'array', // Array allows access to URL, Alt, etc.
-                        'preview_size' => 'thumbnail',
-                        'library' => 'all',
-                        'mime_types' => 'svg,png', // Prefer SVG
+                        'type' => 'textarea',
+                        'instructions' => 'Paste your SVG code here. It will be rendered directly.',
+                        'rows' => 4,
                         'wrapper' => array('width' => '20'),
                     ),
                     array(

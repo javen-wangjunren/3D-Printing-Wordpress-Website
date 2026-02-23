@@ -1,101 +1,155 @@
+/**
+ * Tailwind CSS 主入口文件 (Source Input)
+ * ==========================================================================
+ * 作用与用途：
+ * 1. 构建源：这是 Tailwind CLI 编译 CSS 的源文件。它会被编译成 assets/css/style.css 供前端加载。
+ * 2. 样式重置 (Base)：包含针对 GeneratePress 主题的深度定制 Reset，强制移除侧边栏、修正容器宽度。
+ * 3. 组件定义 (Components)：存放表单 (Fluent Forms)、自定义模块 (Mission, Team 等) 的 CSS 类。
+ * 4. 样式兜底：当 PHP 过滤器失效时，这里的 !important 规则是保证布局不崩坏的最后一道防线。
+ *
+ * 为什么需要这个文件？
+ * - 实现 "Utility-First" 无法覆盖的复杂选择器样式（如第三方插件覆盖）。
+ * - 集中管理全站的全局样式规则，避免内联样式泛滥。
+ * - 配合 tailwind.config.js 实现设计系统的原子化落地。
+ *
+ * 编译指令：
+ * 开发模式 (监听变化)：npm run watch
+ * 生产构建 (压缩优化)：npm run build
+ * ==========================================================================
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* 
+ * ==========================================================================
+ * 1. Base Layer Reset (全局基础重置)
+ * ==========================================================================
+ * 目的：
+ * - 统一基础字体和背景
+ * - 接管 GeneratePress 的布局控制权 (Container & Sidebar)
+ * - 移除不必要的浏览器默认样式
+ */
 @layer base {
-  /* ========== 全局兜底 Reset ========== */
+  
+  /* 1.1 全局基础样式 */
   html, body { 
     @apply bg-bg-page text-body font-sans; 
   } 
 
-  /* ✅ 推荐：只针对你的“受控区域”进行重置 */ 
-  /**
- * Controlled Blocks Typography
- * ----------------------------
- * In custom Tailwind blocks, spacing is explicit.
- * We disable GP's default paragraph rhythm (1.5em)
- * to avoid invisible layout gaps.
- */
-
-  .site-content section p, 
-  .site-content .max-w-container p { 
-      margin-bottom: 0 !important; 
+  /* 1.2 标题排版 (覆盖 GP 默认样式) */
+  h1 {
+    @apply text-pretty text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl;
   }
 
-  /* Reset margin for block containers to avoid double spacing */
-   .site-main > div,
-   .site-main > section {
-       margin-bottom: 0 !important;
-   }
-
-  /* Alpine.js Cloak */
-  [x-cloak] { 
-    display: none !important; 
+  /* 1.3 链接样式重置 */
+  a {
+    text-decoration: none !important; /* 强制移除所有链接下划线 */
+  }
+  
+  a:hover {
+    text-decoration: none !important;
   }
 
-  /* 彻底摧毁侧边栏的占位可能 */
+  /* 
+   * 1.4 布局控制 (核心避坑区)
+   * --------------------------------------------------
+   * 这些 !important 规则用于解决 GP 主题与 Tailwind 全宽布局的冲突。
+   * 即使 PHP 过滤器失效，这些 CSS 也能强制修正布局。
+   */
+
+  /* 强制主内容全宽，移除浮动和边距 */
   #primary {
     width: 100% !important;
     float: none !important;
     margin: 0 !important;
   }
 
+  /* 彻底隐藏侧边栏容器 (防止幽灵占位) */
   #right-sidebar, .sidebar {
     display: none !important;
     width: 0 !important;
   }
 
-  /* 解锁 GP 的固定宽度容器 */
+  /* 解锁 GP 的固定宽度容器限制 */
   .grid-container {
     max-width: 100% !important;
   }
 
-  /* 强制主内容区域为 Block 布局，防止 Flex Row 导致子元素并排 */
+  /* 强制主内容区域为 Block 布局 (防止 Flex Row 导致子元素并排) */
   .site-content {
     display: block !important;
   }
 
-  a {
-    /* 彻底取消全局链接下划线 */
-    text-decoration: none !important;
+  /* 
+   * 1.5 间距与交互重置 
+   */
+
+  /* 移除 Tailwind Block 内部段落的默认间距 (交给 Tailwind 类控制) */
+  .site-content section p, 
+  .site-content .max-w-container p { 
+      margin-bottom: 0 !important; 
   }
-  
-  /* 如果你希望鼠标悬停时也不要有下划线 */
-  a:hover {
-    text-decoration: none !important;
+
+  /* 移除 Block 容器的默认外边距 */
+   .site-main > div,
+   .site-main > section {
+       margin-bottom: 0 !important; 
+   }
+
+  /* 隐藏 Alpine.js 初始化前的元素 (防止闪烁) */
+  [x-cloak] { 
+    display: none !important; 
   }
 }
 
+/* 
+ * ==========================================================================
+ * 2. Components Layer (自定义组件)
+ * ==========================================================================
+ * 包含：
+ * - Typography (标题工具类)
+ * - Forms (Fluent Forms 定制)
+ * - Modules (各业务模块的特定样式)
+ * - Header/Footer (头部底部样式覆盖)
+ */
 @layer components {
-  /* --- Fluent Forms Custom Styling --- */
+  
+  /* --- 2.1 Typography --- */
+  .text-h1 {
+    @apply text-5xl sm:text-7xl font-semibold tracking-tight;
+  }
 
-  /* 1. 基础输入框样式 (Global Input Styles) */
+  /* --- 2.2 Fluent Forms Custom Styling --- */
+  
+  /* 输入框基础样式 */
   .fluentform .ff-el-form-control {
     @apply border border-[#E4E7EC] rounded-md px-4 py-3 bg-white text-heading text-[15px] transition-all duration-150 ease-out;
   }
 
-  /* 物理锁定感：Focus 时边框变粗且无模糊阴影 */
+  /* 输入框 Focus 状态 (物理锁定感) */
   .fluentform .ff-el-form-control:focus {
     @apply border-primary outline-none ring-2 ring-primary/10;
   }
 
-  /* Labels */
+  /* 标签 (Labels) */
   .fluentform .ff-el-input--label {
     @apply font-semibold text-heading mb-2 tracking-[-0.01em] text-sm;
   }
 
-  /* Required Asterisk */
+  /* 必填星号 */
   .fluentform .ff-el-input--label.ff-el-is-required:after {
     content: '*';
     @apply text-[#D92D20] ml-1;
   }
 
-  /* 2. Container 间距优化 (Class: form-row-gap-md) */
+  /* 容器间距 */
   .fluentform .form-row-gap-md {
     @apply mb-6;
   }
 
-  /* 3. 文件上传区域美化 (Class: form-upload-zone) */
+  /* 文件上传区域 */
   .fluentform .form-upload-zone .ff-upload-btn-wrapper {
     @apply border border-dashed border-[#D0D5DD] rounded-lg bg-[#F9FAFB] py-8 px-5 text-center cursor-pointer transition-all duration-200;
   }
@@ -104,7 +158,7 @@
     @apply border-primary bg-[#F0F5FF];
   }
 
-  /* 4. 提交按钮 (Global Submit Button) */
+  /* 提交按钮 */
   .fluentform .ff-btn-submit {
     @apply w-full justify-center px-6 py-3.5 font-semibold text-[15px] rounded-md bg-primary text-white tracking-wide transition-colors duration-200;
   }
@@ -113,7 +167,7 @@
     @apply bg-primary-hover;
   }
 
-  /* 5. 移动端优化 */
+  /* 移动端表单优化 */
   @media (max-width: 768px) {
     .fluentform .ff-t-cell {
       @apply block w-full pr-0 mb-4;
@@ -123,9 +177,9 @@
     }
   }
 
-  /* --- Mission Module Styles --- */
+  /* --- 2.3 Module Specific Styles --- */
 
-  /* 工业网格背景微纹理 */
+  /* Mission Module: 工业网格背景 */
   .industrial-grid-bg {
     background-color: #F2F4F7;
     background-image: linear-gradient(rgba(228, 231, 236, 0.5) 1px, transparent 1px),
@@ -133,80 +187,52 @@
     background-size: 40px 40px;
   }
 
-  /* 图片上的技术遮罩层 */
+  /* Mission Module: 技术遮罩层 */
   .tech-overlay::after {
     content: '';
     @apply absolute inset-0 border border-white/10 pointer-events-none z-[5];
     background: linear-gradient(to bottom, transparent 80%, rgba(0, 71, 171, 0.2) 100%);
   }
 
-  /* --- Factory Image Module Styles --- */
-
-  /* 物理锁定框 (Hover State) */
+  /* Factory Image Module: Bento Card */
   .bento-card { 
       @apply relative overflow-hidden rounded-card bg-[#F8F9FB] border border-[#E4E7EC] transition-all duration-300 ease-out cursor-zoom-in;
   }
-  .bento-card:hover { 
-      @apply border-primary shadow-[0_0_0_3px_#0047AB,0_20px_40px_rgba(0,71,171,0.1)] z-10;
-  }
   
-  /* 图片交互 */
   .bento-card img {
       transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  .bento-card:hover img {
-      transform: scale(1.05);
-  }
   
-  /* 数据化标签 */
   .mono-tag { 
       @apply absolute top-4 left-4 font-mono text-[11px] font-bold bg-white/95 backdrop-blur-[4px] px-2 py-1 rounded text-primary border border-primary/10 z-20 uppercase tracking-[-0.02em];
   }
   
-  /* 描述遮罩 */
   .card-overlay {
       @apply absolute inset-0 opacity-0 transition-opacity duration-300 z-[8];
       background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);
-  }
-  .bento-card:hover .card-overlay {
-      opacity: 1;
   }
 
   .card-info {
       @apply absolute bottom-4 left-4 text-white translate-y-[10px] opacity-0 transition-all duration-300 ease-out delay-100 z-[9];
   }
-  .bento-card:hover .card-info {
-      transform: translateY(0);
-      opacity: 1;
-  }
 
-
-  /* --- Team Module Styles (Leadership) --- */
-
-  /* Title Typography */
+  /* Team Module Styles */
   .industrial-h2 { 
     letter-spacing: -0.5px; 
   }
 
-  /* Card Styling (Static, Clean) */
   .team-card { 
     @apply relative border border-[#E4E7EC] bg-white overflow-hidden rounded-xl;
   }
 
-  /* Mono Tag Styling */
   .mono-stat {
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.05em;
   }
 
-  /* --- Header Styles (Custom Overrides) --- */
+  /* --- 2.4 Header & Footer Overrides --- */
 
-  /* Alpine.js Cloak */
-  [x-cloak] { 
-    display: none !important; 
-  }
-
-  /* Header Material Column Title Border */
+  /* Header: 菜单边框与样式 */
   header .border-b,
   .material-column-heading {
     border-bottom-width: 1px !important;
@@ -214,7 +240,7 @@
     border-bottom-color: #E4E7EC !important;
   }
 
-  /* Nav Link Hover Effect */
+  /* Header: 导航链接悬停效果 */
   .nav-link-hover::after {
     content: ''; 
     @apply absolute bottom-[-2px] left-0 w-0 h-[2px] bg-primary transition-[width] duration-200 ease-out;
@@ -222,5 +248,18 @@
 
   .nav-link-hover:hover::after { 
     @apply w-full; 
+  }
+
+  /* Footer: 链接列表 */
+  .footer-link-list {
+    @apply list-none m-0 p-0;
+  }
+
+  .footer-link-list li {
+    @apply m-0 p-0 before:hidden;
+  }
+
+  .footer-link-list li a {
+    @apply text-body hover:text-primary transition-colors duration-200 block;
   }
 }

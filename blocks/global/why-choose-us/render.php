@@ -1,179 +1,208 @@
 <?php
 /**
- * Block: Why Choose Us
+ * Block: Why Choose Us (B2B Logic)
  * Path: blocks/global/why-choose-us/render.php
- * Description: Renders the Why Choose Us block with image slider and reasons list.
- * 
- * @package 3D_Printing
- * @author Javen
+ * Description: 100% 还原设计稿的工业级分栏模块，支持双角色内容对比。
  */
-// Prefix Support
-$pfx = isset($block['prefix']) ? $block['prefix'] : '';
-$block = isset( $block ) ? $block : array();
 
-// 万能取数逻辑
-$clone_name = rtrim($pfx, '_');
+$block_id = !empty($block['anchor']) ? $block['anchor'] : 'why-choose-us-' . $block['id'];
 
-// Initialize variables with defaults
-$header_title = '';
-$header_description = '';
-$slides = array();
-$fallback_image_id = 0;
-$reasons = array();
-$cta_link = array();
-$layout_style = 'image-left';
-$bg_color = '#ffffff'; // Default bg
-$auto_rotate = true;
-$rotate_interval = 5000;
-$custom_class = '';
+// 获取字段数据，优先从区块获取，若为空则从全局设置获取
+$main_title = get_field('wcu_main_title');
+$card_label = get_field('wcu_card_label');
+$tabs = get_field('wcu_tabs');
+$cta_page = get_field('wcu_cta_page');
+$cta_text = get_field('wcu_cta_text');
+$anchor_id = get_field('wcu_anchor_id');
+$custom_class = get_field('wcu_custom_class');
 
-if ( empty( $pfx ) ) {
-    // Global Settings Mode
+if (empty($tabs)) {
     $global_data = get_field('global_why_choose_us', 'option');
-    if ( $global_data ) {
-        $header_title = isset($global_data['wcu_header_title']) ? (string)$global_data['wcu_header_title'] : '';
-        $header_description = isset($global_data['wcu_header_description']) ? (string)$global_data['wcu_header_description'] : '';
-        $slides = isset($global_data['wcu_slides']) ? $global_data['wcu_slides'] : array();
-        $fallback_image_id = isset($global_data['why_choose_us_left_image']) ? (int)$global_data['why_choose_us_left_image'] : 0;
-        $cta_link = isset($global_data['wcu_cta_link']) ? $global_data['wcu_cta_link'] : array();
-        $layout_style = isset($global_data['why_choose_us_layout_style']) ? (string)$global_data['why_choose_us_layout_style'] : 'image-left';
-        $auto_rotate = isset($global_data['wcu_auto_rotate']) ? (bool)$global_data['wcu_auto_rotate'] : true;
-        $rotate_interval = isset($global_data['wcu_rotate_interval']) ? (int)$global_data['wcu_rotate_interval'] : 5000;
-        $custom_class = isset($global_data['why_choose_us_custom_class']) ? (string)$global_data['why_choose_us_custom_class'] : '';
-        $reasons = isset($global_data['why_choose_us_reasons']) ? $global_data['why_choose_us_reasons'] : array();
-        $bg_color = isset($global_data['bg_color']) ? $global_data['bg_color'] : '#ffffff';
+    if ($global_data) {
+        $main_title = $main_title ?: ($global_data['wcu_main_title'] ?? '');
+        $card_label = $card_label ?: ($global_data['wcu_card_label'] ?? '');
+        $tabs = $tabs ?: ($global_data['wcu_tabs'] ?? array());
+        $cta_page = $cta_page ?: ($global_data['wcu_cta_page'] ?? '');
+        $cta_text = $cta_text ?: ($global_data['wcu_cta_text'] ?? '');
+        $anchor_id = $anchor_id ?: ($global_data['wcu_anchor_id'] ?? '');
+        $custom_class = $custom_class ?: ($global_data['wcu_custom_class'] ?? '');
     }
-} else {
-    // Local Mode
-    $header_title       = (string) get_field_value('wcu_header_title', $block, $clone_name, $pfx, '');
-    $header_description = (string) get_field_value('wcu_header_description', $block, $clone_name, $pfx, '');
-    $slides             = get_field_value('wcu_slides', $block, $clone_name, $pfx, array());
-    $fallback_image_id  = (int) get_field_value('why_choose_us_left_image', $block, $clone_name, $pfx, 0);
-    $reasons            = get_field_value('why_choose_us_reasons', $block, $clone_name, $pfx, array());
-    $cta_link           = get_field_value('wcu_cta_link', $block, $clone_name, $pfx, array());
-    $layout_style       = (string) get_field_value('why_choose_us_layout_style', $block, $clone_name, $pfx, 'image-left');
-    $auto_rotate        = (bool) get_field_value('wcu_auto_rotate', $block, $clone_name, $pfx, true);
-    $rotate_interval    = (int) get_field_value('wcu_rotate_interval', $block, $clone_name, $pfx, 5000);
-    $custom_class       = (string) get_field_value('why_choose_us_custom_class', $block, $clone_name, $pfx, '');
-    $bg_color           = get_field_value('bg_color', $block, $clone_name, $pfx, '#ffffff');
 }
 
-$block_id = _3dp_get_safe_block_id( $block, 'why-choose-us' );
+$block_id = $anchor_id ?: $block_id;
+$main_title = $main_title ?: 'Why Choose 3DPROTO';
+$card_label = $card_label ?: 'CONSOLE / NAVIGATION';
+$cta_text = $cta_text ?: 'START YOUR PROJECT';
+$tabs = $tabs ?: array();
+$custom_class = $custom_class ?: '';
 
-if ( empty( $reasons ) ) return;
+if (empty($tabs)) return;
 
-if ( empty( $slides ) && $fallback_image_id ) {
-    $slides = array(
-        array( 'image' => $fallback_image_id, 'alt' => $header_title ?: 'Factory View' ),
+// 预处理 Alpine.js 数据
+$alpine_content = array();
+foreach ($tabs as $index => $tab) {
+    $tab_name = $tab['tab_name'];
+    $img_url = wp_get_attachment_image_url($tab['tab_image'], 'full');
+    
+    $eng_points = array();
+    if (!empty($tab['eng_list'])) {
+        foreach ($tab['eng_list'] as $item) {
+            $eng_points[] = $item['item'];
+        }
+    }
+
+    $proc_points = array();
+    if (!empty($tab['proc_list'])) {
+        foreach ($tab['proc_list'] as $item) {
+            $proc_points[] = $item['item'];
+        }
+    }
+
+    $alpine_content[$tab_name] = array(
+        'title' => $tab['tab_name'],
+        'desc'  => $tab['tab_desc'],
+        'img'   => $img_url,
+        'engLabel' => $tab['eng_label'],
+        'engPoints' => $eng_points,
+        'procLabel' => $tab['proc_label'],
+        'procPoints' => $proc_points
     );
 }
 
-$slides_count = is_array( $slides ) ? count( $slides ) : 0;
+$initial_tab = !empty($tabs) ? $tabs[0]['tab_name'] : '';
 
-// --- Dynamic Spacing Logic ---
-$prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
-$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
-$pb_class = 'pb-16 lg:pb-24';
-
-$left_order  = 'order-1 lg:order-2';
-$right_order = 'order-2 lg:order-1';
-if ( $layout_style === 'image-right' ) {
-    $left_order  = 'order-2 lg:order-1';
-    $right_order = 'order-1 lg:order-2';
-}
-
-$section_id_attr = $block_id ? 'id="' . esc_attr( $block_id ) . '"' : '';
+// 更新全局背景状态 (WCU 是纯白底)
+$GLOBALS['3dp_last_bg'] = '#ffffff';
 ?>
 
-<section <?php echo $section_id_attr; ?> class="why-choose-us-block w-full relative <?php echo esc_attr( $custom_class . ' ' . $pt_class . ' ' . $pb_class ); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>">
-    <div class="mx-auto max-w-container px-6 lg:px-[64px]" x-data="{ activeSlide: 0, slidesCount: <?php echo (int) $slides_count; ?>, autoRotate: <?php echo $auto_rotate ? 'true' : 'false'; ?>, interval: <?php echo (int) $rotate_interval; ?> }" x-init="if (autoRotate && slidesCount > 1) { setInterval(() => { activeSlide = (activeSlide + 1) % slidesCount }, interval) }">
-        <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-stretch">
-
-            <!-- Image/Slider Section -->
-            <div class="relative rounded-card overflow-hidden border border-border h-full min-h-[320px] lg:min-h-0 <?php echo esc_attr( $left_order ); ?>">
-                <?php foreach ( $slides as $index => $slide ) : ?>
-                    <?php
-                    $img_id = isset( $slide['image'] ) ? (int) $slide['image'] : 0;
-                    $alt    = isset( $slide['alt'] ) ? (string) $slide['alt'] : ( $header_title ?: 'Factory View' );
-                    ?>
-                    <div x-show="activeSlide === <?php echo (int) $index; ?>" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 scale-105" x-transition:enter-end="opacity-100 scale-100" class="absolute inset-0">
-                        <?php if ( $img_id ) : ?>
-                            <?php echo wp_get_attachment_image( $img_id, 'large', false, array( 'alt' => esc_attr( $alt ), 'class' => 'w-full h-full object-cover', 'loading' => 'lazy' ) ); ?>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-
-                <?php if ( $slides_count > 1 ) : ?>
-                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-                    <?php for ( $i = 0; $i < $slides_count; $i++ ) : ?>
-                        <button @click="activeSlide = <?php echo (int) $i; ?>" :class="activeSlide === <?php echo (int) $i; ?> ? 'bg-white w-6' : 'bg-white/40 w-1.5'" class="h-1 rounded-full transition-all duration-300"></button>
-                    <?php endfor; ?>
+<section id="<?php echo esc_attr($block_id); ?>" class="py-16 lg:pt-24 lg:pb-40 bg-white relative overflow-hidden <?php echo esc_attr($custom_class); ?>">
+    
+    <div class="max-w-container mx-auto px-container relative z-10">
+        
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 min-h-[700px] lg:min-h-[800px]" 
+             x-data="{ 
+                activeTab: '<?php echo esc_attr($initial_tab); ?>',
+                content: <?php echo htmlspecialchars(json_encode($alpine_content), ENT_QUOTES, 'UTF-8'); ?>
+             }">
+            
+            <!-- Left Rail: Console Controls (Fixed Width: 380px) -->
+            <div class="lg:w-[380px] bg-panel border border-border rounded-xl p-8 lg:p-10 flex flex-col relative overflow-hidden">
+                
+                <!-- Global Section Header (Moved inside Left Rail for alignment) -->
+                <div class="mb-12 lg:mb-16 relative z-20">
+                    <h2 class="text-heading text-[32px] lg:text-[40px] font-extrabold tracking-[-1px] leading-tight">
+                        <?php 
+                        // 处理标题中的品牌色
+                        $title_html = esc_html($main_title);
+                        if (strpos($title_html, '3DPROTO') !== false) {
+                            $title_html = str_replace('3DPROTO', '<span class="text-primary">3DPROTO</span>', $title_html);
+                        }
+                        echo $title_html;
+                        ?>
+                    </h2>
                 </div>
-                <?php endif; ?>
+
+                <!-- Grid Overlay (Only inside the left rail area) -->
+                <div class="absolute inset-0 opacity-[0.3] pointer-events-none" style="background-image: radial-gradient(circle, #D0D5DD 1px, transparent 1px); background-size: 24px 24px;"></div>
+                
+                <div class="relative z-10 mb-10">
+                    <h4 class="font-mono text-[13px] font-bold text-primary uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                        <?php echo esc_html($card_label); ?>
+                    </h4>
+                </div>
+                
+                <nav class="relative z-10 flex-1 space-y-4 lg:space-y-6">
+                    <template x-for="(data, tab) in content" :key="tab">
+                        <button @click="activeTab = tab"
+                                :class="activeTab === tab ? 'border-l-primary bg-white shadow-sm' : 'border-l-transparent opacity-60 hover:opacity-100'"
+                                class="w-full text-left transition-all duration-300 group border-l-[3px] border-y-0 border-r-0 pl-6 py-4 outline-none rounded-r-xl">
+                            <div class="flex flex-col gap-1.5">
+                                <div class="flex items-center gap-3">
+                                    <span :class="activeTab === tab ? 'text-primary' : 'text-body opacity-40'" 
+                                          class="font-mono text-[11px] font-bold">
+                                        <span x-text="'0' + (Object.keys(content).indexOf(tab) + 1)"></span>
+                                    </span>
+                                    <h3 :class="activeTab === tab ? 'text-industrial' : 'text-body'" 
+                                        class="font-bold uppercase tracking-[1.2px] text-[14px] m-0" 
+                                        x-text="tab"></h3>
+                                </div>
+                                <div x-show="activeTab === tab" 
+                                     x-cloak
+                                     x-transition:enter="transition ease-out duration-300"
+                                     x-transition:enter-start="opacity-0 -translate-y-2"
+                                     class="mt-2">
+                                    <p class="text-[13px] text-body/80 leading-relaxed pr-4 m-0" 
+                                       x-text="data.desc"></p>
+                                </div>
+                            </div>
+                        </button>
+                    </template>
+                </nav>
             </div>
 
-            <!-- Content Section -->
-            <div class="flex flex-col justify-center <?php echo esc_attr( $right_order ); ?>">
-                <header class="mb-6 lg:mb-8">
-                    <?php if ( $header_title ) : ?>
-                        <h2 class="text-h2 font-bold text-heading tracking-tight leading-tight mb-4">
-                            <?php echo esc_html( $header_title ); ?>
-                        </h2>
-                    <?php endif; ?>
-                    <?php if ( $header_description ) : ?>
-                        <p class="text-body text-small leading-relaxed">
-                            <?php echo esc_html( $header_description ); ?>
-                        </p>
-                    <?php endif; ?>
-                </header>
+            <!-- Right Content: Information Matrix -->
+            <div class="flex-1 bg-white border border-border rounded-xl p-8 lg:p-12 flex flex-col">
+                <!-- Visual Asset -->
+                <div class="h-[300px] lg:h-[450px] overflow-hidden rounded-[20px] bg-industrial relative shadow-inner">
+                    <img :src="content[activeTab].img" class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-1000">
+                    <div class="absolute inset-0 bg-gradient-to-t from-industrial/40 to-transparent"></div>
+                </div>
 
-                <div class="space-y-2 lg:space-y-3">
-                    <?php foreach ( $reasons as $reason ) : ?>
-                        <?php
-                        $r_title = isset( $reason['reason_title'] ) ? (string) $reason['reason_title'] : '';
-                        $r_desc  = isset( $reason['reason_description'] ) ? (string) $reason['reason_description'] : '';
-                        $r_badge = isset( $reason['reason_badge'] ) ? (string) $reason['reason_badge'] : '';
-                        $r_svg   = isset( $reason['reason_icon_svg'] ) ? (string) $reason['reason_icon_svg'] : '';
-                        if ( ! $r_title ) { continue; }
-                        ?>
-                        <div class="flex items-center gap-4 p-3 rounded-lg border border-transparent hover:border-border hover:bg-bg-section/40 transition-all group">
-                            <div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center text-primary shrink-0 group-hover:bg-primary group-hover:text-inverse transition-colors">
-                                <?php if ( $r_svg ) : ?>
-                                    <?php echo wp_kses_post( $r_svg ); ?>
-                                <?php else : ?>
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                <?php endif; ?>
-                            </div>
-                            <div class="flex-1 flex items-center justify-between">
-                                <div>
-                                    <h4 class="text-[15px] font-bold text-heading group-hover:text-primary transition-colors mb-1"><?php echo esc_html( $r_title ); ?></h4>
-                                    <?php if ( $r_desc ) : ?>
-                                        <p class="text-[12px] text-body opacity-80"><?php echo esc_html( $r_desc ); ?></p>
-                                    <?php endif; ?>
+                <!-- Data Matrix -->
+                <div class="py-12 lg:py-16 flex-1 flex flex-col justify-center">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                        
+                        <!-- Persona 01: Engineers -->
+                        <div x-show="activeTab" x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 translate-y-4">
+                            <div class="flex items-center gap-4 mb-8">
+                                <span class="font-mono text-[13px] font-bold text-primary uppercase tracking-wider" x-text="content[activeTab].engLabel"></span>
+                                <div class="relative h-[1px] flex-1 bg-border/60">
+                                    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-3 bg-border"></div>
                                 </div>
-                                <?php if ( $r_badge ) : ?>
-                                    <span class="font-mono text-[11px] font-bold text-primary bg-primary/5 px-2 py-0.5 rounded"><?php echo esc_html( $r_badge ); ?></span>
-                                <?php endif; ?>
                             </div>
+                            <ul class="space-y-5 m-0 p-0 list-none">
+                                <template x-for="point in content[activeTab].engPoints">
+                                    <li class="flex items-start gap-4">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                                        <p class="text-[15px] lg:text-[16px] text-industrial font-bold tracking-tight leading-relaxed m-0" x-text="point"></p>
+                                    </li>
+                                </template>
+                            </ul>
                         </div>
-                    <?php endforeach; ?>
-                </div>
 
-                <?php if ( ! empty( $cta_link['url'] ) ) : ?>
-                <div class="mt-8">
-                    <a href="<?php echo esc_url( $cta_link['url'] ); ?>" class="inline-flex items-center justify-center w-full bg-primary hover:bg-primary-hover text-inverse px-8 py-4 rounded-button font-bold text-small uppercase tracking-wider shadow-lg shadow-primary/20 transition-all group" <?php if ( ! empty( $cta_link['target'] ) ) : ?>target="<?php echo esc_attr( $cta_link['target'] ); ?>"<?php endif; ?>>
-                        <?php echo esc_html( ! empty( $cta_link['title'] ) ? $cta_link['title'] : 'Get an Instant Quote' ); ?>
-                        <svg class="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
+                        <!-- Persona 02: Procurement -->
+                        <div x-show="activeTab" x-transition:enter="transition ease-out duration-500 delay-200" x-transition:enter-start="opacity-0 translate-y-4">
+                            <div class="flex items-center gap-4 mb-8">
+                                <span class="font-mono text-[13px] font-bold text-primary uppercase tracking-wider" x-text="content[activeTab].procLabel"></span>
+                                <div class="relative h-[1px] flex-1 bg-border/60">
+                                    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-[1px] h-3 bg-border"></div>
+                                </div>
+                            </div>
+                            <ul class="space-y-5 m-0 p-0 list-none">
+                                <template x-for="point in content[activeTab].procPoints">
+                                    <li class="flex items-start gap-4">
+                                        <div class="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                                        <p class="text-[15px] lg:text-[16px] text-industrial font-bold tracking-tight leading-relaxed m-0" x-text="point"></p>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Link -->
+                    <div class="mt-12 lg:mt-16 pt-10 border-t border-border flex justify-end items-center">
+                        <?php if ($cta_page) : ?>
+                        <a href="<?php echo esc_url($cta_page); ?>" class="group bg-primary text-white px-10 py-4 rounded-button text-[13px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-primary-hover transition-all duration-300 shadow-lg shadow-primary/10">
+                            <?php echo esc_html($cta_text); ?>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
-                <?php endif; ?>
             </div>
 
         </div>
     </div>
 </section>
-
-<?php
-// Set global state for next block
-$GLOBALS['3dp_last_bg'] = $bg_color;
-?>

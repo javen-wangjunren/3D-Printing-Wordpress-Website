@@ -1,39 +1,63 @@
 <?php
 /**
- * 集中加载所有模块的字段定义
- * 位置: /inc/acf/fields.php
- * 作用：
- * - 集中入口：把主题里所有“字段定义文件”一次性加载进来，让 ACF 在后台显示对应的字段组
- * - 自动扫描：按目录自动找到并引入 .php（模块字段/自定义文章类型字段/页面专属字段），不用你手动一个个 require
- * - 安全护栏：只有在 ACF 可用时才加载，避免非 ACF 环境报错
+ * ACF Field Loader (ACF 字段定义加载器)
+ * ==========================================================================
+ * 文件作用:
+ * 集中加载所有模块的 ACF 字段定义文件。
+ * 
+ * 核心逻辑:
+ * 1. 扫描 `inc/acf/field/` 目录：加载通用 Block 字段。
+ * 2. 扫描 `inc/acf/cpt/` 目录：加载自定义文章类型 (CPT) 字段。
+ * 3. 扫描 `inc/acf/pages/` 目录：加载特定页面 (Page Template) 字段。
+ * 4. 扫描 `inc/acf/taxonomy/` 目录：加载分类法 (Taxonomy) 字段。
+ *
+ * 架构角色:
+ * [Configuration Loader]
+ * 这个文件是 ACF 字段配置的"总入口"。
+ * 它确保了所有的 PHP 字段定义文件被 WordPress 识别并执行。
+ * 使用 `glob()` 自动扫描机制，避免了每增加一个文件就要手动写一行 `require` 的麻烦。
+ *
+ * 🚨 避坑指南:
+ * 1. 文件命名: 确保目录下的文件都是 `.php` 后缀。
+ * 2. 加载顺序: 如果字段组之间有依赖（比如 Clone），加载顺序可能重要，但通常 ACF 会处理好。
+ *    目前的加载顺序是: Fields -> CPT -> Pages -> Taxonomy。
+ * ==========================================================================
+ * 
+ * @package GeneratePress_Child
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// 仅在 ACF 插件激活且可用时执行
 if ( function_exists( 'acf_add_local_field_group' ) ) {
     
-    // 获取字段定义文件夹的路径
-    $fields_dir = get_stylesheet_directory() . '/inc/acf/field/';
-    $cpt_fields_dir = get_stylesheet_directory() . '/inc/acf/cpt/';
-    $pages_fields_dir = get_stylesheet_directory() . '/inc/acf/pages/';
-
-    // 模式 A：自动加载（推荐）
-    // 自动扫描文件夹下所有的 .php 文件，省去手动 require 的麻烦
-    foreach ( glob( $fields_dir . "*.php" ) as $filename ) {
-        require_once $filename;
-    }
+    // 定义各类型字段的目录路径
+    $base_dir = get_stylesheet_directory() . '/inc/acf/';
     
-    // 加载自定义文章类型的字段定义
-    foreach ( glob( $cpt_fields_dir . "*.php" ) as $filename ) {
-        require_once $filename;
-    }
-    
-    // 加载页面特定的字段定义
-    foreach ( glob( $pages_fields_dir . "*.php" ) as $filename ) {
-        require_once $filename;
+    $directories = array(
+        'field'    => $base_dir . 'field/',    // 通用 Block 字段
+        'cpt'      => $base_dir . 'cpt/',      // CPT 专属字段 (如 Material, Capability)
+        'pages'    => $base_dir . 'pages/',    // 页面模板字段 (如 Home, Contact)
+        'taxonomy' => $base_dir . 'taxonomy/', // 分类法字段 (如 Material Process)
+    );
+
+    // 遍历目录并加载文件
+    foreach ( $directories as $type => $path ) {
+        // 确保目录存在，防止报错
+        if ( is_dir( $path ) ) {
+            foreach ( glob( $path . "*.php" ) as $filename ) {
+                require_once $filename;
+            }
+        }
     }
 
-    /* // 模式 B：手动加载（你目前的模式，如果想保留手动控制，就用这个）
-    if ( file_exists( $fields_path . 'hero-banner.php' ) ) {
-        require_once $fields_path . 'hero-banner.php';
+    /* 
+    // [Legacy Mode] 手动加载示例
+    // 如果某个文件需要特定顺序加载，可以在这里单独 require
+    if ( file_exists( $directories['field'] . 'hero-banner.php' ) ) {
+        require_once $directories['field'] . 'hero-banner.php';
     }
     */
 }

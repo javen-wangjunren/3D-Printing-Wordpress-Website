@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Industrial Console v10.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        industrial: '#1D2938',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .grid-pattern {
+            background-image: radial-gradient(circle, #E4E7EC 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="relative bg-[#F8F9FB] overflow-hidden border-t border-border" 
+         x-data="{ 
+            activeTab: 'EFFICIENCY',
+            content: {
+                'EFFICIENCY': {
+                    title: 'Operational Efficiency',
+                    desc: 'Digital automation from CAD upload to global shipment.',
+                    img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200',
+                    engPoints: ['Instant DFM analysis on CAD uploads', '24-hour manufacturing for rapid iterations'],
+                    buyPoints: ['Real-time quoting eliminates procurement lag', '97.4% on-time delivery across global logistics']
+                },
+                'QUALITY': {
+                    title: 'Precision Quality',
+                    desc: 'Mission-critical standards for industrial applications.',
+                    img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=1200',
+                    engPoints: ['Strict ISO 2768-C tolerance standards', 'Advanced CMM inspection for critical dimensions'],
+                    buyPoints: ['ISO 9001:2015 certified quality systems', 'Full material traceability and test certifications']
+                },
+                'CAPACITY': {
+                    title: 'Scalable Capacity',
+                    desc: 'From high-fidelity prototypes to industrial mass production.',
+                    img: 'https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&q=80&w=1200',
+                    engPoints: ['Industrial fleet for complex internal geometries', 'Large-scale build volumes up to 800mm (single part)'],
+                    buyPoints: ['Flexible production cycles: 1 to 10,000+ units', 'Tiered pricing models optimized for industrial orders']
+                },
+                'EXPERTISE': {
+                    title: 'Engineering Support',
+                    desc: 'Strategic manufacturing partnership for aerospace and medical.',
+                    img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=1200',
+                    engPoints: ['Deep expertise in 15-5PH, Titanium, and PEEK', 'Application-specific DFM consultation'],
+                    buyPoints: ['Decades of experience in high-compliance sectors', 'Dedicated technical account management support']
+                }
+            }
+         }">
+    
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-[80px] pt-24 pb-12 relative z-20">
+        <h2 class="text-[40px] lg:text-[56px] font-[800] text-industrial tracking-[-2px] uppercase leading-none">
+            Why Choose <span class="text-primary italic">3DPROTO?</span>
+        </h2>
+    </div>
+
+    <div class="flex flex-col lg:flex-row max-w-[1400px] mx-auto min-h-[850px] relative z-10">
+        
+        <div class="lg:w-[350px] bg-panel grid-pattern border-r border-border p-10 lg:p-14 flex flex-col">
+            <div class="mb-16">
+                <span class="font-mono text-[11px] font-bold text-primary uppercase tracking-[4px]">[ System_Navigation ]</span>
+                <div class="h-[1px] w-12 bg-primary/30 mt-4"></div>
+            </div>
+
+            <nav class="flex-1 space-y-10">
+                <template x-for="tab in Object.keys(content)">
+                    <button @click="activeTab = tab"
+                            :class="activeTab === tab ? 'text-primary' : 'text-industrial opacity-30 hover:opacity-60'"
+                            class="w-full text-left transition-all duration-300 group flex flex-col gap-2">
+                        <div class="flex items-center gap-4">
+                            <div :class="activeTab === tab ? 'w-8 bg-primary opacity-100' : 'w-0 opacity-0'" class="h-[2px] transition-all duration-500"></div>
+                            <div class="flex flex-col">
+                                <span class="font-mono text-[10px] font-bold mb-1" x-text="'VAL_0' + (Object.keys(content).indexOf(tab) + 1)"></span>
+                                <span class="font-extrabold uppercase tracking-[2px] text-[16px] lg:text-[18px]" x-text="tab"></span>
+                            </div>
+                        </div>
+                        <p x-show="activeTab === tab" x-transition class="pl-12 text-[12px] text-industrial/60 leading-relaxed font-medium" x-text="content[tab].desc"></p>
+                    </button>
+                </template>
+            </nav>
+
+            <div class="mt-20 pt-10 border-t border-border/60 opacity-20">
+                <p class="font-mono text-[9px] uppercase tracking-[4px]">3DPROTO // DATA_SYNC_v10.0</p>
+            </div>
+        </div>
+
+        <div class="flex-1 bg-white flex flex-col">
+            
+            <div class="h-[450px] overflow-hidden bg-industrial relative">
+                <img :src="content[activeTab].img" class="w-full h-full object-cover grayscale-[20%] transition-all duration-1000 scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-industrial/20 to-transparent"></div>
+            </div>
+
+            <div class="p-10 lg:p-20 flex-1 flex flex-col justify-center">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                    
+                    <div x-show="activeTab" x-transition:enter="transition ease-out duration-500 delay-100" x-transition:enter-start="opacity-0 translate-y-4">
+                        <div class="flex items-center gap-4 mb-10">
+                            <span class="font-mono text-[12px] font-bold text-primary uppercase tracking-[4px]">[ 01 / For Engineers ]</span>
+                            <div class="h-[1px] flex-1 bg-border/60"></div>
+                        </div>
+                        <ul class="space-y-6">
+                            <template x-for="point in content[activeTab].engPoints">
+                                <li class="flex items-start gap-5">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                                    <p class="text-[17px] text-industrial font-bold leading-relaxed tracking-tight" x-text="point"></p>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <div x-show="activeTab" x-transition:enter="transition ease-out duration-500 delay-200" x-transition:enter-start="opacity-0 translate-y-4">
+                        <div class="flex items-center gap-4 mb-10">
+                            <span class="font-mono text-[12px] font-bold text-primary opacity-50 uppercase tracking-[4px]">[ 02 / For Buyers ]</span>
+                            <div class="h-[1px] flex-1 bg-border/60"></div>
+                        </div>
+                        <ul class="space-y-6">
+                            <template x-for="point in content[activeTab].buyPoints">
+                                <li class="flex items-start gap-5">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-primary/30 mt-2 flex-shrink-0"></div>
+                                    <p class="text-[17px] text-industrial opacity-70 leading-relaxed" x-text="point"></p>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="mt-16 pt-10 border-t border-border flex justify-end">
+                    <a href="/quote" class="group flex items-center gap-4 text-primary font-bold uppercase tracking-[3px] text-[13px] hover:gap-6 transition-all">
+                        Proceed to Instant Quote
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

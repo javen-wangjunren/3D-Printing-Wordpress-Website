@@ -29,45 +29,64 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'instructions' => '如：SLS Materials Mechanical Properties Comparison',
                 ),
                 array(
-                    'key' => 'field_ct_desc',
+                    'key' => 'field_ct_description',
                     'label' => 'Table Description',
                     'name' => 'table_description',
-                    'type' => 'text',
-                    'instructions' => '表格标题下方的补充说明文字。',
-                    'placeholder' => 'Precision Display: Uniform borders and dual-tone matrix.',
+                    'type' => 'textarea',
+                    'rows' => 2,
+                    'instructions' => '显示在标题下方的补充描述文字。',
                 ),
-                // --- 第一层：定义表头标签 (动态表头核心) ---
+                // 旧版字段移除：表头与单列表数据已废弃
+                // --- 第二层 (新版)：Data Tabs (分组数据) ---
                 array(
-                    'key' => 'field_ct_header_group',
-                    'label' => 'Table Headers (定义列标题)',
-                    'name' => 'headers',
-                    'type' => 'group',
-                    'layout' => 'table', // 表头定义采用紧凑表格布局
-                    'instructions' => '在此定义表格的列名。例如：Material, Color, Tensile Strength 等。',
-                    'sub_fields' => array(
-                        array( 'key' => 'field_ct_h1', 'label' => 'Col 1 (Fixed)', 'name' => 'h1', 'type' => 'text', 'default_value' => 'Material' ),
-                        array( 'key' => 'field_ct_h2', 'label' => 'Col 2', 'name' => 'h2', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_h3', 'label' => 'Col 3', 'name' => 'h3', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_h4', 'label' => 'Col 4', 'name' => 'h4', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_h5', 'label' => 'Col 5', 'name' => 'h5', 'type' => 'text' ),
-                    ),
-                ),
-                // --- 第二层：填入行数据 ---
-                array(
-                    'key' => 'field_ct_rows',
-                    'label' => 'Table Data Rows (数据行内容)',
-                    'name' => 'comparison_rows',
+                    'key' => 'field_ct_tabs',
+                    'label' => 'Data Tabs (分组数据 - 推荐)',
+                    'name' => 'comparison_tabs',
                     'type' => 'repeater',
-                    'instructions' => '对应上方定义的表头填入数值。例如在 Val 3 填入 "7.54 ksi"。',
-                    'collapsed' => 'field_ct_col1',
-                    'layout' => 'table', // 每一行在后台也横向显示，模拟真实表格
-                    'button_label' => '＋ 添加数据行',
+                    'instructions' => '每个分组的“首行”即为该分组的表头（Col1-6）。其余行作为数据行。',
+                    'layout' => 'block',
+                    'collapsed' => 'field_ct_tab_label',
+                    'button_label' => '＋ 添加分组 Tab',
                     'sub_fields' => array(
-                        array( 'key' => 'field_ct_col1', 'label' => 'Val 1', 'name' => 'v1', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_col2', 'label' => 'Val 2', 'name' => 'v2', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_col3', 'label' => 'Val 3', 'name' => 'v3', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_col4', 'label' => 'Val 4', 'name' => 'v4', 'type' => 'text' ),
-                        array( 'key' => 'field_ct_col5', 'label' => 'Val 5', 'name' => 'v5', 'type' => 'text' ),
+                        // Tab Label
+                        array(
+                            'key' => 'field_ct_tab_label',
+                            'label' => 'Tab Label',
+                            'name' => 'tab_label',
+                            'type' => 'text',
+                            'required' => 0,
+                            'wrapper' => array('width' => '50'),
+                        ),
+                        array(
+                            'key' => 'field_ct_tab_column_count',
+                            'label' => 'Columns',
+                            'name' => 'tab_column_count',
+                            'type' => 'number',
+                            'default_value' => 6,
+                            'min' => 1,
+                            'max' => 6,
+                            'wrapper' => array('width' => '50'),
+                        ),
+                        // Tab Rows (Nested Repeater)
+                        array(
+                            'key' => 'field_ct_tab_rows',
+                            'label' => 'Rows for this Tab',
+                            'name' => 'tab_rows',
+                            'type' => 'repeater',
+                            'layout' => 'table',
+                            'button_label' => '＋ 添加该分组下的行',
+                            'wrapper' => array('width' => '100'),
+                            'min' => 1,
+                            'instructions' => '第1行作为表头（Col1-6），至少需要1行。',
+                            'sub_fields' => array(
+                                array( 'key' => 'field_ct_t_v1', 'label' => 'Val 1', 'name' => 'v1', 'type' => 'text' ),
+                                array( 'key' => 'field_ct_t_v2', 'label' => 'Val 2', 'name' => 'v2', 'type' => 'text' ),
+                                array( 'key' => 'field_ct_t_v3', 'label' => 'Val 3', 'name' => 'v3', 'type' => 'text' ),
+                                array( 'key' => 'field_ct_t_v4', 'label' => 'Val 4', 'name' => 'v4', 'type' => 'text' ),
+                                array( 'key' => 'field_ct_t_v5', 'label' => 'Val 5', 'name' => 'v5', 'type' => 'text' ),
+                                array( 'key' => 'field_ct_t_v6', 'label' => 'Val 6', 'name' => 'v6', 'type' => 'text' ),
+                            ),
+                        ),
                     ),
                 ),
 

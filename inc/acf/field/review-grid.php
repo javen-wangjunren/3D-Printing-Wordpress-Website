@@ -105,16 +105,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'return_format' => 'value',
                         ),
                         array(
-                            'key'           => 'field_verified',
-                            'label'         => 'Verified',
-                            'name'          => 'verified',
-                            'type'          => 'true_false',
-                            'required'      => 0,
-                            'wrapper'       => array( 'width' => '33' ),
-                            'message'       => '标记为已验证',
-                            'default_value' => 1,
-                        ),
-                        array(
                             'key'         => 'field_review_text',
                             'label'       => 'Review Text',
                             'name'        => 'review_text',

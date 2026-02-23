@@ -62,21 +62,15 @@ $primary_type    = ! empty( $type_slugs ) ? $type_terms[0]->name : get_field_val
 
     <a class="material-card-link absolute inset-0 z-10" href="<?php echo esc_url( get_permalink() ); ?>" aria-label="<?php echo esc_attr( $title_raw ); ?>"></a>
 
-    <div class="relative aspect-[4/3] bg-bg-section flex items-center justify-center p-4">
-        <?php if ( $primary_process ) : ?>
-            <span class="material-card-tag material-card-tag-process absolute top-4 left-4 inline-flex items-center rounded px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.08em] bg-heading text-white" data-tag="process">
-                <?php echo esc_html( $primary_process ); ?>
-            </span>
-        <?php endif; ?>
+    <div class="relative aspect-[4/3] bg-bg-section flex items-center justify-center">
 
-        <?php if ( $primary_type ) : ?>
-            <span class="material-card-tag material-card-tag-type absolute top-4 right-4 inline-flex items-center rounded border border-border bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.08em] text-heading" data-tag="type">
-                <?php echo esc_html( $primary_type ); ?>
-            </span>
-        <?php endif; ?>
-
-        <?php if ( has_post_thumbnail() ) : ?>
-            <?php echo get_the_post_thumbnail( null, 'medium_large', array( 'class' => 'material-card-image h-full w-full object-contain mix-blend-multiply', 'loading' => 'lazy' ) ); ?>
+        <?php
+        $hero_image_id = get_field( 'mat_hero_hero_image', $post_id );
+        ?>
+        <?php if ( $hero_image_id ) : ?>
+            <?php echo wp_get_attachment_image( $hero_image_id, 'medium_large', false, array( 'class' => 'material-card-image h-full w-full object-cover', 'loading' => 'lazy' ) ); ?>
+        <?php elseif ( has_post_thumbnail() ) : ?>
+            <?php echo get_the_post_thumbnail( null, 'medium_large', array( 'class' => 'material-card-image h-full w-full object-cover', 'loading' => 'lazy' ) ); ?>
         <?php endif; ?>
     </div>
 

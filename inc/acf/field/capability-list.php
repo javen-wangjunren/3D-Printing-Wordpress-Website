@@ -2,7 +2,9 @@
 /**
  * 推荐文件路径：inc/acf/field/capability-list.php
  * 角色：Capability List (工艺列表模块)
- * 逻辑：展示所有制造工艺，支持标签切换，显示工艺详情和可用材料
+ * 逻辑：展示所有制造工艺，支持标签切换。
+ *      采用 "Source of Truth" 模式：优先从关联的 Capability Post 读取数据，
+ *      同时也允许手动覆盖 (Override)。
  * 位置： 首页介绍所有工艺
  */
 
@@ -32,6 +34,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'text',
                     'default_value' => 'Manufacturing Capabilities',
                     'placeholder' => '例如：Manufacturing Capabilities',
+                    'wrapper' => array('width' => '50'),
                 ),
                 array(
                     'key' => 'field_cl_section_desc',
@@ -40,7 +43,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'textarea',
                     'rows' => 2,
                     'default_value' => 'Six industrial technologies optimized for prototyping and scalable production.',
-                    'placeholder' => '例如：Six industrial technologies optimized for prototyping and scalable production.',
+                    'wrapper' => array('width' => '50'),
                 ),
                 
                 // --- 工艺列表核心定义 --- 
@@ -49,77 +52,53 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Manufacturing Capabilities',
                     'name' => 'capabilities',
                     'type' => 'repeater',
-                    'collapsed' => 'field_cl_capability_name',
+                    'collapsed' => 'field_cl_capability_source',
                     'layout' => 'block',
                     'button_label' => '添加工艺',
                     'sub_fields' => array(
-                        // 基础标识
+                        
+                        // 1. 数据源选择 (Source of Truth)
                         array(
-                            'key' => 'field_cl_capability_name',
-                            'label' => 'Capability Name',
-                            'name' => 'name',
-                            'type' => 'text',
+                            'key' => 'field_cl_capability_source',
+                            'label' => 'Capability Source',
+                            'name' => 'capability_source',
+                            'type' => 'post_object',
+                            'post_type' => array('capability'),
+                            'return_format' => 'object', 
+                            'ui' => 1,
                             'required' => 1,
-                            'instructions' => '工艺的完整名称，如：Selective Laser Sintering',
-                            'wrapper' => array('width' => '100'),
+                            'instructions' => '<b>核心数据源：</b> 必须选择一个 Capability 页面。系统将自动同步其 Title (Tab Name), Description, 和 Materials。<br>Specs (参数) 和 Image (图片) 可以在下方自定义或覆盖。',
+                            'wrapper' => array('width' => '50'),
                         ),
-                        
-                        // 工艺描述
-                        array(
-                            'key' => 'field_cl_capability_desc',
-                            'label' => 'Description',
-                            'name' => 'description',
-                            'type' => 'textarea',
-                            'rows' => 3,
-                            'instructions' => '工艺的详细描述',
-                        ),
-                        
-                        // 工艺参数
+
+                        // 工艺参数 (Manual Only - Structure Refactor)
                         array(
                             'key' => 'field_cl_capability_specs',
                             'label' => 'Technical Specifications',
                             'name' => 'specs',
-                            'type' => 'group',
+                            'type' => 'repeater',
                             'layout' => 'table',
-                            'instructions' => '工艺的技术参数',
+                            'instructions' => '自定义技术参数（如 Build Volume, Tolerance 等）。建议 3-4 项。',
+                            'button_label' => 'Add Spec',
                             'sub_fields' => array(
-                                array('key' => 'field_cl_spec_build', 'label' => 'Build Volume', 'name' => 'build_volume', 'type' => 'text'),
-                                array('key' => 'field_cl_spec_layer', 'label' => 'Layer Height', 'name' => 'layer_height', 'type' => 'text'),
-                                array('key' => 'field_cl_spec_tolerance', 'label' => 'Tolerance', 'name' => 'tolerance', 'type' => 'text'),
-                                array('key' => 'field_cl_spec_lead', 'label' => 'Lead Time', 'name' => 'lead_time', 'type' => 'text'),
+                                array(
+                                    'key' => 'field_cl_spec_label',
+                                    'label' => 'Label',
+                                    'name' => 'label',
+                                    'type' => 'text',
+                                    'placeholder' => 'e.g. Build Volume',
+                                ),
+                                array(
+                                    'key' => 'field_cl_spec_value',
+                                    'label' => 'Value',
+                                    'name' => 'value',
+                                    'type' => 'text',
+                                    'placeholder' => 'e.g. 340 x 340 x 600 mm',
+                                ),
                             ),
                         ),
                         
-                        // 可用材料（手动勾选）
-                        array(
-                            'key' => 'field_cl_capability_materials',
-                            'label' => 'Available Materials',
-                            'name' => 'materials',
-                            'type' => 'relationship',
-                            'instructions' => '选择该工艺可用的材料',
-                            'post_type' => array('material'),
-                            'taxonomy' => '',
-                            'filters' => array(
-                                0 => 'search',
-                                1 => 'post_type',
-                            ),
-                            'elements' => array(
-                                0 => 'featured_image',
-                            ),
-                            'min' => '',
-                            'max' => '',
-                            'return_format' => 'object',
-                        ),
-                        
-                        // 设备信息
-                        array(
-                            'key' => 'field_cl_capability_equipment',
-                            'label' => 'Equipment',
-                            'name' => 'equipment',
-                            'type' => 'text',
-                            'instructions' => '使用的设备型号',
-                            'placeholder' => '例如：EOS P396 Printer',
-                        ),
+                        // 图片 (Auto or Manual)
                         array(
                             'key' => 'field_cl_capability_image',
                             'label' => 'Capability Image',
@@ -127,16 +106,16 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'type' => 'image',
                             'return_format' => 'id',
                             'preview_size' => 'medium',
-                            'instructions' => '工艺设备的图片',
+                            'instructions' => '<b>[Override]</b> 强制比例 4:3 (建议 1200x900px)。留空则自动读取 Capability Hero 模块的 Desktop Image。',
                         ),
                         
-                        // 按钮链接
+                        // 按钮链接 (Manual usually, but Detail Link can be auto)
                         array(
                             'key' => 'field_cl_capability_quote_link',
                             'label' => 'Quote Button Link',
                             'name' => 'quote_link',
                             'type' => 'link',
-                            'instructions' => '获取报价按钮的链接',
+                            'wrapper' => array('width' => '50'),
                             'default_value' => array(
                                 'url' => '/quote',
                                 'title' => 'Get Instant Quote',
@@ -144,16 +123,14 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             ),
                         ),
                         array(
-                            'key' => 'field_cl_capability_detail_link',
-                            'label' => 'Details Button Link',
-                            'name' => 'detail_link',
-                            'type' => 'link',
-                            'instructions' => '查看详情按钮的链接',
-                            'default_value' => array(
-                                'url' => '#',
-                                'title' => 'Explore Details',
-                                'target' => '',
-                            ),
+                            'key' => 'field_cl_capability_detail_label',
+                            'label' => 'Details Button Label',
+                            'name' => 'detail_label',
+                            'type' => 'text',
+                            'wrapper' => array('width' => '50'),
+                            'default_value' => 'Learn More',
+                            'placeholder' => 'Learn More',
+                            'instructions' => '设置按钮文字。URL 将自动指向所选的 Capability 页面。',
                         ),
                     ),
                 ),
@@ -167,12 +144,34 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type' => 'tab',
                 ),
                 array(
+                    'key' => 'field_cl_mobile_layout',
+                    'label' => 'Mobile Layout',
+                    'name' => 'cl_mobile_layout',
+                    'type' => 'select',
+                    'choices' => array(
+                        'tabs_scroll' => 'Horizontal Tabs (Scroll)',
+                        'accordion' => 'Accordion (Stacked)',
+                    ),
+                    'default_value' => 'tabs_scroll',
+                    'instructions' => '选择移动端下的交互形式。',
+                    'wrapper' => array('width' => '50'),
+                ),
+                array(
+                    'key' => 'field_cl_mobile_compact',
+                    'label' => 'Mobile Compact Mode',
+                    'name' => 'cl_mobile_compact',
+                    'type' => 'true_false',
+                    'ui' => 1,
+                    'default_value' => 0,
+                    'instructions' => '手机端减少内边距，使内容更紧凑。',
+                    'wrapper' => array('width' => '50'),
+                ),
+                array(
                     'key' => 'field_cl_bg_color',
                     'label' => 'Background Color',
                     'name' => 'cl_bg_color',
                     'type' => 'color_picker',
                     'default_value' => '#ffffff',
-                    'instructions' => '模块的背景颜色',
                     'wrapper' => array('width' => '33'),
                 ),
                 array(
@@ -181,7 +180,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'cl_text_color',
                     'type' => 'color_picker',
                     'default_value' => '#667085',
-                    'instructions' => '模块的文本颜色',
                     'wrapper' => array('width' => '33'),
                 ),
                 array(
@@ -190,7 +188,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'name' => 'cl_accent_color',
                     'type' => 'color_picker',
                     'default_value' => '#0047AB',
-                    'instructions' => '模块的强调色（按钮、激活标签）',
                     'wrapper' => array('width' => '33'),
                 ),
                 

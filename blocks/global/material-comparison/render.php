@@ -58,7 +58,7 @@ $GLOBALS['3dp_last_bg'] = $current_bg_for_state;
 <section id="<?php echo esc_attr($anchor); ?>" class="w-full <?php echo esc_attr($section_spacing); ?> <?php echo esc_attr($class_string); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
     <div class="max-w-container mx-auto px-container">
         <?php if ($title): ?>
-            <h2 class="text-h2 font-semibold text-heading tracking-tight mb-8"><?php echo esc_html($title); ?></h2>
+            <h2 class="text-heading"><?php echo esc_html($title); ?></h2>
         <?php endif; ?>
         
         <!-- Material Comparison 模块渲染内容 -->

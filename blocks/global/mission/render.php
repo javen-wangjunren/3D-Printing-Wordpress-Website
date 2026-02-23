@@ -42,7 +42,7 @@ $prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
 $current_bg_for_state = $bg_color_hex; 
 $pt_remove = ($prev_bg && $prev_bg === $current_bg_for_state) ? 'pt-0' : '';
 
-$pt_class = $pt_remove ? 'pt-0' : 'pt-16 lg:pt-24';
+$pt_class = $pt_remove ? 'pt-[100px]' : 'pt-16 lg:pt-24';
 $pb_class = 'pb-16 lg:pb-24';
 $section_spacing = $pt_class . ' ' . $pb_class;
 $section_classes .= ' ' . $section_spacing;
@@ -69,9 +69,8 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
         
         <?php if ( $header ) : ?>
         <div class="mb-20 text-center">
-            <h2 class="text-[36px] font-bold text-heading tracking-tight mb-4 inline-block relative">
+            <h2 class="text-heading">
                 <?php echo esc_html( $header['prefix'] ); ?> <span class="text-primary"><?php echo esc_html( $header['highlight'] ); ?></span>
-                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-12 h-1 bg-primary"></span>
             </h2>
             <?php if ( ! empty( $header['description'] ) ) : ?>
             <p class="text-[18px] text-body max-w-2xl mx-auto mt-8 font-sans">
@@ -132,7 +131,9 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-12 h-12 rounded-[8px] bg-primary/10 flex items-center justify-center text-primary overflow-hidden">
                             <?php if ( $icon ) : ?>
-                                <img src="<?php echo esc_url($icon['url']); ?>" width="<?php echo esc_attr($icon['width']); ?>" height="<?php echo esc_attr($icon['height']); ?>" alt="<?php echo esc_attr($icon['alt']); ?>" class="w-6 h-6">
+                                <div class="w-6 h-6 flex items-center justify-center">
+                                    <?php echo $icon; // Raw SVG output ?>
+                                </div>
                             <?php endif; ?>
                         </div>
                         <span class="font-mono text-[12px] font-bold text-primary uppercase tracking-widest">
@@ -146,13 +147,13 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
                     </h3>
 
                     <!-- Description -->
-                    <p class="text-[16px] text-body leading-relaxed mb-10">
+                    <p class="text-[16px] text-body leading-relaxed mb-12">
                         <?php echo esc_html( $desc ); ?>
                     </p>
                     
                     <!-- Data Points (Stats) -->
                     <?php if ( !empty($mission_item['stats']) && is_array($mission_item['stats']) ) : ?>
-                    <div class="bg-white border-l-2 border-primary pl-6 py-4 grid grid-cols-2 gap-8">
+                    <div class="bg-white border-l-2 border-primary pl-6 py-4 grid grid-cols-2 gap-8 mt-12">
                         <?php foreach ( $mission_item['stats'] as $stat ) : 
                             $stat_label = $stat['label'];
                             $stat_value = $stat['value'];

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Post-Processing DFM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        industrial: '#1D2938',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB',
+                        warning: '#F59E0B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="py-24 bg-[#F8F9FB]">
+    <div class="w-[90%] lg:w-[80%] mx-auto">
+        
+        <div class="mb-16">
+            <h3 class="text-[36px] font-extrabold uppercase tracking-tighter leading-none">
+                Post-Processing <span class="text-primary italic">DFM Guide</span>
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            
+            <div class="bg-white p-10 rounded-[32px] border border-border shadow-sm">
+                <div class="flex items-center gap-4 mb-10">
+                    <span class="font-mono text-[14px] font-bold text-primary tracking-[-0.5px]">01 / Minimum Wall Thickness</span>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="flex items-start gap-6 group">
+                        <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Reinforced Features</p>
+                            <p class="text-[14px] text-industrial/60 leading-relaxed font-medium">
+                                Maintain a wall thickness of at least <span class="font-mono text-primary font-bold">[ 1.2mm ]</span> to survive mechanical tumbling and bead blasting without deformation.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-6 opacity-50">
+                        <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Ultra-thin structures</p>
+                            <p class="text-[14px] leading-relaxed font-medium">
+                                Features under <span class="font-mono text-rose-600">[ 0.8mm ]</span> are highly susceptible to snapping during vibratory finishing cycles.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-10 rounded-[32px] border border-border shadow-sm">
+                <div class="flex items-center gap-4 mb-10">
+                    <span class="font-mono text-[14px] font-bold text-primary tracking-[-0.5px]">02 / Internal Cavity Access</span>
+                </div>
+
+                <div class="space-y-8">
+                    <div class="flex items-start gap-6">
+                        <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Vented Channels</p>
+                            <p class="text-[14px] text-industrial/60 leading-relaxed font-medium">
+                                Add drainage holes with min <span class="font-mono text-primary font-bold">[ 3.0mm ]</span> diameter to allow vapor or chemical media to circulate freely.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-6 opacity-50">
+                        <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Deep Blind Holes</p>
+                            <p class="text-[14px] leading-relaxed font-medium">
+                                Vapor polishing cannot reach deep internal surfaces, resulting in inconsistent "Raw" finishes inside the part.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

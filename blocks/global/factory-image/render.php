@@ -53,7 +53,7 @@ if ( $bg_style === 'industrial' ) {
 
 // Dynamic Spacing
 $prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
-$pt_class = ($prev_bg && $prev_bg === $bg_color_class) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pt_class = ($prev_bg && $prev_bg === $bg_color_class) ? 'pt-[100px]' : 'pt-16 lg:pt-24';
 $pb_class = 'pb-16 lg:pb-24';
 
 // 3. Determine Classes
@@ -88,7 +88,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
         <div class="mb-12 lg:mb-16 flex flex-col lg:flex-row justify-between items-end gap-6">
             <div class="max-w-2xl text-left">
                 <?php if ( $title ) : ?>
-                    <h2 class="industrial-h2 text-[32px] lg:text-[40px] font-bold text-heading mb-4 leading-tight">
+                    <h2 class="text-heading">
                         <?php echo wp_kses_post($title_html); ?>
                     </h2>
                 <?php endif; ?>
@@ -120,9 +120,6 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                     // Data Extraction
                     $img_id         = $item['image'];
                     $mobile_img_id  = $item['mobile_image'];
-                    $tag_text       = $item['tag_text'];
-                    $item_title     = $item['item_title'];
-                    $item_sub       = $item['item_subtitle'];
 
                     // Image URL Logic (Prefer Desktop, no complex picture tag to keep DOM simple as per design)
                     // But we can check if it's mobile view in CSS or just use object-cover. 
@@ -134,7 +131,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                     $img_w = $img_data ? $img_data[1] : '';
                     $img_h = $img_data ? $img_data[2] : '';
 
-                    $img_alt = get_post_meta($img_id, '_wp_attachment_image_alt', true) ?: $item_title;
+                    $img_alt = get_post_meta($img_id, '_wp_attachment_image_alt', true) ?: get_the_title($img_id);
 
                     // Layout Logic
                     $is_hero = ($index === 0);
@@ -142,7 +139,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                     // Class Logic
                     // Hero: col-span-2 lg:col-span-2 lg:row-span-2 (Desktop 2x2, Mobile 2x1)
                     // Detail: col-span-1 (Desktop 1x1, Mobile 1x1)
-                    $card_classes = 'bento-card group tech-overlay relative overflow-hidden cursor-zoom-in';
+                    $card_classes = 'bento-card group relative overflow-hidden cursor-zoom-in';
                     
                     if ( $is_hero ) {
                         $card_classes .= ' col-span-2 lg:col-span-2 lg:row-span-2 h-[280px] lg:h-auto';
@@ -151,34 +148,10 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                     }
                 ?>
                     <div class="<?php echo esc_attr($card_classes); ?>"
-                         @click="openImg('<?php echo esc_url($img_url); ?>', '<?php echo esc_js($item_title); ?>', '<?php echo esc_attr($img_w); ?>', '<?php echo esc_attr($img_h); ?>')">
+                         @click="openImg('<?php echo esc_url($img_url); ?>', '', '<?php echo esc_attr($img_w); ?>', '<?php echo esc_attr($img_h); ?>')">
                         
-                        <?php if ( $tag_text ) : ?>
-                            <span class="mono-tag <?php echo $is_hero ? '' : 'text-[9px] lg:text-[11px]'; ?>">
-                                <?php echo esc_html($tag_text); ?>
-                            </span>
-                        <?php endif; ?>
-
                         <!-- Image -->
                         <?php echo wp_get_attachment_image($img_id, 'full', false, array('class' => 'w-full h-full object-cover')); ?>
-
-                        <!-- Overlay & Info -->
-                        <?php if ( $is_hero ) : ?>
-                            <!-- Hero: Mobile visible, Desktop hover (handled by CSS) -->
-                            <div class="card-overlay opacity-100 lg:opacity-0"></div>
-                            <div class="card-info opacity-100 lg:opacity-0 lg:translate-y-2">
-                                <h4 class="text-lg font-bold leading-tight"><?php echo esc_html($item_title); ?></h4>
-                                <?php if ( $item_sub ) : ?>
-                                    <p class="text-sm opacity-90 font-mono mt-1"><?php echo esc_html($item_sub); ?></p>
-                                <?php endif; ?>
-                            </div>
-                        <?php else : ?>
-                            <!-- Detail: Hover only (handled by CSS) -->
-                            <div class="card-overlay"></div>
-                            <div class="card-info">
-                                <h4 class="text-xs lg:text-md font-bold leading-tight"><?php echo esc_html($item_title); ?></h4>
-                            </div>
-                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
                 
@@ -208,7 +181,6 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
 
             <div class="max-w-6xl w-full flex flex-col items-center relative z-10 pointer-events-none">
                 <img :src="activeImg" :width="activeWidth" :height="activeHeight" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl pointer-events-auto border border-white/10" loading="lazy">
-                <h5 class="text-white mt-6 text-xl font-bold font-mono tracking-tight pointer-events-auto" x-text="activeTitle"></h5>
             </div>
         </div>
     </template>

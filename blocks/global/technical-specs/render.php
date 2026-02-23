@@ -91,7 +91,7 @@ $first_tab_key = ! empty( $tabs ) ? $tabs[0]['id'] : '';
 		
 		<!-- Header -->
 		<header class="mb-6 lg:mb-8">
-			<h2 class="text-[26px] lg:text-[36px] font-bold text-heading mb-3 tracking-tight">
+			<h2 class="text-heading">
 				<?php echo esc_html( $title ); ?>
 			</h2>
 			<p class="text-[14px] lg:text-[15px] max-w-2xl leading-relaxed opacity-90"><?php echo $intro ? esc_html($intro) : 'Standardized testing data (ISO/ASTM)'; ?></p>

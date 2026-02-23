@@ -80,31 +80,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         ),
                     ),
                 ),
-                array(
-                    'key' => 'field_op_cta_group',
-                    'label' => 'CTA Button (行动号召按钮)',
-                    'name' => 'order_process_cta',
-                    'type' => 'group',
-                    'layout' => 'block',
-                    'sub_fields' => array(
-                        array(
-                            'key' => 'field_op_cta_text',
-                            'label' => 'Button Text',
-                            'name' => 'text',
-                            'type' => 'text',
-                            'instructions' => '如：Start Your Instant Quote',
-                            'wrapper' => array('width' => '50'),
-                        ),
-                        array(
-                            'key' => 'field_op_cta_link',
-                            'label' => 'Button Link',
-                            'name' => 'link',
-                            'type' => 'link',
-                            'wrapper' => array('width' => '50'),
-                        ),
-                    ),
-                ),
-
                 // ======================================================
                 // TAB 2: DESIGN (视觉与响应式控制)
                 // ======================================================
@@ -113,27 +88,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'label' => 'Design',
                     'type' => 'tab',
                     'placement' => 'top',
-                ),
-                array(
-                    'key' => 'field_op_bg_style',
-                    'label' => 'Background Style',
-                    'name' => 'order_process_bg_style',
-                    'type' => 'select',
-                    'choices' => array(
-                        'bg-white' => '白色背景',
-                        'bg-light' => '浅灰背景 (与页面区分)',
-                    ),
-                    'default_value' => 'bg-white',
-                ),
-                array(
-                    'key' => 'field_op_active_step',
-                    'label' => 'Active Step (默认高亮步骤)',
-                    'name' => 'order_process_active_step',
-                    'type' => 'number',
-                    'instructions' => '输入步骤编号（从1开始），该步骤将在页面加载时默认高亮。',
-                    'min' => 1,
-                    'default_value' => 1,
-                    'wrapper' => array('width' => '50'),
                 ),
 
                 // ======================================================

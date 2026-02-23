@@ -1,15 +1,46 @@
 <?php
 /**
- * ACF Blocks 注册文件
- * 负责注册所有自定义的ACF Block，重复注册会导致后台错误一定得注意哦
+ * ACF Blocks Registration (ACF 积木注册)
+ * ==========================================================================
+ * 文件作用:
+ * 负责注册所有自定义的 ACF Block。
+ * 每一个 Block 都对应一个 `acf_register_block_type` 调用，定义了 Block 的
+ * 名称、标题、描述、图标、关键词以及渲染模板路径。
+ *
+ * 核心逻辑:
+ * 1. 注册 Hero Banner, CTA, Feature Grid 等基础布局 Block。
+ * 2. 注册 Industry Slider, Trusted By 等动态内容 Block。
+ * 3. 注册 Material List, Comparison Table 等复杂业务 Block。
+ * 
+ * 架构角色:
+ * [Block Registry]
+ * 这个文件是连接 "ACF 字段定义" (Schema) 和 "前端渲染模板" (Renderer) 的纽带。
+ * 它告诉 WordPress："嘿，我有一个叫 'hero-banner' 的积木，它的设置字段在哪里（由 fields.php 加载），
+ * 它的渲染代码在 'blocks/global/hero-banner/render.php'。"
+ *
+ * 🚨 避坑指南:
+ * 1. 唯一性: `name` 属性必须是唯一的，且只能包含小写字母和连字符。
+ * 2. 路径准确: `render_template` 必须指向存在的 PHP 文件，否则前台会报错。
+ * 3. 图标选择: 尽量使用 Dashicons 图标，以保持后台风格统一。
+ * ==========================================================================
+ * 
+ * @package GeneratePress_Child
  */
 
-// 确保函数在ACF可用时才执行
-if ( function_exists( 'acf_register_block_type' ) ) 
-{
-    // 注册Hero Banner Block
-    function _3dp_register_hero_block() 
-    {
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// 仅在 ACF Pro 激活且支持 Block API 时执行
+if ( function_exists( 'acf_register_block_type' ) ) {
+
+    add_action( 'acf/init', function() {
+
+        // ==========================================================================
+        // I. 基础布局类 (Layout Blocks)
+        // ==========================================================================
+
+        // 1. Hero Banner
         acf_register_block_type( array(
             'name'              => 'hero-banner',
             'title'             => __( 'Hero Banner', '3d-printing' ),
@@ -20,150 +51,10 @@ if ( function_exists( 'acf_register_block_type' ) )
             'keywords'          => array( 'hero', 'banner', '3d printing', 'header' ),
             'mode'              => 'preview',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_hero_block' );
-    
-    // 注册Trusted By Block
-    function _3dp_register_trusted_by_block() 
-    {
-        acf_register_block_type( array(
-            'name'              => 'trusted-by',
-            'title'             => __( 'Trusted By', '3d-printing' ),
-            'description'       => __( '展示合作伙伴或客户Logo的区块', '3d-printing' ),
-            'render_template'   => 'blocks/global/trusted-by/render.php',
-            'category'          => 'layout',
-            'icon'              => 'groups',
-            'keywords'          => array( 'trusted by', 'clients', 'partners', 'logos' ),
-            'mode'              => 'preview',
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
-        ) );
-    }
-    add_action( 'acf/init', '_3dp_register_trusted_by_block' );
-    
-    // 注册Feature Grid Block
-    function _3dp_register_feature_grid_block() 
-    {
-        acf_register_block_type( array(
-            'name'              => 'feature-grid',
-            'title'             => __( 'Feature Grid', '3d-printing' ),
-            'description'       => __( '展示3D打印工艺的功能网格模块', '3d-printing' ),
-            'render_template'   => 'blocks/global/feature-grid/render.php',
-            'category'          => 'layout',
-            'icon'              => 'grid-view',
-            'keywords'          => array( 'feature', 'grid', '3d printing', 'processes' ),
-            'mode'              => 'preview',
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
-        ) );
-    }
-    add_action( 'acf/init', '_3dp_register_feature_grid_block' );
-    
-    // 注册Why Choose Us Block
-    function _3dp_register_why_choose_us_block() 
-    {
-        acf_register_block_type( array(
-            'name'              => 'why-choose-us',
-            'title'             => __( 'Why Choose Us', '3d-printing' ),
-            'description'       => __( '展示选择理由的区块，包含左侧图片和右侧多个理由项', '3d-printing' ),
-            'render_template'   => 'blocks/global/why-choose-us/render.php',
-            'category'          => 'layout',
-            'icon'              => 'thumbs-up',
-            'keywords'          => array( 'why choose us', 'reasons', 'advantages', 'benefits' ),
-            'mode'              => 'preview',
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
-        ) );
-    }
-    add_action( 'acf/init', '_3dp_register_why_choose_us_block' );
-    
-    // 注册Industry Slider Block
-    function _3dp_register_industry_slider_block() 
-    {
-        acf_register_block_type( array(
-            'name'              => 'industry-slider',
-            'title'             => __( 'Industry Slider', '3d-printing' ),
-            'description'       => __( '展示服务行业的滑块模块，包含行业图片、名称和链接', '3d-printing' ),
-            'render_template'   => 'blocks/global/industry-slider/render.php',
-            'category'          => 'layout',
-            'icon'              => 'images-alt',
-            'keywords'          => array( 'industry', 'slider', 'services', 'industries we serve' ),
-            'mode'              => 'preview',
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
-        ) );
-    }
-    add_action( 'acf/init', '_3dp_register_industry_slider_block' );
-    
-    // 注册Review Grid Block
-    function _3dp_register_review_grid_block() 
-    {
-        acf_register_block_type( array(
-            'name'              => 'review-grid',
-            'title'             => __( 'Review Grid', '3d-printing' ),
-            'description'       => __( '客户评价网格模块，展示多个客户评价', '3d-printing' ),
-            'render_template'   => 'blocks/global/review-grid/render.php',
-            'category'          => 'layout',
-            'icon'              => 'testimonial',
-            'keywords'          => array( 'review', 'testimonial', 'customer', 'feedback' ),
-            'mode'              => 'preview',
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
-        ) );
-    }
-    add_action( 'acf/init', '_3dp_register_review_grid_block' );
-    
-    // 注册Related Blog Block
-    function _3dp_register_related_blog_block() 
-    {
-        acf_register_block_type( array(
-            'name'              => 'related-blog',
-            'title'             => __( 'Related Blog', '3d-printing' ),
-            'description'       => __( '相关博客文章展示模块，支持最新、分类或手动选择文章', '3d-printing' ),
-            'render_template'   => 'blocks/global/related-blog/render.php',
-            'category'          => 'layout',
-            'icon'              => 'format-aside',
-            'keywords'          => array( 'blog', 'article', 'related', 'post' ),
-            'mode'              => 'preview',
-            'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
-        ) );
-    }
-    add_action( 'acf/init', '_3dp_register_related_blog_block' );
-    
-    // 注册CTA Block
-    function _3dp_register_cta_block() 
-    {
+
+        // 2. CTA (Call to Action)
         acf_register_block_type( array(
             'name'              => 'cta',
             'title'             => __( 'CTA', '3d-printing' ),
@@ -174,18 +65,102 @@ if ( function_exists( 'acf_register_block_type' ) )
             'keywords'          => array( 'cta', 'call to action', 'banner', 'promotion' ),
             'mode'              => 'preview',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_cta_block' );
-    
-    // 注册Comparison Table Block
-    function _3dp_register_comparison_table_block() 
-    {
+
+        // 3. Feature Grid
+        acf_register_block_type( array(
+            'name'              => 'feature-grid',
+            'title'             => __( 'Feature Grid', '3d-printing' ),
+            'description'       => __( '展示3D打印工艺的功能网格模块', '3d-printing' ),
+            'render_template'   => 'blocks/global/feature-grid/render.php',
+            'category'          => 'layout',
+            'icon'              => 'grid-view',
+            'keywords'          => array( 'feature', 'grid', '3d printing', 'processes' ),
+            'mode'              => 'preview',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
+        ) );
+
+        // 4. Why Choose Us
+        acf_register_block_type( array(
+            'name'              => 'why-choose-us',
+            'title'             => __( 'Why Choose Us', '3d-printing' ),
+            'description'       => __( '展示选择理由的区块，包含左侧图片和右侧多个理由项', '3d-printing' ),
+            'render_template'   => 'blocks/global/why-choose-us/render.php',
+            'category'          => 'layout',
+            'icon'              => 'thumbs-up',
+            'keywords'          => array( 'why choose us', 'reasons', 'advantages', 'benefits' ),
+            'mode'              => 'preview',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
+        ) );
+
+        // ==========================================================================
+        // II. 动态内容类 (Dynamic Content Blocks)
+        // ==========================================================================
+
+        // 5. Trusted By (Logos)
+        acf_register_block_type( array(
+            'name'              => 'trusted-by',
+            'title'             => __( 'Trusted By', '3d-printing' ),
+            'description'       => __( '展示合作伙伴或客户Logo的区块', '3d-printing' ),
+            'render_template'   => 'blocks/global/trusted-by/render.php',
+            'category'          => 'layout',
+            'icon'              => 'groups',
+            'keywords'          => array( 'trusted by', 'clients', 'partners', 'logos' ),
+            'mode'              => 'preview',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
+        ) );
+
+        // 6. Industry Slider
+        acf_register_block_type( array(
+            'name'              => 'industry-slider',
+            'title'             => __( 'Industry Slider', '3d-printing' ),
+            'description'       => __( '展示服务行业的滑块模块，包含行业图片、名称和链接', '3d-printing' ),
+            'render_template'   => 'blocks/global/industry-slider/render.php',
+            'category'          => 'layout',
+            'icon'              => 'images-alt',
+            'keywords'          => array( 'industry', 'slider', 'services', 'industries we serve' ),
+            'mode'              => 'preview',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
+        ) );
+
+        // 7. Review Grid
+        acf_register_block_type( array(
+            'name'              => 'review-grid',
+            'title'             => __( 'Review Grid', '3d-printing' ),
+            'description'       => __( '客户评价网格模块，展示多个客户评价', '3d-printing' ),
+            'render_template'   => 'blocks/global/review-grid/render.php',
+            'category'          => 'layout',
+            'icon'              => 'testimonial',
+            'keywords'          => array( 'review', 'testimonial', 'customer', 'feedback' ),
+            'mode'              => 'preview',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
+        ) );
+
+        // 8. Related Blog
+        acf_register_block_type( array(
+            'name'              => 'related-blog',
+            'title'             => __( 'Related Blog', '3d-printing' ),
+            'description'       => __( '相关博客文章展示模块，支持最新、分类或手动选择文章', '3d-printing' ),
+            'render_template'   => 'blocks/global/related-blog/render.php',
+            'category'          => 'layout',
+            'icon'              => 'format-aside',
+            'keywords'          => array( 'blog', 'article', 'related', 'post' ),
+            'mode'              => 'preview',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
+        ) );
+
+        // ==========================================================================
+        // III. 业务组件类 (Business Logic Blocks)
+        // ==========================================================================
+
+        // 9. Comparison Table
         acf_register_block_type( array(
             'name'              => 'comparison-table',
             'title'             => __( 'Comparison Table', '3d-printing' ),
@@ -193,21 +168,13 @@ if ( function_exists( 'acf_register_block_type' ) )
             'render_template'   => 'blocks/global/comparison-table/render.php',
             'category'          => 'layout',
             'icon'              => 'table-row-after',
-            'keywords'          => array( 'comparison', 'table', '3d printing', 'tech', 'comparison table' ),
-            'mode'              => 'auto', // 设置为auto模式，允许在内容区域直接编辑
+            'keywords'          => array( 'comparison', 'table', '3d printing', 'tech' ),
+            'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_comparison_table_block' );
-    
-    // 注册Material List Block
-    function _3dp_register_material_list_block() 
-    {
+
+        // 10. Material List
         acf_register_block_type( array(
             'name'              => 'material-list',
             'title'             => __( 'Material List', '3d-printing' ),
@@ -216,20 +183,12 @@ if ( function_exists( 'acf_register_block_type' ) )
             'category'          => 'layout',
             'icon'              => 'list-view',
             'keywords'          => array( 'material', 'list', '3d printing', 'materials', 'processes' ),
-            'mode'              => 'auto', // 设置为auto模式，允许在内容区域直接编辑
+            'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_material_list_block' );
 
-    // 注册Manufacturing Showcase Block
-    function _3dp_register_manufacturing_showcase_block() 
-    {
+        // 11. Manufacturing Showcase
         acf_register_block_type( array(
             'name'              => 'manufacturing-showcase',
             'title'             => __( 'Manufacturing Showcase', '3d-printing' ),
@@ -240,19 +199,10 @@ if ( function_exists( 'acf_register_block_type' ) )
             'keywords'          => array( 'manufacturing', 'showcase', 'examples', 'slider', 'production' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_manufacturing_showcase_block' );
 
-    // 注册Technical Specs Block
-    function _3dp_register_technical_specs_block() 
-    {
+        // 12. Technical Specs
         acf_register_block_type( array(
             'name'              => 'technical-specs',
             'title'             => __( 'Technical Specs', '3d-printing' ),
@@ -263,20 +213,10 @@ if ( function_exists( 'acf_register_block_type' ) )
             'keywords'          => array( 'technical', 'specs', 'performance', 'properties', 'material' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_technical_specs_block' );
 
-        // 注册材料卡片网格模块
-
-    function _3dp_register_material_card_block() 
-    {
+        // 13. Material Card Grid
         acf_register_block_type( array(
             'name'              => 'material-card',
             'title'             => __( 'Material Card Grid', '3d-printing' ),
@@ -287,19 +227,10 @@ if ( function_exists( 'acf_register_block_type' ) )
             'keywords'          => array( 'material', 'card', 'grid', 'cost', 'lead time' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_material_card_block' );
 
-    // 注册Manufacturing Capabilities Block
-    function _3dp_register_manufacturing_capabilities_block() 
-    {
+        // 14. Manufacturing Capabilities
         acf_register_block_type( array(
             'name'              => 'manufacturing-capabilities',
             'title'             => __( 'Manufacturing Capabilities', '3d-printing' ),
@@ -310,106 +241,38 @@ if ( function_exists( 'acf_register_block_type' ) )
             'keywords'          => array( 'manufacturing', 'capabilities', 'hub', 'tabs', 'specs' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-                'jsx'       => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true, 'jsx' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_manufacturing_capabilities_block' );
 
-    // 注册 Surface Finish Gallery
-    function _3dp_register_surface_finish_block() 
-    {
+        // 15. Surface Finish Gallery
         acf_register_block_type( array(
             'name'              => 'surface-finish',
             'title'             => __( 'Surface Finish Gallery', '3d-printing' ),
             'description'       => __( '展示 3D 打印表面处理工艺，支持多重筛选、视觉对比及参数网格。', '3d-printing' ),
             'render_template'   => 'blocks/global/surface-finish/render.php',
-            'category'          => 'layout', // 保持与 Material List 一致
-            'icon'              => 'admin-appearance', // 艺术/视觉相关的图标
+            'category'          => 'layout',
+            'icon'              => 'admin-appearance',
             'keywords'          => array( 'surface', 'finish', 'post-processing', 'gallery', '3d printing' ),
-            
-            // 核心交互设置
-            'mode'              => 'auto',  // 允许在内容区域直接编辑，避开拥挤的侧边栏
+            'mode'              => 'auto',
             'align'             => 'full',
-            
-            // 响应式与功能支持
-            'supports'          => array(
-                'align'     => array( 'full' ), // 强制支持全宽布局，适配瀑布流设计
-                'mode'      => true,            // 允许用户切换编辑/预览模式
-                'jsx'       => true,            // 支持内部嵌套积木（如需要）
-                'anchor'    => true,            // 支持 HTML 锚点，方便从导航跳转
-            ),
-            
-            // 示例数据 (用于后台积木预览)
-            'example'           => array(
-                'attributes' => array(
-                    'mode' => 'preview',
-                    'data' => array(
-                        'is_preview' => true
-                    )
-                )
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'mode' => true, 'jsx' => true, 'anchor' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_surface_finish_block' );
-}
 
-/**
- * 推荐文件路径：inc/acf/blocks.php
- * 注册 How It Works (工艺流程步骤) 积木
- */
-
-if ( function_exists( 'acf_register_block_type' ) ) {
-
-    function _3dp_register_how_it_works_block() 
-    {
+        // 16. How It Works
         acf_register_block_type( array(
             'name'              => 'how-it-works',
             'title'             => __( 'How It Works (Step Module)', '3d-printing' ),
             'description'       => __( '展示工艺生产流程的交互式步骤模块，包含沉浸式大图、数据指标及专家提示。', '3d-printing' ),
             'render_template'   => 'blocks/global/how-it-works/render.php',
             'category'          => 'layout',
-            'icon'              => 'media-interactive', // 使用具有交互感和多媒体感的图标
+            'icon'              => 'media-interactive',
             'keywords'          => array( 'process', 'steps', 'how it works', 'manufacturing', 'sls' ),
-            
-            // 核心交互设置
-            'mode'              => 'auto',  // 允许在内容区域直接编辑，提供沉浸式建模体验
-            'align'             => 'full',  // 默认支持全宽布局，以匹配深色工业面板的设计
-            
-            // 功能支持
-            'supports'          => array(
-                'align'     => array( 'full' ), // 强制支持全宽，确保视觉冲击力
-                'anchor'    => true,            // 支持 SEO 锚点，方便从页面导航直接跳转到流程介绍
-                'mode'      => true,            // 允许手动切换编辑和预览模式
-                'jsx'       => true,            // 预留内部积木嵌套能力
-            ),
-
-            // 示例数据（用于积木选择器中的预览）
-            'example'           => array(
-                'attributes' => array(
-                    'mode' => 'preview',
-                    'data' => array(
-                        'is_preview' => true
-                    )
-                )
-            ),
+            'mode'              => 'auto',
+            'align'             => 'full',
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true, 'jsx' => true ),
         ) );
-    }
 
-    // 挂载到 acf/init 钩子，确保安全性
-    add_action( 'acf/init', '_3dp_register_how_it_works_block' );
-}
-
-/**
- * 注册 Capability Design Guide 积木身份
- * 挂载于 acf/init 钩子中
- */
-if ( function_exists( 'acf_register_block_type' ) ) {
-    function _3dp_register_capability_design_guide_block() {
+        // 17. Capability Design Guide
         acf_register_block_type( array(
             'name'              => 'capability-design-guide',
             'title'             => __( 'Capability Design Guide', '3d-printing' ),
@@ -420,22 +283,10 @@ if ( function_exists( 'acf_register_block_type' ) ) {
             'keywords'          => array( 'capability', 'design', 'specs', 'guide' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_capability_design_guide_block' );
-}
 
-/**
- * 注册 Order Process Block
- * 挂载于 acf/init 钩子中
- */
-if ( function_exists( 'acf_register_block_type' ) ) {
-    function _3dp_register_order_process_block() {
+        // 18. Order Process
         acf_register_block_type( array(
             'name'              => 'order-process',
             'title'             => __( 'Order Process', '3d-printing' ),
@@ -446,22 +297,10 @@ if ( function_exists( 'acf_register_block_type' ) ) {
             'keywords'          => array( 'order', 'process', 'steps', 'workflow', 'manufacturing' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_order_process_block' );
-}
 
-/**
- * 注册 Material Comparison Block
- * 挂载于 acf/init 钩子中
- */
-if ( function_exists( 'acf_register_block_type' ) ) {
-    function _3dp_register_material_comparison_block() {
+        // 19. Material Comparison (New)
         acf_register_block_type( array(
             'name'              => 'material-comparison',
             'title'             => __( 'Material Comparison', '3d-printing' ),
@@ -472,22 +311,10 @@ if ( function_exists( 'acf_register_block_type' ) ) {
             'keywords'          => array( 'material', 'comparison', 'table', '3d printing', 'materials' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_material_comparison_block' );
-}
 
-/**
- * 注册 Capability List Block
- * 挂载于 acf/init 钩子中
- */
-if ( function_exists( 'acf_register_block_type' ) ) {
-    function _3dp_register_capability_list_block() {
+        // 20. Capability List
         acf_register_block_type( array(
             'name'              => 'capability-list',
             'title'             => __( 'Capability List', '3d-printing' ),
@@ -498,18 +325,10 @@ if ( function_exists( 'acf_register_block_type' ) ) {
             'keywords'          => array( 'capability', 'list', 'manufacturing', '3d printing', 'processes' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true ),
         ) );
-    }
-    add_action( 'acf/init', '_3dp_register_capability_list_block' );
-}
 
-if ( function_exists( 'acf_register_block_type' ) ) {
-    add_action( 'acf/init', function() {
+        // 21. Filter Sidebar
         acf_register_block_type( array(
             'name'              => 'filter-sidebar',
             'title'             => __( 'Filter Sidebar', '3d-printing' ),
@@ -520,11 +339,8 @@ if ( function_exists( 'acf_register_block_type' ) ) {
             'keywords'          => array( 'filter', 'sidebar', 'materials', 'library' ),
             'mode'              => 'auto',
             'align'             => 'full',
-            'supports'          => array(
-                'align'     => array( 'full' ),
-                'anchor'    => true,
-                'mode'      => true,
-            ),
+            'supports'          => array( 'align' => array( 'full' ), 'anchor' => true, 'mode' => true ),
         ) );
-    } );
+
+    }); // End add_action 'acf/init'
 }

@@ -99,7 +99,7 @@ $alpine_state = array(
 <section id="<?php echo $block_id ? esc_attr( $block_id ) : ''; ?>" class="material-list-block w-full <?php echo esc_attr($section_spacing); ?>" x-data='<?php echo json_encode( $alpine_state ); ?>'<?php echo $bg_style_attr; ?>>
     <div class="mx-auto max-w-container px-container <?php echo esc_attr( $block_class ); ?> <?php echo esc_attr( $custom_class ); ?>">
         <div class="mb-8 lg:mb-12">
-            <h2 class="text-h2 font-semibold text-heading tracking-tight mb-3">
+            <h2 class="text-heading">
                 <?php echo esc_html( 'Explore ' ); ?><span class="text-primary"><?php echo esc_html( 'Manufacturing Materials' ); ?></span>
             </h2>
             <p class="text-body max-w-2xl text-small opacity-90 leading-snug">
@@ -107,27 +107,30 @@ $alpine_state = array(
             </p>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-6 items-start">
+        <!-- Main Layout: Stacked (Tabs Top, Content Bottom) -->
+        <div class="w-full">
             <?php if ( ! $display_single && count( $processes ) > 1 ) : ?>
-                <aside class="flex lg:flex-col gap-2 overflow-x-auto no-scrollbar pb-1 -mx-container px-container lg:mx-0 lg:px-0 lg:w-[150px] shrink-0 lg:border-r lg:border-border lg:pr-5 snap-x">
+                <!-- Process Tabs (Horizontal Scroll) -->
+                <div class="flex flex-nowrap gap-1 border-b border-border mb-6 lg:mb-8 overflow-x-auto no-scrollbar">
                     <?php foreach ( $processes as $process ) : ?>
                         <?php
-                        $proc_name   = (string) $process['name'];
-                        $first_mat   = isset( $process['first_mat_id'] ) ? (string) $process['first_mat_id'] : '';
+                        $proc_name = (string) $process['name'];
                         ?>
-                        <button
-                            type="button"
-                            @click='activeProcess = <?php echo json_encode( $proc_name ); ?>; openMaterial = <?php echo json_encode( $first_mat ); ?>'
-                            :class='activeProcess === <?php echo json_encode( $proc_name ); ?> ? "bg-primary text-inverse shadow-md border-primary" : "bg-white text-body border-border hover:border-primary/50"'
-                            class="whitespace-nowrap px-4 py-2.5 lg:w-full lg:text-left rounded-button border-[3px] font-bold text-[11px] uppercase tracking-[0.14em] transition-all snap-start flex-shrink-0"
+                        <div
+                            role="tab"
+                            @click='activeProcess = <?php echo json_encode( $proc_name ); ?>'
+                            class="whitespace-nowrap px-4 py-3 text-[13px] font-bold transition-colors !bg-transparent !border-t-0 !border-l-0 !border-r-0 !border-b-2 !shadow-none !ring-0 focus:!outline-none cursor-pointer"
+                            :class='activeProcess === <?php echo json_encode( $proc_name ); ?> 
+                                ? "!border-primary text-primary" 
+                                : "!border-transparent text-gray-500 hover:text-primary"'
                         >
                             <?php echo esc_html( $proc_name ); ?>
-                        </button>
+                        </div>
                     <?php endforeach; ?>
-                </aside>
+                </div>
             <?php endif; ?>
 
-            <main class="flex-1 w-full">
+            <main class="w-full">
                 <div class="space-y-3">
                     <?php foreach ( $processes as $process ) : ?>
                         <?php

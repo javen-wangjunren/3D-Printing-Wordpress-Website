@@ -121,7 +121,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
     <div class="max-w-container mx-auto px-6 lg:px-[64px]">
         <div class="text-center mb-8 lg:mb-12">
             <?php if ( $section_title ) : ?>
-                <h2 class="text-h2 font-semibold text-heading tracking-[-0.04em] mb-2">
+                <h2 class="text-heading">
                     <?php echo esc_html( $section_title ); ?>
                 </h2>
             <?php endif; ?>

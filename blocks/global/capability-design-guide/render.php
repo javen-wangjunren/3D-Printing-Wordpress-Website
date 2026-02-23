@@ -59,7 +59,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
     <div class="max-w-container mx-auto px-5 lg:px-8 <?php echo esc_attr( $block_class ); ?>">
         <?php if ( $section_title ) : ?>
             <div class="mb-8 lg:mb-12">
-                <h2 class="text-h2 font-semibold text-heading tracking-tight mb-3">
+                <h2 class="text-heading">
                     <?php echo esc_html( $section_title ); ?>
                 </h2>
                 <div class="h-1 w-12 bg-primary rounded-full"></div>

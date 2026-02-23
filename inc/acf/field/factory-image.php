@@ -99,33 +99,6 @@ if ( function_exists('acf_add_local_field_group') ) {
                             'wrapper' => array('width' => '50'),
                         ),
                         
-                        // Row 2: Tag & Content
-                        array(
-                            'key' => 'field_factory_image_item_tag',
-                            'label' => 'Corner Tag (Mono)',
-                            'name' => 'tag_text',
-                            'type' => 'text',
-                            'placeholder' => 'Area: 3,700 SQM',
-                            'instructions' => 'Top-left monospace tag.',
-                            'wrapper' => array('width' => '33'),
-                        ),
-                        array(
-                            'key' => 'field_factory_image_item_title',
-                            'label' => 'Card Title',
-                            'name' => 'item_title',
-                            'type' => 'text',
-                            'placeholder' => 'Main Production Floor',
-                            'wrapper' => array('width' => '33'),
-                        ),
-                        array(
-                            'key' => 'field_factory_image_item_sub',
-                            'label' => 'Subtitle / Desc',
-                            'name' => 'item_subtitle',
-                            'type' => 'text',
-                            'placeholder' => 'ISO 9001 Certified Environment',
-                            'instructions' => 'Visible on Hover or for Hero item.',
-                            'wrapper' => array('width' => '33'),
-                        ),
                     ),
                 ),
 

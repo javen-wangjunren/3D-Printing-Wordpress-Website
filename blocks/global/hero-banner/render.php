@@ -46,10 +46,10 @@ $section_classes[] = $block_class;
 
 // Layout specific classes
 if ($layout === 'centered') {
-    $section_classes[] = 'min-h-[600px] lg:min-h-[700px] flex items-center pt-32 pb-32 lg:pb-24'; // Reduced bottom padding
+    $section_classes[] = 'min-h-[600px] lg:min-h-[700px] flex items-center pt-16 pb-16 lg:pt-24 lg:pb-24'; // Standardized padding
 } else {
     // Split layout
-    $section_classes[] = 'pt-20 pb-20 lg:pt-32 lg:pb-24'; // Reduced bottom padding to prevent huge gap
+    $section_classes[] = 'pt-16 pb-16 lg:pt-24 lg:pb-24'; // Standardized padding
 }
 
 // Compact mode for mobile
@@ -121,7 +121,7 @@ if ($pt_remove) {
             <?php endif; ?>
             
             <?php if ($title): ?>
-            <h1 class="text-h1 text-white tracking-tight mb-6 drop-shadow-sm">
+            <h1 class="text-h1 text-white mb-6 drop-shadow-sm">
                 <?php echo esc_html($title); ?>
             </h1>
             <?php endif; ?>
@@ -135,15 +135,20 @@ if ($pt_remove) {
             <?php if (is_array($buttons) || is_object($buttons)): ?>
             <div class="flex flex-wrap justify-center gap-4">
                 <?php foreach ($buttons as $btn): 
-                    $style = $btn['button_style'];
-                    $b_url = $btn['button_url'];
-                    $b_text = $btn['button_text'];
+                    $style = isset($btn['button_style']) ? $btn['button_style'] : 'primary';
+                    
+                    $link = isset($btn['button_link']) ? $btn['button_link'] : '';
+                    if ( ! $link ) continue;
+
+                    $b_url    = isset($link['url']) ? $link['url'] : '';
+                    $b_text   = isset($link['title']) ? $link['title'] : '';
+                    $b_target = isset($link['target']) ? $link['target'] : '_self';
                     
                     $btn_classes = $style === 'primary' 
                         ? 'bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/20' 
                         : 'bg-transparent border-2 border-white/30 text-white hover:bg-white/10';
                 ?>
-                    <a href="<?php echo esc_url($b_url); ?>" class="<?php echo esc_attr($btn_classes); ?> px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all">
+                    <a href="<?php echo esc_url($b_url); ?>" target="<?php echo esc_attr($b_target); ?>" class="<?php echo esc_attr($btn_classes); ?> px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all">
                         <?php if ($style === 'primary'): // Icon for primary ?>
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                         <?php endif; ?>
@@ -161,19 +166,19 @@ if ($pt_remove) {
     // ==========================================
     else { 
     ?>
-        <div class="max-w-container mx-auto px-6 lg:px-8">
+        <div class="max-w-container mx-auto px-container">
             <div class="grid lg:grid-cols-2 gap-12 items-stretch">
                 
                 <!-- Left: Text Content -->
                 <div class="z-10 flex flex-col justify-center py-6">
                     <?php if ($title): ?>
-                    <h1 class="text-h1 text-heading tracking-tight mb-6">
+                    <h1 class="text-h1 text-heading mb-6">
                         <?php echo esc_html($title); ?>
                     </h1>
                     <?php endif; ?>
 
                     <?php if ($subtitle): ?>
-                    <h2 class="text-[20px] font-semibold text-primary mb-4 uppercase tracking-tight">
+                    <h2 class="text-heading">
                         <?php echo esc_html($subtitle); ?>
                     </h2>
                     <?php endif; ?>
@@ -188,14 +193,21 @@ if ($pt_remove) {
                     <div class="flex flex-wrap gap-4">
                         <?php foreach ($buttons as $btn): 
                             $style = $btn['button_style'];
-                            $b_url = $btn['button_url'];
-                            $b_text = $btn['button_text'];
+                            
+                            $link = isset($btn['button_link']) ? $btn['button_link'] : '';
+                            if ( ! $link ) {
+                                continue;
+                            }
+
+                            $b_url    = isset($link['url']) ? $link['url'] : '';
+                            $b_text   = isset($link['title']) ? $link['title'] : '';
+                            $b_target = isset($link['target']) ? $link['target'] : '';
                             
                             $btn_classes = $style === 'primary' 
                                 ? 'bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/10' 
                                 : 'bg-white border-[3px] border-border text-heading hover:border-primary';
                         ?>
-                            <a href="<?php echo esc_url($b_url); ?>" class="<?php echo esc_attr($btn_classes); ?> px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all">
+                            <a href="<?php echo esc_url($b_url); ?>" target="<?php echo esc_attr($b_target); ?>" class="<?php echo esc_attr($btn_classes); ?> px-8 py-4 rounded-button font-bold text-sm inline-flex items-center gap-2 transition-all">
                                 <?php if ($style === 'primary'): ?>
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                                 <?php endif; ?>

@@ -84,23 +84,13 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'button_label'      => __( 'Add Button', '3d-printing' ),
                     'sub_fields'        => array(
                         array(
-                            'key'           => 'field_button_text',
-                            'label'         => __( 'Button Text', '3d-printing' ),
-                            'name'          => 'button_text',
-                            'type'          => 'text',
+                            'key'           => 'field_button_link',
+                            'label'         => __( 'Button Link', '3d-printing' ),
+                            'name'          => 'button_link',
+                            'type'          => 'link',
                             'required'      => 0,
                             'wrapper'       => array(
-                                'width' => '33',
-                            ),
-                        ),
-                        array(
-                            'key'           => 'field_button_url',
-                            'label'         => __( 'Button URL', '3d-printing' ),
-                            'name'          => 'button_url',
-                            'type'          => 'url',
-                            'required'      => 0,
-                            'wrapper'       => array(
-                                'width' => '50',
+                                'width' => '60',
                             ),
                         ),
                         array(
@@ -115,7 +105,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'default_value' => 'primary',
                             'required'      => 0,
                             'wrapper'       => array(
-                                'width' => '17',
+                                'width' => '40',
                             ),
                         ),
                     ),

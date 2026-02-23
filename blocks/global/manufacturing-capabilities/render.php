@@ -22,7 +22,6 @@ $clone_name = rtrim($pfx, '_');
 
 // 3. 获取 ACF 字段数据
 $section_title  = get_field_value('manufacturing_capabilities_title', $block, $clone_name, $pfx, 'Manufacturing Capabilities' );
-$section_intro  = get_field_value('manufacturing_capabilities_intro', $block, $clone_name, $pfx );
 
 // 获取 Tab 数据
 $tabs_raw = get_field_value('manufacturing_capabilities_tabs', $block, $clone_name, $pfx, array() );
@@ -36,7 +35,12 @@ $extra_class    = get_field_value('manufacturing_capabilities_css_class', $block
 
 // 2. Data cleaning and structuring
 $tabs = array();
-foreach ( $tabs_raw as $tab ) {
+
+// Override Logic: If tabs_override is provided, use it directly (skip ACF)
+if ( ! empty( $block['tabs_override'] ) && is_array( $block['tabs_override'] ) ) {
+    $tabs = $block['tabs_override'];
+} else {
+    foreach ( $tabs_raw as $tab ) {
     // 处理高亮参数 (Highlights)
     $highlights = array();
     if ( ! empty( $tab['highlights'] ) && is_array( $tab['highlights'] ) ) {
@@ -45,7 +49,7 @@ foreach ( $tabs_raw as $tab ) {
                 'title' => isset( $hl['title'] ) ? (string) $hl['title'] : '',
                 'value' => isset( $hl['value'] ) ? (string) $hl['value'] : '',
                 'unit'  => isset( $hl['unit'] ) ? (string) $hl['unit'] : '',
-                'tag'   => isset( $hl['tag'] ) ? (string) $hl['tag'] : '',
+                'tag'   => isset( $tab['tab_title'] ) ? (string) $tab['tab_title'] : '',
             );
         }
     }
@@ -88,8 +92,6 @@ foreach ( $tabs_raw as $tab ) {
     $tabs[] = array(
         'title'          => isset( $tab['tab_title'] ) ? (string) $tab['tab_title'] : '',
         'short_title'    => isset( $tab['tab_short_title'] ) ? (string) $tab['tab_short_title'] : '', // 新增：移动端短标题
-        'key'            => isset( $tab['tab_key'] ) ? (string) $tab['tab_key'] : '',
-        'machine'        => isset( $tab['machine_model'] ) ? (string) $tab['machine_model'] : '',
         'hub_title'      => isset( $tab['hub_title'] ) ? (string) $tab['hub_title'] : '',
         'hub_desc'       => isset( $tab['hub_desc'] ) ? (string) $tab['hub_desc'] : '',
         'highlights'     => $highlights,
@@ -102,6 +104,7 @@ foreach ( $tabs_raw as $tab ) {
             'height'  => $image_h,
         ),
     );
+}
 }
 
 // 3. 构建 Alpine.js 配置
@@ -144,12 +147,9 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
         
         <!-- Header & Tabs -->
         <header class="text-center mb-10 lg:mb-16">
-            <h2 class="text-[28px] lg:text-[36px] font-bold text-heading mb-6 tracking-tight">
+            <h2 class="text-heading">
                 <?php echo esc_html( $section_title ); ?>
             </h2>
-            <?php if ( $section_intro ) : ?>
-                <p class="text-body mb-6 max-w-2xl mx-auto"><?php echo esc_html( $section_intro ); ?></p>
-            <?php endif; ?>
             
             <div class="flex gap-2 justify-center mt-4" x-show="tabs.length > 1">
                 <template x-for="(tab, index) in tabs" :key="index">
@@ -181,7 +181,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                     <div class="grid grid-cols-3 gap-2 lg:gap-4 mb-6 lg:mb-8 mt-5">
                         <template x-for="(item, idx) in tabs[active].highlights" :key="idx">
                             <div class="p-2 lg:p-6 border border-border rounded-[12px] bg-white hover:border-primary/50 transition-all text-center lg:text-left flex flex-col justify-center h-full">
-                                <span class="hidden lg:inline-block text-[8px] font-bold text-primary uppercase tracking-widest mb-1.5 opacity-80" x-text="item.tag || tabs[active].key"></span>
+                                <span class="hidden lg:inline-block text-[8px] font-bold text-primary uppercase tracking-widest mb-1.5 opacity-80" x-text="item.tag"></span>
                                 <h3 class="text-[9px] lg:text-[14px] font-bold text-heading mb-0.5 lg:mb-2 truncate w-full" x-text="item.title"></h3>
                                 <div class="font-mono text-[15px] lg:text-[22px] font-bold text-heading leading-tight" :class="useMono ? 'font-mono' : ''">
                                     <span x-text="item.value"></span><span class="text-[8px] lg:text-[11px] font-medium text-muted ml-0.5" x-text="item.unit"></span>
@@ -192,10 +192,10 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
 
                     <!-- Finishing Tags -->
                     <div class="mb-6 lg:mb-8" x-show="tabs[active].finishing_tags && tabs[active].finishing_tags.length">
-                        <span class="text-[9px] font-bold text-muted uppercase tracking-[1.5px] block mb-2 lg:mb-3">Available Finishing</span>
+                        <span class="text-[13px] font-bold text-muted uppercase tracking-wide block mb-2 lg:mb-3">Available Finishing</span>
                         <div class="flex flex-wrap gap-2">
                             <template x-for="(tag, t_idx) in tabs[active].finishing_tags" :key="t_idx">
-                                <span class="bg-[#F8F9FB] border border-border px-2.5 py-1 rounded text-[13px] lg:text-[15px] font-bold text-body" x-text="tag"></span>
+                                <a :href="(typeof tag === 'object' && tag.url) ? tag.url : 'javascript:void(0)'" class="bg-[#F8F9FB] border border-border px-2.5 py-1 rounded text-[13px] lg:text-[15px] font-bold text-body hover:border-primary/50 hover:text-primary transition-colors" x-text="(typeof tag === 'object' && tag.text) ? tag.text : tag"></a>
                             </template>
                         </div>
                     </div>
@@ -214,7 +214,6 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
             <div class="aspect-[4/3] lg:aspect-auto lg:h-auto order-1 lg:order-2">
                 <div class="h-full relative rounded-[12px] overflow-hidden border border-border bg-[#F8F9FB] group shadow-sm">
                     <img :src="tabs[active].image.desktop || tabs[active].image.mobile" :width="tabs[active].image.width" :height="tabs[active].image.height" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System" loading="lazy">
-                    <div class="absolute bottom-0 right-0 bg-primary/90 backdrop-blur-sm px-3 py-1.5 lg:px-4 lg:py-2 text-[9px] lg:text-[10px] font-mono font-bold text-white tracking-widest uppercase rounded-tl-[12px]" x-text="tabs[active].machine"></div>
                 </div>
             </div>
 

@@ -22,7 +22,7 @@ $spacing         = get_field_value('review_spacing', $block, $clone_name, $pfx, 
 $card_style      = get_field_value('review_card_style', $block, $clone_name, $pfx, 'default');
 $mobile_compact  = get_field_value('mobile_compact_mode', $block, $clone_name, $pfx, false);
 $mobile_hide_txt = get_field_value('mobile_hide_content', $block, $clone_name, $pfx, false);
-$bg_color        = get_field_value('bg_color', $block, $clone_name, $pfx, '#ffffff');
+$bg_color        = get_field_value('bg_color', $block, $clone_name, $pfx, '#F8F9FB');
 
 // 样式映射
 $spacing_map = array(
@@ -49,9 +49,12 @@ $custom_class = get_field_value('review_grid_custom_class', $block, $clone_name,
 // 计算总数以便 JS 使用
 $total_reviews = count( $reviews );
 
+// 更新全局背景状态，供后续模块判断是否需要 pt-0
+$GLOBALS['3dp_last_bg'] = $bg_color;
+
 // --- Dynamic Spacing Logic ---
 $prev_bg = isset($GLOBALS['3dp_last_bg']) ? $GLOBALS['3dp_last_bg'] : '';
-$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-0' : 'pt-16 lg:pt-24';
+$pt_class = ($prev_bg && $prev_bg === $bg_color) ? 'pt-[100px]' : 'pt-[164px] lg:pt-[196px]'; // 增加 100px 以解决标题重叠问题
 $pb_class = 'pb-16 lg:pb-24';
 ?>
 
@@ -81,13 +84,13 @@ $pb_class = 'pb-16 lg:pb-24';
             }
          }"
          @resize.window="active = Math.min(active, maxIndex)"
-         class="max-w-container mx-auto px-6 lg:px-[64px]">
+         class="max-w-container mx-auto px-container">
 
         <!-- Header Section -->
         <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div class="max-w-xl">
                 <!-- Step 2: 注入视觉规范 - Heading & Subtitle -->
-                <h2 class="text-h2 font-bold text-heading tracking-tight mb-4">
+                <h2 class="text-heading">
                     <?php echo esc_html( $title_main ); ?> 
                     <span class="text-primary"><?php echo esc_html( $title_highlight ); ?></span>
                 </h2>
@@ -103,12 +106,12 @@ $pb_class = 'pb-16 lg:pb-24';
             <div class="hidden md:flex gap-3">
                 <button @click="prev" 
                         class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors"
-                        aria-label="<?php esc_attr_e( 'Previous review', '3d-printing' ); ?>">
+                        aria-label="<?php echo esc_attr( __( 'Previous review', '3d-printing' ) ); ?>">
                     &larr;
                 </button>
                 <button @click="next" 
                         class="w-12 h-12 rounded-full border-[3px] border-border bg-white flex items-center justify-center hover:border-primary text-heading transition-colors"
-                        aria-label="<?php esc_attr_e( 'Next review', '3d-printing' ); ?>">
+                        aria-label="<?php echo esc_attr( __( 'Next review', '3d-printing' ) ); ?>">
                     &rarr;
                 </button>
             </div>
@@ -127,7 +130,6 @@ $pb_class = 'pb-16 lg:pb-24';
                         $name      = isset($review['user_name']) ? $review['user_name'] : '';
                         $title     = isset($review['user_title']) ? $review['user_title'] : '';
                         $stars     = isset($review['stars_count']) ? intval( $review['stars_count'] ) : 5;
-                        $verified  = isset($review['verified']) ? $review['verified'] : false;
                         $text      = isset($review['review_text']) ? $review['review_text'] : '';
                         
                         // 动态列宽类
@@ -145,45 +147,40 @@ $pb_class = 'pb-16 lg:pb-24';
                             
                             <div class="<?php echo esc_attr( $card_class ); ?> p-8 <?php echo $mobile_compact ? 'max-md:p-5' : ''; ?>">
                                 
-                                <!-- Stars & Verified -->
-                                <div class="flex justify-between items-center mb-6">
+                                <!-- Stars -->
+                                <div class="flex items-center mb-6">
                                     <div class="flex gap-1 text-primary">
                                         <?php for ( $i = 0; $i < $stars; $i++ ) : ?>
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                                         <?php endfor; ?>
-                                        <?php // 补齐空星（可选，保持极简暂时不补，demo也没补） ?>
                                     </div>
-                                    
-                                    <?php if ( $verified ) : ?>
-                                        <span class="bg-green-50 text-green-700 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-green-100 uppercase tracking-wider"><?php esc_html_e( 'Verified', '3d-printing' ); ?></span>
-                                    <?php endif; ?>
                                 </div>
 
                                 <!-- Review Text -->
                                 <div class="flex-1 mb-10">
-                                    <p class="text-body italic leading-relaxed text-[15px] <?php echo $mobile_compact ? 'max-md:text-sm max-md:line-clamp-4' : ''; ?>">
+                                    <p class="text-heading font-medium leading-relaxed text-[15px] <?php echo $mobile_compact ? 'max-md:text-sm max-md:line-clamp-5' : ''; ?>">
                                         "<?php echo esc_html( strip_tags( $text ) ); ?>"
                                     </p>
                                 </div>
 
                                 <!-- User Info -->
-                                <div class="flex items-center gap-4 pt-6 border-t border-border/50">
+                                <div class="flex items-center gap-4 pt-6 border-t border-border/60">
                                     <!-- Photo -->
                                     <?php if ( ! empty( $photo ) ) : ?>
-                                        <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100">
+                                        <div class="w-11 h-11 rounded-lg overflow-hidden shrink-0 bg-slate-100 border border-border/50">
                                             <?php echo wp_get_attachment_image( $photo['id'], 'thumbnail', false, array( 'class' => 'w-full h-full object-cover', 'loading' => 'lazy' ) ); ?>
                                         </div>
                                     <?php else : ?>
                                         <!-- Fallback Initial -->
-                                        <div class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center font-bold text-primary shrink-0 font-mono">
+                                        <div class="w-11 h-11 bg-primary/5 rounded-lg flex items-center justify-center font-bold text-primary shrink-0 font-mono border border-primary/10">
                                             <?php echo esc_html( substr( $name, 0, 1 ) ); ?>
                                         </div>
                                     <?php endif; ?>
                                     
                                     <!-- Meta -->
                                     <div class="overflow-hidden">
-                                        <span class="block text-[14px] font-bold text-heading truncate"><?php echo esc_html( $name ); ?></span>
-                                        <span class="block text-[12px] text-body truncate"><?php echo esc_html( $title ); ?></span>
+                                        <span class="block text-[14px] font-bold text-heading truncate leading-tight mb-0.5"><?php echo esc_html( $name ); ?></span>
+                                        <span class="block text-[12px] font-mono text-body/80 truncate"><?php echo esc_html( $title ); ?></span>
                                     </div>
                                 </div>
                             </div>

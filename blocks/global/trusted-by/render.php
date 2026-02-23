@@ -84,8 +84,6 @@ $pb_class = 'pb-16 lg:pb-24';
 $section_classes = array(
     $pt_class,
     $pb_class,
-    'border-b',
-    'border-border',
     'overflow-hidden',
     $block_class,
 );
@@ -126,7 +124,7 @@ if ($animation_speed === 'slow') {
 </style>
 
 <div id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr($section_class_attr); ?>" style="background-color: <?php echo esc_attr($bg_color); ?>;">
-    <div class="max-w-container mx-auto px-6 lg:px-[24px]">
+    <div class="max-w-container mx-auto px-container">
         <div class="text-center mb-12">
             <?php if ($title) : ?>
                 <h3 class="text-[28px] font-bold text-heading tracking-tight mb-4" style="color: <?php echo esc_attr($title_color); ?>;">

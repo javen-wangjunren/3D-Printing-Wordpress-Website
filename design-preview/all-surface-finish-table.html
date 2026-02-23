@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Surface Finish Matrix</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        industrial: '#1D2938',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="py-24 bg-white" x-data="{ 
+    activeTab: 'ALL',
+    finishes: [
+        { 
+            name: 'As Machined', 
+            desc: 'Standard finish with visible layer lines and a matte texture.', 
+            ra: '3.2 - 6.3 μm', 
+            processes: ['PLASTIC', 'METAL'], 
+            leadTime: '0 DAYS',
+            img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=200'
+        },
+        { 
+            name: 'Bead Blasting', 
+            desc: 'Uniform matte surface achieved by spraying fine glass beads.', 
+            ra: '1.6 - 3.2 μm', 
+            processes: ['PLASTIC', 'METAL', 'RESIN'], 
+            leadTime: '+ 1 DAY',
+            img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=200'
+        },
+        { 
+            name: 'Vapor Polishing', 
+            desc: 'Chemical process that melts the surface to create a high-gloss finish.', 
+            ra: '< 0.8 μm', 
+            processes: ['PLASTIC'], 
+            leadTime: '+ 2 DAYS',
+            img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=200'
+        },
+        { 
+            name: 'Electropolishing', 
+            desc: 'Electrochemical removal of surface material for peak smoothness.', 
+            ra: '0.4 - 0.8 μm', 
+            processes: ['METAL'], 
+            leadTime: '+ 2 DAYS',
+            img: 'https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&q=80&w=200'
+        }
+    ],
+    get filteredFinishes() {
+        if (this.activeTab === 'ALL') return this.finishes;
+        return this.finishes.filter(f => f.processes.includes(this.activeTab));
+    }
+}">
+    <div class="w-[90%] lg:w-[80%] mx-auto">
+        
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+            <div class="max-w-xl">
+                <h2 class="text-[42px] font-[800] uppercase tracking-tighter leading-none mb-6">
+                    Surface <span class="text-primary italic">Finishing</span>
+                </h2>
+                <p class="text-body/60 text-[15px] font-medium leading-relaxed">
+                    Explore our range of post-processing options to achieve the perfect functional and aesthetic requirements for your parts.
+                </p>
+            </div>
+
+            <div class="flex bg-panel p-1.5 rounded-xl border border-border">
+                <template x-for="tab in ['ALL', 'PLASTIC', 'RESIN', 'METAL']">
+                    <button @click="activeTab = tab"
+                            :class="activeTab === tab ? 'bg-white shadow-sm text-primary' : 'text-industrial/40 hover:text-industrial/70'"
+                            class="px-6 py-2.5 rounded-lg text-[12px] font-bold uppercase tracking-widest transition-all"
+                            x-text="tab">
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto no-scrollbar">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="border-b border-industrial/10 text-left">
+                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Type / Visual</th>
+                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Description</th>
+                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Roughness (Ra)</th>
+                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Compatibility</th>
+                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Lead Time</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border">
+                    <template x-for="finish in filteredFinishes" :key="finish.name">
+                        <tr class="group hover:bg-panel transition-colors duration-300">
+                            <td class="py-8 pr-8">
+                                <div class="flex items-center gap-6">
+                                    <div class="w-20 h-20 rounded-xl overflow-hidden bg-panel border border-border flex-shrink-0">
+                                        <img :src="finish.img" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                    </div>
+                                    <span class="font-extrabold text-[17px] uppercase tracking-tight text-industrial" x-text="finish.name"></span>
+                                </div>
+                            </td>
+                            <td class="py-8 pr-8 max-w-xs">
+                                <p class="text-[14px] text-industrial/60 leading-relaxed font-medium" x-text="finish.desc"></p>
+                            </td>
+                            <td class="py-8 pr-8">
+                                <div class="inline-block px-3 py-1 bg-white border border-border rounded-lg shadow-sm">
+                                    <span class="font-mono text-[13px] text-primary font-bold" x-text="'[ ' + finish.ra + ' ]'"></span>
+                                </div>
+                            </td>
+                            <td class="py-8 pr-8">
+                                <div class="flex flex-wrap gap-2">
+                                    <template x-for="p in finish.processes">
+                                        <span class="px-2 py-0.5 bg-industrial/5 border border-industrial/10 rounded font-mono text-[9px] text-industrial/40 font-bold" x-text="p"></span>
+                                    </template>
+                                </div>
+                            </td>
+                            <td class="py-8">
+                                <span class="font-mono text-[13px] text-industrial font-bold" x-text="'[ ' + finish.leadTime + ' ]'"></span>
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-20 p-12 bg-panel rounded-[32px] border border-border flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="flex flex-col gap-2">
+                <span class="font-mono text-[10px] font-bold text-primary uppercase tracking-[4px]">READY_TO_PROCEED</span>
+                <h3 class="text-[24px] font-[800] uppercase tracking-tight text-industrial">Get an Instant Quote with Professional Finishing</h3>
+            </div>
+            <a href="/quote" class="px-10 py-5 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-[13px] shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all">
+                Upload CAD & Quote &rarr;
+            </a>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

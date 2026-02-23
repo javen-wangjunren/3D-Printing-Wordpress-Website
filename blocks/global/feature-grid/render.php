@@ -42,7 +42,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
         <?php if ($heading || $description) : ?>
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <?php if ($heading) : ?>
-                    <h2 class="text-3xl lg:text-4xl font-bold text-heading tracking-tight mb-4">
+                    <h2 class="text-heading">
                         <?php echo esc_html($heading); ?>
                     </h2>
                 <?php endif; ?>

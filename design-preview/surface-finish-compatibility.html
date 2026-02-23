@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Enhanced Compatibility Tiles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        industrial: '#1D2938',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="py-20 bg-white" x-data="{
+    processes: [
+        { name: 'SLS', supported: true, url: '/capabilities/sls/' },
+        { name: 'MJF', supported: true, url: '/capabilities/mjf/' },
+        { name: 'SLA', supported: false, url: '/capabilities/sla/' },
+        { name: 'FDM', supported: false, url: '/capabilities/fdm/' }
+    ],
+    materials: [
+        { code: 'PA12', name: 'Nylon 12', url: '/materials/nylon-pa12/' },
+        { code: 'PA11', name: 'Nylon 11', url: '/materials/nylon-pa11/' },
+        { code: 'TPU', name: 'Flexible TPU', url: '/materials/tpu/' }
+    ]
+}">
+    <div class="w-[90%] lg:w-[80%] mx-auto">
+        
+        <div class="mb-14">
+            <h3 class="text-[32px] lg:text-[40px] font-extrabold uppercase tracking-tighter leading-none text-industrial">
+                Technical <span class="text-primary italic">Compatibility</span>
+            </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-20">
+            
+            <div>
+                <div class="flex items-center justify-between mb-8 border-b border-border pb-4">
+                    <h4 class="text-[14px] font-extrabold tracking-widest text-industrial/50">Supported Processes</h4>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <template x-for="p in processes">
+                        <a :href="p.supported ? p.url : '#'" 
+                           :class="p.supported ? 'border-border hover:border-primary hover:bg-panel hover:-translate-y-1' : 'opacity-25 cursor-not-allowed border-dashed'"
+                           class="flex items-center justify-between p-4 border rounded-xl transition-all duration-300 group">
+                            <span class="font-extrabold text-[15px] tracking-tight" x-text="p.name"></span>
+                            <template x-if="p.supported">
+                                <svg class="w-4 h-4 text-primary opacity-30 group-hover:opacity-100 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </template>
+                        </a>
+                    </template>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-8 border-b border-border pb-4">
+                    <h4 class="text-[14px] font-extrabold uppercase tracking-widest text-industrial/50">Verified Materials</h4>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    <template x-for="m in materials">
+                        <a :href="m.url" 
+                           class="flex items-center gap-5 pl-5 pr-4 py-3 border border-border rounded-xl hover:border-primary hover:bg-panel hover:-translate-y-1 transition-all duration-300 group">
+                            <div class="flex flex-col">
+                                <span class="font-mono text-[12px] font-bold text-primary" x-text="'[ ' + m.code + ' ]'"></span>
+                                <span class="text-[13px] font-bold text-industrial/70" x-text="m.name"></span>
+                            </div>
+                            <div class="w-8 h-8 rounded-lg bg-panel flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                <svg class="w-4 h-4 text-industrial/20 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

@@ -54,7 +54,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'sub_fields' => array(
                         array(
                             'key' => 'field_ml_process_name',
-                            'label' => 'Process Name',
+                            'label' => 'Tab Name',
                             'name' => 'process_name',
                             'type' => 'text',
                             'required' => 1,
