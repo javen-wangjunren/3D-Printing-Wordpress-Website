@@ -20,7 +20,11 @@
 
 module.exports = {
   plugins: {
+    // 第一道工序：裁剪与缝制
+    // 作用：识别 input.css 里的 @tailwind 指令，把你写的 class="bg-blue-500" 变成真正的 CSS 代码。
     tailwindcss: {},
+    // 第二道工序：熨烫与加前缀
+    // 作用：给 CSS 属性添加浏览器前缀，确保在不同浏览器上都能正常显示。
     autoprefixer: {},
   },
 }
