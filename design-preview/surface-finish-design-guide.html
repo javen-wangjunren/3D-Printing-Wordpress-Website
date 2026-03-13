@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3DPROTO - Post-Processing DFM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
@@ -21,6 +21,12 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace']
+                    },
+                    maxWidth: {
+                        'container': '1280px'
+                    },
+                    padding: {
+                        'container': '2rem'
                     }
                 }
             }
@@ -32,82 +38,110 @@
 </head>
 <body class="bg-white font-sans antialiased text-industrial">
 
-<section class="py-24 bg-[#F8F9FB]">
-    <div class="w-[90%] lg:w-[80%] mx-auto">
+<section class="py-24 bg-white" x-data="{
+    guides: [
+        {
+            id: '01',
+            title: 'Minimum Wall Thickness',
+            positive: {
+                title: 'Reinforced Features',
+                desc: 'Maintain a wall thickness of at least [ 1.2mm ] to survive mechanical tumbling and bead blasting without deformation.',
+                value: '1.2mm'
+            },
+            negative: {
+                title: 'Ultra-thin structures',
+                desc: 'Features under [ 0.8mm ] are highly susceptible to snapping during vibratory finishing cycles.',
+                value: '0.8mm'
+            }
+        },
+        {
+            id: '02',
+            title: 'Internal Cavity Access',
+            positive: {
+                title: 'Vented Channels',
+                desc: 'Add drainage holes with min [ 3.0mm ] diameter to allow vapor or chemical media to circulate freely.',
+                value: '3.0mm'
+            },
+            negative: {
+                title: 'Deep Blind Holes',
+                desc: 'Vapor polishing cannot reach deep internal surfaces, resulting in inconsistent Raw finishes inside the part.',
+                value: ''
+            }
+        }
+    ]
+}">
+    <div class="max-w-container mx-auto px-container">
         
-        <div class="mb-16">
-            <h3 class="text-[36px] font-extrabold uppercase tracking-tighter leading-none">
-                Post-Processing <span class="text-primary italic">DFM Guide</span>
-            </h3>
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 border-b border-border pb-8">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-industrial">
+                    Post-Processing <span class="text-primary">DFM Guide</span>
+                </h2>
+            </div>
+            <p class="text-industrial/60 max-w-md text-sm leading-relaxed">
+                Optimizing your parts for post-processing ensures consistent surface quality and prevents damage during finishing operations.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            
-            <div class="bg-white p-10 rounded-[32px] border border-border shadow-sm">
-                <div class="flex items-center gap-4 mb-10">
-                    <span class="font-mono text-[14px] font-bold text-primary tracking-[-0.5px]">01 / Minimum Wall Thickness</span>
-                </div>
-
-                <div class="space-y-8">
-                    <div class="flex items-start gap-6 group">
-                        <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div>
-                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Reinforced Features</p>
-                            <p class="text-[14px] text-industrial/60 leading-relaxed font-medium">
-                                Maintain a wall thickness of at least <span class="font-mono text-primary font-bold">[ 1.2mm ]</span> to survive mechanical tumbling and bead blasting without deformation.
-                            </p>
-                        </div>
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <template x-for="guide in guides">
+                <div class="group relative bg-white border border-border rounded-xl p-8 hover:border-primary transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                    
+                    <!-- Card Header -->
+                    <div class="flex items-center justify-between mb-8 pb-4 border-b border-border border-dashed">
+                        <h3 class="text-xl font-bold text-industrial tracking-tight" x-text="guide.title"></h3>
+                        <span class="font-mono text-primary/40 text-sm font-bold tracking-widest" x-text="guide.id"></span>
                     </div>
 
-                    <div class="flex items-start gap-6 opacity-50">
-                        <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 flex-shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <!-- Content Stack -->
+                    <div class="space-y-8">
+                        
+                        <!-- Positive (Do) -->
+                        <div class="relative pl-6">
+                            <!-- Indicator Line -->
+                            <div class="absolute left-0 top-1 bottom-1 w-[3px] bg-emerald-500 rounded-full"></div>
+                            
+                            <div class="flex items-start justify-between mb-1">
+                                <h4 class="font-bold text-industrial text-base" x-text="guide.positive.title"></h4>
+                                <div class="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 shrink-0">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-industrial/70 leading-relaxed" x-html="guide.positive.desc.replace(/\[(.*?)\]/g, '<span class=\'font-mono text-primary font-bold bg-primary/5 px-1 rounded\'>$1</span>')"></p>
                         </div>
-                        <div>
-                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Ultra-thin structures</p>
-                            <p class="text-[14px] leading-relaxed font-medium">
-                                Features under <span class="font-mono text-rose-600">[ 0.8mm ]</span> are highly susceptible to snapping during vibratory finishing cycles.
-                            </p>
+
+                        <!-- Negative (Don't) -->
+                        <div class="relative pl-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                            <!-- Indicator Line -->
+                            <div class="absolute left-0 top-1 bottom-1 w-[3px] bg-rose-500/30 group-hover:bg-rose-500 rounded-full transition-colors"></div>
+                            
+                            <div class="flex items-start justify-between mb-1">
+                                <h4 class="font-bold text-industrial text-base" x-text="guide.negative.title"></h4>
+                                <div class="w-6 h-6 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 shrink-0">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-industrial/70 leading-relaxed" x-html="guide.negative.desc.replace(/\[(.*?)\]/g, '<span class=\'font-mono text-rose-600 font-bold bg-rose-50 px-1 rounded\'>$1</span>')"></p>
                         </div>
+
                     </div>
+                    
                 </div>
-            </div>
-
-            <div class="bg-white p-10 rounded-[32px] border border-border shadow-sm">
-                <div class="flex items-center gap-4 mb-10">
-                    <span class="font-mono text-[14px] font-bold text-primary tracking-[-0.5px]">02 / Internal Cavity Access</span>
-                </div>
-
-                <div class="space-y-8">
-                    <div class="flex items-start gap-6">
-                        <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                        </div>
-                        <div>
-                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Vented Channels</p>
-                            <p class="text-[14px] text-industrial/60 leading-relaxed font-medium">
-                                Add drainage holes with min <span class="font-mono text-primary font-bold">[ 3.0mm ]</span> diameter to allow vapor or chemical media to circulate freely.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-6 opacity-50">
-                        <div class="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center text-rose-600 flex-shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
-                        </div>
-                        <div>
-                            <p class="font-bold text-[16px] mb-2 uppercase tracking-tight">Deep Blind Holes</p>
-                            <p class="text-[14px] leading-relaxed font-medium">
-                                Vapor polishing cannot reach deep internal surfaces, resulting in inconsistent "Raw" finishes inside the part.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            </template>
         </div>
+
+        <!-- Footer Note -->
+        <div class="mt-12 flex items-center gap-3 p-4 bg-panel rounded-lg border border-border border-dashed">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <p class="text-sm font-medium text-industrial/80">
+                <span class="font-bold text-industrial">Pro Tip:</span> Always consult our engineering team for complex geometries requiring internal surface finishing.
+            </p>
+        </div>
+
     </div>
 </section>
 

@@ -62,6 +62,14 @@ function _3dp_build_material_query() {
         'meta_query'     => array( 'relation' => 'AND' ),
     );
 
+    if ( ! empty( $_GET['q'] ) ) {
+        $q = trim( sanitize_text_field( (string) $_GET['q'] ) );
+        if ( '' !== $q ) {
+            $args['s'] = $q;
+            $args['search_columns'] = array( 'post_title' );
+        }
+    }
+
     // 3. 获取默认筛选值 (ACF)
     $default_processes = get_field( 'all_materials_default_processes' ); // returns IDs
     $default_types     = get_field( 'all_materials_default_types' ); // returns IDs

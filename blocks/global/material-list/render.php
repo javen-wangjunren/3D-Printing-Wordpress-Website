@@ -48,11 +48,27 @@ foreach ( $raw_processes as $process_row ) {
     $first_slug = '';
 
     if ( $materials ) {
-        $first_material = $materials[0];
-        $first_name     = isset( $first_material['name'] ) ? (string) $first_material['name'] : '';
+        foreach ( $materials as $material_candidate ) {
+            $candidate_name  = isset( $material_candidate['name'] ) ? (string) $material_candidate['name'] : '';
+            $candidate_specs = isset( $material_candidate['specs_link'] ) ? $material_candidate['specs_link'] : '';
 
-        if ( $first_name ) {
-            $first_slug = strtolower( preg_replace( '/[^a-z0-9]+/', '-', strtolower( $first_name ) ) );
+            $candidate_assoc_post_id = 0;
+            if ( is_numeric( $candidate_specs ) && $candidate_specs > 0 ) {
+                $candidate_assoc_post_id = (int) $candidate_specs;
+            } elseif ( is_object( $candidate_specs ) ) {
+                $candidate_assoc_post_id = (int) $candidate_specs->ID;
+            }
+
+            if ( ! $candidate_name && $candidate_assoc_post_id ) {
+                $candidate_name = get_the_title( $candidate_assoc_post_id );
+            }
+
+            if ( ! $candidate_name ) {
+                continue;
+            }
+
+            $first_slug = strtolower( preg_replace( '/[^a-z0-9]+/', '-', strtolower( $candidate_name ) ) );
+            break;
         }
     }
 
@@ -115,10 +131,11 @@ $alpine_state = array(
                     <?php foreach ( $processes as $process ) : ?>
                         <?php
                         $proc_name = (string) $process['name'];
+                        $proc_first_mat_id = isset( $process['first_mat_id'] ) ? (string) $process['first_mat_id'] : '';
                         ?>
                         <div
                             role="tab"
-                            @click='activeProcess = <?php echo json_encode( $proc_name ); ?>'
+                            @click='activeProcess = <?php echo json_encode( $proc_name ); ?>; openMaterial = <?php echo json_encode( $proc_first_mat_id ); ?>'
                             class="whitespace-nowrap px-4 py-3 text-[13px] font-bold transition-colors !bg-transparent !border-t-0 !border-l-0 !border-r-0 !border-b-2 !shadow-none !ring-0 focus:!outline-none cursor-pointer"
                             :class='activeProcess === <?php echo json_encode( $proc_name ); ?> 
                                 ? "!border-primary text-primary" 

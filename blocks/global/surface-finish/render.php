@@ -122,8 +122,7 @@ $items = get_field_value('sf_items', $block, $clone_name, $pfx, array());
                             <div class="lg:col-span-7 relative order-1 lg:order-2">
                                 <div class="aspect-[4/3] w-full rounded-2xl overflow-hidden bg-gray-100 relative shadow-sm border border-gray-100">
                                     <?php if ($img_url): ?>
-                                        <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($item['name']); ?>" class="absolute inset-0 w-full h-full object-cover">
-                                    <?php else: ?>
+                                        <img loading="lazy" src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($item['name']); ?>" class="absolute inset-0 w-full h-full object-cover" sizes="(min-width: 1024px) 800px, 100vw">                                    <?php else: ?>
                                         <div class="absolute inset-0 flex items-center justify-center text-gray-400">
                                             <span class="font-mono text-xs">NO IMAGE</span>
                                         </div>

@@ -78,7 +78,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- ==========================================================================
 	     III. 导航栏结构 (Navigation Bar)
 	     ========================================================================== -->
-	<header x-data="{ openMenu: null, mobileOpen: false }" @mouseleave="openMenu = null" class="relative z-40 bg-white border-b border-border">
+	<header x-data="{ openMenu: null, mobileOpen: false, mobilePanel: 'root' }" @mouseleave="openMenu = null" class="sticky top-0 z-40 bg-white border-b border-border">
 		<div class="mx-auto max-w-container px-container">
 			<div class="flex h-20 items-center justify-between">
 				

@@ -117,15 +117,14 @@ foreach ( $fm_tabs as $index => $tab ) {
             </div>
 
             <!-- IV. 材料网格 (Grid) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 mb-12 lg:mb-16">
                 <template x-for="item in materials[activeTab]" :key="item.name">
                     <a :href="item.slug" class="group block bg-white rounded-xl overflow-hidden border border-[#E4E7EC] hover:border-primary transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,71,171,0.08)]">
                         <!-- Image Wrapper (Lock 1:1 for larger visual) -->
                         <div class="aspect-square overflow-hidden bg-[#F8F9FB] relative">
-                            <img :src="item.img" :alt="item.name" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110">
-                        </div>
+                            <img loading="lazy" :src="item.img" :alt="item.name" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" sizes="(min-width: 1024px) 800px, 100vw">                        </div>
                         <!-- Card Body (Reduced padding) -->
-                        <div class="py-4 px-6 text-center border-t border-[#E4E7EC]">
+                        <div class="py-3 px-4 text-center border-t border-[#E4E7EC]">
                             <h3 class="text-[16px] font-bold text-heading group-hover:text-primary transition-colors leading-tight" x-text="item.name"></h3>
                         </div>
                     </a>

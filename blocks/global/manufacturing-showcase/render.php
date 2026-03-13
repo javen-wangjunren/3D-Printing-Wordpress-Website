@@ -117,8 +117,7 @@ if ( empty( $showcase_ids ) ) { return; }
                         <div class="flex-none <?php echo esc_attr($mb_card_w); ?> <?php echo esc_attr($lg_card_w); ?> snap-start">
                             <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-section group cursor-pointer">
                                 <?php if ( $src_url ) : ?>
-                                    <img src="<?php echo esc_attr($src_url); ?>" width="<?php echo esc_attr($width); ?>" height="<?php echo esc_attr($height); ?>" alt="<?php echo esc_attr($alt_text); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                                <?php endif; ?>
+                                    <img src="<?php echo esc_attr($src_url); ?>" width="<?php echo esc_attr($width); ?>" height="<?php echo esc_attr($height); ?>" alt="<?php echo esc_attr($alt_text); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" sizes="(min-width: 1024px) 800px, 100vw" />                                <?php endif; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -143,8 +142,7 @@ if ( empty( $showcase_ids ) ) { return; }
                     <div>
                         <div class="relative aspect-[4/3] rounded-card overflow-hidden border border-border bg-bg-section group cursor-pointer">
                             <?php if ( $src_url ) : ?>
-                                <img src="<?php echo esc_attr($src_url); ?>" width="<?php echo esc_attr($width); ?>" height="<?php echo esc_attr($height); ?>" alt="<?php echo esc_attr($alt_text); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                            <?php endif; ?>
+                                <img src="<?php echo esc_attr($src_url); ?>" width="<?php echo esc_attr($width); ?>" height="<?php echo esc_attr($height); ?>" alt="<?php echo esc_attr($alt_text); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" sizes="(min-width: 1024px) 800px, 100vw" />                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

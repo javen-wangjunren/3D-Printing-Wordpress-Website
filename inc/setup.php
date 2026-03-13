@@ -1,6 +1,28 @@
 <?php
 
 /**
+ * Setup 引导层（GeneratePress 子主题）
+ * ==========================================================================
+ * 文件作用:
+ * - 作为主题入口的“基础配置层”，由 functions.php 最先加载
+ * - 统一管理：布局接管、编辑器策略、模板路由、Gutenberg 样式清理
+ *
+ * 核心逻辑:
+ * 1. 布局策略：强制无侧边栏 + 全宽容器，确保 Tailwind 视觉一致性
+ * 2. 编辑器策略：仅文章(post)使用 Gutenberg；其余内容类型禁用 Gutenberg
+ * 3. 模板路由：CPT 单页强制指向 templates/ 下的规范模板
+ * 4. 样式清理：非文章页面移除 Gutenberg 样式，消除冗余 CSS
+ *
+ * 架构角色:
+ * - 与 GeneratePress 协同，接管布局与编辑器行为，为 ACF 驱动的模板提供稳定运行环境
+ *
+ * 🚨 避坑指南:
+ * - 禁止在此处做数据库查询或复杂业务逻辑，仅做全局性策略控制
+ * - 若需在 Page 上启用经典编辑器，请在「后台 UI 层」按页面级开关控制
+ * ==========================================================================
+ */
+
+/**
  * 1) 作为主题入口的“基础配置层”
  * - functions.php 会 require_once inc/setup.php，所以它会在主题加载时最早执行。
  * - 适合放 add_action / add_filter 这类“全局规则”，例如编辑器策略、后台 UI 精简等。
@@ -47,17 +69,17 @@ add_action( 'after_setup_theme', function() {
  */
 
 // 1. 强制全局 "无侧边栏" (No Sidebar)
+// 统一去掉 Sidebar，避免 GP 默认布局影响 Tailwind 设计
 add_filter( 'generate_sidebar_layout', function( $layout ) {
     return 'no-sidebar';
 }, 999 );
 
 // 2. 强制页面容器为 "全宽" (Full Width)
+// 用极大容器宽度配合 max-w-* 保证视觉由我们掌控
 add_filter( 'generate_container_width', function( $width ) {
     return '2000'; // 足够大的值，配合 CSS 的 max-w-full 撑开布局
 } );
 
-// 3. 禁用 GP 默认的 H1 标题输出 (我们会在 Block 中自己写)
-add_filter( 'generate_show_title', '__return_false' );
 
 
 /**
@@ -66,29 +88,14 @@ add_filter( 'generate_show_title', '__return_false' );
  * ==================================================
  */
 
-// 1. 前端/数据层：根据 ACF 开关决定是否启用 Gutenberg
-add_filter( 'use_block_editor_for_post', function( $use_block_editor, $post ) {
-    if ( ! $post || 'page' !== $post->post_type ) {
-        return $use_block_editor;
-    }
-
-    $template = get_page_template_slug( $post );
-    $meta_value = get_post_meta( $post->ID, 'page_enable_content_editor', true );
-
-    // 默认值处理：All Capabilities 页面默认关闭编辑器
-    if ( '' === $meta_value && in_array( $template, array( 'templates/page-all-capabilities.php' ), true ) ) {
-        $meta_value = '0';
-    }
-
-    $content_editor_enabled = '' === $meta_value ? true : ( '1' === (string) $meta_value );
-    if ( ! $content_editor_enabled ) {
-        return false;
-    }
-
-    return $use_block_editor;
+// 1. 编辑器策略：仅保留文章(post)使用 Gutenberg，其余全部禁用
+// 说明：避免 Page/CPT 出现古腾堡 + ACF 的“双编辑器冲突”
+add_filter( 'use_block_editor_for_post_type', function( $use_block_editor, $post_type ) {
+	return ( 'post' === $post_type ) ? $use_block_editor : false;
 }, 10, 2 );
 
 // 2. 后台 UI 层：根据开关移除编辑器支持和 Slug 元框
+// 说明：在 Page 维度保留开关，便于极端场景启用/禁用“经典编辑器”区域
 add_action( 'current_screen', function( $screen ) {
     if ( ! is_admin() ) {
         return;
@@ -133,8 +140,8 @@ add_action( 'current_screen', function( $screen ) {
  * IV. 模板加载逻辑 (CPT 路由)
  * ==================================================
  * 
- * 强制将 CPT (Capability, Material, Solution) 的单页模板指向 templates/ 目录
- * 避免文件散落在主题根目录
+ * 强制将 CPT (Capability, Material, Solution, Surface Finish) 的单页模板指向 templates/ 目录
+ * 避免文件散落在主题根目录，确保路由一致性
  */
 
 add_filter( 'template_include', function( $template ) {
@@ -162,6 +169,14 @@ add_filter( 'template_include', function( $template ) {
         }
     }
 
+    // 4. Single Surface Finish
+    if ( is_singular( 'surface-finish' ) ) {
+        $custom_template = locate_template( 'templates/single-surface-finish.php' );
+        if ( $custom_template ) {
+            return $custom_template;
+        }
+    }
+
     return $template;
 } );
 
@@ -171,32 +186,20 @@ add_filter( 'template_include', function( $template ) {
  * V. 资源优化 (Gutenberg 样式清理)
  * ==================================================
  * 
- * 逻辑：全定制模板页面移除 wp-block-library，实现 0 CSS 冗余。single post 保留
+ * 逻辑：非文章页面移除 Gutenberg 样式，实现 0 CSS 冗余；文章保留用于块编辑器渲染
  */
 
 add_action( 'wp_enqueue_scripts', function() {
-    // 1. 定义全定制页面模板列表 (相对于主题根目录)
-    $custom_templates = array(
-        'templates/page-home.php',
-        'templates/page-about.php',
-        'templates/page-contact.php',
-        'templates/page-all-capabilities.php',
-        'templates/page-all-materials.php',
-    );
-
-    // 2. 检查条件
-    // A: 是否使用了上述 Page Templates
-    $is_custom_page = is_page_template( $custom_templates );
-
-    // B: 是否为全定制 CPT (Capability / Material / Solution)
-    // 这些 CPT 在上方 template_include 中已被强制指向 templates/ 目录
-    $is_custom_cpt = is_singular( array( 'capability', 'material', 'solution' ) );
-
-    // 3. 执行移除
-    if ( $is_custom_page || $is_custom_cpt ) {
-        wp_dequeue_style( 'wp-block-library' );
-        wp_dequeue_style( 'wp-block-library-theme' );
-        wp_dequeue_style( 'global-styles' ); // 移除 theme.json 生成的内联样式 (SVG 预设等)
-    }
+	// 除了文章(post)之外，其他页面统一移除 Gutenberg 样式
+	if ( ! is_singular( 'post' ) ) {
+		wp_dequeue_style( 'wp-block-library' );
+		wp_dequeue_style( 'wp-block-library-theme' );
+		wp_dequeue_style( 'global-styles' );
+	}
 }, 100 );
 
+add_action( 'wp_head', function() {
+	if ( is_singular( 'post' ) ) {
+		echo '<style>.wp-block-image{margin-bottom:1.25rem}.wp-block-heading{margin-bottom:1.875rem}</style>';
+	}
+}, 5 );

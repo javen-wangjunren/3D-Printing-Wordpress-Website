@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Technical Blog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-sans antialiased text-heading">
+
+    <header class="bg-white border-b border-border">
+        <div class="w-[90%] lg:w-[80%] mx-auto max-w-[1440px] py-16">
+            <nav class="flex items-center gap-2 font-mono text-[11px] tracking-wider text-body/70">
+                <a href="/blog" class="hover:text-heading">Blog</a>
+                <span class="text-body/40">/</span>
+                <a href="#" class="hover:text-heading">Technical Sheet</a>
+            </nav>
+
+            <div class="mt-8 flex flex-wrap items-center justify-between gap-6">
+                <div class="min-w-0">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span class="inline-flex items-center gap-2 bg-panel border border-border px-3 py-1 rounded-button font-mono text-[11px] font-bold tracking-wider text-primary">
+                            Materials Science
+                        </span>
+                        <span class="font-mono text-[11px] tracking-wider text-body/70">Feb 26, 2026</span>
+                        <span class="font-mono text-[11px] tracking-wider text-body/70">12 min read</span>
+                    </div>
+                    <h1 class="text-[36px] lg:text-[52px] font-extrabold leading-tight tracking-[-1.5px] max-w-4xl">
+                        Understanding the Chemical Resistance of Vapor Polished PA12 Parts
+                    </h1>
+                </div>
+                <!-- 移除了原有的作者卡片 -->
+            </div>
+        </div>
+    </header>
+
+    <main class="py-24">
+        <div class="w-[90%] lg:w-[80%] mx-auto max-w-[1440px] grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+            
+            <article class="lg:col-span-8">
+                <p class="text-[18px] lg:text-[20px] leading-relaxed font-medium text-heading mb-10 border-l-4 border-primary pl-6">
+                    Vapor polishing is not just about aesthetics. In this guide, we break down how chemical finishing alters the surface layer of PA12 parts to improve solvent resistance and cosmetic stability.
+                </p>
+
+                <div class="space-y-10">
+                    <section id="intro" class="scroll-mt-24">
+                        <h2 class="text-[22px] lg:text-[26px] font-extrabold tracking-[-0.5px] mb-4">The Physics of Vapor Polishing</h2>
+                        <p class="text-body leading-relaxed">
+                            Unlike bead blasting (a subtractive mechanical process), vapor polishing uses a controlled solvent atmosphere to briefly reflow the outer polymer layer. The result is a sealed surface with lower porosity and improved chemical performance.
+                        </p>
+                    </section>
+
+                    <figure class="border border-border bg-panel rounded-card overflow-hidden">
+                        <div class="aspect-[16/9]">
+                            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover" alt="Microscopic view of sealed MJF pores">
+                        </div>
+                        <figcaption class="px-6 py-4 font-mono text-[11px] tracking-wider text-body/70">
+                            Fig 1.1 — Microscopic view of sealed MJF pores
+                        </figcaption>
+                    </figure>
+
+                    <section id="properties" class="scroll-mt-24">
+                        <h2 class="text-[22px] lg:text-[26px] font-extrabold tracking-[-0.5px] mb-4">Technical Specifications</h2>
+                        <p class="text-body leading-relaxed">
+                            Surface roughness (Ra) can drop from 6.3μm to below 0.8μm depending on geometry, exposure time, and solvent control. This directly affects capillary absorption and long-term staining resistance.
+                        </p>
+                    </section>
+
+                    <section id="surface" class="scroll-mt-24">
+                        <h2 class="text-[22px] lg:text-[26px] font-extrabold tracking-[-0.5px] mb-4">Surface Transformation</h2>
+                        <p class="text-body leading-relaxed">
+                            The reflowed skin changes friction, reflectivity, and permeability. For functional parts, treat polishing as a surface engineering step: verify dimensional drift, thread engagement, and critical sealing interfaces.
+                        </p>
+                    </section>
+
+                    <section id="conclusion" class="scroll-mt-24">
+                        <h2 class="text-[22px] lg:text-[26px] font-extrabold tracking-[-0.5px] mb-4">Conclusion</h2>
+                        <p class="text-body leading-relaxed">
+                            Vapor polishing can materially improve resistance against oils, fuels, and cleaning agents—when process parameters are controlled. Always validate against your exact media and duty cycle.
+                        </p>
+                    </section>
+                </div>
+
+                <div class="mt-14 border border-border rounded-card p-6 lg:p-8 bg-white">
+                    <div class="flex flex-col sm:flex-row gap-5 sm:items-start">
+                        <div class="w-14 h-14 rounded-full overflow-hidden border border-border bg-bg-section shrink-0">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover" alt="Author avatar">
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center justify-between gap-4">
+                                <div>
+                                    <div class="text-[16px] font-bold tracking-tight">Alex Lindley</div>
+                                    <div class="font-mono text-[11px] tracking-wider text-primary">Lead Engineer</div>
+                                </div>
+                                <a href="https://www.linkedin.com/" class="inline-flex items-center gap-2 px-3 py-2 rounded-button border border-border hover:border-primary text-[12px] font-mono font-bold tracking-wider text-heading hover:text-primary transition-colors">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                    LinkedIn
+                                </a>
+                            </div>
+                            <p class="mt-4 text-body leading-relaxed text-[14px]">
+                                With 10+ years in B2B additive manufacturing, Alex specializes in post-processing systems and material behavior for industrial polymers.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="lg:col-span-4 space-y-10 relative">
+                <!-- 作者卡片 -->
+                <div class="border border-border rounded-card p-6 bg-white">
+                    <div class="flex items-center justify-between gap-4 mb-6">
+                        <div class="font-mono text-[11px] tracking-wider text-body/70">Author</div>
+                        <div class="flex items-center gap-2">
+                            <a href="https://www.linkedin.com/" class="w-9 h-9 rounded-button border border-border hover:border-primary flex items-center justify-center text-body hover:text-primary transition-colors" aria-label="Author LinkedIn">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden border border-border bg-bg-section shrink-0">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" class="w-full h-full object-cover" alt="Author avatar">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-[16px] font-bold tracking-tight">Alex Lindley</div>
+                            <div class="font-mono text-[11px] tracking-wider text-primary">Lead Engineer</div>
+                            <p class="mt-3 text-[13px] text-body leading-relaxed">
+                                Post-processing systems, material science, and industrial polymer reliability for production environments.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 粘性容器：包含 TOC 和 CTA -->
+                <div class="lg:sticky lg:top-10 space-y-10">
+                    <div class="border border-border rounded-card p-6 bg-panel">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="font-mono text-[11px] tracking-wider text-body/70">Table Of Contents</div>
+                            <div class="font-mono text-[11px] tracking-wider text-body/70">04</div>
+                        </div>
+                        <nav class="space-y-2">
+                            <a href="#intro" class="flex items-center justify-between gap-4 py-2 px-3 rounded-button hover:bg-white transition-colors">
+                                <span class="text-[13px] font-semibold text-heading">The Physics of Vapor Polishing</span>
+                                <span class="font-mono text-[11px] text-body/70">01</span>
+                            </a>
+                            <a href="#properties" class="flex items-center justify-between gap-4 py-2 px-3 rounded-button hover:bg-white transition-colors">
+                                <span class="text-[13px] font-semibold text-heading">Technical Specifications</span>
+                                <span class="font-mono text-[11px] text-body/70">02</span>
+                            </a>
+                            <a href="#surface" class="flex items-center justify-between gap-4 py-2 px-3 rounded-button hover:bg-white transition-colors">
+                                <span class="text-[13px] font-semibold text-heading">Surface Transformation</span>
+                                <span class="font-mono text-[11px] text-body/70">03</span>
+                            </a>
+                            <a href="#conclusion" class="flex items-center justify-between gap-4 py-2 px-3 rounded-button hover:bg-white transition-colors">
+                                <span class="text-[13px] font-semibold text-heading">Conclusion</span>
+                                <span class="font-mono text-[11px] text-body/70">04</span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <div class="border border-border rounded-card p-6 bg-white">
+                        <div class="font-mono text-[11px] tracking-wider text-body/70 mb-3">Industrial Service</div>
+                        <h5 class="text-[18px] font-extrabold tracking-[-0.5px] mb-4">Ready to Scale Your Production?</h5>
+                        <button class="w-full bg-primary text-white py-3.5 rounded-button font-bold text-[12px] tracking-wider hover:bg-primary-hover transition-colors">
+                            Get A Quote
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- Related Blog Section -->
+    <section class="py-24 bg-panel border-t border-border overflow-hidden" 
+             x-data="{ 
+                active: 0,
+                posts: [
+                    { tag: 'Metal AM', title: 'The Future of AlSi10Mg in Aerospace', excerpt: 'Topology optimization strategies that reduce weight by 40% while maintaining structural integrity.', date: 'Dec 17, 2025', read: '6 min', img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Design Guide', title: 'Mastering Tolerances for SLS', excerpt: 'Deep dive into SLS tolerance control and DfM optimization for complex nylon assemblies.', date: 'Dec 12, 2025', read: '8 min', img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Case Study', title: 'Custom Medical Implants via SLA', excerpt: 'Case study: Delivering customized surgical guides for medical institutions in 48 hours using high-precision SLA resin.', date: 'Dec 04, 2025', read: '5 min', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'News', title: 'Global 3D Printing Trends 2026', excerpt: 'Analyzing upcoming industrial AM trends, including sustainable materials and fully automated cloud factories.', date: 'Nov 28, 2025', read: '10 min', img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800' },
+                    { tag: 'Tech Deep Dive', title: 'Advanced Post-Processing Techniques', excerpt: 'From chemical polishing to bead blasting, we detail the impact of different surface treatments on part performance.', date: 'Nov 15, 2025', read: '7 min', img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800' }
+                ],
+                scrollNext() {
+                    const el = document.getElementById('blog-slider');
+                    el.scrollBy({ left: el.offsetWidth * 0.8, behavior: 'smooth' });
+                },
+                scrollPrev() {
+                    const el = document.getElementById('blog-slider');
+                    el.scrollBy({ left: -el.offsetWidth * 0.8, behavior: 'smooth' });
+                }
+             }">
+        
+        <div class="w-[90%] lg:w-[80%] mx-auto max-w-[1440px]">
+            
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
+                <div class="max-w-xl text-left">
+                    <h2 class="text-[30px] lg:text-[36px] font-extrabold text-heading tracking-[-1px] mb-4">
+                        Related Manufacturing <span class="text-primary">Insights</span>
+                    </h2>
+                    <p class="text-body text-[16px] leading-relaxed">
+                        Explore the latest technical guides, material breakthroughs, and industry case studies.
+                    </p>
+                </div>
+                
+                <div class="hidden md:flex gap-3 pb-2">
+                    <button @click="scrollPrev" class="w-12 h-12 rounded-button border border-border flex items-center justify-center bg-white hover:border-primary hover:text-primary transition-all group shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button @click="scrollNext" class="w-12 h-12 rounded-button border border-border flex items-center justify-center bg-white hover:border-primary hover:text-primary transition-all group shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative">
+                <div class="flex gap-6 overflow-x-auto no-scrollbar pb-10 scroll-smooth" 
+                     id="blog-slider"
+                     style="scroll-snap-type: x mandatory;">
+                    
+                    <template x-for="(post, index) in posts" :key="index">
+                        <div class="w-[85%] md:w-[45%] lg:w-[32%] flex-shrink-0" style="scroll-snap-align: start;">
+                            <a href="#" class="group block bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 h-full flex flex-col shadow-sm hover:shadow-lg hover:shadow-primary/5">
+                                
+                                <div class="aspect-[16/10] overflow-hidden relative bg-bg-section">
+                                    <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Post Cover">
+                                    <div class="absolute top-4 left-4">
+                                        <span class="bg-white/95 backdrop-blur shadow-sm px-3 py-1 rounded text-[10px] font-mono font-bold text-heading uppercase tracking-wide border border-border/50" x-text="post.tag"></span>
+                                    </div>
+                                </div>
+
+                                <div class="p-6 lg:p-8 flex flex-col flex-1">
+                                    
+                                    <div class="flex items-center gap-3 mb-3 text-[11px] font-mono text-body border-b border-border/40 pb-3">
+                                        <span x-text="post.date"></span>
+                                        <span class="w-1 h-1 rounded-full bg-border"></span>
+                                        <span x-text="post.read"></span>
+                                    </div>
+
+                                    <h3 class="text-[18px] font-bold text-heading mb-3 line-clamp-2 leading-tight group-hover:text-primary transition-colors tracking-tight" x-text="post.title"></h3>
+                                    <p class="text-body text-sm leading-relaxed mb-6 line-clamp-3" x-text="post.excerpt"></p>
+                                    
+                                    <div class="mt-auto pt-4 flex justify-between items-center">
+                                        <span class="text-[12px] font-bold text-primary group-hover:underline decoration-primary/30 underline-offset-4 transition-all">Read Article</span>
+                                        <svg class="w-4 h-4 text-primary transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="flex justify-center mt-4 gap-2 md:hidden">
+                    <template x-for="(post, index) in posts">
+                        <div class="h-1 rounded-full transition-all duration-300"
+                             :class="index === 0 ? 'bg-primary w-8' : 'bg-border w-2'"></div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

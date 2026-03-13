@@ -7,9 +7,8 @@
 
 // 确保函数在ACF可用时才执行
 if ( function_exists( 'acf_add_local_field_group' ) ) {
-    // 注册CTA Block的字段组
-    function _3dp_cta_fields() {
-        acf_add_local_field_group( array(
+	add_action( 'acf/init', function() {
+		acf_add_local_field_group( array(
             'key' => 'group_66e4c0c0f0c8b0b',
             'title' => 'CTA Block',
             'fields' => array(
@@ -205,7 +204,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
             'active' => true,
             'description' => '',
             'show_in_rest' => 0,
-        ));
-    }
-    add_action( 'acf/init', '_3dp_cta_fields' );
+        ) );
+	} );
 }

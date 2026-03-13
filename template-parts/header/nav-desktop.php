@@ -12,9 +12,13 @@
 
 $header_capabilities_parent_link = function_exists( 'get_field' ) ? get_field( 'header_capabilities_link', 'option' ) : null;
 $header_materials_parent_link = function_exists( 'get_field' ) ? get_field( 'header_materials_link', 'option' ) : null;
+$header_industry_parent_link = function_exists( 'get_field' ) ? get_field( 'header_industry_link', 'option' ) : null;
+$header_resources_parent_link = function_exists( 'get_field' ) ? get_field( 'header_resources_link', 'option' ) : null;
 
 $header_capabilities = function_exists( 'get_field' ) ? get_field( 'header_capabilities_items', 'option' ) : null;
 $header_material_columns = function_exists( 'get_field' ) ? get_field( 'header_material_columns', 'option' ) : null;
+$header_industry_items = function_exists( 'get_field' ) ? get_field( 'header_industry_items', 'option' ) : null;
+$header_resources_items = function_exists( 'get_field' ) ? get_field( 'header_resources_items', 'option' ) : null;
 $header_company_items = function_exists( 'get_field' ) ? get_field( 'header_company_items', 'option' ) : null;
 $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global', 'option' )['cta_button'] ?? null : null;
 
@@ -55,7 +59,37 @@ $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global',
 		</a>
 	</div>
 
-	<!-- 2.3 Company Dropdown -->
+	<!-- 2.3 Industry Dropdown -->
+	<div class="relative group" @mouseenter="openMenu = 'industry'">
+		<?php
+			$ind_url = ! empty( $header_industry_parent_link['url'] ) ? $header_industry_parent_link['url'] : 'javascript:void(0)';
+			$ind_target = ! empty( $header_industry_parent_link['target'] ) ? $header_industry_parent_link['target'] : '_self';
+		?>
+		<a href="<?php echo esc_url( $ind_url ); ?>" target="<?php echo esc_attr( $ind_target ); ?>" class="bg-transparent border-none relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary no-underline" :class="{ 'text-primary': openMenu === 'industry' }">
+			<span>Industry</span>
+			<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'industry' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+				<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+			<span class="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200" :class="openMenu === 'industry' ? 'w-full' : 'w-0'"></span>
+		</a>
+	</div>
+
+	<!-- 2.4 Resources Dropdown -->
+	<div class="relative group" @mouseenter="openMenu = 'resources'">
+		<?php
+			$res_url = ! empty( $header_resources_parent_link['url'] ) ? $header_resources_parent_link['url'] : 'javascript:void(0)';
+			$res_target = ! empty( $header_resources_parent_link['target'] ) ? $header_resources_parent_link['target'] : '_self';
+		?>
+		<a href="<?php echo esc_url( $res_url ); ?>" target="<?php echo esc_attr( $res_target ); ?>" class="bg-transparent border-none relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary no-underline" :class="{ 'text-primary': openMenu === 'resources' }">
+			<span>Resources</span>
+			<svg class="h-4 w-4 opacity-50 transition-transform duration-200" :class="{ 'rotate-180': openMenu === 'resources' }" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+				<path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+			</svg>
+			<span class="absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200" :class="openMenu === 'resources' ? 'w-full' : 'w-0'"></span>
+		</a>
+	</div>
+
+	<!-- 2.5 Company Dropdown -->
 	<div class="relative group" @mouseenter="openMenu = 'company'">
 		<button type="button" class="bg-transparent border-none relative flex items-center gap-1 py-2 text-sm font-semibold tracking-[-0.01em] text-heading hover:text-primary" :class="{ 'text-primary': openMenu === 'company' }">
 			<span>Company</span>
@@ -76,7 +110,7 @@ $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global',
 			$cta_target = isset( $header_cta['target'] ) && $header_cta['target'] ? esc_attr( $header_cta['target'] ) : '_self';
 		?>
 		<a href="<?php echo esc_url( $cta_url ); ?>" target="<?php echo $cta_target; ?>" class="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-white border border-[#E4E7EC] transition hover:bg-primary-hover">
-			<span><?php echo $cta_title ? $cta_title : esc_html__( 'Get Instant Quote', 'generatepress' ); ?></span>
+			<span><?php echo $cta_title ? $cta_title : 'Get Instant Quote'; ?></span>
 			<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 				<path d="M17 8l4 4m0 0-4 4m4-4H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
 			</svg>
@@ -99,7 +133,7 @@ $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global',
 			x-transition:leave="transition ease-in duration-150" 
 			x-transition:leave-start="opacity-100 translate-y-0" 
 			x-transition:leave-end="opacity-0 -translate-y-2" 
-			class="absolute left-0 w-full bg-white border-b border-border z-50 top-full">
+			class="absolute left-0 w-full bg-white border-b border-border shadow-[0_10px_30px_-25px_rgba(29,41,56,0.55)] z-50 top-full">
 		<div class="mx-auto max-w-container px-container py-8 lg:py-10">
 			<div class="grid gap-y-6 gap-x-12 lg:grid-cols-3">
 				<?php foreach ( $header_capabilities as $item ) : ?>
@@ -138,7 +172,7 @@ $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global',
 			x-transition:leave="transition ease-in duration-150" 
 			x-transition:leave-start="opacity-100 translate-y-0" 
 			x-transition:leave-end="opacity-0 -translate-y-2" 
-			class="absolute left-0 w-full bg-white border-b border-border z-50 top-full">
+			class="absolute left-0 w-full bg-white border-b border-border shadow-[0_10px_30px_-25px_rgba(29,41,56,0.55)] z-50 top-full">
 		<div class="mx-auto max-w-container px-container py-8 lg:py-10">
 			<div class="grid gap-8 lg:grid-cols-4">
 				<?php foreach ( $header_material_columns as $column ) : ?>
@@ -194,7 +228,7 @@ $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global',
 			x-transition:leave="transition ease-in duration-150" 
 			x-transition:leave-start="opacity-100 translate-y-0" 
 			x-transition:leave-end="opacity-0 -translate-y-2" 
-			class="absolute left-0 w-full border-b border-border bg-white z-50 top-full">
+			class="absolute left-0 w-full border-b border-border bg-white shadow-[0_10px_30px_-25px_rgba(29,41,56,0.55)] z-50 top-full">
 		<div class="mx-auto flex max-w-container justify-center gap-12 px-container py-8">
 			<?php foreach ( $header_company_items as $item ) : ?>
 				<?php
@@ -218,6 +252,238 @@ $header_cta = function_exists( 'get_field' ) ? get_field( 'header_brand_global',
 						<?php if ( $desc ) : ?>
 							<span class="text-xs text-body"><?php echo esc_html( $desc ); ?></span>
 						<?php endif; ?>
+					</div>
+				</a>
+			<?php endforeach; ?>
+		</div>
+	</div>
+<?php endif; ?>
+
+<!-- 5.4 Dropdown: Industry -->
+<?php if ( ! empty( $header_industry_items ) && is_array( $header_industry_items ) ) : ?>
+	<div x-show="openMenu === 'industry'" x-cloak 
+			@mouseenter="openMenu = 'industry'" 
+			@mouseleave="openMenu = null"
+			x-transition:enter="transition ease-out duration-200" 
+			x-transition:enter-start="opacity-0 -translate-y-2" 
+			x-transition:enter-end="opacity-100 translate-y-0" 
+			x-transition:leave="transition ease-in duration-150" 
+			x-transition:leave-start="opacity-100 translate-y-0" 
+			x-transition:leave-end="opacity-0 -translate-y-2" 
+			class="absolute left-0 w-full bg-white border-b border-border shadow-[0_10px_30px_-25px_rgba(29,41,56,0.55)] z-50 top-full">
+		<div class="mx-auto max-w-container px-container py-8 lg:py-10">
+			<div class="grid gap-y-6 gap-x-12 lg:grid-cols-3">
+				<?php
+				$allowed_svg = array(
+					'svg' => array(
+						'xmlns' => true,
+						'viewbox' => true,
+						'width' => true,
+						'height' => true,
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+						'stroke-linecap' => true,
+						'stroke-linejoin' => true,
+						'class' => true,
+						'aria-hidden' => true,
+						'role' => true,
+						'focusable' => true,
+					),
+					'g' => array(
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+						'stroke-linecap' => true,
+						'stroke-linejoin' => true,
+						'transform' => true,
+					),
+					'path' => array(
+						'd' => true,
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+						'stroke-linecap' => true,
+						'stroke-linejoin' => true,
+						'transform' => true,
+					),
+					'circle' => array(
+						'cx' => true,
+						'cy' => true,
+						'r' => true,
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+					),
+					'rect' => array(
+						'x' => true,
+						'y' => true,
+						'width' => true,
+						'height' => true,
+						'rx' => true,
+						'ry' => true,
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+					),
+					'line' => array(
+						'x1' => true,
+						'y1' => true,
+						'x2' => true,
+						'y2' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+						'stroke-linecap' => true,
+					),
+					'polyline' => array(
+						'points' => true,
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+						'stroke-linecap' => true,
+						'stroke-linejoin' => true,
+					),
+					'polygon' => array(
+						'points' => true,
+						'fill' => true,
+						'stroke' => true,
+						'stroke-width' => true,
+						'stroke-linecap' => true,
+						'stroke-linejoin' => true,
+					),
+				);
+				?>
+				<?php foreach ( $header_industry_items as $item ) : ?>
+					<?php
+						$title = isset( $item['title'] ) ? $item['title'] : '';
+						$link = isset( $item['link'] ) ? $item['link'] : null;
+						$link_url = is_array( $link ) && ! empty( $link['url'] ) ? $link['url'] : '#';
+						$icon = isset( $item['icon'] ) ? $item['icon'] : '';
+					?>
+					<a href="<?php echo esc_url( $link_url ); ?>" class="group flex items-center gap-3 rounded-xl p-4 transition duration-200 hover:bg-gray-50 border border-transparent hover:border-gray-100">
+						<?php if ( $icon ) : ?>
+							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition">
+								<?php echo wp_kses( $icon, $allowed_svg ); ?>
+							</div>
+						<?php endif; ?>
+						<div>
+							<span class="block text-sm font-bold text-heading group-hover:text-primary transition-colors"><?php echo esc_html( $title ); ?></span>
+						</div>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>
+
+<!-- 5.5 Dropdown: Resources -->
+<?php if ( ! empty( $header_resources_items ) && is_array( $header_resources_items ) ) : ?>
+	<div x-show="openMenu === 'resources'" x-cloak 
+			@mouseenter="openMenu = 'resources'" 
+			@mouseleave="openMenu = null"
+			x-transition:enter="transition ease-out duration-200" 
+			x-transition:enter-start="opacity-0 -translate-y-2" 
+			x-transition:enter-end="opacity-100 translate-y-0" 
+			x-transition:leave="transition ease-in duration-150" 
+			x-transition:leave-start="opacity-100 translate-y-0" 
+			x-transition:leave-end="opacity-0 -translate-y-2" 
+			class="absolute left-0 w-full bg-white border-b border-border shadow-[0_10px_30px_-25px_rgba(29,41,56,0.55)] z-50 top-full">
+		<div class="mx-auto flex max-w-container justify-center gap-12 px-container py-8 lg:py-10">
+			<?php
+			$allowed_svg = array(
+				'svg' => array(
+					'xmlns' => true,
+					'viewbox' => true,
+					'width' => true,
+					'height' => true,
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+					'stroke-linecap' => true,
+					'stroke-linejoin' => true,
+					'class' => true,
+					'aria-hidden' => true,
+					'role' => true,
+					'focusable' => true,
+				),
+				'g' => array(
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+					'stroke-linecap' => true,
+					'stroke-linejoin' => true,
+					'transform' => true,
+				),
+				'path' => array(
+					'd' => true,
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+					'stroke-linecap' => true,
+					'stroke-linejoin' => true,
+					'transform' => true,
+				),
+				'circle' => array(
+					'cx' => true,
+					'cy' => true,
+					'r' => true,
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+				),
+				'rect' => array(
+					'x' => true,
+					'y' => true,
+					'width' => true,
+					'height' => true,
+					'rx' => true,
+					'ry' => true,
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+				),
+				'line' => array(
+					'x1' => true,
+					'y1' => true,
+					'x2' => true,
+					'y2' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+					'stroke-linecap' => true,
+				),
+				'polyline' => array(
+					'points' => true,
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+					'stroke-linecap' => true,
+					'stroke-linejoin' => true,
+				),
+				'polygon' => array(
+					'points' => true,
+					'fill' => true,
+					'stroke' => true,
+					'stroke-width' => true,
+					'stroke-linecap' => true,
+					'stroke-linejoin' => true,
+				),
+			);
+			?>
+			<?php foreach ( $header_resources_items as $item ) : ?>
+				<?php
+				$title = isset( $item['title'] ) ? $item['title'] : '';
+				$link = isset( $item['link'] ) ? $item['link'] : null;
+				$link_url = is_array( $link ) && ! empty( $link['url'] ) ? $link['url'] : '#';
+				$icon = isset( $item['icon'] ) ? $item['icon'] : '';
+				?>
+				<a href="<?php echo esc_url( $link_url ); ?>" class="group flex items-center gap-3 rounded-lg p-3 hover:bg-gray-50 transition">
+					<?php if ( $icon ) : ?>
+						<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition">
+							<?php echo wp_kses( $icon, $allowed_svg ); ?>
+						</div>
+					<?php endif; ?>
+					<div>
+						<span class="block text-sm font-bold text-heading group-hover:text-primary transition-colors"><?php echo esc_html( $title ); ?></span>
 					</div>
 				</a>
 			<?php endforeach; ?>

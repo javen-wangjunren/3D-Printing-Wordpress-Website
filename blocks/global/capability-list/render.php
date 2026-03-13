@@ -271,8 +271,7 @@ $text_style = 'style="color: ' . esc_attr( $text_color ) . '"';
                                     x-transition:enter-start="opacity-0 scale-95"
                                     x-transition:enter-end="opacity-100 scale-100"
                                     loading="lazy"
-                                >
-                            </template>
+                                 sizes="(min-width: 1024px) 800px, 100vw">                            </template>
                             
                             <!-- 无图片占位 -->
                             <template x-if="!tabs[active].image">
@@ -346,8 +345,7 @@ $text_style = 'style="color: ' . esc_attr( $text_color ) . '"';
                     <!-- Image Area -->
                     <div class="relative aspect-[4/3] bg-bg-section border-b border-border p-6 flex items-center justify-center">
                          <template x-if="tab.image">
-                            <img :src="tab.image" class="max-w-full max-h-full object-contain mix-blend-multiply">
-                         </template>
+                            <img loading="lazy" :src="tab.image" class="max-w-full max-h-full object-contain mix-blend-multiply" sizes="(min-width: 1024px) 800px, 100vw">                         </template>
                          <template x-if="!tab.image">
                              <span class="text-small font-bold text-muted" x-text="tab.name"></span>
                          </template>

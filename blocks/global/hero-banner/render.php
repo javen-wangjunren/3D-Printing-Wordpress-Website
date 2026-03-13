@@ -23,7 +23,6 @@ $clone_name = rtrim($pfx, '_');
 // 3. 获取 ACF 字段数据
 // Content
 $title       = get_field_value('hero_title', $block, $clone_name, $pfx, 'Your Streamlined 3D Printing Service');
-$subtitle    = get_field_value('hero_subtitle', $block, $clone_name, $pfx, 'Get Quality Parts at the Best Price');
 $description = get_field_value('hero_description', $block, $clone_name, $pfx);
 $buttons     = get_field_value('hero_buttons', $block, $clone_name, $pfx);
 
@@ -114,12 +113,6 @@ if ($pt_remove) {
         <!-- Content Layer -->
         <div class="relative z-10 max-w-container mx-auto px-6 lg:px-8 text-center">
             
-            <?php if ($subtitle): ?>
-            <span class="inline-block mb-6 px-4 py-1.5 bg-white/10 border border-white/20 rounded-full text-[12px] font-mono font-bold text-white uppercase tracking-wider backdrop-blur-md">
-                <?php echo esc_html($subtitle); ?>
-            </span>
-            <?php endif; ?>
-            
             <?php if ($title): ?>
             <h1 class="text-h1 text-white mb-6 drop-shadow-sm">
                 <?php echo esc_html($title); ?>
@@ -171,16 +164,13 @@ if ($pt_remove) {
                 
                 <!-- Left: Text Content -->
                 <div class="z-10 flex flex-col justify-center py-6">
+                    <?php if ( function_exists( 'custom_breadcrumbs' ) ) : ?>
+                        <?php custom_breadcrumbs(); ?>
+                    <?php endif; ?>
                     <?php if ($title): ?>
-                    <h1 class="text-h1 text-heading mb-6">
+                    <h1 class="text-[60px] leading-none font-semibold tracking-tight text-heading mb-6">
                         <?php echo esc_html($title); ?>
                     </h1>
-                    <?php endif; ?>
-
-                    <?php if ($subtitle): ?>
-                    <h2 class="text-heading">
-                        <?php echo esc_html($subtitle); ?>
-                    </h2>
                     <?php endif; ?>
 
                     <?php if ($description): ?>
@@ -219,7 +209,7 @@ if ($pt_remove) {
                 </div>
 
                 <!-- Right: Image Content -->
-                <div class="relative min-h-[360px] lg:min-h-0">
+                <div class="relative min-h-[360px] lg:min-h-0 lg:aspect-[4/3]">
                     <div class="h-full rounded-card overflow-hidden bg-white border border-border shadow-sm relative">
                         <picture>
                             <?php if ($mobile_img_id): 

@@ -19,14 +19,11 @@ get_header();
         while ( have_posts() ) :
 
             the_post();
-
-            // Placeholder for Solution content
-            echo '<div class="container mx-auto py-20 px-4">';
-            echo '<h1 class="text-4xl font-bold mb-4">' . get_the_title() . '</h1>';
-            echo '<div class="prose max-w-none">';
-            the_content();
-            echo '</div>';
-            echo '</div>';
+            get_template_part( 'template-parts/application/hero' );
+            get_template_part( 'template-parts/application/technical-strength' );
+            get_template_part( 'template-parts/application/showcase' );
+            get_template_part( 'template-parts/application/recommendation' );
+            get_template_part( 'template-parts/application/certification' );
 
         endwhile;
     }

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Knowledge Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        heading: '#1D2938',
+                        body: '#667085',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB',
+                        'bg-section': '#F2F4F7'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 'card': '12px', 'button': '8px' }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-heading">
+
+<section class="py-24 bg-white" x-data="{ 
+    /* 模拟 URL 筛选逻辑 */
+    activeCat: new URLSearchParams(window.location.search).get('category') || 'ALL',
+    blogs: [
+        { 
+            title: 'ULTEM 1010 vs. ULTEM 9085: Key Differences and Applications', 
+            category: 'MATERIALS', 
+            date: 'Feb 4, 2026', 
+            read: '9 min read',
+            excerpt: 'ULTEM 1010 excels in heat resistance, mechanical performance, and chemical stability. ULTEM 9085 stands out for flame retardancy and FST compliance, making it ideal for aerospace interiors.',
+            img: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800'
+        },
+        { 
+            title: 'Building Supply Chain Resilience through Additive Manufacturing', 
+            category: 'INDUSTRY-INSIGHTS', 
+            date: 'Jan 5, 2026', 
+            read: '9 min read',
+            excerpt: 'Additive manufacturing and on-demand production let teams bypass bottlenecks, keep products moving, and react faster to market shifts by digitizing inventory.',
+            img: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=800'
+        },
+        { 
+            title: 'Aerospace 3D Printing Standards: Lessons from the Cozy Mk IV Crash', 
+            category: 'AEROSPACE', 
+            date: 'Dec 5, 2025', 
+            read: '10 min read',
+            excerpt: 'The Cozy Mk IV accident shows how an uncertified, 3D-printed induction elbow—not additive manufacturing itself—created a critical failure point. We analyze the standards required for flight-critical parts.',
+            img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800'
+        },
+        { 
+            title: 'Optimizing Aluminum Alloys for High-Stress Aerospace Components', 
+            category: 'TECHNICAL', 
+            date: 'Nov 28, 2025', 
+            read: '12 min read',
+            excerpt: 'A deep dive into AlSi10Mg heat treatment protocols and topology optimization strategies that reduce weight by 40% while maintaining structural integrity under G-force loads.',
+            img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800'
+        },
+        { 
+            title: 'Vapor Polishing vs. Bead Blasting: Surface Finish Guide', 
+            category: 'CASE-STUDIES', 
+            date: 'Nov 15, 2025', 
+            read: '7 min read',
+            excerpt: 'Comparing chemical smoothing versus mechanical abrasion for SLS nylon parts. Which method achieves the best water tightness and cosmetic appearance for consumer electronics.',
+            img: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=800'
+        },
+        { 
+            title: 'The Future of Industrial 3D Printing: 2026 Outlook', 
+            category: 'ARTICLES', 
+            date: 'Oct 30, 2025', 
+            read: '8 min read',
+            excerpt: 'From multi-material printing to AI-driven quality assurance, we explore the top 5 trends that will define the next generation of digital manufacturing factories.',
+            img: 'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=800'
+        }
+    ],
+    setCategory(cat) {
+        this.activeCat = cat;
+        const url = new URL(window.location);
+        cat === 'ALL' ? url.searchParams.delete('category') : url.searchParams.set('category', cat.toLowerCase());
+        window.history.pushState({}, '', url);
+    }
+}">
+    <div class="w-[90%] lg:w-[80%] mx-auto max-w-[1440px]">
+        
+        <!-- Header Section: Centered & Focused -->
+        <div class="mb-16 text-center max-w-4xl mx-auto">
+            <h1 class="text-[42px] lg:text-[56px] font-extrabold tracking-[-1.5px] leading-tight text-heading mb-6">
+                Manufacturing <span class="text-primary relative inline-block">
+                    Knowledge Base
+                    <svg class="absolute -bottom-2 left-0 w-full h-2 text-primary/10" viewBox="0 0 100 10" preserveAspectRatio="none">
+                        <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="4" fill="none" />
+                    </svg>
+                </span>
+            </h1>
+            <p class="text-body text-lg max-w-2xl mx-auto leading-relaxed">
+                Expert insights on industrial 3D printing materials, design guidelines, and post-processing techniques.
+            </p>
+        </div>
+
+        <!-- Filter Section: Centered Industrial Tabs -->
+        <div class="mb-20 flex justify-center">
+            <div class="inline-flex flex-wrap justify-center gap-2 bg-panel p-1.5 rounded-xl border border-border shadow-sm">
+                <template x-for="cat in ['ALL', 'MATERIALS', 'INDUSTRY-INSIGHTS', 'AEROSPACE', 'TECHNICAL', 'CASE-STUDIES']">
+                    <button @click="setCategory(cat)"
+                            :class="activeCat === cat ? 'bg-white text-primary shadow-sm ring-1 ring-border' : 'text-body hover:text-heading hover:bg-white/50'"
+                            class="px-4 py-2 rounded-lg text-[11px] font-mono font-bold uppercase tracking-wider transition-all duration-200 whitespace-nowrap"
+                            x-text="cat.replace('-', ' ')">
+                    </button>
+                </template>
+            </div>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            <template x-for="post in blogs">
+                <!-- Card Component -->
+                <article class="group bg-white rounded-card border border-border overflow-hidden hover:border-primary transition-all duration-300 flex flex-col h-full hover:shadow-xl hover:shadow-primary/5 cursor-pointer transform hover:-translate-y-1">
+                    
+                    <!-- Image -->
+                    <div class="aspect-[16/10] overflow-hidden bg-bg-section relative">
+                        <img :src="post.img" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Blog Post Image">
+                        <!-- Category Badge Overlay -->
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-white/95 backdrop-blur shadow-sm text-heading px-3 py-1 rounded text-[10px] font-mono font-bold uppercase tracking-wide border border-border/50" 
+                                  x-text="post.category.replace('-', ' ')"></span>
+                        </div>
+                    </div>
+
+                    <!-- Content Body -->
+                    <div class="p-6 lg:p-8 flex flex-col flex-1">
+                        
+                        <!-- Meta Row -->
+                        <div class="flex items-center gap-3 mb-3 text-[11px] font-mono text-body border-b border-border/40 pb-3">
+                            <span x-text="post.date"></span>
+                            <span class="w-1 h-1 rounded-full bg-border"></span>
+                            <span x-text="post.read"></span>
+                        </div>
+
+                        <!-- Title -->
+                        <h3 class="text-[20px] font-bold text-heading leading-tight mb-3 group-hover:text-primary transition-colors tracking-tight" 
+                            x-text="post.title"></h3>
+
+                        <!-- Excerpt -->
+                        <p class="text-sm text-body leading-relaxed mb-6 line-clamp-3" x-text="post.excerpt"></p>
+                        
+                        <!-- Footer -->
+                        <div class="mt-auto flex items-center justify-between pt-4">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded bg-bg-section flex items-center justify-center text-primary font-bold text-[10px] border border-border">FL</div>
+                                <span class="text-[11px] font-semibold text-body">Forge Labs</span>
+                            </div>
+                            
+                            <div class="w-8 h-8 rounded-full border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white group-hover:border-primary transition-all duration-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </template>
+        </div>
+
+        <!-- Pagination: Industrial Style Centered -->
+        <div class="flex justify-center border-t border-border pt-12">
+            <div class="flex gap-2">
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-primary text-primary font-mono text-sm font-bold bg-primary/5">01</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-body font-mono text-sm hover:border-primary hover:text-primary transition-colors bg-white">02</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-body font-mono text-sm hover:border-primary hover:text-primary transition-colors bg-white">03</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-body font-mono text-sm hover:border-primary hover:text-primary transition-colors bg-white">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

@@ -43,13 +43,33 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
         'taxonomy' => $base_dir . 'taxonomy/', // 分类法字段 (如 Material Process)
     );
 
-    // 遍历目录并加载文件
+    // 遍历目录并加载文件（支持子目录）
     foreach ( $directories as $type => $path ) {
-        // 确保目录存在，防止报错
-        if ( is_dir( $path ) ) {
-            foreach ( glob( $path . "*.php" ) as $filename ) {
-                require_once $filename;
+        if ( ! is_dir( $path ) ) {
+            continue;
+        }
+
+        $php_files = array();
+        $iterator  = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator( $path, FilesystemIterator::SKIP_DOTS )
+        );
+
+        foreach ( $iterator as $file ) {
+            if ( ! $file->isFile() ) {
+                continue;
             }
+
+            if ( strtolower( $file->getExtension() ) !== 'php' ) {
+                continue;
+            }
+
+            $php_files[] = $file->getPathname();
+        }
+
+        sort( $php_files );
+
+        foreach ( $php_files as $filename ) {
+            require_once $filename;
         }
     }
 

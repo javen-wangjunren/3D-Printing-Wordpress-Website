@@ -252,3 +252,11 @@ function _3dp_filter_surface_finish_by_capability( $query ) {
         $query->set( 'meta_query', $meta_query );
     }
 }
+
+// ==========================================================================
+// V. 编辑器控制 (Editor Control)
+// ==========================================================================
+
+// 注意：已迁移至 inc/setup.php 统一管理
+// 详情见: inc/setup.php -> III. 内容编辑器控制
+

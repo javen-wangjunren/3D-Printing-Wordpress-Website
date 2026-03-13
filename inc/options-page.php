@@ -97,10 +97,18 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                 // 1. Why Choose Us
                 // --------------------------------------------------
                 array(
-                    'key' => 'field_global_why_choose_us',
+                    'key' => 'field_global_modules_acc_wcu',
                     'label' => 'Why Choose Us',
-                    'name' => 'global_why_choose_us', // 数据存储键名: options_global_why_choose_us
-                    'type' => 'group', // 使用 Group 包裹
+                    'type' => 'accordion',
+                    'open' => 1,
+                    'multi_expand' => 0,
+                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_global_wcu_group',
+                    'label' => 'Why Choose Us (Group)',
+                    'name' => 'global_why_choose_us',
+                    'type' => 'group',
                     'layout' => 'block',
                     'sub_fields' => array(
                         array(
@@ -109,22 +117,36 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'name' => 'wcu_clone',
                             'type' => 'clone',
                             'clone' => array(
-                                0 => 'group_why_choose_us_new', // 引用原始字段组 Key
+                                0 => 'group_why_choose_us_new',
                             ),
-                            'display' => 'seamless', // 无缝显示，直接展示字段
+                            'display' => 'seamless',
                             'layout' => 'block',
                             'prefix_label' => 0,
-                            'prefix_name' => 0, // 不加前缀，因为外层已经是 Group 了
+                            'prefix_name' => 0,
                         ),
                     ),
+                ),
+                array(
+                    'key' => 'field_global_modules_acc_wcu_end',
+                    'label' => '',
+                    'type' => 'accordion',
+                    'endpoint' => 1,
                 ),
                 
                 // --------------------------------------------------
                 // 2. Order Process
                 // --------------------------------------------------
                 array(
-                    'key' => 'field_global_order_process',
+                    'key' => 'field_global_modules_acc_op',
                     'label' => 'Order Process',
+                    'type' => 'accordion',
+                    'open' => 0,
+                    'multi_expand' => 0,
+                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_global_op_group',
+                    'label' => 'Order Process (Group)',
                     'name' => 'global_order_process',
                     'type' => 'group',
                     'layout' => 'block',
@@ -144,13 +166,27 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         ),
                     ),
                 ),
+                array(
+                    'key' => 'field_global_modules_acc_op_end',
+                    'label' => '',
+                    'type' => 'accordion',
+                    'endpoint' => 1,
+                ),
                 
                 // --------------------------------------------------
                 // 3. CTA (Call to Action)
                 // --------------------------------------------------
                 array(
-                    'key' => 'field_global_cta',
+                    'key' => 'field_global_modules_acc_cta',
                     'label' => 'CTA',
+                    'type' => 'accordion',
+                    'open' => 0,
+                    'multi_expand' => 0,
+                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_global_cta_group',
+                    'label' => 'CTA (Group)',
                     'name' => 'global_cta',
                     'type' => 'group',
                     'layout' => 'block',
@@ -170,13 +206,64 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         ),
                     ),
                 ),
+                array(
+                    'key' => 'field_global_modules_acc_cta_end',
+                    'label' => '',
+                    'type' => 'accordion',
+                    'endpoint' => 1,
+                ),
+
+                array(
+                    'key' => 'field_global_modules_acc_blog_cta',
+                    'label' => 'Blog CTA',
+                    'type' => 'accordion',
+                    'open' => 0,
+                    'multi_expand' => 0,
+                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_global_blog_cta_group',
+                    'label' => 'Blog CTA (Group)',
+                    'name' => 'global_blog_cta',
+                    'type' => 'group',
+                    'layout' => 'block',
+                    'sub_fields' => array(
+                        array(
+                            'key' => 'field_global_blog_cta_clone',
+                            'label' => 'Blog CTA Fields',
+                            'name' => 'blog_cta_clone',
+                            'type' => 'clone',
+                            'clone' => array(
+                                0 => 'group_3dp_blog_cta',
+                            ),
+                            'display' => 'seamless',
+                            'layout' => 'block',
+                            'prefix_label' => 0,
+                            'prefix_name' => 0,
+                        ),
+                    ),
+                ),
+                array(
+                    'key' => 'field_global_modules_acc_blog_cta_end',
+                    'label' => '',
+                    'type' => 'accordion',
+                    'endpoint' => 1,
+                ),
                 
                 // --------------------------------------------------
                 // 4. Trusted By
                 // --------------------------------------------------
                 array(
-                    'key' => 'field_global_trusted_by',
+                    'key' => 'field_global_modules_acc_tb',
                     'label' => 'Trusted By',
+                    'type' => 'accordion',
+                    'open' => 0,
+                    'multi_expand' => 0,
+                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_global_tb_group',
+                    'label' => 'Trusted By (Group)',
                     'name' => 'global_trusted_by',
                     'type' => 'group',
                     'layout' => 'block',
@@ -196,13 +283,27 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                         ),
                     ),
                 ),
+                array(
+                    'key' => 'field_global_modules_acc_tb_end',
+                    'label' => '',
+                    'type' => 'accordion',
+                    'endpoint' => 1,
+                ),
                 
                 // --------------------------------------------------
                 // 5. Industry Slider
                 // --------------------------------------------------
                 array(
-                    'key' => 'field_global_industry_slider',
+                    'key' => 'field_global_modules_acc_is',
                     'label' => 'Industry Slider',
+                    'type' => 'accordion',
+                    'open' => 0,
+                    'multi_expand' => 0,
+                    'endpoint' => 0,
+                ),
+                array(
+                    'key' => 'field_global_is_group',
+                    'label' => 'Industry Slider (Group)',
                     'name' => 'global_industry_slider',
                     'type' => 'group',
                     'layout' => 'block',
@@ -221,6 +322,12 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                             'prefix_name' => 0,
                         ),
                     ),
+                ),
+                array(
+                    'key' => 'field_global_modules_acc_is_end',
+                    'label' => '',
+                    'type' => 'accordion',
+                    'endpoint' => 1,
                 ),
 			),
 			'location' => array(

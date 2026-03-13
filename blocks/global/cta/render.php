@@ -56,13 +56,23 @@ if ( empty( $pfx ) ) {
     $global_raw = get_field('global_cta', 'option');
     
     if ( $global_raw ) {
+        $cta_data = ( isset( $global_raw['cta_clone'] ) && is_array( $global_raw['cta_clone'] ) ) ? $global_raw['cta_clone'] : $global_raw;
         // 映射 Global 数据到标准结构
         // 注意: 这里的键名必须与 inc/options-page.php 中定义的结构一致
-        $data['title']           = isset($global_raw['cta_title']) ? $global_raw['cta_title'] : '';
-        $data['title_highlight'] = isset($global_raw['cta_title_highlight']) ? $global_raw['cta_title_highlight'] : '';
-        $data['button_group']    = isset($global_raw['cta_button_group']) ? $global_raw['cta_button_group'] : array();
-        $data['metrics']         = isset($global_raw['cta_metrics']) ? $global_raw['cta_metrics'] : array();
-        $data['bg_color']        = isset($global_raw['bg_color']) ? $global_raw['bg_color'] : '#F2F4F7';
+        $data['title']           = isset($cta_data['cta_title']) ? $cta_data['cta_title'] : '';
+        $data['title_highlight'] = isset($cta_data['cta_title_highlight']) ? $cta_data['cta_title_highlight'] : '';
+        $data['button_group']    = isset($cta_data['cta_button_group']) ? $cta_data['cta_button_group'] : array();
+        $data['metrics']         = isset($cta_data['cta_metrics']) ? $cta_data['cta_metrics'] : array();
+        $data['bg_color']        = isset($cta_data['bg_color']) ? $cta_data['bg_color'] : '#F2F4F7';
+    } else {
+        // Fallback: legacy flat fields (before group wrapper was added)
+        $data['title']           = get_field( 'cta_title', 'option' ) ?: $data['title'];
+        $data['title_highlight'] = get_field( 'cta_title_highlight', 'option' ) ?: $data['title_highlight'];
+        $buttons_flat            = get_field( 'cta_button_group', 'option' );
+        $data['button_group']    = is_array( $buttons_flat ) ? $buttons_flat : $data['button_group'];
+        $metrics_flat            = get_field( 'cta_metrics', 'option' );
+        $data['metrics']         = is_array( $metrics_flat ) ? $metrics_flat : $data['metrics'];
+        $data['bg_color']        = get_field( 'cta_bg_color', 'option' ) ?: $data['bg_color'];
     }
 } else {
     /**

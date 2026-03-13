@@ -118,20 +118,18 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                 
                 <?php foreach ( $items as $index => $item ) : 
                     // Data Extraction
-                    $img_id         = $item['image'];
-                    $mobile_img_id  = $item['mobile_image'];
+                    $img_id        = isset( $item['image'] ) ? (int) $item['image'] : 0;
+                    $mobile_img_id = isset( $item['mobile_image'] ) ? (int) $item['mobile_image'] : 0;
 
-                    // Image URL Logic (Prefer Desktop, no complex picture tag to keep DOM simple as per design)
-                    // But we can check if it's mobile view in CSS or just use object-cover. 
-                    // Let's use the Desktop image URL for the lightbox and main display for simplicity, 
-                    // unless we want to do a <picture> tag. 
-                    // Given the constraint "Pixel-Perfect", let's stick to simple <img> but use the main image.
-                    $img_data = wp_get_attachment_image_src($img_id, 'full'); 
-                    $img_url = $img_data ? $img_data[0] : '';
-                    $img_w = $img_data ? $img_data[1] : '';
-                    $img_h = $img_data ? $img_data[2] : '';
+                    $img_data = $img_id ? wp_get_attachment_image_src( $img_id, 'full' ) : false;
+                    $img_url  = $img_data ? $img_data[0] : '';
+                    $img_w    = $img_data ? $img_data[1] : '';
+                    $img_h    = $img_data ? $img_data[2] : '';
 
-                    $img_alt = get_post_meta($img_id, '_wp_attachment_image_alt', true) ?: get_the_title($img_id);
+                    $img_alt = $img_id ? get_post_meta( $img_id, '_wp_attachment_image_alt', true ) : '';
+                    if ( ! $img_alt && $img_id ) {
+                        $img_alt = get_the_title( $img_id );
+                    }
 
                     // Layout Logic
                     $is_hero = ($index === 0);
@@ -147,11 +145,22 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
                         $card_classes .= ' col-span-1 h-[180px] lg:h-auto';
                     }
                 ?>
-                    <div class="<?php echo esc_attr($card_classes); ?>"
-                         @click="openImg('<?php echo esc_url($img_url); ?>', '', '<?php echo esc_attr($img_w); ?>', '<?php echo esc_attr($img_h); ?>')">
+                    <div class="<?php echo esc_attr( $card_classes ); ?>"
+						<?php if ( $img_url ) : ?>
+                         @click="openImg('<?php echo esc_url( $img_url ); ?>', '', '<?php echo esc_attr( $img_w ); ?>', '<?php echo esc_attr( $img_h ); ?>')"
+						<?php endif; ?>
+					>
                         
                         <!-- Image -->
-                        <?php echo wp_get_attachment_image($img_id, 'full', false, array('class' => 'w-full h-full object-cover')); ?>
+						<?php if ( $img_id ) : ?>
+							<?php
+							echo wp_get_attachment_image( $img_id, 'large', false, array(
+								'class'   => 'w-full h-full object-cover',
+								'loading' => 'lazy',
+								'sizes'   => '(min-width: 1024px) 800px, 100vw',
+							) );
+							?>
+						<?php endif; ?>
                     </div>
                 <?php endforeach; ?>
                 
@@ -180,7 +189,7 @@ $hide_mobile_desc  = in_array('hide_content', $mobile_opts);
             </button>
 
             <div class="max-w-6xl w-full flex flex-col items-center relative z-10 pointer-events-none">
-                <img :src="activeImg" :width="activeWidth" :height="activeHeight" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl pointer-events-auto border border-white/10" loading="lazy">
+                <img :src="activeImg" :width="activeWidth" :height="activeHeight" class="max-h-[80vh] w-auto object-contain rounded-lg shadow-2xl pointer-events-auto border border-white/10" loading="lazy" sizes="(min-width: 1024px) 800px, 100vw">
             </div>
         </div>
     </template>

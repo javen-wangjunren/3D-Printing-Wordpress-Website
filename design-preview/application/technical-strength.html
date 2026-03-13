@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Technical Strength / Breakthrough Lifecycle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        primaryHover: '#003A8C',
+                        industrial: '#1D2938',
+                        panel: '#F8F9FB',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        bg: {
+                            page: '#FFFFFF',
+                            section: '#F2F4F7',
+                            dark: '#1D2939',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: {
+                        card: '12px',
+                        button: '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .phase-line { background: linear-gradient(to right, #E4E7EC 0%, #0047AB 50%, #E4E7EC 100%); }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="py-16 lg:py-24 bg-white overflow-hidden">
+    <div class="w-[90%] lg:w-[1280px] mx-auto">
+        
+        <div class="text-center mb-16">
+            <h2 class="text-[28px] lg:text-[36px] font-bold text-industrial tracking-tight leading-tight mb-4">
+                The Lifecycle of a <span class="text-primary">Breakthrough</span>
+            </h2>
+            <p class="text-body text-[16px] max-w-2xl mx-auto">
+                From chaos to precision: See how we transform complex challenges into engineered excellence.
+            </p>
+        </div>
+
+        <div class="relative">
+            <div class="hidden lg:block absolute top-[120px] left-0 right-0 h-[2px] phase-line"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-4">
+                
+                <div class="relative group">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600" 
+                             class="w-full h-full object-cover opacity-80" 
+                             alt="Complex Requirements">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 01</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4 relative z-10 shadow-lg shadow-primary/25">
+                            01
+                        </div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Complex Requirements</h3>
+                        <p class="text-body text-[13px] leading-relaxed">
+                            Initial chaos: vague specifications, tight tolerances, unconventional geometries.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&q=80&w=600" 
+                             class="w-full h-full object-cover opacity-80" 
+                             alt="Manufacturing Bottlenecks">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 02</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-industrial text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4 relative z-10">
+                            02
+                        </div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Manufacturing Bottlenecks</h3>
+                        <p class="text-body text-[13px] leading-relaxed">
+                            Material constraints, thermal deformation, support structure challenges.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600" 
+                             class="w-full h-full object-cover opacity-80" 
+                             alt="Engineering Breakthrough">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 03</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4 relative z-10 shadow-lg shadow-primary/25">
+                            03
+                        </div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Engineering Breakthrough</h3>
+                        <p class="text-body text-[13px] leading-relaxed">
+                            Iterative testing, process optimization, custom tooling development.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border-2 border-primary mb-6 relative shadow-xl shadow-primary/10">
+                        <img src="https://images.unsplash.com/photo-1562679299-266d23163f3e?auto=format&fit=crop&q=80&w=600" 
+                             class="w-full h-full object-cover" 
+                             alt="Final Delivery">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 04</span>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full">
+                            DELIVERED
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4 relative z-10 shadow-lg shadow-primary/25">
+                            04
+                        </div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Perfect Delivery</h3>
+                        <p class="text-body text-[13px] leading-relaxed">
+                            Precision parts exceeding all specifications, ready for production.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="mt-16 p-8 bg-industrial rounded-[12px] text-center">
+            <p class="text-white/80 text-[14px] mb-4">Every breakthrough starts with a challenge. What's yours?</p>
+            <button class="bg-primary hover:bg-primaryHover text-white px-8 py-3 rounded-[8px] font-semibold text-[14px] transition-all">
+                Start Your Project
+            </button>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

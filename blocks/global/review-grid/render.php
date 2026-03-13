@@ -65,8 +65,11 @@ $pb_class = 'pb-16 lg:pb-24';
             active: 0,
             total: <?php echo intval( $total_reviews ); ?>,
             columns: <?php echo intval( $columns ); ?>,
-            get visible() { return window.innerWidth >= 1024 ? this.columns : 1 },
-            get maxIndex() { return this.total - this.visible },
+            isTrackingTouch: false,
+            touchStartX: 0,
+            touchStartY: 0,
+            get visible() { return window.innerWidth >= 1024 ? this.columns : (window.innerWidth >= 768 ? Math.min(2, this.columns) : 1) },
+            get maxIndex() { return Math.max(0, this.total - this.visible) },
             next() { 
                 // 循环逻辑：如果到达末尾，回到开头
                 if (this.active >= this.maxIndex) {
@@ -80,6 +83,25 @@ $pb_class = 'pb-16 lg:pb-24';
                     this.active = this.maxIndex;
                 } else {
                     this.active--;
+                }
+            },
+            onTouchStart(e) {
+                if (!e.touches || !e.touches.length) return;
+                this.isTrackingTouch = true;
+                this.touchStartX = e.touches[0].clientX;
+                this.touchStartY = e.touches[0].clientY;
+            },
+            onTouchEnd(e) {
+                if (!this.isTrackingTouch) return;
+                this.isTrackingTouch = false;
+                if (!e.changedTouches || !e.changedTouches.length) return;
+                const dx = e.changedTouches[0].clientX - this.touchStartX;
+                const dy = e.changedTouches[0].clientY - this.touchStartY;
+                if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+                if (dx < 0) {
+                    this.next();
+                } else {
+                    this.prev();
                 }
             }
          }"
@@ -120,7 +142,8 @@ $pb_class = 'pb-16 lg:pb-24';
 
         <!-- Slider Track -->
         <div class="relative">
-            <div class="flex transition-transform duration-500 ease-in-out will-change-transform"
+            <div class="flex transition-transform duration-500 ease-in-out will-change-transform touch-pan-y select-none"
+                 @touchstart.passive="onTouchStart($event)" @touchend.window="onTouchEnd($event)" @touchcancel.window="isTrackingTouch = false"
                  :style="`transform: translateX(-${active * (100 / visible)}%)`">
                 
                 <?php 

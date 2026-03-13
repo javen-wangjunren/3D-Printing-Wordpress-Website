@@ -70,8 +70,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
                                 <?php if (is_numeric($icon)) : ?>
                                     <?php echo wp_get_attachment_image($icon, 'thumbnail', false, ['class' => 'w-full h-full object-contain', 'loading' => 'lazy']); ?>
                                 <?php else : ?>
-                                    <img src="<?php echo esc_url($icon); ?>" alt="" class="w-full h-full object-contain" loading="lazy">
-                                <?php endif; ?>
+                                    <img src="<?php echo esc_url($icon); ?>" alt="" class="w-full h-full object-contain" loading="lazy" sizes="(min-width: 1024px) 800px, 100vw">                                <?php endif; ?>
                             </div>
                         <?php endif; ?>
 

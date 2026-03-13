@@ -40,7 +40,9 @@
             desc: 'Standard finish with visible layer lines and a matte texture.', 
             ra: '3.2 - 6.3 μm', 
             processes: ['PLASTIC', 'METAL'], 
+            techs: ['SLS', 'MJF', 'FDM'],
             leadTime: '0 DAYS',
+            priceHtml: '$<span class=\'text-industrial/10\'>$$</span>',
             img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=200'
         },
         { 
@@ -48,7 +50,9 @@
             desc: 'Uniform matte surface achieved by spraying fine glass beads.', 
             ra: '1.6 - 3.2 μm', 
             processes: ['PLASTIC', 'METAL', 'RESIN'], 
+            techs: ['SLS', 'MJF', 'SLM'],
             leadTime: '+ 1 DAY',
+            priceHtml: '$$<span class=\'text-industrial/10\'>$</span>',
             img: 'https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=200'
         },
         { 
@@ -56,7 +60,9 @@
             desc: 'Chemical process that melts the surface to create a high-gloss finish.', 
             ra: '< 0.8 μm', 
             processes: ['PLASTIC'], 
+            techs: ['SLA', 'MJF', 'PolyJet'],
             leadTime: '+ 2 DAYS',
+            priceHtml: '$$$',
             img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=200'
         },
         { 
@@ -64,7 +70,9 @@
             desc: 'Electrochemical removal of surface material for peak smoothness.', 
             ra: '0.4 - 0.8 μm', 
             processes: ['METAL'], 
+            techs: ['SLM', 'DMLS', 'CNC'],
             leadTime: '+ 2 DAYS',
+            priceHtml: '$$$',
             img: 'https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&q=80&w=200'
         }
     ],
@@ -77,8 +85,8 @@
         
         <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
             <div class="max-w-xl">
-                <h2 class="text-[42px] font-[800] uppercase tracking-tighter leading-none mb-6">
-                    Surface <span class="text-primary italic">Finishing</span>
+                <h2 class="text-[42px] font-[800] tracking-tighter leading-none mb-6">
+                    Surface <span class="text-primary">Finishing</span>
                 </h2>
                 <p class="text-body/60 text-[15px] font-medium leading-relaxed">
                     Explore our range of post-processing options to achieve the perfect functional and aesthetic requirements for your parts.
@@ -100,41 +108,55 @@
             <table class="w-full border-collapse">
                 <thead>
                     <tr class="border-b border-industrial/10 text-left">
-                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Type / Visual</th>
-                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Description</th>
-                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Roughness (Ra)</th>
-                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Compatibility</th>
-                        <th class="pb-6 font-mono text-[11px] text-primary uppercase tracking-[3px]">Lead Time</th>
+                        <th class="pb-6 font-mono text-[13px] text-primary uppercase tracking-[1px] whitespace-nowrap">Name</th>
+                        <th class="pb-6 font-mono text-[13px] text-primary uppercase tracking-[1px] whitespace-nowrap">Description</th>
+                        <th class="pb-6 font-mono text-[13px] text-primary uppercase tracking-[1px] whitespace-nowrap">Material</th>
+                        <th class="pb-6 font-mono text-[13px] text-primary uppercase tracking-[1px] whitespace-nowrap">Capability</th>
+                        <th class="pb-6 font-mono text-[13px] text-primary uppercase tracking-[1px] whitespace-nowrap">Commercial</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-border">
                     <template x-for="finish in filteredFinishes" :key="finish.name">
-                        <tr class="group hover:bg-panel transition-colors duration-300">
+                        <tr class="align-middle group hover:bg-panel/50 transition-colors duration-200 cursor-pointer"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 translate-y-2"
+                            x-transition:enter-end="opacity-100 translate-y-0">
                             <td class="py-8 pr-8">
                                 <div class="flex items-center gap-6">
-                                    <div class="w-20 h-20 rounded-xl overflow-hidden bg-panel border border-border flex-shrink-0">
-                                        <img :src="finish.img" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                                    <div class="w-20 h-20 rounded-xl overflow-hidden bg-panel border border-border flex-shrink-0 relative">
+                                        <img :src="finish.img" class="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-110">
                                     </div>
-                                    <span class="font-extrabold text-[17px] uppercase tracking-tight text-industrial" x-text="finish.name"></span>
+                                    <div class="flex items-center gap-3">
+                                        <span class="font-extrabold text-[17px] uppercase tracking-tight text-industrial transition-colors duration-300 group-hover:text-primary" x-text="finish.name"></span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="text-primary opacity-0 -translate-x-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                                            <path d="M5 12h14"></path>
+                                            <path d="m12 5 7 7-7 7"></path>
+                                        </svg>
+                                    </div>
                                 </div>
                             </td>
                             <td class="py-8 pr-8 max-w-xs">
                                 <p class="text-[14px] text-industrial/60 leading-relaxed font-medium" x-text="finish.desc"></p>
                             </td>
-                            <td class="py-8 pr-8">
-                                <div class="inline-block px-3 py-1 bg-white border border-border rounded-lg shadow-sm">
-                                    <span class="font-mono text-[13px] text-primary font-bold" x-text="'[ ' + finish.ra + ' ]'"></span>
+                            <td class="py-8 pr-6">
+                                <div class="flex flex-wrap gap-2">
+                                    <template x-for="process in finish.processes">
+                                        <span class="px-2 py-0.5 bg-panel text-industrial/60 border border-border rounded font-mono text-[10px] font-bold uppercase transition-colors hover:border-industrial/40 hover:text-industrial cursor-default" x-text="process"></span>
+                                    </template>
                                 </div>
                             </td>
-                            <td class="py-8 pr-8">
+                            <td class="py-8 pr-6">
                                 <div class="flex flex-wrap gap-2">
-                                    <template x-for="p in finish.processes">
-                                        <span class="px-2 py-0.5 bg-industrial/5 border border-industrial/10 rounded font-mono text-[9px] text-industrial/40 font-bold" x-text="p"></span>
+                                    <template x-for="tech in finish.techs">
+                                        <span class="px-2 py-0.5 bg-primary/5 text-primary border border-primary/20 rounded font-mono text-[10px] font-bold transition-colors hover:bg-primary/10 cursor-default" x-text="tech"></span>
                                     </template>
                                 </div>
                             </td>
                             <td class="py-8">
-                                <span class="font-mono text-[13px] text-industrial font-bold" x-text="'[ ' + finish.leadTime + ' ]'"></span>
+                                <div class="flex flex-col gap-1">
+                                    <span class="font-mono text-[13px] text-primary font-bold" x-text="'[ ' + finish.leadTime + ' ]'"></span>
+                                    <span class="font-mono text-[13px] text-industrial/30 font-bold" x-html="finish.priceHtml"></span>
+                                </div>
                             </td>
                         </tr>
                     </template>
@@ -142,15 +164,7 @@
             </table>
         </div>
 
-        <div class="mt-20 p-12 bg-panel rounded-[32px] border border-border flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="flex flex-col gap-2">
-                <span class="font-mono text-[10px] font-bold text-primary uppercase tracking-[4px]">READY_TO_PROCEED</span>
-                <h3 class="text-[24px] font-[800] uppercase tracking-tight text-industrial">Get an Instant Quote with Professional Finishing</h3>
-            </div>
-            <a href="/quote" class="px-10 py-5 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-[13px] shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all">
-                Upload CAD & Quote &rarr;
-            </a>
-        </div>
+
 
     </div>
 </section>

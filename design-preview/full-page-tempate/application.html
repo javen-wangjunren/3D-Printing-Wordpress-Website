@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3DPROTO - Application Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        industrial: '#1D2938',
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        panel: '#F8F9FB',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter','sans-serif'],
+                        mono: ['JetBrains Mono','monospace']
+                    },
+                    borderRadius: {
+                        card: '12px',
+                        button: '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .industrial-h2 { letter-spacing: -0.5px; }
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-white font-sans antialiased text-body">
+
+<!-- Hero -->
+<section class="py-20 lg:py-32 bg-white overflow-hidden">
+    <div class="mx-auto max-w-6xl px-4 lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="flex flex-col justify-center max-w-xl">
+            <h1 class="text-[34px] sm:text-[40px] lg:text-[48px] font-extrabold text-industrial tracking-[-0.02em] leading-[1.1] mb-6">
+                3D Printing Solutions for <span class="text-primary">Automotive</span>
+            </h1>
+            <ul class="space-y-3 mb-8" x-data="{benefits:['Accelerate time to market throughout the value chain.','Unlock next-level agility in prototyping and tooling.','Cut costs by up to 90% compared to traditional outsourcing.']}">
+                <template x-for="benefit in benefits" :key="benefit">
+                    <li class="flex items-start gap-3">
+                        <div class="hidden sm:flex mt-1 w-4 h-4 rounded-full border border-border flex-shrink-0 items-center justify-center">
+                            <svg class="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-[15px] font-medium text-body leading-snug" x-text="benefit"></span>
+                    </li>
+                </template>
+            </ul>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-4 py-6 border-y border-border mb-8" x-data="{metrics:[{label:'Weight',value:'[-40%]'},{label:'Lead Time',value:'[-60%]'},{label:'Cost',value:'[-90%]'},{label:'Tolerance',value:'±0.05 mm'}]}">
+                <template x-for="metric in metrics" :key="metric.label">
+                    <div class="min-w-0">
+                        <div class="text-[12px] font-semibold tracking-[-0.5px] text-industrial/70" x-text="metric.label"></div>
+                        <div class="mt-1 font-mono text-[20px] font-bold text-primary leading-none" x-text="metric.value"></div>
+                    </div>
+                </template>
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <button class="inline-flex items-center justify-center rounded-button bg-primary px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-primary-hover">
+                    Watch the Webinar
+                </button>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="aspect-[4/3] rounded-card overflow-hidden bg-panel border border-border">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover" alt="Automotive Component">
+            </div>
+        </div>
+    </div>
+    </section>
+
+<!-- Technical Strength -->
+<section class="py-16 lg:py-24 bg-bg-subtle overflow-hidden">
+    <div class="w-[90%] lg:w-[1280px] mx-auto">
+        <div class="text-center mb-16">
+            <h2 class="industrial-h2 text-[28px] lg:text-[36px] font-bold text-industrial leading-tight mb-4">
+                The Lifecycle of a <span class="text-primary">Breakthrough</span>
+            </h2>
+            <p class="text-body text-[16px] max-w-2xl mx-auto">
+                From chaos to precision: See how we transform complex challenges into engineered excellence.
+            </p>
+        </div>
+        <div class="relative">
+            <div class="hidden lg:block absolute top-[120px] left-0 right-0 h-[2px]" style="background: linear-gradient(to right, #E4E7EC 0%, #0047AB 50%, #E4E7EC 100%);"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-4">
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80" alt="Complex Requirements">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 01</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4">01</div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Complex Requirements</h3>
+                        <p class="text-body text-[13px]">Initial chaos: vague specifications, tight tolerances, unconventional geometries.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1565793298595-6a879b1d9492?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80" alt="Manufacturing Bottlenecks">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 02</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-industrial text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4">02</div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Manufacturing Bottlenecks</h3>
+                        <p class="text-body text-[13px]">Material constraints, thermal deformation, support structure challenges.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border mb-6 relative">
+                        <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover opacity-80" alt="Engineering Breakthrough">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/60 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 03</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4">03</div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Engineering Breakthrough</h3>
+                        <p class="text-body text-[13px]">Iterative testing, process optimization, custom tooling development.</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border-2 border-primary mb-6 relative">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4">
+                            <span class="font-mono text-[10px] text-white/80 uppercase tracking-widest">Phase 04</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-primary text-white font-bold text-[14px] flex items-center justify-center mx-auto mb-4">04</div>
+                        <h3 class="text-[18px] font-bold text-industrial mb-2">Perfect Delivery</h3>
+                        <p class="text-body text-[13px]">Precision parts exceeding all specifications, ready for production.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Showcase -->
+<section class="py-16 lg:py-24 bg-white overflow-hidden" 
+         x-data="{ 
+             activeIndex: null,
+             cases: [
+                 { title: 'Surgical Guide', process: 'SLA', material: 'Surgical Guide Resin', img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'Custom Prosthetic', process: 'SLM', material: 'Titanium Ti-6Al-4V', img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'Anatomy Model', process: 'MJP', material: 'Multi-material Photopolymer', img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'End-of-Arm Tooling', process: 'SLS', material: 'Nylon PA12', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'Lightweight Bracket', process: 'DMLS', material: 'AlSi10Mg Aluminum', img: 'https://images.unsplash.com/photo-1562679299-266d23163f3e?auto=format&fit=crop&q=80&w=800' }
+             ]
+         }">
+    <div class="w-[90%] lg:w-[1280px] mx-auto px-6">
+        <div class="mb-12 lg:mb-16 text-center">
+            <h2 class="industrial-h2 text-[28px] lg:text-[36px] font-bold text-heading mb-3">
+                Typical Use <span class="text-primary">Cases</span>
+            </h2>
+            <p class="text-body text-[15px] max-w-xl mx-auto">Real applications where 3D printing delivers industrial-grade results.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <template x-for="(item, index) in cases" :key="index">
+                <div class="group cursor-pointer" @mouseenter="activeIndex = index" @mouseleave="activeIndex = null">
+                    <div class="relative aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border transition-all duration-300" :class="activeIndex === index ? 'border-primary border-[3px] shadow-lg shadow-primary/10' : ''">
+                        <img :src="item.img" class="w-full h-full object-cover" :alt="item.title">
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/70 via-industrial/15 to-transparent transition-opacity duration-300" :class="activeIndex === index ? 'opacity-90' : 'opacity-60'"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5 transition-all duration-300" :class="activeIndex === index ? 'translate-y-0' : 'translate-y-4'">
+                            <h3 class="text-white font-bold text-[18px] mb-2" x-text="item.title"></h3>
+                            <div x-show="activeIndex === index" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-2" class="font-mono text-[11px] text-white/90 space-y-1 pt-3 border-t border-white/20">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-white/60">Process:</span>
+                                    <span class="font-semibold text-white" x-text="item.process"></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-white/60">Material:</span>
+                                    <span class="font-semibold text-white" x-text="item.material"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+
+<!-- Recommendation -->
+<section class="py-16 lg:py-24 bg-bg-subtle overflow-hidden">
+    <div class="w-[90%] lg:w-[1280px] mx-auto px-6">
+        <div class="mb-12 lg:mb-16 text-center">
+            <h2 class="industrial-h2 text-[28px] lg:text-[36px] font-bold text-heading mb-3">
+                Recommended <span class="text-primary">Processes</span> & Materials
+            </h2>
+            <p class="text-body text-[15px] max-w-2xl mx-auto">
+                Industry-specific technology stacks proven to deliver optimal results. Select your application to discover the best-fit manufacturing solution.
+            </p>
+        </div>
+        <div class="overflow-hidden rounded-[12px] border border-border bg-white">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-panel border-b border-border">
+                        <th class="text-left px-6 py-4 font-semibold text-[13px] text-heading uppercase tracking-wider">Application</th>
+                        <th class="text-left px-6 py-4 font-semibold text-[13px] text-heading uppercase tracking-wider">Recommended Process</th>
+                        <th class="text-left px-6 py-4 font-semibold text-[13px] text-heading uppercase tracking-wider">Key Material</th>
+                        <th class="text-left px-6 py-4 font-semibold text-[13px] text-heading uppercase tracking-wider">Primary Benefit</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-border">
+                    <tr class="hover:bg-panel/50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-[8px] overflow-hidden bg-panel border border-border flex-shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=120" class="w-full h-full object-cover" alt="Surgical Guide">
+                                </div>
+                                <span class="font-semibold text-heading text-[15px]">Surgical Guide</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/process/sla" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                SLA
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/materials/surgical-guide-resin" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                Surgical Guide Resin
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-body text-[14px]">High precision & biocompatibility</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-panel/50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-[8px] overflow-hidden bg-panel border border-border flex-shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=120" class="w-full h-full object-cover" alt="Anatomy Model">
+                                </div>
+                                <span class="font-semibold text-heading text-[15px]">Anatomy Model</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/process/mjp" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                MJP
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/materials/multi-material-photopolymer" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                Multi-material Photopolymer
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-body text-[14px]">Complex geometries with varied hardness</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-panel/50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-[8px] overflow-hidden bg-panel border border-border flex-shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=120" class="w-full h-full object-cover" alt="End-of-Arm Tooling">
+                                </div>
+                                <span class="font-semibold text-heading text-[15px]">End-of-Arm Tooling</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/process/sls" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                SLS
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/materials/nylon-pa12" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                Nylon PA12
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-body text-[14px]">Durable & heat-resistant functional parts</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-panel/50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-[8px] overflow-hidden bg-panel border border-border flex-shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1562679299-266d23163f3e?auto=format&fit=crop&q=80&w=120" class="w-full h-full object-cover" alt="Lightweight Bracket">
+                                </div>
+                                <span class="font-semibold text-heading text-[15px]">Lightweight Bracket</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/process/dmls" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                DMLS
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/materials/alsi10mg-aluminum" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                AlSi10Mg Aluminum
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-body text-[14px]">40% weight reduction with high stiffness</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-panel/50 transition-colors duration-200">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-14 h-14 rounded-[8px] overflow-hidden bg-panel border border-border flex-shrink-0">
+                                    <img src="https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=120" class="w-full h-full object-cover" alt="Functional Prototype">
+                                </div>
+                                <span class="font-semibold text-heading text-[15px]">Functional Prototype</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/process/sls" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                SLS
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <a href="/materials/pa12-gf" class="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 rounded-[6px] font-mono text-[11px] font-semibold transition-colors hover:bg-primary hover:text-white hover:border-primary">
+                                PA12 GF
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-body text-[14px]">High stiffness & repeatable production</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Certification -->
+<section class="py-12 lg:py-16 bg-white overflow-hidden">
+    <div class="w-[90%] lg:w-[1280px] mx-auto px-6">
+        <div class="mb-8 text-center">
+            <h2 class="industrial-h2 text-[24px] lg:text-[28px] font-bold text-heading">
+                Certification <span class="text-primary">&</span> Quality Assurance
+            </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            <div class="rounded-[12px] border border-border overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1560472355-536de3962603?auto=format&fit=crop&q=90&w=1200" alt="ISO 9001 Certificate" class="block w-full h-[350px] lg:h-[450px] object-cover" />
+            </div>
+            <div class="rounded-[12px] border border-border overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=90&w=1200" alt="RoHS Certificate" class="block w-full h-[350px] lg:h-[450px] object-cover" />
+            </div>
+            <div class="rounded-[12px] border border-border overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=90&w=1200" alt="Medical Grade Certificate" class="block w-full h-[350px] lg:h-[450px] object-cover" />
+            </div>
+        </div>
+        <p class="mt-8 text-center text-muted text-[13px]">
+            All materials and processes meet international quality standards for industrial applications.
+        </p>
+    </div>
+</section>
+
+</body>
+</html>

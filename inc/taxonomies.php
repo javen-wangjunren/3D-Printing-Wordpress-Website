@@ -52,11 +52,15 @@ add_action( 'init', function() {
             'new_item_name' => 'New Feature Name',
             'search_items'  => 'Search Features',
         ),
-        'public'            => true,
-        'hierarchical'      => true, // 允许父子级，方便归类
-        'rewrite'           => array( 'slug' => 'material-feature' ),
+        'public'             => false,
+        'publicly_queryable' => false,
+        'rewrite'            => false,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'show_in_rest'       => true,
+        'query_var'          => true,
+        'hierarchical'       => true, // 允许父子级，方便归类
         'show_admin_column' => true, // 在文章列表页显示列
-        'show_in_rest'      => true, // 开启 Gutenberg / REST API 支持
     ) );
 
     // ==========================================================================
@@ -77,18 +81,22 @@ add_action( 'init', function() {
             'new_item_name' => 'New Process Name',
             'search_items'  => 'Search Processes',
         ),
-        'public'            => true,
-        'hierarchical'      => true,
-        'rewrite'           => array( 'slug' => 'material-process' ),
-        'show_admin_column' => true,
-        'show_in_rest'      => true,
+        'public'             => false,
+        'publicly_queryable' => false,
+        'rewrite'            => false,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'show_in_rest'       => true,
+        'query_var'          => true,
+        'hierarchical'       => true,
+        'show_admin_column'  => true,
     ) );
 
     // ==========================================================================
     // 3. Material Type (材料类型)
     // ==========================================================================
     // 用途: 描述材料的化学分类 (如: Nylon, Resin, Metal)
-    register_taxonomy( 'material_type', array( 'material' ), array(
+    register_taxonomy( 'material_type', array( 'material', 'surface-finish' ), array(
         'labels' => array(
             'name'          => 'Material Type',
             'singular_name' => 'Material Type',
@@ -101,11 +109,15 @@ add_action( 'init', function() {
             'new_item_name' => 'New Type Name',
             'search_items'  => 'Search Types',
         ),
-        'public'            => true,
-        'hierarchical'      => true,
-        'rewrite'           => array( 'slug' => 'material-type' ),
-        'show_admin_column' => true,
-        'show_in_rest'      => true,
+        'public'             => false,
+        'publicly_queryable' => false,
+        'rewrite'            => false,
+        'show_ui'            => true,
+        'show_in_menu'       => true,
+        'show_in_rest'       => true,
+        'query_var'          => true,
+        'hierarchical'       => true,
+        'show_admin_column'  => true,
     ) );
 
 } );

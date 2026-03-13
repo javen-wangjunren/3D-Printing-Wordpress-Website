@@ -45,7 +45,7 @@ $mobile_compact_mode = (bool) get_field( 'filter_sidebar_mobile_compact_mode' );
 
 <main id="main" class="site-main page-all-materials">
     <!-- All Materials Filter & Grid -->
-    <section class="all-materials-page bg-gray-50" data-material-library>
+    <section class="all-materials-page bg-gray-50" data-material-library x-data="{ filtersOpen: false }">
         <div class="all-materials-shell container mx-auto px-4 py-8" data-mobile-compact-mode="<?php echo esc_attr( $mobile_compact_mode ? '1' : '0' ); ?>">
 
             <?php if ( $seo_copy ) : ?>
@@ -54,18 +54,42 @@ $mobile_compact_mode = (bool) get_field( 'filter_sidebar_mobile_compact_mode' );
                 </div>
             <?php endif; ?>
 
+            <div class="lg:hidden flex items-center justify-between mb-4">
+                <button type="button" class="inline-flex items-center gap-2 rounded-button border border-border bg-white px-4 py-2.5 text-[13px] font-bold text-heading" @click="filtersOpen = true">
+                    <svg class="w-4 h-4 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 018 18v-4.586L3.293 6.707A1 1 0 013 6V4z"/></svg>
+                    <span>Filters</span>
+                </button>
+                <div class="text-[11px] font-mono text-muted tracking-wide">
+                    <?php echo esc_html( number_format_i18n( $material_count ) ); ?> Materials
+                </div>
+            </div>
+
             <div class="all-materials-layout lg:grid lg:grid-cols-12 lg:gap-8 items-start">
 
                 <!-- 
                   II. 筛选侧边栏 (Filter Sidebar) 
                   这是一个独立的 Block，负责展示过滤选项
                 -->
-                <div class="lg:col-span-3 sticky top-24 self-start">
+                <div class="lg:col-span-3 lg:sticky lg:top-24 self-start lg:z-30">
                     <?php
                     // 将数量传给 Sidebar 显示
                     set_query_var( 'material_count', $material_count );
-                    _3dp_render_block( 'blocks/global/filter-sidebar/render', array() );
                     ?>
+                    <div class="hidden lg:block">
+                        <?php _3dp_render_block( 'blocks/global/filter-sidebar/render', array() ); ?>
+                    </div>
+                    <div class="lg:hidden fixed inset-0 z-50" x-show="filtersOpen" x-cloak>
+                        <div class="absolute inset-0 bg-black/40" @click="filtersOpen = false"></div>
+                        <div class="absolute inset-y-0 left-0 w-[88%] max-w-sm bg-white border-r border-border overflow-y-auto">
+                            <div class="h-20 px-4 flex items-center justify-between border-b border-border">
+                                <div class="text-[13px] font-bold text-heading">Filters</div>
+                                <button type="button" class="w-10 h-10 inline-flex items-center justify-center rounded-button border border-border bg-white text-heading" @click="filtersOpen = false" aria-label="Close filters"><span class="text-lg leading-none">×</span></button>
+                            </div>
+                            <div class="p-4">
+                                <?php _3dp_render_block( 'blocks/global/filter-sidebar/render', array() ); ?>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 
@@ -74,7 +98,7 @@ $mobile_compact_mode = (bool) get_field( 'filter_sidebar_mobile_compact_mode' );
                 -->
                 <div class="materials-grid-area lg:col-span-9" data-materials-grid>
                     <?php if ( $material_query->have_posts() ) : ?>
-                        <div class="materials-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="materials-grid grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                             <?php while ( $material_query->have_posts() ) : $material_query->the_post(); ?>
 
                                 <!-- Material Card Module -->
@@ -92,7 +116,7 @@ $mobile_compact_mode = (bool) get_field( 'filter_sidebar_mobile_compact_mode' );
                         // 注意：get_template_part 默认不能直接传复杂对象，除非用全局变量或 set_query_var
                         // 这里我们使用 set_query_var 更稳妥
                         set_query_var( 'material_query', $material_query );
-                        get_template_part( 'template-parts/components/pagination' ); 
+                        get_template_part( 'template-parts/components/pagination', null, array( 'query' => $material_query ) ); 
                         ?>
 
                     <?php else : ?>

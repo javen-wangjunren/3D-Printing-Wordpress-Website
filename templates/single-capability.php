@@ -82,10 +82,12 @@ get_header(); ?>
 
             // --- 3. How It Works Module (Local Data) ---
             // 数据源: 当前文章 ACF 字段 (prefix: cap_process_)
+            /*
             _3dp_render_block( 'blocks/global/how-it-works/render', array( 
                 'id'     => 'process', 
                 'prefix' => 'cap_process_' 
             ) );
+             */
 
             // --- 4. Industry Slider Module (Global Data) ---
             // 数据源: Theme Options (Global)

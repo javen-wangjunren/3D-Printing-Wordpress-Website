@@ -31,6 +31,8 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name' => 1,
                     'wrapper' => array('width' => '100'),
                 ),
+
+                /*
                 array(
                     'key' => 'field_cap_hiw_clone',
                     'label' => 'Process (How It Works)',
@@ -44,6 +46,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'prefix_name' => 1,
                     'wrapper' => array('width' => '100'),
                 ),
+                */
 
                 array(
                     'key' => 'field_cap_tab_design_guide',

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Application Hero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        'primary-hover': '#003A8C',
+                        'primary-active': '#002E6E',
+                        industrial: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        panel: '#F2F4F7',
+                        border: '#E4E7EC'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: {
+                        card: '12px',
+                        button: '8px'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-sans antialiased text-industrial">
+
+<section class="py-20 lg:py-32 bg-white overflow-hidden" x-data="{ 
+    benefits: [
+        'Accelerate time to market throughout the value chain.',
+        'Unlock next-level agility in prototyping and tooling.',
+        'Cut costs by up to 90% compared to traditional outsourcing.'
+    ],
+    metrics: [
+        { label: 'Weight', value: '[-40%]' },
+        { label: 'Lead Time', value: '[-60%]' },
+        { label: 'Cost', value: '[-90%]' },
+        { label: 'Tolerance', value: '±0.05 mm' }
+    ] 
+}">
+    <div class="mx-auto max-w-6xl px-4 lg:px-0 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="flex flex-col justify-center max-w-xl">
+            <h1 class="text-[34px] sm:text-[40px] lg:text-[48px] font-extrabold text-industrial tracking-[-0.02em] leading-[1.1] mb-6">
+                3D Printing Solutions for <span class="text-primary">Automotive</span>
+            </h1>
+
+            <ul class="space-y-3 mb-8">
+                <template x-for="benefit in benefits" :key="benefit">
+                    <li class="flex items-start gap-3">
+                        <div class="hidden sm:flex mt-1 w-4 h-4 rounded-full border border-border flex-shrink-0 items-center justify-center">
+                            <svg class="w-3 h-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-[15px] font-medium text-body leading-snug" x-text="benefit"></span>
+                    </li>
+                </template>
+            </ul>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-4 py-6 border-y border-border mb-8">
+                <template x-for="metric in metrics" :key="metric.label">
+                    <div class="min-w-0">
+                        <div class="text-[12px] font-semibold tracking-[-0.5px] text-industrial/70" x-text="metric.label"></div>
+                        <div class="mt-1 font-mono text-[20px] font-bold text-primary leading-none" x-text="metric.value"></div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+                <button class="inline-flex items-center justify-center rounded-button bg-primary px-6 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-primary-hover active:bg-primary-active">
+                    Watch the Webinar
+                </button>
+            </div>
+        </div>
+
+        <div class="relative">
+            <div class="aspect-[4/3] rounded-card overflow-hidden bg-panel border border-border">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200"
+                     class="w-full h-full object-cover"
+                     alt="Automotive Component">
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

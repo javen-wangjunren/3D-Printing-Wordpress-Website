@@ -59,6 +59,7 @@ $tdp_inc_files = [
     'acf/blocks.php',        // ACF Blocks 注册
     'helpers.php',           // 全局工具函数 (Helper Functions)
     'template-functions.php',// 模板专用业务逻辑 (Template Logic)
+    'blog-template-functions.php', // Blog 模板逻辑 (TOC / Read Time)
     'duplicate.php',         // 文章复制功能 (Post Duplication)
     'admin-filters.php',     // 后台列表筛选增强
     'seo.php',               // SEO 相关逻辑

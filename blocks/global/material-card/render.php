@@ -75,7 +75,7 @@ $primary_type    = ! empty( $type_slugs ) ? $type_terms[0]->name : get_field_val
     </div>
 
     <div class="material-card-body p-6">
-        <h3 class="material-card-title mb-4 text-h4 text-heading tracking-tight">
+        <h3 class="material-card-title mb-4 text-h4 text-heading tracking-tight text-center">
             <?php the_title(); ?>
         </h3>
 

@@ -17,7 +17,7 @@
 // 接收外部传入的 Query 对象，如果是 include 方式，需要确保变量名一致
 // 建议使用 set_query_var 或 locate_template 传参，或者直接假设 $query 存在
 // 这里做一个简单的兼容性检查
-$query = isset( $args['query'] ) ? $args['query'] : ( isset( $material_query ) ? $material_query : null );
+$query = isset( $args['query'] ) ? $args['query'] : ( isset( $material_query ) ? $material_query : get_query_var( 'material_query', null ) );
 
 if ( ! $query || ! $query instanceof WP_Query ) {
     return;

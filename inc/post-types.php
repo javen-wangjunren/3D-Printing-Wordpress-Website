@@ -69,9 +69,12 @@ function _3dp_register_post_types() {
         'show_ui'            => true,
         'show_in_menu'       => true,
         'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'capability' ),
+        'rewrite'            => array(
+            'slug'       => 'capability',
+            'with_front' => false,
+        ),
         'capability_type'    => 'post',
-        'has_archive'        => true,
+        'has_archive'        => false,
         'hierarchical'       => false,
         'menu_position'      => 5,
         'menu_icon'          => 'dashicons-building', // 图标: 建筑/工厂
@@ -107,9 +110,12 @@ function _3dp_register_post_types() {
         'show_ui'            => true,
         'show_in_menu'       => true,
         'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'material' ),
+        'rewrite'            => array(
+            'slug'       => 'material',
+            'with_front' => false,
+        ),
         'capability_type'    => 'post',
-        'has_archive'        => true,
+        'has_archive'        => false,
         'hierarchical'       => false,
         'menu_position'      => 6,
         'menu_icon'          => 'dashicons-palmtree', // 图标: 自然/材料
@@ -146,13 +152,16 @@ function _3dp_register_post_types() {
         'show_in_menu'       => true,
         'show_in_nav_menus'  => true,
         'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'surface-finish' ),
+        'rewrite'            => array(
+            'slug'       => 'surface-finish',
+            'with_front' => false,
+        ),
         'capability_type'    => 'post',
-        'has_archive'        => true,
+        'has_archive'        => false,
         'hierarchical'       => false,
         'menu_position'      => 7,
         'menu_icon'          => 'dashicons-art', // 图标: 艺术/表面
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ), // 支持 Editor 方便写简单描述
+        'supports'           => array( 'title', 'thumbnail', 'excerpt', 'custom-fields' ), // Removed 'editor' to force disable Gutenberg
         'show_in_rest'       => true,
     ) );
 
@@ -184,13 +193,16 @@ function _3dp_register_post_types() {
         'show_in_menu'       => true,
         'show_in_nav_menus'  => true,
         'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'solution' ),
+        'rewrite'            => array(
+            'slug'       => 'solution',
+            'with_front' => false,
+        ),
         'capability_type'    => 'post',
-        'has_archive'        => true,
+        'has_archive'        => false,
         'hierarchical'       => false,
         'menu_position'      => 8,
         'menu_icon'          => 'dashicons-lightbulb', // 图标: 解决方案/灯泡
-        'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt', 'custom-fields' ),
+        'supports'           => array( 'title', 'thumbnail', 'excerpt', 'custom-fields' ),
         'show_in_rest'       => true,
     ) );
 }

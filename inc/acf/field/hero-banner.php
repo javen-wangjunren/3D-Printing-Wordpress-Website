@@ -51,18 +51,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     ),
                 ),
                 array(
-                    'key'               => 'field_hero_subtitle',
-                    'label'             => __( 'Subtitle', '3d-printing' ),
-                    'name'              => 'hero_subtitle',
-                    'type'              => 'text',
-                    'instructions'      => __( 'A supporting sub-headline.', '3d-printing' ),
-                    'required'          => 0,
-                    'default_value'     => __( 'Get Quality Parts at the Best Price', '3d-printing' ),
-                    'wrapper'           => array(
-                        'width' => '100',
-                    ),
-                ),
-                array(
                     'key'               => 'field_hero_description',
                     'label'             => __( 'Description', '3d-printing' ),
                     'name'              => 'hero_description',
@@ -172,45 +160,6 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'wrapper'           => array(
                         'width' => '50',
                     ),
-                ),
-                // Colors - Grouped for compactness
-                array(
-                    'key'               => 'field_hero_background_color',
-                    'label'             => __( 'Background Color', '3d-printing' ),
-                    'name'              => 'hero_background_color',
-                    'type'              => 'color_picker',
-                    'instructions'      => __( 'Set a custom background color for the section. (Default: #f3f4f7)', '3d-printing' ),
-                    'required'          => 0,
-                    'default_value'     => '#f3f4f7', // Updated default to match theme
-                    'enable_opacity'    => 1,
-                    'return_format'     => 'string',
-                    'wrapper'           => array(
-                        'width' => '50',
-                    ),
-                ),
-                array(
-                    'key'               => 'field_hero_text_color',
-                    'label'             => __( 'Text', '3d-printing' ),
-                    'name'              => 'hero_text_color',
-                    'type'              => 'color_picker',
-                    'default_value'     => '#000000',
-                    'wrapper'           => array( 'width' => '25' ),
-                ),
-                array(
-                    'key'               => 'field_hero_btn_p_color',
-                    'label'             => __( 'Btn Primary', '3d-printing' ),
-                    'name'              => 'hero_primary_button_color',
-                    'type'              => 'color_picker',
-                    'default_value'     => '#0073aa',
-                    'wrapper'           => array( 'width' => '25' ),
-                ),
-                array(
-                    'key'               => 'field_hero_btn_s_color',
-                    'label'             => __( 'Btn Secondary', '3d-printing' ),
-                    'name'              => 'hero_secondary_button_color',
-                    'type'              => 'color_picker',
-                    'default_value'     => '#ffffff',
-                    'wrapper'           => array( 'width' => '25' ),
                 ),
             ),
         ) );

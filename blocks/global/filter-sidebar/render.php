@@ -52,6 +52,7 @@ global $wpdb;
     $sidebar_subtitle_template = (string) get_field_value('filter_sidebar_subtitle', $block, $clone_name, $pfx, '');
     $search_placeholder = (string) get_field_value('filter_sidebar_search_placeholder', $block, $clone_name, $pfx, '');
     $sidebar_subtitle = $sidebar_subtitle_template ? str_replace( '{count}', (string) $material_count, $sidebar_subtitle_template ) : '';
+    $current_search = isset( $_GET['q'] ) ? trim( sanitize_text_field( (string) $_GET['q'] ) ) : '';
 
     $terms_hide_empty = $include_empty_terms ? false : true;
 
@@ -122,7 +123,7 @@ global $wpdb;
     data-default-cost="<?php echo esc_attr( $default_cost_str ); ?>"
     data-default-lead-time="<?php echo esc_attr( $default_lead_time_str ); ?>"
 >
-
+    
     <header class="mb-6 space-y-1">
         <?php if ( $sidebar_title ) : ?>
             <h3 class="text-xl text-heading font-bold tracking-tight mb-1">
@@ -138,16 +139,17 @@ global $wpdb;
     </header>
 
     <div class="mb-8">
-        <div class="relative group">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted group-focus-within:text-primary transition-colors duration-200">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </div>
+        <div class="relative">
             <input
                 type="search"
-                class="block w-full rounded-lg border border-border bg-gray-50/50 pl-10 pr-3 py-2.5 text-sm text-heading placeholder:text-muted/80 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-all duration-200"
+                class="block w-full rounded-lg border border-border bg-gray-50/50 pl-3 pr-12 py-2.5 text-sm text-heading placeholder:text-muted/80 focus:border-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-primary transition-all duration-200"
                 data-filter-search
+                value="<?php echo esc_attr( $current_search ); ?>"
                 placeholder="<?php echo esc_attr( $search_placeholder ); ?>"
             />
+            <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 text-muted hover:text-primary transition-colors" data-filter-search-submit aria-label="Search">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-5.2-5.2m1.2-4.3a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
         </div>
     </div>
 
@@ -256,33 +258,55 @@ global $wpdb;
     
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.querySelector('[data-filter-sidebar]');
-        if (!sidebar) return;
+        const sidebars = document.querySelectorAll('[data-filter-sidebar]');
+        if (!sidebars.length) return;
 
-        const checkboxes = sidebar.querySelectorAll('input[type="checkbox"]');
-        
-        function updateFilters() {
-            const params = new URLSearchParams(window.location.search);
-            
-            // Reset pagination when filtering
-            params.delete('paged');
+        sidebars.forEach(sidebar => {
+            const checkboxes = sidebar.querySelectorAll('input[type="checkbox"]');
+            const searchInput = sidebar.querySelector('[data-filter-search]');
+            const searchSubmit = sidebar.querySelector('[data-filter-search-submit]');
 
-            const groups = ['process', 'type', 'cost'];
-            groups.forEach(group => {
-                const checked = Array.from(sidebar.querySelectorAll(`input[data-filter="${group}"]:checked`))
-                    .map(cb => cb.value);
-                if (checked.length > 0) {
-                    params.set(group, checked.join(','));
+            function updateFilters() {
+                const params = new URLSearchParams(window.location.search);
+                params.delete('paged');
+
+                const q = searchInput ? (searchInput.value || '').trim() : '';
+                if (q) {
+                    params.set('q', q);
                 } else {
-                    params.delete(group);
+                    params.delete('q');
                 }
-            });
-            
-            window.location.search = params.toString();
-        }
 
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', updateFilters);
+                const groups = ['process', 'type', 'cost'];
+                groups.forEach(group => {
+                    const checked = Array.from(sidebar.querySelectorAll(`input[data-filter="${group}"]:checked`)).map(cb => cb.value);
+                    if (checked.length > 0) {
+                        params.set(group, checked.join(','));
+                    } else {
+                        params.delete(group);
+                    }
+                });
+
+                window.location.search = params.toString();
+            }
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateFilters);
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Enter') return;
+                    e.preventDefault();
+                    updateFilters();
+                });
+            }
+
+            if (searchSubmit) {
+                searchSubmit.addEventListener('click', () => {
+                    updateFilters();
+                });
+            }
         });
     });
     </script>

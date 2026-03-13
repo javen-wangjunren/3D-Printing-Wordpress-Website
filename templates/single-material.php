@@ -85,7 +85,8 @@ get_header(); ?>
             // 数据源: 当前文章 ACF 字段 (prefix: mat_tech_specs_)
             _3dp_render_block( 'blocks/global/technical-specs/render', array( 
                 'id'     => 'specifications', 
-                'prefix' => 'mat_tech_specs_' 
+                'prefix' => 'mat_tech_specs_',
+                'background_color' => '#f8f9fb'
             ) );
 
             // --- 4. Manufacturing Capabilities Module ---
@@ -108,11 +109,13 @@ get_header(); ?>
             // --- 6. Related Blog Module ---
             // 数据源: 根据 Tags 自动匹配
             // 状态: 传入当前 material 上下文，供模块内部查询使用
+            /*
             _3dp_render_block( 'blocks/global/related-blog/render', array( 
                 'id'               => 'related-stories', 
                 'prefix'           => 'mat_related_blog_',
                 'current_material' => $current_material // Explicitly pass context
             ) );
+             */
 
         endwhile;
     }

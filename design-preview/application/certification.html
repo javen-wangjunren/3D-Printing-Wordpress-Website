@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Certification & Quality</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        industrial: '#1D2938',
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 
+                        'card': '12px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .industrial-h2 { letter-spacing: -0.5px; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-12 lg:py-16 bg-bg-subtle overflow-hidden">
+    <div class="w-[90%] lg:w-[1280px] mx-auto px-6">
+        
+        <div class="mb-8 text-center">
+            <h2 class="industrial-h2 text-[24px] lg:text-[28px] font-bold text-heading">
+                Certification <span class="text-primary">&</span> Quality Assurance
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            <div class="rounded-[12px] border border-border overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1560472355-536de3962603?auto=format&fit=crop&q=90&w=1200" alt="ISO 9001 Certificate" class="block w-full h-[350px] lg:h-[450px] object-cover" />
+            </div>
+            <div class="rounded-[12px] border border-border overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=90&w=1200" alt="RoHS Certificate" class="block w-full h-[350px] lg:h-[450px] object-cover" />
+            </div>
+            <div class="rounded-[12px] border border-border overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=90&w=1200" alt="Medical Grade Certificate" class="block w-full h-[350px] lg:h-[450px] object-cover" />
+            </div>
+        </div>
+
+        <p class="mt-8 text-center text-muted text-[13px]">
+            All materials and processes meet international quality standards for industrial applications.
+        </p>
+
+    </div>
+</section>
+
+</body>
+</html>

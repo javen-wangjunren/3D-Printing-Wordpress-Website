@@ -28,12 +28,21 @@ if ( empty( $pfx ) ) {
     // Global Settings Mode
     $global_data = get_field('global_order_process', 'option');
     if ( $global_data ) {
-        $title = isset($global_data['order_process_title']) ? (string)$global_data['order_process_title'] : '';
-        $description = isset($global_data['order_process_description']) ? (string)$global_data['order_process_description'] : '';
-        $steps = isset($global_data['order_process_steps']) ? $global_data['order_process_steps'] : array();
+        $op_data = ( isset( $global_data['op_clone'] ) && is_array( $global_data['op_clone'] ) ) ? $global_data['op_clone'] : $global_data;
+        $title = isset($op_data['order_process_title']) ? (string)$op_data['order_process_title'] : '';
+        $description = isset($op_data['order_process_description']) ? (string)$op_data['order_process_description'] : '';
+        $steps = isset($op_data['order_process_steps']) ? $op_data['order_process_steps'] : array();
         
-        $anchor_id = isset($global_data['order_process_anchor_id']) ? (string)$global_data['order_process_anchor_id'] : '';
-        $custom_class = isset($global_data['order_process_custom_class']) ? (string)$global_data['order_process_custom_class'] : '';
+        $anchor_id = isset($op_data['order_process_anchor_id']) ? (string)$op_data['order_process_anchor_id'] : '';
+        $custom_class = isset($op_data['order_process_custom_class']) ? (string)$op_data['order_process_custom_class'] : '';
+    } else {
+        // Fallback for legacy flat fields
+        $title        = (string) get_field( 'order_process_title', 'option' );
+        $description  = (string) get_field( 'order_process_description', 'option' );
+        $steps_flat   = get_field( 'order_process_steps', 'option' );
+        $steps        = is_array( $steps_flat ) ? $steps_flat : array();
+        $anchor_id    = (string) get_field( 'order_process_anchor_id', 'option' );
+        $custom_class = (string) get_field( 'order_process_custom_class', 'option' );
     }
 } else {
     // Local/Page Builder Mode

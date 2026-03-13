@@ -19,13 +19,24 @@ $custom_class = get_field('wcu_custom_class');
 if (empty($tabs)) {
     $global_data = get_field('global_why_choose_us', 'option');
     if ($global_data) {
-        $main_title = $main_title ?: ($global_data['wcu_main_title'] ?? '');
-        $card_label = $card_label ?: ($global_data['wcu_card_label'] ?? '');
-        $tabs = $tabs ?: ($global_data['wcu_tabs'] ?? array());
-        $cta_page = $cta_page ?: ($global_data['wcu_cta_page'] ?? '');
-        $cta_text = $cta_text ?: ($global_data['wcu_cta_text'] ?? '');
-        $anchor_id = $anchor_id ?: ($global_data['wcu_anchor_id'] ?? '');
-        $custom_class = $custom_class ?: ($global_data['wcu_custom_class'] ?? '');
+        $wcu_data = ( isset( $global_data['wcu_clone'] ) && is_array( $global_data['wcu_clone'] ) ) ? $global_data['wcu_clone'] : $global_data;
+        $main_title = $main_title ?: ($wcu_data['wcu_main_title'] ?? '');
+        $card_label = $card_label ?: ($wcu_data['wcu_card_label'] ?? '');
+        $tabs = $tabs ?: ($wcu_data['wcu_tabs'] ?? array());
+        $cta_page = $cta_page ?: ($wcu_data['wcu_cta_page'] ?? '');
+        $cta_text = $cta_text ?: ($wcu_data['wcu_cta_text'] ?? '');
+        $anchor_id = $anchor_id ?: ($wcu_data['wcu_anchor_id'] ?? '');
+        $custom_class = $custom_class ?: ($wcu_data['wcu_custom_class'] ?? '');
+    } else {
+        // Fallback for legacy flat option fields
+        $main_title = $main_title ?: ( get_field('wcu_main_title', 'option') ?: '' );
+        $card_label = $card_label ?: ( get_field('wcu_card_label', 'option') ?: '' );
+        $tabs_flat  = get_field('wcu_tabs', 'option');
+        $tabs       = $tabs ?: ( is_array($tabs_flat) ? $tabs_flat : array() );
+        $cta_page   = $cta_page ?: ( get_field('wcu_cta_page', 'option') ?: '' );
+        $cta_text   = $cta_text ?: ( get_field('wcu_cta_text', 'option') ?: '' );
+        $anchor_id  = $anchor_id ?: ( get_field('wcu_anchor_id', 'option') ?: '' );
+        $custom_class = $custom_class ?: ( get_field('wcu_custom_class', 'option') ?: '' );
     }
 }
 
@@ -145,8 +156,7 @@ $GLOBALS['3dp_last_bg'] = '#ffffff';
             <div class="flex-1 bg-white border border-border rounded-xl p-8 lg:p-12 flex flex-col">
                 <!-- Visual Asset -->
                 <div class="h-[300px] lg:h-[450px] overflow-hidden rounded-[20px] bg-industrial relative shadow-inner">
-                    <img :src="content[activeTab].img" class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-1000">
-                    <div class="absolute inset-0 bg-gradient-to-t from-industrial/40 to-transparent"></div>
+                    <img loading="lazy" :src="content[activeTab].img" class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-1000" sizes="(min-width: 1024px) 800px, 100vw">                    <div class="absolute inset-0 bg-gradient-to-t from-industrial/40 to-transparent"></div>
                 </div>
 
                 <!-- Data Matrix -->

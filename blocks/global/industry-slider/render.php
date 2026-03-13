@@ -14,11 +14,12 @@ $clone_name = rtrim($pfx, '_');
 // --- 1. Data Scope ---
 // Fetch Global Options Data
 $global_data = get_field('global_industry_slider', 'option');
+$is_data = ( isset( $global_data['is_clone'] ) && is_array( $global_data['is_clone'] ) ) ? $global_data['is_clone'] : $global_data;
 
 // Priority: Local Block Data > Global Options Data
-$heading = get_field('title') ?: ($global_data['title'] ?? 'Industries We Serve');
-$description = get_field('desc') ?: ($global_data['desc'] ?? '');
-$items = get_field('items') ?: ($global_data['items'] ?? []);
+$heading = get_field('title') ?: ($is_data['title'] ?? 'Industries We Serve');
+$description = get_field('desc') ?: ($is_data['desc'] ?? '');
+$items = get_field('items') ?: ($is_data['items'] ?? []);
 
 $bg_color = get_field_value('bg_color', $block, $clone_name, $pfx, '#ffffff');
 

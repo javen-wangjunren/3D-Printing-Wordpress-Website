@@ -101,17 +101,25 @@ $id_attr = 'id="' . esc_attr($final_id) . '"';
             <div class="grid lg:grid-cols-2 gap-12 items-center group">
                 
                 <!-- Image Column -->
-                <div class="relative rounded-card overflow-hidden border border-border shadow-xl shadow-primary/5 tech-overlay h-[400px] lg:h-[480px] <?php echo $is_odd ? 'lg:order-last' : ''; ?>">
+                <div class="relative rounded-card overflow-hidden border border-border bg-panel shadow-xl shadow-primary/5 tech-overlay h-[400px] lg:h-[480px] <?php echo $is_odd ? 'lg:order-last' : ''; ?>">
                     <!-- Scanline Animation (CSS in style.css) -->
                     <div class="scanline" style="<?php echo $is_odd ? 'animation-delay: 2s;' : ''; ?>"></div>
                     
                     <?php if ( $image ) : ?>
-                        <img src="<?php echo esc_url($image['url']); ?>" 
-                             width="<?php echo esc_attr($image['width']); ?>"
-                             height="<?php echo esc_attr($image['height']); ?>"
-                             alt="<?php echo esc_attr($image['alt']); ?>" 
-                             class="w-full h-full object-cover"
-                             loading="lazy">
+						<?php
+						$image_id = isset( $image['ID'] ) ? (int) $image['ID'] : 0;
+						?>
+						<?php if ( $image_id ) : ?>
+							<?php
+							echo wp_get_attachment_image( $image_id, 'large', false, array(
+								'class'   => 'w-full h-full object-cover object-center',
+								'loading' => 'lazy',
+								'sizes'   => '(min-width: 1024px) 800px, 100vw',
+							) );
+							?>
+						<?php else : ?>
+							<img loading="lazy" src="<?php echo esc_url( $image['url'] ); ?>" alt="" class="w-full h-full object-cover object-center" sizes="(min-width: 1024px) 800px, 100vw" />
+						<?php endif; ?>
                     <?php endif; ?>
 
                     <!-- Corner Accents -->

@@ -36,6 +36,8 @@ function get_the_title( $post_id = 0 ) { return ''; }
 function get_post_thumbnail_id( $post_id = 0 ) { return 0; }
 function has_post_thumbnail( $post = null ) { return false; }
 function get_the_post_thumbnail( $post = null, $size = 'post-thumbnail', $attr = array() ) { return ''; }
+function get_avatar_url( $id_or_email, $args = array() ) { return ''; }
+function get_the_author_meta( $field = '', $user_id = false ) { return ''; }
 function wp_get_attachment_image_url( $id, $size = 'thumbnail' ) { return ''; }
 function wp_get_attachment_image( $id, $size = 'thumbnail', $icon = false, $attr = array() ) { return ''; }
 function wp_get_post_terms( $post_id, $taxonomy, $args = array() ) { return array(); }

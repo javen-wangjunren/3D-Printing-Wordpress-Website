@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3DPROTO - Configurable Commercial Params</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
@@ -20,29 +20,44 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace']
+                    },
+                    maxWidth: {
+                        'container': '1280px'
+                    },
+                    padding: {
+                        'container': '2rem'
                     }
                 }
             }
         }
     </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .text-heading {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #1D2938;
+        }
+    </style>
 </head>
 <body class="bg-white font-sans antialiased text-industrial">
 
-<section class="py-24 bg-white" x-data="{
+<section class="py-24 bg-[#f3f4f7]" x-data="{
     /* 这里是配置中心：针对不同页面只需修改此数组 */
     /* 场景：Vapor Polishing (注重质量与价值) */
     params: [
         { 
             icon: 'M13 10V3L4 14h7v7l9-11h-7z', 
             label: 'Value Addition', 
-            value: '[ HIGH_IMPACT ]', 
+            value: 'HIGH IMPACT', 
             desc: 'Significantly increases the aesthetic value and air-tightness of parts.',
             type: 'standard'
         },
         { 
             icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 
             label: 'Yield Assurance', 
-            value: '[ 99.2% YIELD ]', 
+            value: '99.2% YIELD', 
             desc: 'Controlled chemical process ensures maximum repeatability across large batches.',
             type: 'standard'
         },
@@ -55,38 +70,44 @@
         }
     ]
 }">
-    <div class="w-[90%] lg:w-[80%] mx-auto">
+    <div class="max-w-container mx-auto px-container">
         
+        <!-- Header -->
         <div class="mb-16">
-            <h3 class="text-[36px] font-extrabold tracking-tighter leading-none">
-                Procurement <span class="text-primary italic">Strategy Guide</span>
+            <h3 class="text-heading text-3xl md:text-4xl">
+                Procurement <span class="text-primary">Strategy Guide</span>
             </h3>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <template x-for="p in params" :key="p.label">
-                <div class="p-10 border border-border rounded-[32px] hover:border-primary transition-all duration-300 group flex flex-col bg-white">
-                    <div class="mb-8 w-12 h-12 rounded-2xl bg-panel flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="p.icon"></path>
-                        </svg>
+                <div class="p-8 border border-border rounded-xl hover:border-primary hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group flex flex-col bg-white">
+                    
+                    <!-- Icon & Label Row -->
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-panel group-hover:bg-primary/10 flex items-center justify-center text-industrial/40 group-hover:text-primary transition-colors shrink-0">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="p.icon"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-sm font-bold uppercase tracking-widest text-industrial/50 group-hover:text-primary/80 transition-colors" x-text="p.label"></h4>
                     </div>
 
-                    <h4 class="text-[14px] font-extrabold uppercase tracking-widest text-industrial/40 mb-4" x-text="p.label"></h4>
-
-                    <div class="mb-6 h-10 flex items-center">
+                    <!-- Value -->
+                    <div class="mb-4">
                         <template x-if="p.type === 'standard'">
-                            <span class="font-mono text-[24px] lg:text-[28px] font-extrabold text-primary" x-text="p.value"></span>
+                            <span class="font-mono text-2xl font-bold text-industrial group-hover:text-primary transition-colors" x-text="p.value"></span>
                         </template>
                         <template x-if="p.type === 'cost'">
-                            <div class="flex items-center gap-1">
-                                <span class="font-mono text-[28px] font-extrabold text-primary" x-text="p.value"></span>
-                                <span class="font-mono text-[28px] font-extrabold text-industrial/10">$$$</span>
+                            <div class="flex items-center gap-1 font-mono text-2xl font-bold">
+                                <span class="text-industrial group-hover:text-primary transition-colors" x-text="p.value"></span>
+                                <span class="text-industrial/20">$$$</span>
                             </div>
                         </template>
                     </div>
 
-                    <p class="text-[14px] text-industrial/60 leading-relaxed font-medium" x-text="p.desc"></p>
+                    <!-- Description -->
+                    <p class="text-sm text-industrial/70 leading-relaxed" x-text="p.desc"></p>
                 </div>
             </template>
         </div>

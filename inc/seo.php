@@ -3,22 +3,21 @@
  * SEO & Metadata Enhancements (SEO 增强与面包屑管理)
  * ==========================================================================
  * 文件作用:
- * 负责全站的 SEO 相关辅助逻辑，最主要的功能是**统一渲染面包屑导航**。
- * 它作为一个“胶水层”，适配不同的 SEO 插件（SEOPress, Yoast, RankMath），
- * 并强制应用主题统一的工业风样式。
+ * 统一输出主题级面包屑导航（含 JSON-LD BreadcrumbList），用于替代 SEO 插件的面包屑。
+ * 当前项目采用 Hub & Spoke 信息架构：CPT 单页 → 对应 Hub 列表页（非 taxonomy archive）。
  *
  * 核心逻辑:
- * 1. 挂载到 `generate_after_header` 钩子，自动在 Header 下方输出。
- * 2. 检测当前激活的 SEO 插件（优先级: SEOPress > Yoast > RankMath）。
- * 3. 使用 Tailwind CSS 统一包裹容器和文字样式，确保视觉一致性。
+ * 1. custom_breadcrumbs()：按页面类型生成 crumbs，并渲染 nav（Tailwind 样式可传参覆盖）。
+ * 2. 自动注入 BreadcrumbList JSON-LD（同一请求只输出一次，避免重复 schema）。
  *
  * 架构角色:
- * [View Layer - Component Adapter]
- * 它将第三方插件的输出（数据）适配到当前主题的 UI 系统（视图）中。
+ * [View Layer - SEO Utility]
+ * 将导航路径结构化（可视 + 机器可读），与 Tailwind 设计系统对齐，减少插件依赖与样式冲突。
  * 
  * 🚨 避坑指南:
- * 1. 样式冲突: 如果 SEO 插件本身开启了“添加样式”，请在插件设置中关闭，完全交由本文件控制 CSS。
- * 2. 首页隐藏: 逻辑中已包含 `is_front_page()` 判断，首页不会显示面包屑。
+ * 1. 不做 taxonomy archive：面包屑不要输出分类页链接（例如 blog category）。
+ * 2. Hub 链接优先动态解析（get_page_by_path），仅在明确要求时才写固定 path。
+ * 3. 若在同一页面多处调用 custom_breadcrumbs()，schema 只会输出一次。
  * ==========================================================================
  * 
  * @package GeneratePress
@@ -29,71 +28,196 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * ==============================================================================
- * Breadcrumbs Implementation (面包屑导航 - 工业风 Utility Bar)
- * ==============================================================================
- * 
- * 逻辑:
- * 1. 排除首页。
- * 2. 依次检查 SEOPress, Yoast, RankMath 是否存在。
- * 3. 如果存在，输出统一的 HTML 容器 wrapper。
- * 4. 调用插件函数输出面包屑 HTML。
- * 
- * @hook generate_after_header (Priority 20: 确保在 Header 之后，Main Content 之前)
+ * I. 辅助函数（内部使用）
+ * - 仅做轻量计算与 permalink 解析，严禁查询大规模数据
  */
-add_action( 'generate_after_header', function() {
-    
-    // 1. Never show on Front Page (首页不显示面包屑)
-    if ( is_front_page() ) {
-        return;
-    }
+function _3dp_breadcrumbs_resolve_page_url_by_paths( $paths ) {
+	static $cache = array();
 
-    // 定义统一的容器样式 (Utility Bar Style)
-    // - w-full bg-bg-page border-b: 全宽背景带下划线
-    // - max-w-container: 内容居中对齐
-    // - font-mono uppercase: 工业风字体
-    $wrapper_start = '<div class="w-full bg-bg-page border-b border-border">';
-    $wrapper_inner = '<div class="max-w-container mx-auto px-container py-2 lg:py-3">';
-    $wrapper_end   = '</div></div>';
-    
-    // 定义统一的文字排版样式
-    // - text-[11px]: 小号字体
-    // - text-muted: 弱化颜色
-    // - [&_a:hover]:text-primary: 链接悬停高亮
-    $typography_class = 'text-[11px] lg:text-xs font-mono text-muted uppercase tracking-wider leading-none [&_a]:text-muted [&_a:hover]:text-primary [&_.sep]:px-2';
+	foreach ( (array) $paths as $path ) {
+		$path = is_string( $path ) ? trim( $path ) : '';
+		if ( '' === $path ) {
+			continue;
+		}
 
-    // 2. Check for SEOPress (Priority 1)
-    if ( function_exists( 'seopress_display_breadcrumbs' ) ) {
-        echo $wrapper_start . $wrapper_inner;
-        echo '<div class="' . $typography_class . '">';
-        seopress_display_breadcrumbs();
-        echo '</div>';
-        echo $wrapper_end;
-        return;
-    }
+		if ( array_key_exists( $path, $cache ) ) {
+			if ( $cache[ $path ] ) {
+				return $cache[ $path ];
+			}
+			continue;
+		}
 
-    // 3. Check for Yoast SEO (Priority 2)
-    if ( function_exists( 'yoast_breadcrumb' ) ) {
-        echo $wrapper_start . $wrapper_inner;
-        yoast_breadcrumb( 
-            '<p id="breadcrumbs" class="' . $typography_class . '">',
-            '</p>' 
-        );
-        echo $wrapper_end;
-        return;
-    }
+		$page = get_page_by_path( $path );
+		$cache[ $path ] = $page ? get_permalink( $page->ID ) : '';
 
-    // 4. Check for RankMath (Priority 3)
-    if ( function_exists( 'rank_math_the_breadcrumbs' ) ) {
-        echo $wrapper_start . $wrapper_inner;
-        // RankMath 自带 wrapper，但我们可以在外面再包一层来控制布局
-        echo '<div class="' . $typography_class . '">';
-        rank_math_the_breadcrumbs();
-        echo '</div>';
-        echo $wrapper_end;
-    }
+		if ( $cache[ $path ] ) {
+			return $cache[ $path ];
+		}
+	}
 
-}, 20 );
+	return '';
+}
+
+function _3dp_breadcrumbs_current_url() {
+	$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '/';
+	$request_uri = strtok( $request_uri, '?' );
+	return home_url( $request_uri ? $request_uri : '/' );
+}
+
+function _3dp_breadcrumbs_build_crumbs( $home_label ) {
+	$crumbs = array(
+		array(
+			'label' => (string) $home_label,
+			'url'   => home_url( '/' ),
+		),
+	);
+
+	if ( is_singular( 'material' ) ) {
+		$crumbs[] = array(
+			'label' => 'All Materials',
+			'url'   => _3dp_breadcrumbs_resolve_page_url_by_paths( array( 'all-materials' ) ),
+		);
+		$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+		return $crumbs;
+	}
+
+	if ( is_singular( 'capability' ) ) {
+		$crumbs[] = array(
+			'label' => 'All Capabilities',
+			'url'   => _3dp_breadcrumbs_resolve_page_url_by_paths( array( 'all-capabilities' ) ),
+		);
+		$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+		return $crumbs;
+	}
+
+	if ( is_singular( 'surface-finish' ) ) {
+		$crumbs[] = array(
+			'label' => 'All Surface Finishes',
+			'url'   => _3dp_breadcrumbs_resolve_page_url_by_paths( array( 'all-surface-finish', 'all-surface-finishes' ) ),
+		);
+		$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+		return $crumbs;
+	}
+
+	if ( is_singular( 'solution' ) ) {
+		$crumbs[] = array(
+			'label' => 'All Solutions',
+			'url'   => _3dp_breadcrumbs_resolve_page_url_by_paths( array( 'all-solutions', 'solutions' ) ),
+		);
+		$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+		return $crumbs;
+	}
+
+	if ( is_singular( 'post' ) ) {
+		$crumbs[] = array(
+			'label' => 'All Blogs',
+			'url'   => home_url( '/blogs/' ),
+		);
+		$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+		return $crumbs;
+	}
+
+	if ( is_home() ) {
+		$crumbs[] = array( 'label' => 'All Blogs', 'url' => '' );
+		return $crumbs;
+	}
+
+	if ( is_page() ) {
+		$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+		return $crumbs;
+	}
+
+	$crumbs[] = array( 'label' => get_the_title(), 'url' => '' );
+	return $crumbs;
+}
+
+function _3dp_breadcrumbs_render_schema_once( $crumbs ) {
+	static $schema_printed = false;
+	if ( $schema_printed ) {
+		return;
+	}
+	$schema_printed = true;
+
+	$schema_items = array();
+	$position     = 1;
+	$current_url  = _3dp_breadcrumbs_current_url();
+
+	foreach ( $crumbs as $item ) {
+		$label = isset( $item['label'] ) ? (string) $item['label'] : '';
+		$url   = ! empty( $item['url'] ) ? (string) $item['url'] : $current_url;
+
+		if ( '' === $label ) {
+			continue;
+		}
+
+		$schema_items[] = array(
+			'@type'    => 'ListItem',
+			'position' => $position,
+			'name'     => $label,
+			'item'     => $url,
+		);
+		$position++;
+	}
+
+	$schema_data = array(
+		'@context'        => 'https://schema.org',
+		'@type'           => 'BreadcrumbList',
+		'itemListElement' => $schema_items,
+	);
+
+	echo "\n" . '<script type="application/ld+json">' . wp_json_encode( $schema_data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+}
+
+/**
+ * II. 对外函数（模板调用）
+ */
+function custom_breadcrumbs( $args = array() ) {
+	if ( is_front_page() ) {
+		return;
+	}
+
+	$args = wp_parse_args( $args, array(
+		'nav_class'     => 'text-small text-muted mb-4 leading-snug flex items-center flex-wrap gap-2',
+		'link_class'    => 'text-muted hover:text-primary transition-colors',
+		'current_class' => 'text-heading font-medium',
+		'sep_html'      => '<span class="text-muted/60">/</span>',
+		'home_label'    => 'Home',
+	) );
+
+	$crumbs = _3dp_breadcrumbs_build_crumbs( (string) $args['home_label'] );
+
+	echo '<nav aria-label="breadcrumb" class="' . esc_attr( $args['nav_class'] ) . '">';
+
+	$total = count( $crumbs );
+	foreach ( $crumbs as $index => $item ) {
+		$is_last = ( $index === $total - 1 );
+		$label   = isset( $item['label'] ) ? (string) $item['label'] : '';
+		$url     = isset( $item['url'] ) ? (string) $item['url'] : '';
+
+		if ( '' === $label ) {
+			continue;
+		}
+
+		if ( $index > 0 ) {
+			echo $args['sep_html'];
+		}
+
+		if ( $is_last ) {
+			echo '<span class="' . esc_attr( $args['current_class'] ) . '">' . esc_html( $label ) . '</span>';
+			continue;
+		}
+
+		if ( $url ) {
+			echo '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $args['link_class'] ) . '">' . esc_html( $label ) . '</a>';
+		} else {
+			echo '<span class="' . esc_attr( $args['link_class'] ) . '">' . esc_html( $label ) . '</span>';
+		}
+	}
+
+	echo '</nav>';
+
+	_3dp_breadcrumbs_render_schema_once( $crumbs );
+}
 
 /**
  * ==============================================================================

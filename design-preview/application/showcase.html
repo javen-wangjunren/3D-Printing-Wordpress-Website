@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3DPROTO - Typical Use Cases</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            important: true,
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { DEFAULT: '#0047AB', hover: '#003A8C' },
+                        industrial: '#1D2938',
+                        heading: '#1D2938',
+                        body: '#667085',
+                        muted: '#98A2B3',
+                        border: '#E4E7EC',
+                        'bg-subtle': '#F8F9FB'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    borderRadius: { 
+                        'card': '12px',
+                        'button': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .industrial-h2 { letter-spacing: -0.5px; }
+    </style>
+</head>
+<body class="bg-white font-sans text-body antialiased">
+
+<section class="py-16 lg:py-24 bg-white overflow-hidden" 
+         x-data="{ 
+             activeIndex: null,
+             cases: [
+                 { title: 'Surgical Guide', process: 'SLA', material: 'Surgical Guide Resin', img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'Custom Prosthetic', process: 'SLM', material: 'Titanium Ti-6Al-4V', img: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'Anatomy Model', process: 'MJP', material: 'Multi-material Photopolymer', img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'End-of-Arm Tooling', process: 'SLS', material: 'Nylon PA12', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800' },
+                 { title: 'Lightweight Bracket', process: 'DMLS', material: 'AlSi10Mg Aluminum', img: 'https://images.unsplash.com/photo-1562679299-266d23163f3e?auto=format&fit=crop&q=80&w=800' }
+             ]
+         }">
+    <div class="w-[90%] lg:w-[1280px] mx-auto px-6">
+        
+        <div class="mb-12 lg:mb-16 text-center">
+            <h2 class="industrial-h2 text-[28px] lg:text-[36px] font-bold text-heading mb-3">
+                Typical Use <span class="text-primary">Cases</span>
+            </h2>
+            <p class="text-body text-[15px] max-w-xl mx-auto">
+                Real applications where 3D printing delivers industrial-grade results.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <template x-for="(item, index) in cases" :key="index">
+                <div class="group cursor-pointer"
+                     @mouseenter="activeIndex = index"
+                     @mouseleave="activeIndex = null">
+                    
+                    <div class="relative aspect-[4/3] rounded-[12px] overflow-hidden bg-panel border border-border transition-all duration-300"
+                         :class="activeIndex === index ? 'border-primary border-[3px] shadow-lg shadow-primary/10' : ''">
+                        
+                        <img :src="item.img" 
+                             class="w-full h-full object-cover"
+                             :alt="item.title">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-industrial/70 via-industrial/15 to-transparent transition-opacity duration-300"
+                             :class="activeIndex === index ? 'opacity-90' : 'opacity-60'"></div>
+                        
+                        <div class="absolute bottom-0 left-0 right-0 p-5 transition-all duration-300"
+                             :class="activeIndex === index ? 'translate-y-0' : 'translate-y-4'">
+                            <h3 class="text-white font-bold text-[18px] mb-2" x-text="item.title"></h3>
+                            
+                            <div x-show="activeIndex === index" 
+                                 x-transition:enter="transition ease-out duration-300"
+                                 x-transition:enter-start="opacity-0 translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 x-transition:leave="transition ease-in duration-200"
+                                 x-transition:leave-start="opacity-100 translate-y-0"
+                                 x-transition:leave-end="opacity-0 translate-y-2"
+                                 class="font-mono text-[11px] text-white/90 space-y-1 pt-3 border-t border-white/20">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-white/60">Process:</span>
+                                    <span class="font-semibold text-white" x-text="item.process"></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-white/60">Material:</span>
+                                    <span class="font-semibold text-white" x-text="item.material"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>

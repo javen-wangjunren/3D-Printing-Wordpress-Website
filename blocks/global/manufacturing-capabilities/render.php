@@ -213,8 +213,7 @@ $GLOBALS['3dp_last_bg'] = $bg_color;
             <!-- Image Column (Order 1 on mobile, 2 on desktop) -->
             <div class="aspect-[4/3] lg:aspect-auto lg:h-auto order-1 lg:order-2">
                 <div class="h-full relative rounded-[12px] overflow-hidden border border-border bg-[#F8F9FB] group shadow-sm">
-                    <img :src="tabs[active].image.desktop || tabs[active].image.mobile" :width="tabs[active].image.width" :height="tabs[active].image.height" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System" loading="lazy">
-                </div>
+                    <img :src="tabs[active].image.desktop || tabs[active].image.mobile" :width="tabs[active].image.width" :height="tabs[active].image.height" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700" alt="Manufacturing System" loading="lazy" sizes="(min-width: 1024px) 800px, 100vw">                </div>
             </div>
 
         </div>
