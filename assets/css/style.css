@@ -1330,6 +1330,10 @@ header .border-b,
   margin-top: auto !important;
 }
 
+.mb-14 {
+  margin-bottom: 3.5rem !important;
+}
+
 .line-clamp-2 {
   overflow: hidden !important;
   display: -webkit-box !important;
@@ -1930,6 +1934,16 @@ header .border-b,
   transform: translate3d(var(--tw-translate-x), var(--tw-translate-y), 0) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
+
 .cursor-default {
   cursor: default !important;
 }
@@ -2128,6 +2142,10 @@ header .border-b,
   row-gap: 1.5rem !important;
 }
 
+.gap-y-3 {
+  row-gap: 0.75rem !important;
+}
+
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0 !important;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse)) !important;
@@ -2194,12 +2212,12 @@ header .border-b,
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse)) !important;
 }
 
-.divide-\[\#E4E7EC\] > :not([hidden]) ~ :not([hidden]) {
+.divide-border > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1 !important;
   border-color: rgb(228 231 236 / var(--tw-divide-opacity, 1)) !important;
 }
 
-.divide-border > :not([hidden]) ~ :not([hidden]) {
+.divide-\[\#E4E7EC\] > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-opacity: 1 !important;
   border-color: rgb(228 231 236 / var(--tw-divide-opacity, 1)) !important;
 }
@@ -2533,6 +2551,10 @@ header .border-b,
 .border-yellow-200 {
   --tw-border-opacity: 1 !important;
   border-color: rgb(254 240 138 / var(--tw-border-opacity, 1)) !important;
+}
+
+.border-\[\#0047AB\]\/20 {
+  border-color: rgb(0 71 171 / 0.2) !important;
 }
 
 .border-l-primary {
@@ -3673,6 +3695,16 @@ header .border-b,
   color: rgb(202 138 4 / var(--tw-text-opacity, 1)) !important;
 }
 
+.text-slate-400 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(148 163 184 / var(--tw-text-opacity, 1)) !important;
+}
+
+.text-slate-600 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(71 85 105 / var(--tw-text-opacity, 1)) !important;
+}
+
 .no-underline {
   text-decoration-line: none !important;
 }
@@ -3732,6 +3764,10 @@ header .border-b,
 
 .opacity-\[0\.3\] {
   opacity: 0.3 !important;
+}
+
+.opacity-\[0\.03\] {
+  opacity: 0.03 !important;
 }
 
 .mix-blend-multiply {
@@ -3807,6 +3843,12 @@ header .border-b,
 .shadow-xl {
   --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+}
+
+.shadow-\[0_0_20px_rgba\(0\2c 71\2c 171\2c 0\.1\)\] {
+  --tw-shadow: 0 0 20px rgba(0,71,171,0.1) !important;
+  --tw-shadow-colored: 0 0 20px var(--tw-shadow-color) !important;
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
 }
 
@@ -4181,6 +4223,16 @@ header .border-b,
   background-color: rgb(255 255 255 / 0.9) !important;
 }
 
+.hover\:bg-\[\#003d96\]:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(0 61 150 / var(--tw-bg-opacity, 1)) !important;
+}
+
+.hover\:bg-slate-50:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1)) !important;
+}
+
 .hover\:text-\[\#0047AB\]:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(0 71 171 / var(--tw-text-opacity, 1)) !important;
@@ -4324,6 +4376,12 @@ header .border-b,
 
 .focus-visible\:outline-indigo-600:focus-visible {
   outline-color: #4f46e5 !important;
+}
+
+.active\:scale-\[0\.98\]:active {
+  --tw-scale-x: 0.98 !important;
+  --tw-scale-y: 0.98 !important;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
 .disabled\:opacity-30:disabled {
@@ -4504,6 +4562,10 @@ header .border-b,
     width: 10rem !important;
   }
 
+  .sm\:w-auto {
+    width: auto !important;
+  }
+
   .sm\:max-w-md {
     max-width: 28rem !important;
   }
@@ -4530,6 +4592,11 @@ header .border-b,
 
   .sm\:gap-8 {
     gap: 2rem !important;
+  }
+
+  .sm\:py-32 {
+    padding-top: 8rem !important;
+    padding-bottom: 8rem !important;
   }
 
   .sm\:pb-12 {
@@ -4568,6 +4635,11 @@ header .border-b,
   .sm\:text-xl\/8 {
     font-size: 1.25rem !important;
     line-height: 2rem !important;
+  }
+
+  .sm\:text-5xl {
+    font-size: 3rem !important;
+    line-height: 1 !important;
   }
 }
 
