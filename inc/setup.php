@@ -46,14 +46,43 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 add_action( 'after_setup_theme', function() {
-	// 注册自定义菜单位置
+	// 1. 注册自定义菜单位置
 	register_nav_menus( array(
 		'footer_capabilities' => 'Footer – Capabilities',
 		'footer_materials'    => 'Footer – Materials',
 		'footer_resources'    => 'Footer – Resources',
 		'footer_company'      => 'Footer – Company',
 	) );
+
+    // 2. 启用古腾堡编辑器宽度支持 (Content Width)
+    // 配合下面的 CSS 注入，确保编辑器不会溢出
+    add_theme_support( 'align-wide' );
+    add_theme_support( 'editor-styles' );
 } );
+
+/**
+ * 注入古腾堡编辑器专用样式 (Admin Only)
+ * 强制限制文章编辑区域宽度为 800px，并匹配前端 prose 风格
+ */
+add_action( 'enqueue_block_editor_assets', function() {
+    $custom_css = "
+        /* 限制编辑器主容器宽度 */
+        .interface-interface-skeleton__content .wp-block-post-title,
+        .interface-interface-skeleton__content .block-editor-block-list__layout {
+            max-width: 800px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        /* 针对不同版本的 WordPress/Gutenberg 选择器适配 */
+        .edit-post-visual-editor__content-area .wp-block {
+            max-width: 800px !important;
+        }
+        /* 确保全宽/宽幅块依然能工作但受到 800px 约束（如果需要） */
+        .wp-block[data-align='wide'] { max-width: 1000px !important; }
+        .wp-block[data-align='full'] { max-width: none !important; }
+    ";
+    wp_add_inline_style( 'wp-edit-post', $custom_css );
+}, 100 );
 
 
 /**
@@ -74,10 +103,14 @@ add_filter( 'generate_sidebar_layout', function( $layout ) {
     return 'no-sidebar';
 }, 999 );
 
-// 2. 强制页面容器为 "全宽" (Full Width)
-// 用极大容器宽度配合 max-w-* 保证视觉由我们掌控
+// 2. 强制页面容器逻辑 (GeneratePress 核心)
+// - 页面 (Page) 保持 2000px 全宽，由 Tailwind 接管布局
+// - 文章 (Post) 及其他内容类型恢复正常宽度 (如 800px) 以优化编辑器体验
 add_filter( 'generate_container_width', function( $width ) {
-    return '2000'; // 足够大的值，配合 CSS 的 max-w-full 撑开布局
+    if ( is_singular( 'page' ) || ( is_admin() && isset( $_GET['post'] ) && 'page' === get_post_type( $_GET['post'] ) ) ) {
+        return '2000';
+    }
+    return '800'; // 文章详情页建议阅读宽度
 } );
 
 
