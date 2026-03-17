@@ -1262,6 +1262,10 @@ header .border-b,
   margin-left: 0.5rem !important;
 }
 
+.ml-4 {
+  margin-left: 1rem !important;
+}
+
 .ml-auto {
   margin-left: auto !important;
 }
@@ -1908,6 +1912,11 @@ header .border-b,
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 
+.rotate-45 {
+  --tw-rotate: 45deg !important;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
+}
+
 .scale-100 {
   --tw-scale-x: 1 !important;
   --tw-scale-y: 1 !important;
@@ -2150,6 +2159,12 @@ header .border-b,
   --tw-space-x-reverse: 0 !important;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse)) !important;
   margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse))) !important;
+}
+
+.space-x-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0 !important;
+  margin-right: calc(0.75rem * var(--tw-space-x-reverse)) !important;
+  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse))) !important;
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -2771,6 +2786,11 @@ header .border-b,
 .bg-slate-300 {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(203 213 225 / var(--tw-bg-opacity, 1)) !important;
+}
+
+.bg-slate-50 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(248 250 252 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .bg-transparent {
@@ -3897,6 +3917,10 @@ header .border-b,
   --tw-ring-color: rgb(17 24 39 / 0.1) !important;
 }
 
+.ring-primary\/10 {
+  --tw-ring-color: rgb(0 71 171 / 0.1) !important;
+}
+
 .blur-3xl {
   --tw-blur: blur(64px) !important;
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow) !important;
@@ -4112,6 +4136,11 @@ header .border-b,
 .hover\:border-\[\#0047AB\]:hover {
   --tw-border-opacity: 1 !important;
   border-color: rgb(0 71 171 / var(--tw-border-opacity, 1)) !important;
+}
+
+.hover\:border-border-strong:hover {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(208 213 221 / var(--tw-border-opacity, 1)) !important;
 }
 
 .hover\:border-gray-100:hover {
@@ -4446,6 +4475,10 @@ header .border-b,
   border-color: rgb(0 71 171 / var(--tw-border-opacity, 1)) !important;
 }
 
+.group:hover .group-hover\:border-primary\/30 {
+  border-color: rgb(0 71 171 / 0.3) !important;
+}
+
 .group:hover .group-hover\:bg-primary {
   --tw-bg-opacity: 1 !important;
   background-color: rgb(0 71 171 / var(--tw-bg-opacity, 1)) !important;
@@ -4732,9 +4765,23 @@ header .border-b,
     padding: 1.25rem !important;
   }
 
+  .md\:p-8 {
+    padding: 2rem !important;
+  }
+
+  .md\:px-12 {
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
+  }
+
   .md\:px-3 {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
+  }
+
+  .md\:px-8 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
   }
 
   .md\:py-1\.5 {
@@ -4745,6 +4792,11 @@ header .border-b,
   .md\:text-4xl {
     font-size: 2.25rem !important;
     line-height: 2.5rem !important;
+  }
+
+  .md\:text-5xl {
+    font-size: 3rem !important;
+    line-height: 1 !important;
   }
 
   .md\:text-\[10px\] {
@@ -5193,6 +5245,11 @@ header .border-b,
   .lg\:px-0 {
     padding-left: 0px !important;
     padding-right: 0px !important;
+  }
+
+  .lg\:px-24 {
+    padding-left: 6rem !important;
+    padding-right: 6rem !important;
   }
 
   .lg\:px-6 {
