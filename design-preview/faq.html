@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Module - Industrial 4.0 Aesthetic</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js CDN -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0047AB',
+                        industrial: '#1D2938',
+                        stroke: '#E4E7EC',
+                        surface: '#f3f4f7',
+                    },
+                    borderRadius: {
+                        'ind': '12px',
+                        'ind-sm': '8px',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        
+        /* Custom Accordion Transition */
+        .faq-accordion-item {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Smooth Icon Rotation */
+        .icon-rotate {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-surface antialiased font-sans">
+
+    <!-- FAQ Section -->
+    <section class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+            
+            <!-- Left Column: Intro -->
+            <div class="lg:col-span-4 space-y-8">
+                <div class="space-y-4">
+                    <h2 class="text-5xl font-bold text-industrial leading-[1.1] tracking-tight">
+                        Frequently asked <br>
+                        questions
+                    </h2>
+                </div>
+                
+                <div class="pt-6 border-t border-stroke/60">
+                    <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                        Can't find the answer you're looking for? <br class="hidden md:block">
+                        Our technical team is here to help with your project.
+                    </p>
+                    
+                    <a href="#" class="inline-flex items-center space-x-3 px-8 py-4 bg-industrial text-white rounded-full hover:bg-primary transition-all duration-300 group">
+                        <span class="font-medium">Get in touch</span>
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right Column: Accordion -->
+            <div class="lg:col-span-8 space-y-4" x-data="{ active: 1 }">
+                
+                <!-- FAQ Item 1 -->
+                <div class="faq-accordion-item group border bg-white rounded-ind"
+                    :class="active === 1 ? 'border-primary border-[3px] shadow-lg ring-1 ring-primary/10' : 'border-stroke hover:border-slate-300 shadow-sm'">
+                    <button @click="active = (active === 1 ? null : 1)" 
+                            class="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none">
+                        <span class="text-xl font-bold text-industrial tracking-tight">Where are positions settled?</span>
+                        <div class="flex-shrink-0 ml-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-stroke group-hover:border-primary/30 transition-colors"
+                                 :class="active === 1 ? 'bg-primary/5 border-primary/20' : ''">
+                                <svg class="w-5 h-5 text-industrial transition-transform duration-300 icon-rotate" 
+                                     :class="active === 1 ? 'rotate-45 text-primary' : ''"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v12M6 12h12"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                    <div x-show="active === 1" 
+                         x-collapse.duration.500ms
+                         x-cloak
+                         class="px-6 md:px-8 pb-8">
+                        <div class="text-slate-600 leading-relaxed max-w-2xl text-lg">
+                            Tenor provides an interface to the Morpho protocol, a non-custodial, self-executing onchain protocol that matches lenders and borrowers at fixed interest rates.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-accordion-item group border bg-white rounded-ind"
+                    :class="active === 2 ? 'border-primary border-[3px] shadow-lg ring-1 ring-primary/10' : 'border-stroke hover:border-slate-300 shadow-sm'">
+                    <button @click="active = (active === 2 ? null : 2)" 
+                            class="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none">
+                        <span class="text-xl font-bold text-industrial tracking-tight">Can you repay a position before maturity?</span>
+                        <div class="flex-shrink-0 ml-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-stroke group-hover:border-primary/30 transition-colors"
+                                 :class="active === 2 ? 'bg-primary/5 border-primary/20' : ''">
+                                <svg class="w-5 h-5 text-industrial transition-transform duration-300 icon-rotate" 
+                                     :class="active === 2 ? 'rotate-45 text-primary' : ''"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v12M6 12h12"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                    <div x-show="active === 2" 
+                         x-collapse.duration.500ms
+                         x-cloak
+                         class="px-6 md:px-8 pb-8">
+                        <div class="text-slate-600 leading-relaxed max-w-2xl text-lg">
+                            Yes, positions can be repaid at any time. The system automatically calculates the prorated interest and fees based on the duration of the position.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-accordion-item group border bg-white rounded-ind"
+                    :class="active === 3 ? 'border-primary border-[3px] shadow-lg ring-1 ring-primary/10' : 'border-stroke hover:border-slate-300 shadow-sm'">
+                    <button @click="active = (active === 3 ? null : 3)" 
+                            class="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none">
+                        <span class="text-xl font-bold text-industrial tracking-tight">What happens at maturity?</span>
+                        <div class="flex-shrink-0 ml-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-stroke group-hover:border-primary/30 transition-colors"
+                                 :class="active === 3 ? 'bg-primary/5 border-primary/20' : ''">
+                                <svg class="w-5 h-5 text-industrial transition-transform duration-300 icon-rotate" 
+                                     :class="active === 3 ? 'rotate-45 text-primary' : ''"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v12M6 12h12"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                    <div x-show="active === 3" 
+                         x-collapse.duration.500ms
+                         x-cloak
+                         class="px-6 md:px-8 pb-8">
+                        <div class="text-slate-600 leading-relaxed max-w-2xl text-lg">
+                            At maturity, the principal and interest are automatically settled. If there are insufficient funds, the collateral is liquidated according to the protocol rules.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-accordion-item group border bg-white rounded-ind"
+                    :class="active === 4 ? 'border-primary border-[3px] shadow-lg ring-1 ring-primary/10' : 'border-stroke hover:border-slate-300 shadow-sm'">
+                    <button @click="active = (active === 4 ? null : 4)" 
+                            class="w-full flex items-center justify-between p-6 md:p-8 text-left focus:outline-none">
+                        <span class="text-xl font-bold text-industrial tracking-tight">How does Tenor support institutional players?</span>
+                        <div class="flex-shrink-0 ml-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-stroke group-hover:border-primary/30 transition-colors"
+                                 :class="active === 4 ? 'bg-primary/5 border-primary/20' : ''">
+                                <svg class="w-5 h-5 text-industrial transition-transform duration-300 icon-rotate" 
+                                     :class="active === 4 ? 'rotate-45 text-primary' : ''"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v12M6 12h12"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </button>
+                    <div x-show="active === 4" 
+                         x-collapse.duration.500ms
+                         x-cloak
+                         class="px-6 md:px-8 pb-8">
+                        <div class="text-slate-600 leading-relaxed max-w-2xl text-lg">
+                            Tenor offers enterprise-grade security, high-liquidity pools, and advanced risk management tools specifically designed for institutional compliance and performance requirements.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

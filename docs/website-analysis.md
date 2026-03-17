@@ -29,9 +29,16 @@
   - [certification.php](file:///Users/javen/Local%20Sites/3d-printing/app/public/wp-content/themes/generatepress_child/template-parts/application/certification.php)
 
 ## 复杂度评估
-- 结构复杂度：中等偏低。字段建模清晰，Loader 自动扫描（inc/acf/fields.php），CPT 路由统一。
-- 认知复杂度：中等。历史 Block 与新 Template Parts 并存，需理解两套范式的边界。
-- 运维复杂度：中等。ACF Repeater 广泛使用，后台录入友好但需要注意性能边界与命名一致性。
+- 结构复杂度：**中等偏高**。包含 4 个核心 CPT（Capability、Material、Surface Finish、Solution），通过 ACF 关系字段和分类法形成复杂的关联网络。Solution CPT 尤其复杂，通过 Clone 字段整合了 5 个 Application 模块，形成多层次的数据结构。
+- 认知复杂度：**中等偏高**。
+  - 范式混用：历史 Block 与新 Template Parts 并存，需要理解两套实现逻辑的边界和迁移路径。
+  - 数据关系：CPT 之间存在多对多关联（如 Material 与 Capability 的适配关系、Surface Finish 与 Material 的兼容关系），增加了理解成本。
+  - 模板依赖：Template Parts 之间存在层级依赖，如 Solution 单页模板依赖多个 Application 模块。
+- 运维复杂度：**中等偏高**。
+  - ACF 复杂度：广泛使用 Repeater、Clone、Relationship 等高级字段，后台录入友好但需要注意性能边界。
+  - 命名规范：需要维护统一的字段命名规范（如 `sol_`、`mat_`、`sf_` 前缀），避免命名冲突。
+  - 数据一致性：CPT 之间的关联需要手动维护，存在数据不一致的风险（如 Material 与 Capability 的适配关系变更）。
+- 数据流转复杂度：**中等**。从 ACF 字段获取 → Template Parts 渲染 → 前端 Alpine.js 交互，形成完整的数据流转链路，需要确保各环节数据格式的一致性。
 
 ## 做得好的点
 - 渲染范式清晰：Template Parts 三段式（初始化→预处理→视图）落地到位。
@@ -53,10 +60,15 @@
 - 文档偏历史：从 Block → Template Parts 的迁移已在进行，但旧文档/示例仍有 Block 痕迹，易误导新人。
 
 ## 潜在风险
-- 长期并存两套模块范式（Block 与 Template Parts）会造成双重心智负担与不必要的兼容逻辑。
-- Repeater 过大或多层嵌套导致后台性能下降（尤其是图片预览与多选关系字段）。
-- 多选关系（Process/Material）规模扩大后，页面渲染或查询可能需要缓存策略。
-- 占位图外链依赖第三方（Unsplash），可能遇到访问稳定性或合规问题。
+- **范式混用风险**：长期并存两套模块范式（Block 与 Template Parts）会造成双重心智负担与不必要的兼容逻辑，增加维护成本。
+- **CPT 关联复杂度风险**：
+  - 数据一致性风险：CPT 之间的多对多关联（如 Material ↔ Capability、Surface Finish ↔ Material）需要手动维护，容易出现数据不一致。
+  - 性能风险：多选关系字段规模扩大后，后台加载和前端渲染可能出现性能瓶颈。
+- **ACF 复杂度风险**：
+  - Repeater 过大或多层嵌套（如 Solution 的 5 个 Clone 模块）导致后台性能下降，尤其是图片预览与多选关系字段。
+  - 字段命名冲突：不同 CPT 之间的字段前缀需要严格管理，避免命名冲突。
+- **模板依赖风险**：Template Parts 之间的层级依赖（如 Solution 依赖 Application 模块）可能导致修改一处影响多处，增加回归风险。
+- **占位图依赖风险**：占位图外链依赖第三方（Unsplash），可能遇到访问稳定性或合规问题。
 
 ## 推荐路线图（分阶段）
 ### Phase 1：范式统一与契约固化（短期）

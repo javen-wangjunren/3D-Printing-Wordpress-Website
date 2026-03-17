@@ -133,8 +133,14 @@ get_header(); ?>
                 'id' => 'why-us' 
             ) );
             */
-
-            // --- 10. CTA Module (Global Data) ---
+            
+            // --- 10. FAQ Module (Local Clone Data) ---
+            // 数据源: 当前文章 ACF 字段 (prefix: cap_faq_)
+            get_template_part('template-parts/components/faq', null, array(
+                'prefix' => 'cap_faq_'
+            ));
+            
+            // --- 11. CTA Module (Global Data) ---
             // 数据源: Theme Options (Global)
             _3dp_render_block( 'blocks/global/cta/render', array( 
                 'id' => 'cta' 

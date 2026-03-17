@@ -166,6 +166,34 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'type'     => 'accordion',
                     'endpoint' => 1,
                 ),
+
+                // FAQ Module
+                array(
+                    'key'          => 'field_sol_acc_faq',
+                    'label'        => 'FAQ Module',
+                    'type'         => 'accordion',
+                    'open'         => 0,
+                    'multi_expand' => 1,
+                    'endpoint'     => 0,
+                ),
+                array(
+                    'key'          => 'field_sol_clone_faq',
+                    'label'        => 'FAQ',
+                    'name'         => 'solution_faq',
+                    'type'         => 'clone',
+                    'display'      => 'seamless',
+                    'clone'        => array(
+                        0 => 'group_module_faq',
+                    ),
+                    'prefix_label' => 0,
+                    'prefix_name'  => 1,
+                ),
+                array(
+                    'key'      => 'field_sol_acc_faq_end',
+                    'label'    => '',
+                    'type'     => 'accordion',
+                    'endpoint' => 1,
+                ),
             ),
             'location' => array(
                 array(

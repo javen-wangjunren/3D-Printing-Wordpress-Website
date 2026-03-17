@@ -295,6 +295,48 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
 				'type' => 'accordion',
 				'endpoint' => 1,
 			),
+
+			// =================================================================
+			// Tab 4: FAQ
+			// =================================================================
+			array(
+				'key' => 'tab_sf_faq',
+				'label' => 'FAQ',
+				'name' => '',
+				'type' => 'tab',
+				'placement' => 'top',
+				'endpoint' => 0,
+			),
+			// FAQ Module (Accordion)
+			array(
+				'key' => 'acc_sf_faq',
+				'label' => 'FAQ Module',
+				'name' => '',
+				'type' => 'accordion',
+				'open' => 0,
+				'multi_expand' => 1,
+				'endpoint' => 0,
+			),
+			array(
+				'key' => 'field_sf_faq_clone',
+				'label' => 'FAQ',
+				'name' => 'sf_faq',
+				'type' => 'clone',
+				'display' => 'seamless',
+				'clone' => array(
+					0 => 'group_module_faq',
+				),
+				'prefix_label' => 0,
+				'prefix_name' => 1,
+			),
+			// End Accordion
+			array(
+				'key' => 'acc_sf_faq_end',
+				'label' => '',
+				'name' => '',
+				'type' => 'accordion',
+				'endpoint' => 1,
+			),
 		),
 		'location' => array(
 			array(

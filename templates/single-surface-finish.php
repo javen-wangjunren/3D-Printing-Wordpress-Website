@@ -77,7 +77,14 @@ if ( function_exists( '_3dp_render_block' ) ) {
 }
 
 // ==========================================
-// 6. Global CTA (Render Block)
+// 6. FAQ Module (Local Clone Data)
+// ==========================================
+get_template_part('template-parts/components/faq', null, array(
+	'prefix' => 'sf_faq_'
+));
+
+// ==========================================
+// 7. Global CTA (Render Block)
 // ==========================================
 // Renders the global CTA module from Theme Options.
 if ( function_exists( '_3dp_render_block' ) ) {

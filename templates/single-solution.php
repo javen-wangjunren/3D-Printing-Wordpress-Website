@@ -24,6 +24,18 @@ get_header();
             get_template_part( 'template-parts/application/showcase' );
             get_template_part( 'template-parts/application/recommendation' );
             get_template_part( 'template-parts/application/certification' );
+            
+            // --- FAQ Module (Local Clone Data) ---
+            get_template_part( 'template-parts/components/faq', null, array(
+                'prefix' => 'solution_faq'
+            ));
+
+            // --- Global CTA Module ---
+            if ( function_exists( '_3dp_render_block' ) ) {
+                _3dp_render_block( 'blocks/global/cta/render', array( 
+                    'id' => 'cta' 
+                ) );
+            }
 
         endwhile;
     }

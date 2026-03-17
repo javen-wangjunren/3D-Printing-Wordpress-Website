@@ -98,6 +98,42 @@ if ( function_exists( 'acf_add_local_field_group' ) ) {
                     'wrapper'      => array( 'width' => '100' ),
                 ),
 
+                // ======================================================
+                // TAB 4: FAQ
+                // ======================================================
+                array(
+                    'key'       => 'field_mat_tab_faq',
+                    'label'     => 'FAQ',
+                    'type'      => 'tab',
+                    'placement' => 'top',
+                ),
+                array(
+                    'key'          => 'field_mat_faq_acc',
+                    'label'        => 'FAQ Module',
+                    'type'         => 'accordion',
+                    'open'         => 0,
+                    'multi_expand' => 1,
+                    'endpoint'     => 0,
+                ),
+                array(
+                    'key'          => 'field_mat_faq_clone',
+                    'label'        => 'FAQ',
+                    'name'         => 'mat_faq',
+                    'type'         => 'clone',
+                    'display'      => 'seamless',
+                    'clone'        => array(
+                        0 => 'group_module_faq',
+                    ),
+                    'prefix_label' => 0,
+                    'prefix_name'  => 1,
+                ),
+                array(
+                    'key'      => 'field_mat_faq_acc_end',
+                    'label'    => '',
+                    'type'     => 'accordion',
+                    'endpoint' => 1,
+                ),
+
             ),
             'location' => array(
                 array(

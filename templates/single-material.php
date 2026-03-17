@@ -100,7 +100,13 @@ get_header(); ?>
                 'tabs_override' => $linked_cap_data_override
             ) );
 
-            // --- 5. CTA Module (Global) ---
+            // --- 5. FAQ Module (Local Clone Data) ---
+            // 数据源: 当前文章 ACF 字段 (prefix: mat_faq_)
+            get_template_part('template-parts/components/faq', null, array(
+                'prefix' => 'mat_faq_'
+            ));
+
+            // --- 6. CTA Module (Global) ---
             // 数据源: Theme Options (Global)
             _3dp_render_block( 'blocks/global/cta/render', array( 
                 'id' => 'cta' 

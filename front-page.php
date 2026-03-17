@@ -89,7 +89,15 @@ get_header(); ?>
 
     <?php 
     /**
-     * VII. 行动号召 (CTA)
+     * VII. FAQ 模块 (FAQ)
+     * ==========================================================================
+     */
+    get_template_part( 'template-parts/components/faq', null, array( 'prefix' => 'home_faq_' ) );
+    ?>
+
+    <?php 
+    /**
+     * VIII. 行动号召 (CTA)
      * ==========================================================================
      */
     _3dp_render_block( 'blocks/global/cta/render', array( 'id' => 'home-cta' ) ); 
