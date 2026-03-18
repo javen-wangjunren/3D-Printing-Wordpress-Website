@@ -29,7 +29,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                 'type'              => 'text',
                 'instructions'      => '支持使用 &lt;br&gt; 或 &lt;span class="italic"&gt; 进行样式微调',
                 'default_value'     => 'Frequently asked questions',
-                'required'          => 1,
+                'required'          => 0,
             ),
             array(
                 'key'               => 'field_faq_desc',
@@ -74,7 +74,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                         'label'         => '问题',
                         'name'          => 'question',
                         'type'          => 'text',
-                        'required'      => 1,
+                        'required'      => 0,
                         'placeholder'   => '例如：How does Tenor support institutional players?',
                     ),
                     array(
@@ -82,7 +82,7 @@ if ( function_exists( 'acf_add_local_field_group' ) ) :
                         'label'         => '回答内容',
                         'name'          => 'answer',
                         'type'          => 'textarea',
-                        'required'      => 1,
+                        'required'      => 0,
                         'rows'          => 4,
                         'new_lines'     => 'br', // 允许简单换行，保持纯净输出
                         'placeholder'   => '输入详细的解答内容...',
