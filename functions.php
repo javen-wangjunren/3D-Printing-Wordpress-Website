@@ -62,6 +62,7 @@ $tdp_inc_files = [
     'blog-template-functions.php', // Blog 模板逻辑 (TOC / Read Time)
     'duplicate.php',         // 文章复制功能 (Post Duplication)
     'admin-filters.php',     // 后台列表筛选增强
+    'disable-comments.php',  // 禁用评论功能
     'seo.php',               // SEO 相关逻辑
 ];
 
