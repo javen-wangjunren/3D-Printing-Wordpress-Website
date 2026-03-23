@@ -63,7 +63,8 @@ $tdp_inc_files = [
     'duplicate.php',         // 文章复制功能 (Post Duplication)
     'admin-filters.php',     // 后台列表筛选增强
     'disable-comments.php',  // 禁用评论功能
-    'seo.php',               // SEO 相关逻辑
+    'seo.php',               // SEO 相关逻辑 (Meta Tags, Sitemap)
+    'tracking.php',          // 跟踪代码注入 (GTM, Google Analytics)
 ];
 
 // 1. 自动加载 ACF 字段文件 (inc/acf/field/*.php)
